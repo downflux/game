@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://brfgeivuijr45"]
+
+[ext_resource type="TileSet" uid="uid://c6mcf3ex17o3" path="res://scenes/map/schematic/assets/ground.tres" id="1_rcet5"]
+[ext_resource type="TileSet" uid="uid://eago5nrlktcj" path="res://scenes/map/schematic/assets/cliff.tres" id="2_6gn51"]
+
+[node name="Schematic" type="Node2D"]
+
+[node name="Ground" type="TileMap" parent="."]
+tile_set = ExtResource("1_rcet5")
+format = 2
+
+[node name="Cliff" type="TileMap" parent="."]
+tile_set = ExtResource("2_6gn51")
+format = 2
