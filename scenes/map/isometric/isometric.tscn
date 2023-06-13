@@ -58,4 +58,4 @@ y_sort_enabled = true
 tile_set = SubResource("TileSet_hcde5")
 format = 2
 layer_0/y_sort_enabled = true
-layer_0/tile_data = PackedInt32Array(0, 0, 0, -65535, 65536, 0, -131070, 131072, 0, -65536, 0, 0, -131072, 0, 0, -131071, 0, 0)
+layer_0/tile_data = PackedInt32Array(0, 0, 0, -65535, 65536, 0, -131070, 131072, 0, -65536, 0, 0, -131072, 0, 0, -131071, 0, 0, -1, 196609, 0, -65537, 131073, 0, -131073, 131073, 0)
