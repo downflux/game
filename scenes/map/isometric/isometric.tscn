@@ -1,61 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://lvdnj3gfkxlb"]
+[gd_scene load_steps=2 format=3 uid="uid://lvdnj3gfkxlb"]
 
-[ext_resource type="Texture2D" uid="uid://chnt2xmf5kun1" path="res://scenes/map/isometric/assets/terrain.png" id="1_1ngo0"]
-[ext_resource type="Texture2D" uid="uid://whf8v1t17be7" path="res://scenes/map/isometric/assets/ramp.png" id="2_j5pc3"]
-[ext_resource type="Texture2D" uid="uid://8m3525b5ghuc" path="res://scenes/map/isometric/assets/cliff.png" id="3_cailv"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vkvof"]
-texture = ExtResource("1_1ngo0")
-texture_region_size = Vector2i(64, 48)
-0:0/0 = 0
-0:0/0/texture_origin = Vector2i(0, -8)
-1:0/0 = 0
-1:0/0/texture_origin = Vector2i(0, -8)
-2:0/0 = 0
-2:0/0/texture_origin = Vector2i(0, 56)
-2:0/0/z_index = 1
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n0nsq"]
-texture = ExtResource("2_j5pc3")
-texture_region_size = Vector2i(64, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/size_in_atlas = Vector2i(1, 2)
-2:0/0 = 0
-2:0/0/texture_origin = Vector2i(0, 16)
-3:0/size_in_atlas = Vector2i(1, 2)
-3:0/0 = 0
-3:0/0/texture_origin = Vector2i(0, 16)
-4:0/size_in_atlas = Vector2i(1, 2)
-4:0/0 = 0
-4:0/0/texture_origin = Vector2i(0, 16)
-5:0/0 = 0
-6:0/0 = 0
-7:0/0 = 0
-1:2/0 = 0
-3:2/size_in_atlas = Vector2i(1, 2)
-3:2/0 = 0
-3:2/0/texture_origin = Vector2i(0, -16)
-5:2/0 = 0
-7:2/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_421h3"]
-texture = ExtResource("3_cailv")
-texture_region_size = Vector2i(64, 32)
-
-[sub_resource type="TileSet" id="TileSet_hcde5"]
-tile_shape = 1
-tile_layout = 5
-tile_size = Vector2i(64, 32)
-sources/0 = SubResource("TileSetAtlasSource_vkvof")
-sources/1 = SubResource("TileSetAtlasSource_n0nsq")
-sources/2 = SubResource("TileSetAtlasSource_421h3")
+[ext_resource type="TileSet" uid="uid://s5qlv5t8s3x6" path="res://scenes/map/isometric/ground.tres" id="1_vyxjr"]
 
 [node name="IsometricMap" type="Node2D"]
 
 [node name="Ground" type="TileMap" parent="."]
 y_sort_enabled = true
-tile_set = SubResource("TileSet_hcde5")
+tile_set = ExtResource("1_vyxjr")
 format = 2
 layer_0/y_sort_enabled = true
-layer_0/tile_data = PackedInt32Array(0, 0, 0, -65535, 65536, 0, -131070, 131072, 0, -65536, 0, 0, -131072, 0, 0, -131071, 0, 0, -1, 196609, 0, -65537, 131073, 0, -131073, 131073, 0)
+layer_0/tile_data = PackedInt32Array(0, 0, 0, -65535, 65536, 0, -131070, 131072, 0, -65536, 0, 0, -131072, 0, 0, -131071, 0, 0, -1, 196609, 0, -65537, 131073, 0, -131073, 131073, 0, -196609, 65537, 0, -458746, 131073, 0, -458747, 131073, 1, -393210, 131073, 0, -327674, 0, 0, -393211, 196609, 1, -458748, 0, 2, -131069, 65536, 0, -393212, 327681, 3)
