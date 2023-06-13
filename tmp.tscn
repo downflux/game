@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://c56g8ixxpjr8i"]
+
+[ext_resource type="PackedScene" uid="uid://d0pkrq7ickeat" path="res://scenes/map/isometric/scenes/ramp_set_n.tscn" id="1_vdjuf"]
+[ext_resource type="Script" path="res://tmp.gd" id="2_3gcly"]
+[ext_resource type="Texture2D" uid="uid://dxur8d7jlcy3r" path="res://icon.png" id="3_qd46h"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="RampSetN" parent="." instance=ExtResource("1_vdjuf")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+z_index = 1
+position = Vector2(99, 113)
+scale = Vector2(0.12, 0.12)
+disable_mode = 2
+motion_mode = 1
+script = ExtResource("2_3gcly")
+
+[node name="Icon" type="Sprite2D" parent="CharacterBody2D"]
+scale = Vector2(1, 1)
+texture = ExtResource("3_qd46h")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CharacterBody2D"]
+position = Vector2(-0.0010376, -0.00012207)
+polygon = PackedVector2Array(-283.334, -100, -225.001, -166.667, -175.001, -141.667, -133.334, -175, -133.334, -233.333, -50.001, -266.667, -25.001, -208.333, 24.999, -208.333, 49.999, -266.667, 133.332, -233.333, 133.332, -175, 174.999, -141.667, 224.999, -166.667, 283.332, -100, 241.666, -50.0001, 241.666, 141.667, 216.666, 208.333, 99.999, 258.333, -108.334, 258.333, -183.334, 225, -241.668, 166.667, -241.668, -41.6667)
+
+[node name="Camera2D" type="Camera2D" parent="."]

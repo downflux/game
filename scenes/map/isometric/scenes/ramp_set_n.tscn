@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0pkrq7ickeat"]
+[gd_scene load_steps=3 format=3 uid="uid://d0pkrq7ickeat"]
 
 [ext_resource type="Texture2D" uid="uid://c3xrqmoa8tppo" path="res://scenes/map/isometric/assets/ramp_set.png" id="1_8ilxk"]
+[ext_resource type="Script" path="res://scenes/map/isometric/scenes/ramp_set_n.gd" id="2_ljahg"]
 
 [node name="RampSetN" type="Node2D"]
 
@@ -27,6 +28,10 @@ region_enabled = true
 region_rect = Rect2(160, 128, 96, 32)
 
 [node name="Collision" type="Area2D" parent="."]
+script = ExtResource("2_ljahg")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision"]
 polygon = PackedVector2Array(64, -16, 96, 0, 96, 16, 64, 0)
+
+[connection signal="body_entered" from="Collision" to="Collision" method="_on_body_entered"]
+[connection signal="body_exited" from="Collision" to="Collision" method="_on_body_exited"]
