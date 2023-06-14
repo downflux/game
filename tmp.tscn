@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bkuqgdj8d5032"]
+[gd_scene load_steps=5 format=3 uid="uid://bkuqgdj8d5032"]
 
 [ext_resource type="PackedScene" uid="uid://lvdnj3gfkxlb" path="res://scenes/map/isometric/isometric.tscn" id="1_qpm0p"]
 [ext_resource type="Script" path="res://objects/df_unit.gd" id="2_s2a00"]
 [ext_resource type="Texture2D" uid="uid://dxur8d7jlcy3r" path="res://icon.png" id="3_qd46h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b0vsr"]
+size = Vector2(550, 516.667)
 
 [node name="Node2D" type="Node2D"]
 
@@ -17,9 +20,10 @@ script = ExtResource("2_s2a00")
 [node name="Icon" type="Sprite2D" parent="CharacterBody2D"]
 texture = ExtResource("3_qd46h")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CharacterBody2D"]
-position = Vector2(-0.0010376, -0.00012207)
-polygon = PackedVector2Array(-283.334, -100, -225.001, -166.667, -175.001, -141.667, -133.334, -175, -133.334, -233.333, -50.001, -266.667, -25.001, -208.333, 24.999, -208.333, 49.999, -266.667, 133.332, -233.333, 133.332, -175, 174.999, -141.667, 224.999, -166.667, 283.332, -100, 241.666, -50.0001, 241.666, 141.667, 216.666, 208.333, 99.999, 258.333, -108.334, 258.333, -183.334, 225, -241.668, 166.667, -241.668, -41.6667)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(0.000183105, 0)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_b0vsr")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 

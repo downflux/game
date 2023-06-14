@@ -1,5 +1,12 @@
 extends Resource
 
+## DFUnit3D tracks the 3D coordinates for a unit.
+##
+## DFUnit3D frees the underlying (x, y, z) unit coordinates from the isometric
+## rendering layer, which combines the y and z coordinates.
+##
+## The API for this unit should conform with that of CharacterBody3D where
+## applicable.
 class_name DFUnit3D
 
 enum ProjectionMode {
@@ -15,7 +22,9 @@ var _ISOMETRIC_TRANSFORM = Transform2D(
 	Vector2(0.5, -0.25),
 	Vector2(0, 0)
 )
-const _LAYER_HEIGHT_PX = 32
+const _PIXELS_PER_LAYER = 32
+
+# Corresponds to https://redd.it/mo9xyx
 const _PIXELS_PER_METER = 100
 
 func position2d(mode: ProjectionMode = ProjectionMode.CARTESIAN) -> Vector2:
@@ -29,7 +38,7 @@ func velocity2d(mode: ProjectionMode = ProjectionMode.CARTESIAN) -> Vector2:
 	return _ISOMETRIC_TRANSFORM * Vector2(velocity.x, velocity.y) + Vector2(0, velocity.z)
 
 func z_layer() -> int:
-	return floor(position.z / _LAYER_HEIGHT_PX)
+	return floor(position.z / _PIXELS_PER_LAYER)
 
 func _physics_process(_delta):
 	position += velocity * _delta * _PIXELS_PER_METER

@@ -1,5 +1,9 @@
 extends CharacterBody2D
 
+## DFUnit is the base unit script for a DownFlux body.
+##
+## DFUnit collision boxes must be convex -- concave collision boxes will trigger
+## environment collisions multiple times, which will cause errors.
 class_name DFUnit
 
 var df_unit: DFUnit3D = DFUnit3D.new()
