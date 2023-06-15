@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bs5jh8dv3l73p"
-path="res://.godot/imported/walls.png-d0a4430412868e0982c3035f1aed46a9.ctex"
+uid="uid://bxdmay7hbwb3c"
+path="res://.godot/imported/palette.png-d2f19efe79dd3cc8ae8b30021b41e500.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/map/isometric/assets/v2/walls.png"
-dest_files=["res://.godot/imported/walls.png-d0a4430412868e0982c3035f1aed46a9.ctex"]
+source_file="res://scenes/map/isometric_v2/assets/palette.png"
+dest_files=["res://.godot/imported/palette.png-d2f19efe79dd3cc8ae8b30021b41e500.ctex"]
 
 [params]
 

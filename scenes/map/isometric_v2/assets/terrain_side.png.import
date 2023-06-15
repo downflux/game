@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ee6jhyoatuce"
-path="res://.godot/imported/font.png-254b63a663c3bb01fc016b3082aecd0b.ctex"
+uid="uid://bs5jh8dv3l73p"
+path="res://.godot/imported/terrain_side.png-1d9569998ebb716b0a63dfb648b3e43a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/map/isometric/assets/v2/font.png"
-dest_files=["res://.godot/imported/font.png-254b63a663c3bb01fc016b3082aecd0b.ctex"]
+source_file="res://scenes/map/isometric_v2/assets/terrain_side.png"
+dest_files=["res://.godot/imported/terrain_side.png-1d9569998ebb716b0a63dfb648b3e43a.ctex"]
 
 [params]
 

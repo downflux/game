@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://d07mmws12lxef"]
+
+[ext_resource type="TileSet" uid="uid://bxvy3qs1vwdd7" path="res://scenes/map/isometric_v2/terrain_top.tres" id="1_mh8kw"]
+[ext_resource type="TileSet" uid="uid://lv22ribevpin" path="res://scenes/map/isometric_v2/terrain_side.tres" id="2_fhlnm"]
+
+[node name="IsometricMapV2" type="Node2D"]
+
+[node name="Layer" type="Node2D" parent="."]
+
+[node name="Top" type="TileMap" parent="Layer"]
+z_index = 1
+y_sort_enabled = true
+tile_set = ExtResource("1_mh8kw")
+format = 2
+layer_0/y_sort_enabled = true
+layer_0/tile_data = PackedInt32Array(65535, 0, 0, 0, 65536, 0, 1, 65536, 0, 65536, 65536, 0, 65537, 65536, 0, 131072, 0, 1, 131073, 0, 1, 65534, 65536, 0, 131071, 0, 0, 131070, 0, 0, 196607, 0, 0, 262143, 131072, 2, 327679, 196608, 2, 327678, 0, 3, 262142, 0, 0, 524288, 0, 5, 589823, 65536, 5, 524287, 131072, 5, 458751, 196608, 5, 393216, 0, 4, 393217, 65536, 4, 458753, 131072, 4, 524289, 196608, 4, 458752, 0, 0, 458754, 131072, 7, 589826, 196608, 7, 524290, 131072, 7, 393218, 131072, 7, 589825, 0, 8, 589824, 0, 8, 655359, 0, 8, 655358, 65536, 8, 589822, 131072, 8, 524286, 131072, 8, 458750, 131072, 8)
+
+[node name="Side" type="TileMap" parent="Layer"]
+y_sort_enabled = true
+tile_set = ExtResource("2_fhlnm")
+format = 2
+layer_0/y_sort_enabled = true
+layer_0/tile_data = PackedInt32Array(65535, 0, 0, 0, 65536, 0, 65536, 65536, 0, 65537, 65536, 0, 1, 65536, 0, 131072, 0, 1, 131073, 0, 1, 65534, 65536, 0, 131071, 0, 0, 131070, 0, 0, 196607, 0, 0, 262143, 131072, 2, 327679, 196608, 2, 327678, 0, 3, 262142, 0, 0, 458752, 0, 0, 393216, 0, 4, 393217, 65536, 4, 458753, 131072, 4, 524289, 196608, 4, 524288, 0, 5, 589823, 65536, 5, 524287, 131072, 5, 458751, 196608, 5, 393218, 131072, 7, 458754, 131072, 7, 524290, 131072, 7, 589826, 196608, 7, 589825, 0, 8, 589824, 0, 8, 655359, 0, 8, 655358, 65536, 8, 589822, 131072, 8, 524286, 131072, 8, 458750, 131072, 8)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxdmay7hbwb3c"
-path="res://.godot/imported/palette.png-ca330d10a97dd26d21b45c364ac6b2ff.ctex"
+uid="uid://ee6jhyoatuce"
+path="res://.godot/imported/font.png-e9348cb395834b6ff71d7a21f7ed9b22.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/map/isometric/assets/v2/palette.png"
-dest_files=["res://.godot/imported/palette.png-ca330d10a97dd26d21b45c364ac6b2ff.ctex"]
+source_file="res://scenes/map/isometric_v2/assets/font.png"
+dest_files=["res://.godot/imported/font.png-e9348cb395834b6ff71d7a21f7ed9b22.ctex"]
 
 [params]
 
