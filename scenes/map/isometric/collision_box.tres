@@ -1,6 +1,6 @@
-[gd_resource type="TileSet" load_steps=3 format=3]
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://c3vvtcm44rqch"]
 
-[ext_resource type="PackedScene" uid="uid://bmoluriiv4qej" path="res://scenes/map/isometric_v2/z_transition_s.tscn" id="1_1rnen"]
+[ext_resource type="PackedScene" uid="uid://bx6o0fn7o214v" path="res://scenes/map/isometric/z_transition/z_transition_s.tscn" id="1_1rnen"]
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_uy42b"]
 resource_name = "CollisionBox"

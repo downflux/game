@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8m3525b5ghuc"
-path="res://.godot/imported/cliff.png-c35afccc7ccda2645e17507c749d79a7.ctex"
+uid="uid://ee6jhyoatuce"
+path="res://.godot/imported/font.png-7cc344bccb0ab43252a384ade97c4bc1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/map/isometric/assets/cliff.png"
-dest_files=["res://.godot/imported/cliff.png-c35afccc7ccda2645e17507c749d79a7.ctex"]
+source_file="res://scenes/map/isometric/assets/font.png"
+dest_files=["res://.godot/imported/font.png-7cc344bccb0ab43252a384ade97c4bc1.ctex"]
 
 [params]
 

@@ -1,12 +1,57 @@
-[gd_scene load_steps=2 format=3 uid="uid://lvdnj3gfkxlb"]
+[gd_scene load_steps=7 format=3 uid="uid://j7kncyclbtw1"]
 
-[ext_resource type="TileSet" uid="uid://s5qlv5t8s3x6" path="res://scenes/map/isometric/ground.tres" id="1_vyxjr"]
+[ext_resource type="Script" path="res://scenes/map/isometric/tmp.gd" id="1_hhn1a"]
+[ext_resource type="Texture2D" uid="uid://dxur8d7jlcy3r" path="res://icon.png" id="2_cairu"]
+[ext_resource type="TileSet" uid="uid://bk8xm2dq2vg87" path="res://scenes/map/isometric/terrain_side.tres" id="3_snao5"]
+[ext_resource type="TileSet" uid="uid://b7a54vky7ky18" path="res://scenes/map/isometric/terrain_top.tres" id="4_bptwb"]
+[ext_resource type="TileSet" uid="uid://c3vvtcm44rqch" path="res://scenes/map/isometric/collision_box.tres" id="5_i4vc8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nb1a0"]
+size = Vector2(550.685, 526.028)
 
 [node name="IsometricMap" type="Node2D"]
-
-[node name="Ground" type="TileMap" parent="."]
 y_sort_enabled = true
-tile_set = ExtResource("1_vyxjr")
+
+[node name="TestUnit" type="CharacterBody2D" parent="."]
+y_sort_enabled = true
+position = Vector2(-333, 300)
+scale = Vector2(0.0608333, 0.0608333)
+script = ExtResource("1_hhn1a")
+
+[node name="Icon" type="Sprite2D" parent="TestUnit"]
+y_sort_enabled = true
+texture = ExtResource("2_cairu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestUnit"]
+scale = Vector2(1, 0.999999)
+shape = SubResource("RectangleShape2D_nb1a0")
+
+[node name="Layer" type="Node2D" parent="."]
+
+[node name="Side" type="TileMap" parent="Layer"]
+y_sort_enabled = true
+tile_set = ExtResource("3_snao5")
 format = 2
 layer_0/y_sort_enabled = true
-layer_0/tile_data = PackedInt32Array(0, 0, 0, -65535, 65536, 0, -131070, 131072, 0, -65536, 0, 0, -131072, 0, 0, -131071, 0, 0, -1, 196609, 0, -65537, 131073, 0, -131073, 131073, 0, -196609, 65537, 0, -458746, 131073, 0, -458747, 131073, 1, -393210, 131073, 0, -327674, 0, 0, -393211, 196609, 1, -458748, 0, 2, -131069, 65536, 0, -393212, 327681, 3, 196614, 4, 65536, 262150, 131072, 0, 327686, 131072, 0, 327687, 131072, 0, 327688, 131072, 0, 327689, 131072, 0, 327690, 131072, 0, 327691, 131072, 0, 262155, 131072, 0, 262156, 131072, 0, 262157, 131072, 0, 327693, 131072, 0, 327692, 131072, 0, 393228, 131072, 0, 393229, 131072, 0)
+layer_0/tile_data = PackedInt32Array(65535, 0, 0, 0, 65536, 0, 65536, 65536, 0, 65537, 65536, 0, 1, 65536, 0, 131072, 0, 1, 131073, 0, 1, 65534, 65536, 0, 131071, 0, 0, 131070, 0, 0, 196607, 0, 0, 262143, 131072, 2, 327679, 196608, 2, 327678, 0, 3, 262142, 0, 0, 458752, 0, 0, 393216, 0, 4, 393217, 65536, 4, 458753, 131072, 4, 524289, 196608, 4, 524288, 0, 5, 589823, 65536, 5, 524287, 131072, 5, 458751, 196608, 5, 393218, 131072, 7, 458754, 131072, 7, 524290, 131072, 7, 589826, 196608, 7, 589825, 0, 8, 589824, 0, 8, 655359, 0, 8, 655358, 65536, 8, 589822, 131072, 8, 524286, 131072, 8, 458750, 131072, 8, 327677, 0, 3, 262141, 65536, 3, 131078, 0, 0, 131077, 65536, 0)
+
+[node name="Top" type="TileMap" parent="Layer"]
+z_index = 1
+y_sort_enabled = true
+tile_set = ExtResource("4_bptwb")
+format = 2
+layer_0/y_sort_enabled = true
+layer_0/tile_data = PackedInt32Array(65535, 0, 0, 0, 65536, 0, 1, 65536, 0, 65536, 65536, 0, 65537, 65536, 0, 131072, 0, 1, 131073, 0, 1, 65534, 65536, 0, 131071, 0, 0, 131070, 0, 0, 196607, 0, 0, 262143, 131072, 2, 327679, 196608, 2, 327678, 0, 3, 262142, 0, 0, 524288, 0, 5, 589823, 65536, 5, 524287, 131072, 5, 458751, 196608, 5, 393216, 0, 4, 393217, 65536, 4, 458753, 131072, 4, 524289, 196608, 4, 458752, 0, 0, 458754, 131072, 7, 589826, 196608, 7, 524290, 131072, 7, 393218, 131072, 7, 589825, 0, 8, 589824, 0, 8, 655359, 0, 8, 655358, 65536, 8, 589822, 131072, 8, 524286, 131072, 8, 458750, 131072, 8, 327677, 65536, 3, 262141, 131072, 3, 131078, 0, 0, 131077, 65536, 0, 786435, 0, 3)
+
+[node name="CollisionBox" type="TileMap" parent="Layer"]
+z_index = 2
+y_sort_enabled = true
+tile_set = ExtResource("5_i4vc8")
+format = 2
+layer_0/y_sort_enabled = true
+layer_0/tile_data = PackedInt32Array(786435, 0, 0)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[connection signal="body_entered" from="Layer/CollisionBox/ZTransitionS" to="Layer/CollisionBox/ZTransitionS" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="Layer/CollisionBox/ZTransitionS" to="Layer/CollisionBox/ZTransitionS" method="_on_body_exited" flags=18]

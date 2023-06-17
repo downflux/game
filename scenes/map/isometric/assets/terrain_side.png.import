@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chnt2xmf5kun1"
-path="res://.godot/imported/terrain.png-38324452016b090f82b0d75e8c95306d.ctex"
+uid="uid://bs5jh8dv3l73p"
+path="res://.godot/imported/terrain_side.png-1d2ef843fbab922791a1b87c3d48425a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/map/isometric/assets/terrain.png"
-dest_files=["res://.godot/imported/terrain.png-38324452016b090f82b0d75e8c95306d.ctex"]
+source_file="res://scenes/map/isometric/assets/terrain_side.png"
+dest_files=["res://.godot/imported/terrain_side.png-1d2ef843fbab922791a1b87c3d48425a.ctex"]
 
 [params]
 

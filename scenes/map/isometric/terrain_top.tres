@@ -1,6 +1,6 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bxvy3qs1vwdd7"]
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b7a54vky7ky18"]
 
-[ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric_v2/assets/terrain_top.png" id="1_qr564"]
+[ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric/assets/terrain_top.png" id="1_qr564"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_704ur"]
 texture = ExtResource("1_qr564")
