@@ -10,15 +10,15 @@ b = Vector2(32, -16)
 script = ExtResource("1_clgn5")
 up_orientation = 3
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 48)
-shape = SubResource("SegmentShape2D_ygk1o")
-
 [node name="TerrainTop" type="Sprite2D" parent="."]
 position = Vector2(0, 16)
 texture = ExtResource("2_5ddqu")
 region_enabled = true
 region_rect = Rect2(128, 128, 64, 64)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 48)
+shape = SubResource("SegmentShape2D_ygk1o")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

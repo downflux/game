@@ -19,10 +19,14 @@ enum Orientation {
 
 const _MAP_Z_INDEX_BUFFER = 10
 const _UP_VECTOR_LOOKUP: Dictionary = {
-	Orientation.NORTH: Vector2( 0, -1),
-	Orientation.EAST:  Vector2(-1,  0),
-	Orientation.SOUTH: Vector2( 0,  1),
-	Orientation.WEST:  Vector2( 1,  0),
+	Orientation.NORTH:     Vector2( 0, -1),
+	Orientation.NORTHEAST: Vector2(-1, -1),
+	Orientation.EAST:      Vector2(-1,  0),
+	Orientation.SOUTHEAST: Vector2(-1,  1),
+	Orientation.SOUTH:     Vector2( 0,  1),
+	Orientation.SOUTHWEST: Vector2( 1,  1),
+	Orientation.WEST:      Vector2( 1,  0),
+	Orientation.NORTHWEST: Vector2( 1, -1),
 }
 
 ## _up defines the Cartesian direction which points towards the positive z-axis.
