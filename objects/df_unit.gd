@@ -8,7 +8,7 @@ class_name DFUnit
 
 var df_unit: DFUnit3D = DFUnit3D.new()
 
-const SPEED = 30
+const SPEED = 100
 
 func _process(_delta):
 	var p = df_unit.position2d(DFUnit3D.ProjectionMode.ISOMETRIC)

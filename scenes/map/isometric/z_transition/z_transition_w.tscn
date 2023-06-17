@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://b8gnik5hvbwgr"]
+
+[ext_resource type="Script" path="res://scenes/map/isometric/z_transition/z_transition_base.gd" id="1_akg3y"]
+[ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric/assets/terrain_top.png" id="2_gxqp5"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_ygk1o"]
+b = Vector2(32, -16)
+
+[node name="ZTransitionW" type="Area2D"]
+script = ExtResource("1_akg3y")
+up_orientation = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-32, 32)
+shape = SubResource("SegmentShape2D_ygk1o")
+
+[node name="TerrainTop" type="Sprite2D" parent="."]
+position = Vector2(0, 16)
+texture = ExtResource("2_gxqp5")
+region_enabled = true
+region_rect = Rect2(128, 192, 64, 64)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

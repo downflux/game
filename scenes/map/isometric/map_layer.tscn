@@ -9,6 +9,12 @@
 y_sort_enabled = true
 script = ExtResource("1_qp825")
 
+[node name="CollisionBoxes" type="TileMap" parent="."]
+y_sort_enabled = true
+tile_set = ExtResource("3_gotbk")
+format = 2
+layer_0/y_sort_enabled = true
+
 [node name="Walls" type="TileMap" parent="."]
 y_sort_enabled = true
 tile_set = ExtResource("2_dfoqb")
@@ -19,11 +25,5 @@ layer_0/y_sort_enabled = true
 z_index = 1
 y_sort_enabled = true
 tile_set = ExtResource("1_yharv")
-format = 2
-layer_0/y_sort_enabled = true
-
-[node name="CollisionBoxes" type="TileMap" parent="."]
-y_sort_enabled = true
-tile_set = ExtResource("3_gotbk")
 format = 2
 layer_0/y_sort_enabled = true

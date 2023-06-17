@@ -1,10 +1,16 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://c3vvtcm44rqch"]
+[gd_resource type="TileSet" load_steps=6 format=3 uid="uid://c3vvtcm44rqch"]
 
-[ext_resource type="PackedScene" uid="uid://bx6o0fn7o214v" path="res://scenes/map/isometric/z_transition/z_transition_s.tscn" id="1_1rnen"]
+[ext_resource type="PackedScene" uid="uid://bx6o0fn7o214v" path="res://scenes/map/isometric/z_transition/z_transition_s.tscn" id="1_es72t"]
+[ext_resource type="PackedScene" uid="uid://b2oa7l5j77bu5" path="res://scenes/map/isometric/z_transition/z_transition_n.tscn" id="1_slqhd"]
+[ext_resource type="PackedScene" uid="uid://bcsl4pj7an3iu" path="res://scenes/map/isometric/z_transition/z_transition_e.tscn" id="2_7mh1c"]
+[ext_resource type="PackedScene" uid="uid://b8gnik5hvbwgr" path="res://scenes/map/isometric/z_transition/z_transition_w.tscn" id="4_prpij"]
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_uy42b"]
 resource_name = "CollisionBox"
-scenes/0/scene = ExtResource("1_1rnen")
+scenes/0/scene = ExtResource("1_slqhd")
+scenes/2/scene = ExtResource("2_7mh1c")
+scenes/4/scene = ExtResource("1_es72t")
+scenes/6/scene = ExtResource("4_prpij")
 
 [resource]
 tile_shape = 1
