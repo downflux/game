@@ -41,4 +41,4 @@ func z_layer() -> int:
 	return floor(position.z / _PIXELS_PER_LAYER)
 
 func _physics_process(_delta):
-	position += velocity * _delta * _PIXELS_PER_METER
+	position += velocity * _delta

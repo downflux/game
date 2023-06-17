@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://c48hgtr5ishcv"]
+
+[ext_resource type="Script" path="res://scenes/map/isometric/map_layer.gd" id="1_qp825"]
+[ext_resource type="TileSet" uid="uid://b7a54vky7ky18" path="res://scenes/map/isometric/terrain_ground.tres" id="1_yharv"]
+[ext_resource type="TileSet" uid="uid://bk8xm2dq2vg87" path="res://scenes/map/isometric/terrain_walls.tres" id="2_dfoqb"]
+[ext_resource type="TileSet" uid="uid://c3vvtcm44rqch" path="res://scenes/map/isometric/collision_boxes.tres" id="3_gotbk"]
+
+[node name="MapLayer" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_qp825")
+
+[node name="Walls" type="TileMap" parent="."]
+y_sort_enabled = true
+tile_set = ExtResource("2_dfoqb")
+format = 2
+layer_0/y_sort_enabled = true
+
+[node name="Ground" type="TileMap" parent="."]
+z_index = 1
+y_sort_enabled = true
+tile_set = ExtResource("1_yharv")
+format = 2
+layer_0/y_sort_enabled = true
+
+[node name="CollisionBoxes" type="TileMap" parent="."]
+y_sort_enabled = true
+tile_set = ExtResource("3_gotbk")
+format = 2
+layer_0/y_sort_enabled = true

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://cu8grc5iqpuv3"]
+
+[ext_resource type="Script" path="res://objects/df_unit.gd" id="1_e2noa"]
+[ext_resource type="Texture2D" uid="uid://deswygl8ng7wu" path="res://unit.png" id="1_s2rpw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_84hyx"]
+size = Vector2(32, 40)
+
+[node name="ExampleUnit" type="CharacterBody2D"]
+y_sort_enabled = true
+script = ExtResource("1_e2noa")
+
+[node name="Unit" type="Sprite2D" parent="."]
+texture = ExtResource("1_s2rpw")
+offset = Vector2(0, -16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -12)
+shape = SubResource("RectangleShape2D_84hyx")
