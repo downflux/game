@@ -1,0 +1,13 @@
+[gd_resource type="TileSet" load_steps=3 format=3]
+
+[ext_resource type="PackedScene" uid="uid://bmoluriiv4qej" path="res://scenes/map/isometric_v2/z_transition_s.tscn" id="1_1rnen"]
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_uy42b"]
+resource_name = "CollisionBox"
+scenes/0/scene = ExtResource("1_1rnen")
+
+[resource]
+tile_shape = 1
+tile_layout = 5
+tile_size = Vector2i(64, 32)
+sources/0 = SubResource("TileSetScenesCollectionSource_uy42b")

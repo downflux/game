@@ -8,7 +8,7 @@ class_name DFUnit
 
 var df_unit: DFUnit3D = DFUnit3D.new()
 
-const SPEED = 1
+const SPEED = 5
 
 func _process(_delta):
 	var p = df_unit.position2d(DFUnit3D.ProjectionMode.ISOMETRIC)
@@ -27,3 +27,7 @@ func _physics_process(delta):
 			0,
 		) * SPEED
 	df_unit._physics_process(delta)
+
+func maybe_set_z_layer(z_layer: int):
+	print("Set z_layer: ", z_layer)
+	z_index = z_layer * ZTransitionBase._MAP_Z_INDEX_BUFFER

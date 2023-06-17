@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bao73pt8476uw"]
+
+[ext_resource type="Script" path="res://scenes/map/isometric_v2/z_transition/z_transition_s.gd" id="1_kxdj1"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_ygk1o"]
+b = Vector2(32, 16)
+
+[node name="ZTransitionS" type="Area2D"]
+script = ExtResource("1_kxdj1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-32, 32)
+shape = SubResource("SegmentShape2D_ygk1o")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
