@@ -6,7 +6,13 @@ extends CharacterBody2D
 ## environment collisions multiple times, which will cause errors.
 class_name DFUnit
 
+@export var z_layer: int
 var df_unit: DFUnit3D = DFUnit3D.new()
+var _l: Layer
+
+func _init():
+	_l = Layer.new(z_layer)
+	z_index = _l.get_z_index(Layer.RenderLayer.UNIT)
 
 const SPEED = 100
 
@@ -30,4 +36,6 @@ func _physics_process(delta):
 
 func maybe_set_z_layer(z_layer: int):
 	print("Set z_layer: ", z_layer)
-	z_index = z_layer * ZTransitionBase._MAP_Z_INDEX_BUFFER
+	_l.set_z_layer(z_layer)
+	z_index = _l.get_z_index(Layer.RenderLayer.UNIT)
+	print(z_index)

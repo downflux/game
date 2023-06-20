@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwt5ncr3miqc3"
-path="res://.godot/imported/terrain_top.png-5b7f681e9e1e390943b117247a2919e2.ctex"
+uid="uid://bs5jh8dv3l73p"
+path="res://.godot/imported/terrain_walls.png-780584a029352b9450f24233aa0543ec.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/map/isometric/assets/terrain_top.png"
-dest_files=["res://.godot/imported/terrain_top.png-5b7f681e9e1e390943b117247a2919e2.ctex"]
+source_file="res://scenes/map/isometric/assets/terrain_walls.png"
+dest_files=["res://.godot/imported/terrain_walls.png-780584a029352b9450f24233aa0543ec.ctex"]
 
 [params]
 

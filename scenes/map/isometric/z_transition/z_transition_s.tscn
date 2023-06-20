@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bx6o0fn7o214v"]
+[gd_scene load_steps=4 format=3 uid="uid://drjftb4rwwa40"]
 
 [ext_resource type="Script" path="res://scenes/map/isometric/z_transition/z_transition_base.gd" id="1_se6he"]
-[ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric/assets/terrain_top.png" id="2_7uby3"]
+[ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric/assets/terrain_ground.png" id="2_lh12q"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_ygk1o"]
 b = Vector2(32, 16)
@@ -11,13 +11,12 @@ script = ExtResource("1_se6he")
 up_orientation = 5
 
 [node name="TerrainTop" type="Sprite2D" parent="."]
-position = Vector2(0, 16)
-texture = ExtResource("2_7uby3")
+texture = ExtResource("2_lh12q")
 region_enabled = true
-region_rect = Rect2(0, 192, 64, 64)
+region_rect = Rect2(0, 128, 64, 64)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-32, 32)
+position = Vector2(-32, 16)
 shape = SubResource("SegmentShape2D_ygk1o")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -1,19 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://cso02cs6d2mjm"]
+[gd_scene load_steps=3 format=3 uid="uid://32hlv4nxdxh6"]
 
 [ext_resource type="Script" path="res://scenes/map/isometric/z_transition/z_transition_base.gd" id="1_qaxli"]
-[ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric/assets/terrain_top.png" id="2_b4bue"]
+[ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric/assets/terrain_ground.png" id="2_d2lyn"]
 
 [node name="ZTransitionNW" type="Area2D"]
 script = ExtResource("1_qaxli")
 up_orientation = 8
 
 [node name="TerrainTop" type="Sprite2D" parent="."]
-position = Vector2(0, 16)
-texture = ExtResource("2_b4bue")
+texture = ExtResource("2_d2lyn")
 region_enabled = true
-region_rect = Rect2(192, 192, 64, 64)
+region_rect = Rect2(192, 128, 64, 64)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(0, -16)
 polygon = PackedVector2Array(-32, 32, 32, 32, 0, 16)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

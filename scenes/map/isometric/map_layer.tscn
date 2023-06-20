@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://c48hgtr5ishcv"]
 
 [ext_resource type="Script" path="res://scenes/map/isometric/map_layer.gd" id="1_qp825"]
-[ext_resource type="TileSet" uid="uid://b7a54vky7ky18" path="res://scenes/map/isometric/terrain_ground.tres" id="1_yharv"]
-[ext_resource type="TileSet" uid="uid://bk8xm2dq2vg87" path="res://scenes/map/isometric/terrain_walls.tres" id="2_dfoqb"]
+[ext_resource type="TileSet" uid="uid://co5ykgkoccsml" path="res://scenes/map/isometric/terrain_ground.tres" id="1_yharv"]
+[ext_resource type="TileSet" uid="uid://byb2ax2kkag86" path="res://scenes/map/isometric/terrain_walls.tres" id="2_dfoqb"]
 [ext_resource type="TileSet" path="res://scenes/map/isometric/collision_boxes.tres" id="3_gotbk"]
 
 [node name="MapLayer" type="Node2D"]
