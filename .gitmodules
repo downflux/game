@@ -1,0 +1,4 @@
+[submodule "third_party/godot-uuid"]
+	path = third_party/godot-uuid
+	url = https://github.com/binogure-studio/godot-uuid
+	ignore = dirty
