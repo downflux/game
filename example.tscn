@@ -11,13 +11,16 @@ y_sort_enabled = true
 [node name="DFUnit" parent="IsometricMap/MapLayer" index="0" instance=ExtResource("2_03ykn")]
 position = Vector2(0, -16)
 
+[node name="Ground" parent="IsometricMap/MapLayer" index="2"]
+layer_0/tile_data = PackedInt32Array(65535, 65536, 2)
+
 [node name="CollisionBoxes" parent="IsometricMap/MapLayer" index="3"]
-layer_0/tile_data = PackedInt32Array(65535, 0, 262144)
+layer_0/tile_data = PackedInt32Array(65535, 0, 196608)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
-[connection signal="body_entered" from="IsometricMap/MapLayer/CollisionBoxes/ZTransitionS" to="IsometricMap/MapLayer/CollisionBoxes/ZTransitionS" method="_on_body_entered" flags=18]
-[connection signal="body_exited" from="IsometricMap/MapLayer/CollisionBoxes/ZTransitionS" to="IsometricMap/MapLayer/CollisionBoxes/ZTransitionS" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer/CollisionBoxes/ZTransitionSW" to="IsometricMap/MapLayer/CollisionBoxes/ZTransitionSW" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer/CollisionBoxes/ZTransitionSW" to="IsometricMap/MapLayer/CollisionBoxes/ZTransitionSW" method="_on_body_exited" flags=18]
 
 [editable path="IsometricMap"]
 [editable path="IsometricMap/MapLayer"]
