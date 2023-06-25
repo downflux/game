@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/map/isometric/layer/map_layer.gd" id="1_ppnsl"]
 [ext_resource type="TileSet" uid="uid://byb2ax2kkag86" path="res://scenes/map/isometric/layer/terrain_walls.tres" id="2_sffvw"]
 [ext_resource type="TileSet" uid="uid://co5ykgkoccsml" path="res://scenes/map/isometric/layer/terrain_ground.tres" id="3_t57ne"]
-[ext_resource type="TileSet" path="res://scenes/map/isometric/layer/collision_boxes.tres" id="4_w5j7s"]
+[ext_resource type="TileSet" uid="uid://bgqo20lwe5cx8" path="res://scenes/map/isometric/layer/collision_boxes.tres" id="4_w5j7s"]
 
 [node name="MapLayer" type="Node2D"]
 y_sort_enabled = true
@@ -28,3 +28,6 @@ tile_set = ExtResource("4_w5j7s")
 format = 2
 layer_0/name = "Ramp"
 layer_0/y_sort_enabled = true
+
+[connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
+[connection signal="child_exiting_tree" from="." to="." method="_on_child_exiting_tree"]

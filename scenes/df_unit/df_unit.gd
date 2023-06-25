@@ -11,6 +11,9 @@ var _uuid = preload("res://third_party/godot-uuid/uuid.gd")
 @export var z_layer: int
 var df_unit: DFUnit3D = DFUnit3D.new()
 
+signal proxy_ramp_entered
+signal proxy_ramp_exited
+
 var _l: Layer
 var _id: String
 

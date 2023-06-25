@@ -2,9 +2,6 @@ extends Area2D
 
 class_name ZTransitionBase
 
-signal ramp_entered(unit: DFUnit)
-signal ramp_exited(unit: DFUnit)
-
 @export var up_orientation: ZTransitionBase.Orientation
 
 enum Orientation {
@@ -43,9 +40,9 @@ func _ready():
 func _on_body_entered(body):
     print("BODY ENTERED")
     if body is DFUnit and body.df_unit.velocity2d(DFUnit3D.ProjectionMode.CARTESIAN).dot(_up) >= 0:
-        ramp_entered.emit(body as DFUnit)
+        body.proxy_ramp_entered.emit()
 
 func _on_body_exited(body):
     print("BODY EXITED")
     if body is DFUnit and body.df_unit.velocity2d(DFUnit3D.ProjectionMode.CARTESIAN).dot(_up) <= 0:
-        ramp_exited.emit(body as DFUnit)
+        body.proxy_ramp_exited.emit()

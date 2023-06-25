@@ -11,3 +11,4 @@ func _ready():
                 "duplicate map z-layers found",
             )
             _layers[n.z_layer] = n
+
