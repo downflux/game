@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://dkddpciwtg84v"]
 
 [ext_resource type="Script" path="res://scenes/map/isometric/layer/z_transition/z_transition_base.gd" id="1_clgn5"]
 [ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric/assets/terrain_ground.png" id="2_8yufh"]

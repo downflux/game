@@ -1,10 +1,7 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://w2mb6efwjv2a"]
 
 [ext_resource type="Script" path="res://scenes/map/isometric/layer/z_transition/z_transition_base.gd" id="1_se6he"]
 [ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric/assets/terrain_ground.png" id="2_lh12q"]
-
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_ygk1o"]
-b = Vector2(32, 16)
 
 [node name="ZTransitionS" type="Area2D"]
 script = ExtResource("1_se6he")
@@ -15,9 +12,8 @@ texture = ExtResource("2_lh12q")
 region_enabled = true
 region_rect = Rect2(0, 128, 64, 64)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-32, 16)
-shape = SubResource("SegmentShape2D_ygk1o")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-32, 16, 0, -16, 32, 0, 0, 32)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

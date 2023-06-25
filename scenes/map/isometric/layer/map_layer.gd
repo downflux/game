@@ -25,6 +25,7 @@ func _on_child_exiting_tree(node):
         node.proxy_ramp_entered.disconnect(_on_unit_move_down)
 
 func _on_unit_move_up(unit: DFUnit):
+    # TODO(minkezhang): Check unit z_layer, only check if map's layer == unit z_layer (or unit.z_layer - 1 to move down)
     unit_transition.emit(unit, z_layer, z_layer + 1)
 
 func _on_unit_move_down(unit: DFUnit):

@@ -9,7 +9,7 @@ class_name DFUnit
 var _uuid = preload("res://third_party/godot-uuid/uuid.gd")
 
 @export var z_layer: int
-var df_unit: DFUnit3D = DFUnit3D.new()
+var df_unit: DFUnit3D
 
 signal proxy_ramp_entered
 signal proxy_ramp_exited
@@ -18,6 +18,8 @@ var _l: Layer
 var _id: String
 
 func _ready():
+    df_unit = DFUnit3D.new(position)
+    print(df_unit.position)
     _id = _uuid.v4()
 
 func _init():

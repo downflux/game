@@ -1,19 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://dxcrio6w3o2en"]
+[gd_scene load_steps=3 format=3 uid="uid://dxcrio6w3o2en"]
 
 [ext_resource type="Script" path="res://scenes/df_unit/df_unit.gd" id="1_e2noa"]
 [ext_resource type="Texture2D" uid="uid://deswygl8ng7wu" path="res://unit.png" id="1_s2rpw"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_84hyx"]
-size = Vector2(32, 40)
-
 [node name="DFUnit" type="CharacterBody2D"]
 y_sort_enabled = true
+motion_mode = 1
 script = ExtResource("1_e2noa")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_s2rpw")
 offset = Vector2(0, -16)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -12)
-shape = SubResource("RectangleShape2D_84hyx")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(0, -32, 16, -24, 16, 0, 0, 8, -16, 0, -16, -24)

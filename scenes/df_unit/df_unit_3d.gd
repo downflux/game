@@ -27,6 +27,11 @@ const _PIXELS_PER_LAYER = 32
 # Corresponds to https://redd.it/mo9xyx
 const _PIXELS_PER_METER = 100
 
+func _init(position2d: Vector2 = Vector2(0, 0)):
+    var p = _ISOMETRIC_TRANSFORM.affine_inverse() * position2d
+    position.x = p.x
+    position.y = p.y
+
 func position2d(mode: ProjectionMode = ProjectionMode.CARTESIAN) -> Vector2:
     if mode == ProjectionMode.CARTESIAN:
         return Vector2(position.x, position.y)
