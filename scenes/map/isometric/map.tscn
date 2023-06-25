@@ -1,32 +1,45 @@
-[gd_scene load_steps=4 format=3 uid="uid://cs652iwcwy1bg"]
+[gd_scene load_steps=4 format=3 uid="uid://bl1tj2lt457cv"]
 
-[ext_resource type="PackedScene" uid="uid://c48hgtr5ishcv" path="res://scenes/map/isometric/map_layer.tscn" id="1_aqjo8"]
+[ext_resource type="PackedScene" uid="uid://cqktarrued86e" path="res://scenes/map/isometric/layer/map_layer.tscn" id="1_aqjo8"]
 [ext_resource type="Script" path="res://scenes/map/isometric/map.gd" id="1_cfqil"]
-[ext_resource type="PackedScene" uid="uid://drjftb4rwwa40" path="res://scenes/map/isometric/z_transition/z_transition_s.tscn" id="2_qx3rt"]
+[ext_resource type="PackedScene" path="res://scenes/map/isometric/layer/z_transition/z_transition_se.tscn" id="2_qx3rt"]
 
 [node name="IsometricMap" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_cfqil")
 
-[node name="MapLayer2" parent="." instance=ExtResource("1_aqjo8")]
+[node name="MapLayer" parent="." instance=ExtResource("1_aqjo8")]
 z_layer = 1
 
-[node name="Walls" parent="MapLayer2" index="0"]
+[node name="Walls" parent="MapLayer" index="0"]
 layer_0/tile_data = PackedInt32Array(196605, 0, 2, 196606, 0, 2, 196607, 0, 2, 131072, 0, 2, -2, 0, 0, 65534, 0, 0, 131070, 0, 0, 131071, 0, 0, 65535, 0, 0, -1, 0, 0, -65536, 0, 0, 0, 0, 0, 65536, 0, 0, -65535, 131072, 1, 1, 131072, 1, 65537, 131072, 1)
 
-[node name="Ground" parent="MapLayer2" index="1"]
+[node name="Ground" parent="MapLayer" index="1"]
 layer_0/tile_data = PackedInt32Array(196606, 0, 2, 196607, 0, 2, 131072, 0, 2, 131070, 0, 0, 131071, 0, 0, 65536, 0, 0, 0, 0, 0, -65536, 0, 0, -1, 0, 0, -2, 0, 0, 65534, 0, 0, 65535, 0, 0, -65535, 131072, 1, 1, 131072, 1, 65537, 131072, 1)
 
-[node name="CollisionBoxes" parent="MapLayer2" index="2"]
+[node name="CollisionBoxes" parent="MapLayer" index="2"]
 layer_0/tile_data = PackedInt32Array(196606, 0, 262144, 196607, 0, 262144, 131072, 0, 262144, 65537, 0, 131072, 1, 0, 131072, -65535, 0, 131072)
 
-[node name="ZTransitionS" parent="MapLayer2/CollisionBoxes" index="0" instance=ExtResource("2_qx3rt")]
+[node name="ZTransitionS" parent="MapLayer/CollisionBoxes" index="0" instance=ExtResource("2_qx3rt")]
 position = Vector2(-32, 48)
 
-[node name="ZTransitionS18661" parent="MapLayer2/CollisionBoxes" index="1" instance=ExtResource("2_qx3rt")]
+[node name="ZTransitionS18661" parent="MapLayer/CollisionBoxes" index="1" instance=ExtResource("2_qx3rt")]
 position = Vector2(-64, 32)
 
-[node name="ZTransitionS18662" parent="MapLayer2/CollisionBoxes" index="2" instance=ExtResource("2_qx3rt")]
+[node name="ZTransitionS18662" parent="MapLayer/CollisionBoxes" index="2" instance=ExtResource("2_qx3rt")]
 position = Vector2(-96, 16)
 
-[editable path="MapLayer2"]
+[connection signal="body_entered" from="MapLayer/CollisionBoxes/ZTransitionE" to="MapLayer/CollisionBoxes/ZTransitionE" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="MapLayer/CollisionBoxes/ZTransitionE" to="MapLayer/CollisionBoxes/ZTransitionE" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="MapLayer/CollisionBoxes/@ZTransitionE@21791" to="MapLayer/CollisionBoxes/@ZTransitionE@21791" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="MapLayer/CollisionBoxes/@ZTransitionE@21791" to="MapLayer/CollisionBoxes/@ZTransitionE@21791" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="MapLayer/CollisionBoxes/@ZTransitionE@21792" to="MapLayer/CollisionBoxes/@ZTransitionE@21792" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="MapLayer/CollisionBoxes/@ZTransitionE@21792" to="MapLayer/CollisionBoxes/@ZTransitionE@21792" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="MapLayer/CollisionBoxes/@ZTransitionS@21793" to="MapLayer/CollisionBoxes/@ZTransitionS@21793" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="MapLayer/CollisionBoxes/@ZTransitionS@21793" to="MapLayer/CollisionBoxes/@ZTransitionS@21793" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="MapLayer/CollisionBoxes/@ZTransitionS@21794" to="MapLayer/CollisionBoxes/@ZTransitionS@21794" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="MapLayer/CollisionBoxes/@ZTransitionS@21794" to="MapLayer/CollisionBoxes/@ZTransitionS@21794" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="MapLayer/CollisionBoxes/@ZTransitionS@21795" to="MapLayer/CollisionBoxes/@ZTransitionS@21795" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="MapLayer/CollisionBoxes/@ZTransitionS@21795" to="MapLayer/CollisionBoxes/@ZTransitionS@21795" method="_on_body_exited" flags=18]
+
+[editable path="MapLayer"]

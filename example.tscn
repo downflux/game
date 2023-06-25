@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1yftdig24omx"]
+
+[ext_resource type="PackedScene" path="res://scenes/map/isometric/map.tscn" id="1_340ec"]
+[ext_resource type="PackedScene" path="res://scenes/df_unit/example_unit.tscn" id="2_03ykn"]
+
+[node name="Example" type="Node2D"]
+y_sort_enabled = true
+
+[node name="IsometricMap@MapLayer2@ExampleUnit" parent="." instance=ExtResource("2_03ykn")]
+z_index = 5
+position = Vector2(-147, 82)
+
+[node name="IsometricMap" parent="." instance=ExtResource("1_340ec")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionE" to="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionE" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionE" to="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionE" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionE@20538" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionE@20538" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionE@20538" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionE@20538" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionE@20539" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionE@20539" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionE@20539" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionE@20539" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20540" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20540" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20540" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20540" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20541" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20541" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20541" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20541" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20542" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20542" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20542" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20542" method="_on_body_exited" flags=18]
+
+[editable path="IsometricMap"]
+[editable path="IsometricMap/MapLayer2"]

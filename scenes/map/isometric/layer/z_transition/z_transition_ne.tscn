@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://crih0dnlkkx5j"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://scenes/map/isometric/z_transition/z_transition_base.gd" id="1_ie62y"]
+[ext_resource type="Script" path="res://scenes/map/isometric/layer/z_transition/z_transition_base.gd" id="1_ie62y"]
 [ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric/assets/terrain_ground.png" id="2_u2upg"]
 
 [node name="ZTransitionNE" type="Area2D"]
