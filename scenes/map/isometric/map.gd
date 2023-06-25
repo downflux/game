@@ -11,7 +11,3 @@ func _ready():
                 "duplicate map z-layers found",
             )
             _layers[n.z_layer] = n
-
-func move_unit(unit: DFUnit, source: int, target: int):
-    _layers[source].remove_unit(unit)
-    _layers[target].insert_unit(unit)
