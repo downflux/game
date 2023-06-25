@@ -12,3 +12,6 @@ func _ready():
             )
             _layers[n.z_layer] = n
 
+func _on_map_layer_unit_transition(unit: DFUnit, source_z_layer: int, target_z_layer: int):
+    _layers[source_z_layer].remove_child(unit)
+    _layers[target_z_layer].add_child(unit)

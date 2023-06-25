@@ -34,15 +34,13 @@ func _ready():
     _up = _UP_VECTOR_LOOKUP[up_orientation].normalized()
 
 # TODO(minkezhang): Emit signal to IsometricMap instead.
-# TODO(minkezhang): Rename IsometricMap -> Map.
-# TODO(minkezhang): Add Schematic tilemap per MapLayer.
 # TODO(minkezhang): Move children between MapLayers instead of worrying about z_index.
 func _on_body_entered(body):
-    print("BODY ENTERED")
-    if body is DFUnit and body.df_unit.velocity2d(DFUnit3D.ProjectionMode.CARTESIAN).dot(_up) >= 0:
-        body.proxy_ramp_entered.emit()
+    if body is DFUnit:
+    # if body is DFUnit and body.df_unit.velocity2d(DFUnit3D.ProjectionMode.CARTESIAN).dot(_up) >= 0:
+        (body as DFUnit).proxy_ramp_entered.emit()
 
 func _on_body_exited(body):
-    print("BODY EXITED")
-    if body is DFUnit and body.df_unit.velocity2d(DFUnit3D.ProjectionMode.CARTESIAN).dot(_up) <= 0:
-        body.proxy_ramp_exited.emit()
+    if body is DFUnit:
+    # if body is DFUnit and body.df_unit.velocity2d(DFUnit3D.ProjectionMode.CARTESIAN).dot(_up) <= 0:
+        (body as DFUnit).proxy_ramp_exited.emit()
