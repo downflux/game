@@ -59,11 +59,11 @@ func _ready():
     if parent != null:
         _z_layer = parent.z_layer
 
-# TODO(minkezhang): Make sure this works for cells other than (0, 0).
+# TODO(minkezhang): Check for z_layer offset.
 func _body_is_above(body: DFUnit) -> bool:
-    var p = _UP_VECTOR_PLANE[up_orientation].p - global_position
-    var dp = body.global_position - p
-    return dp.dot(_UP_VECTOR_PLANE[up_orientation].n) > 0
+    var p = DFVector.flatten(DFVector.inflate(global_position)) + _UP_VECTOR_LOOKUP[up_orientation] * 32
+    var dp = body.df_unit.position2d() - p
+    return dp.dot(_UP_VECTOR_LOOKUP[up_orientation]) > 0
 
 # TODO(minkezhang): Emit signal to IsometricMap instead.
 # TODO(minkezhang): Move children between MapLayers instead of worrying about z_index.
@@ -71,13 +71,13 @@ func _on_body_entered(body):
     if body is DFUnit:
         if _body_is_above(body):  # come down to current layer down (if tile is on next tile down)
             print(_body_is_above(body))
-            (body as DFUnit).proxy_ramp_entered.emit()
+            (body as DFUnit).proxy_ramp_entered.emit(_z_layer)
         else:  # entering from bottom or side -- only increase Z-index
             pass
 
 func _on_body_exited(body):
     if body is DFUnit:
         if _body_is_above(body):  # increase body z layer
-            (body as DFUnit).proxy_ramp_exited.emit()
+            (body as DFUnit).proxy_ramp_exited.emit(_z_layer)
         else:  # exiting from bottom or side -- decrease Z-index
             pass

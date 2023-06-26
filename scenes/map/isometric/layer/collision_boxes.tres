@@ -1,22 +1,22 @@
 [gd_resource type="TileSet" load_steps=10 format=3 uid="uid://bgqo20lwe5cx8"]
 
-[ext_resource type="PackedScene" path="res://scenes/map/isometric/layer/z_transition/z_transition_s.tscn" id="1_es72t"]
-[ext_resource type="PackedScene" path="res://scenes/map/isometric/layer/z_transition/z_transition_n.tscn" id="1_slqhd"]
-[ext_resource type="PackedScene" path="res://scenes/map/isometric/layer/z_transition/z_transition_e.tscn" id="2_7mh1c"]
-[ext_resource type="PackedScene" path="res://scenes/map/isometric/layer/z_transition/z_transition_ne.tscn" id="2_hw5b6"]
-[ext_resource type="PackedScene" path="res://scenes/map/isometric/layer/z_transition/z_transition_w.tscn" id="4_prpij"]
-[ext_resource type="PackedScene" path="res://scenes/map/isometric/layer/z_transition/z_transition_sw.tscn" id="4_rw8tn"]
-[ext_resource type="PackedScene" path="res://scenes/map/isometric/layer/z_transition/z_transition_se.tscn" id="6_pdlfb"]
-[ext_resource type="PackedScene" path="res://scenes/map/isometric/layer/z_transition/z_transition_nw.tscn" id="8_0vd2p"]
+[ext_resource type="PackedScene" uid="uid://w2mb6efwjv2a" path="res://scenes/map/isometric/layer/z_transition/z_transition_s.tscn" id="1_es72t"]
+[ext_resource type="PackedScene" uid="uid://bqrrw6hwkmyhu" path="res://scenes/map/isometric/layer/z_transition/z_transition_n.tscn" id="1_slqhd"]
+[ext_resource type="PackedScene" uid="uid://dkddpciwtg84v" path="res://scenes/map/isometric/layer/z_transition/z_transition_e.tscn" id="2_7mh1c"]
+[ext_resource type="PackedScene" uid="uid://boqbwjk74mdjj" path="res://scenes/map/isometric/layer/z_transition/z_transition_ne.tscn" id="2_hw5b6"]
+[ext_resource type="PackedScene" uid="uid://rb16qu2slc1k" path="res://scenes/map/isometric/layer/z_transition/z_transition_w.tscn" id="4_prpij"]
+[ext_resource type="PackedScene" uid="uid://dvewehmhxxnhn" path="res://scenes/map/isometric/layer/z_transition/z_transition_sw.tscn" id="4_rw8tn"]
+[ext_resource type="PackedScene" uid="uid://dpepaxpuvork6" path="res://scenes/map/isometric/layer/z_transition/z_transition_se.tscn" id="6_pdlfb"]
+[ext_resource type="PackedScene" uid="uid://dk880ayc03tqk" path="res://scenes/map/isometric/layer/z_transition/z_transition_nw.tscn" id="8_0vd2p"]
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_uy42b"]
 resource_name = "CollisionBox"
 scenes/0/scene = ExtResource("1_slqhd")
 scenes/1/scene = ExtResource("2_hw5b6")
 scenes/2/scene = ExtResource("2_7mh1c")
-scenes/3/scene = ExtResource("4_rw8tn")
+scenes/3/scene = ExtResource("6_pdlfb")
 scenes/4/scene = ExtResource("1_es72t")
-scenes/5/scene = ExtResource("6_pdlfb")
+scenes/5/scene = ExtResource("4_rw8tn")
 scenes/6/scene = ExtResource("4_prpij")
 scenes/7/scene = ExtResource("8_0vd2p")
 

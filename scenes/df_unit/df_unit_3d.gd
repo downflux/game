@@ -18,13 +18,13 @@ const _PIXELS_PER_LAYER = 32
 const _PIXELS_PER_METER = 100
 
 func _init(position2d: Vector2 = Vector2(0, 0)):
-    position = DFVector.project_inverse(position2d)
+    position = DFVector.inflate(position2d)
 
 func position2d(mode: DFVector.Mode = DFVector.Mode.CARTESIAN) -> Vector2:
-    return DFVector.project(position, mode)
+    return DFVector.flatten(position, mode)
 
 func velocity2d(mode: DFVector.Mode = DFVector.Mode.CARTESIAN) -> Vector2:
-    return DFVector.project(velocity, mode)
+    return DFVector.flatten(velocity, mode)
 
 func z_layer() -> int:
     return floor(position.z / _PIXELS_PER_LAYER)
