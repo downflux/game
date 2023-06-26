@@ -10,6 +10,4 @@ script = ExtResource("1_cfqil")
 [node name="MapLayer" parent="." instance=ExtResource("1_aqjo8")]
 z_layer = 1
 
-[connection signal="unit_transition" from="MapLayer" to="." method="_on_map_layer_unit_transition"]
-
 [editable path="MapLayer"]

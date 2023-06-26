@@ -39,6 +39,8 @@ class Plane2D:
 # Planes here define the +z direction; the planes are defined in point-normal
 # form, with the are in point-normal form, with the normal pointing into the +z
 # direction.
+#
+# TODO(minkezhang): Detect the lower z-side instead.
 var _UP_VECTOR_PLANE: Dictionary = {
     Orientation.NORTH:     Plane2D.new(Vector2(-32,   0), Vector2(-1,  2).normalized()),
     Orientation.NORTHEAST: Plane2D.new(Vector2(-32,   0), Vector2(-1,  0)),
@@ -71,13 +73,13 @@ func _on_body_entered(body):
     if body is DFUnit:
         if _body_is_above(body):  # come down to current layer down (if tile is on next tile down)
             print(_body_is_above(body))
-            (body as DFUnit).proxy_ramp_entered.emit(_z_layer)
+            (body as DFUnit).proxy_z_layer_down.emit(_z_layer)
         else:  # entering from bottom or side -- only increase Z-index
             pass
 
 func _on_body_exited(body):
     if body is DFUnit:
         if _body_is_above(body):  # increase body z layer
-            (body as DFUnit).proxy_ramp_exited.emit(_z_layer)
+            (body as DFUnit).proxy_z_layer_up.emit(_z_layer)
         else:  # exiting from bottom or side -- decrease Z-index
             pass
