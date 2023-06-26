@@ -4,6 +4,8 @@ class_name ZTransitionBase
 
 @export var up_orientation: ZTransitionBase.Orientation
 
+var _z_layer: int = -1
+
 enum Orientation {
     ERROR_UNSPECIFIED,
     NORTH,
@@ -53,6 +55,9 @@ var _up: Vector2
 
 func _ready():
     _up = _UP_VECTOR_LOOKUP[up_orientation].normalized()
+    var parent = get_owner() as MapLayer
+    if parent != null:
+        _z_layer = parent.z_layer
 
 # TODO(minkezhang): Make sure this works for cells other than (0, 0).
 func _body_is_above(body: DFUnit) -> bool:

@@ -32,8 +32,8 @@ func id() -> String:
 const SPEED = 100
 
 func _process(_delta):
-    var p = df_unit.position2d(DFUnit3D.ProjectionMode.ISOMETRIC)
-    var v = df_unit.velocity2d(DFUnit3D.ProjectionMode.ISOMETRIC)
+    var p = df_unit.position2d(DFVector.Mode.ISOMETRIC)
+    var v = df_unit.velocity2d(DFVector.Mode.ISOMETRIC)
     position.x = p.x
     position.y = p.y
     velocity.x = v.x

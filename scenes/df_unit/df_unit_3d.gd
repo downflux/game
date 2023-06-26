@@ -9,38 +9,22 @@ extends Resource
 ## applicable.
 class_name DFUnit3D
 
-enum ProjectionMode {
-    CARTESIAN,
-    ISOMETRIC,
-}
-
 var position: Vector3
 var velocity: Vector3
 
-var _ISOMETRIC_TRANSFORM = Transform2D(
-    Vector2(0.5,  0.25),
-    Vector2(0.5, -0.25),
-    Vector2(0, 0)
-)
 const _PIXELS_PER_LAYER = 32
 
 # Corresponds to https://redd.it/mo9xyx
 const _PIXELS_PER_METER = 100
 
 func _init(position2d: Vector2 = Vector2(0, 0)):
-    var p = _ISOMETRIC_TRANSFORM.affine_inverse() * position2d
-    position.x = p.x
-    position.y = p.y
+    position = DFVector.project_inverse(position2d)
 
-func position2d(mode: ProjectionMode = ProjectionMode.CARTESIAN) -> Vector2:
-    if mode == ProjectionMode.CARTESIAN:
-        return Vector2(position.x, position.y)
-    return _ISOMETRIC_TRANSFORM * Vector2(position.x, position.y) + Vector2(0, position.z)
+func position2d(mode: DFVector.Mode = DFVector.Mode.CARTESIAN) -> Vector2:
+    return DFVector.project(position, mode)
 
-func velocity2d(mode: ProjectionMode = ProjectionMode.CARTESIAN) -> Vector2:
-    if mode == ProjectionMode.CARTESIAN:
-        return Vector2(velocity.x, velocity.y)
-    return _ISOMETRIC_TRANSFORM * Vector2(velocity.x, velocity.y) + Vector2(0, velocity.z)
+func velocity2d(mode: DFVector.Mode = DFVector.Mode.CARTESIAN) -> Vector2:
+    return DFVector.project(velocity, mode)
 
 func z_layer() -> int:
     return floor(position.z / _PIXELS_PER_LAYER)
