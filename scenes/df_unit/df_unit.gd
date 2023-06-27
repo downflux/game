@@ -14,16 +14,12 @@ var df_unit: DFUnit3D
 signal proxy_z_layer_up(collision_z_layer: int)
 signal proxy_z_layer_down(collision_z_layer: int)
 
-var _l: Layer
 var _id: String
 
 func _ready():
     df_unit = DFUnit3D.new(position)
     _id = _uuid.v4()
-
-func _init():
-    _l = Layer.new(z_layer)
-    z_index = _l.get_z_index(Layer.RenderLayer.UNIT)
+    z_index = Layer.z_index_offset(Layer.RenderLayer.UNIT) + Layer._Z_INDICES_PER_LAYER
 
 func id() -> String:
     return _id

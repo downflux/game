@@ -60,10 +60,10 @@ func _on_body_entered(body):
     if body is DFUnit:
         # A unit is detected moving into the collision area from the negative z
         # plane, and is approaching from the layer immediately below.
-        if _is_below_tile(body): # and body.z_layer == _z_layer - 1:
+        if _is_below_tile(body) and body.z_layer == _z_layer - 1:
             body.proxy_z_layer_up.emit(_z_layer)
 
 func _on_body_exited(body):
     if body is DFUnit:
-        if _is_below_tile(body): # and body.z_layer == _z_layer:
+        if _is_below_tile(body) and body.z_layer == _z_layer:
             body.proxy_z_layer_down.emit(_z_layer)

@@ -1,12 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bl1tj2lt457cv"]
+[gd_scene load_steps=2 format=3 uid="uid://bl1tj2lt457cv"]
 
-[ext_resource type="PackedScene" uid="uid://cqktarrued86e" path="res://scenes/map/isometric/layer/map_layer.tscn" id="1_aqjo8"]
 [ext_resource type="Script" path="res://scenes/map/isometric/map.gd" id="1_cfqil"]
 
 [node name="Map" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_cfqil")
-
-[node name="MapLayer" parent="." instance=ExtResource("1_aqjo8")]
-
-[editable path="MapLayer"]

@@ -5,9 +5,8 @@ class_name MapLayer
 @export var z_layer: int = 0
 
 func _ready():
-    var l: Layer = Layer.new(z_layer)
-    z_index = l.get_z_index()
-    $Walls.z_index = Layer.get_z_index_offset(Layer.RenderLayer.WALL)
-    $Ground.z_index = Layer.get_z_index_offset(Layer.RenderLayer.GROUND)
+    z_index = Layer.z_index(z_layer)
+    $Walls.z_index = Layer.z_index_offset(Layer.RenderLayer.WALL)
+    $Ground.z_index = Layer.z_index_offset(Layer.RenderLayer.GROUND)
     $CollisionBoxes.visible = false
-    # position.y -= z_layer * 16
+    position.y -= z_layer * 16
