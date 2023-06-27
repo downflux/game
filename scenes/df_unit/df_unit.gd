@@ -19,7 +19,6 @@ var _id: String
 
 func _ready():
     df_unit = DFUnit3D.new(position)
-    print(df_unit.position)
     _id = _uuid.v4()
 
 func _init():
@@ -48,9 +47,3 @@ func _physics_process(delta):
             0,
         ) * SPEED
     df_unit._physics_process(delta)
-
-func maybe_set_z_layer(z_layer: int):
-    print("Set z_layer: ", z_layer)
-    _l.set_z_layer(z_layer)
-    z_index = _l.get_z_index(Layer.RenderLayer.UNIT)
-    print(z_index)

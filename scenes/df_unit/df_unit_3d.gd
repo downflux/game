@@ -17,8 +17,8 @@ const _PIXELS_PER_LAYER = 32
 # Corresponds to https://redd.it/mo9xyx
 const _PIXELS_PER_METER = 100
 
-func _init(position2d: Vector2 = Vector2(0, 0)):
-    position = DFVector.inflate(position2d)
+func _init(p: Vector2 = Vector2(0, 0)):
+    position = DFVector.inflate(p)
 
 func position2d(mode: DFVector.Mode = DFVector.Mode.CARTESIAN) -> Vector2:
     return DFVector.flatten(position, mode)
