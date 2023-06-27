@@ -3,10 +3,9 @@
 [ext_resource type="Script" path="res://scenes/map/isometric/layer/z_transition/z_transition_base.gd" id="1_ye1j7"]
 [ext_resource type="Texture2D" uid="uid://dwt5ncr3miqc3" path="res://scenes/map/isometric/assets/terrain_ground.png" id="2_n0w5x"]
 
-[node name="ZTransitionN" type="Area2D" node_paths=PackedStringArray("up_line")]
+[node name="ZTransitionN" type="Area2D"]
 script = ExtResource("1_ye1j7")
-up_orientation = 1
-up_line = NodePath("")
+z_layer_down_face = 1
 
 [node name="TerrainTop" type="Sprite2D" parent="."]
 texture = ExtResource("2_n0w5x")

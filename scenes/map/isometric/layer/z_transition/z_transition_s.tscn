@@ -5,7 +5,7 @@
 
 [node name="ZTransitionS" type="Area2D"]
 script = ExtResource("1_se6he")
-up_orientation = 5
+z_layer_down_face = 5
 
 [node name="TerrainTop" type="Sprite2D" parent="."]
 texture = ExtResource("2_lh12q")

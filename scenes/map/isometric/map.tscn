@@ -8,6 +8,5 @@ y_sort_enabled = true
 script = ExtResource("1_cfqil")
 
 [node name="MapLayer" parent="." instance=ExtResource("1_aqjo8")]
-z_layer = 1
 
 [editable path="MapLayer"]
