@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://b6nfo7yw4u6sq"]
+
+[ext_resource type="Texture2D" uid="uid://ej0brol4mg7m" path="res://assets/map/terrain.png" id="1_m6ptk"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t3sil"]
+texture = ExtResource("1_m6ptk")
+texture_region_size = Vector2i(48, 48)
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+0:3/0 = 0
+0:4/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_kgupe"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_t3sil")
+
+[node name="Map" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_kgupe")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 0, 1, 1, 0, 1, 2, 0, 1, 3, 0, 1, 65537, 131072, 1, 65538, 131072, 1, 65536, 0, 2, 65539, 0, 2, 131072, 0, 1, 131073, 0, 1, 131074, 0, 1, 131075, 0, 1, 65535, 0, 1, 131071, 0, 2, 196607, 65536, 1, 131076, 65536, 1, 65540, 0, 2, 4, 0, 1, -1, 0, 4, -65536, 0, 4, -65535, 0, 4, -65534, 0, 4, -65533, 0, 4, -65532, 0, 4, -131067, 0, 3, -65531, 0, 3, 5, 0, 3, -131068, 0, 3, -131069, 0, 3, -131070, 0, 3, -131071, 0, 3, -131072, 0, 3, -65537, 0, 3, -65538, 0, 3, -2, 0, 3, 65534, 0, 3, 131070, 0, 3, 196606, 0, 3, 262142, 0, 3, 262143, 0, 3, 196608, 0, 3, 196609, 0, 3, 196610, 0, 3, 196611, 0, 3, 196612, 0, 3, 196613, 0, 3, 131077, 0, 3, 65541, 0, 3)
