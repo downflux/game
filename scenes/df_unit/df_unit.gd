@@ -19,7 +19,6 @@ var _id: String
 func _ready():
     df_unit = DFUnit3D.new(position)
     _id = _uuid.v4()
-    z_index = Layer.z_index_offset(Layer.RenderLayer.UNIT) + Layer._Z_INDICES_PER_LAYER
 
 func id() -> String:
     return _id

@@ -56,6 +56,7 @@ func _is_below_tile(body: DFUnit) -> bool:
     var dp = body.global_position - p
     return dp.dot(_Z_LAYER_DOWN_NORMAL[z_layer_down_face]) > 0
 
+# TODO(minkezhang): Check for v exit out / in.
 func _on_body_entered(body):
     if body is DFUnit:
         # A unit is detected moving into the collision area from the negative z

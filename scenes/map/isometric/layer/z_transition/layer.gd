@@ -19,8 +19,5 @@ const _Z_INDEX_OFFSET: Dictionary = {
     RenderLayer.GROUND: 1,
 }
 
-static func z_index(z_layer) -> int:
-    return z_layer * _Z_INDICES_PER_LAYER
-
-static func z_index_offset(l: RenderLayer) -> int:
-    return _Z_INDEX_OFFSET[l]
+static func z_index(z_layer: int, layer: RenderLayer) -> int:
+    return z_layer * _Z_INDICES_PER_LAYER + _Z_INDEX_OFFSET[layer]

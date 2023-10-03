@@ -21,46 +21,48 @@ layer_0/tile_data = PackedInt32Array(-65539, 196608, 0, -3, 0, 0, 65533, 0, 0, 1
 z_layer = 1
 
 [node name="Walls" parent="IsometricMap/MapLayer2" index="0"]
-layer_0/tile_data = PackedInt32Array(-65539, 0, 2, -65538, 0, 2, -65537, 0, 2, -131072, 0, 2, -196608, 0, 0, -131073, 0, 0, -131074, 0, 0, -131075, 0, 0, -196611, 0, 0, -196610, 0, 0, -196609, 0, 0, -262144, 0, 0, -262147, 196608, 0, -262146, 196608, 0, -262145, 196608, 0, -327680, 196608, 0)
+layer_0/tile_data = PackedInt32Array(-65539, 0, 2, -65538, 0, 2, -65537, 0, 2, -131072, 0, 2, -196608, 0, 0, -131073, 0, 0, -131074, 0, 0, -131075, 0, 0, -196611, 0, 0, -196610, 0, 0, -196609, 0, 0, -262144, 0, 0, -262147, 196608, 0, -262146, 196608, 0, -262145, 196608, 0, -327680, 196608, 0, 196602, 65536, 2)
 
 [node name="Ground" parent="IsometricMap/MapLayer2" index="1"]
-layer_0/tile_data = PackedInt32Array(-65539, 0, 2, -65538, 0, 2, -65537, 0, 2, -131072, 0, 2, -262147, 196608, 0, -196611, 0, 0, -131075, 0, 0, -131074, 0, 0, -196610, 0, 0, -262146, 196608, 0, -262145, 196608, 0, -196609, 0, 0, -131073, 0, 0, -196608, 0, 0, -262144, 0, 0, -327680, 196608, 0)
+layer_0/tile_data = PackedInt32Array(-65539, 0, 2, -65538, 0, 2, -65537, 0, 2, -131072, 0, 2, -262147, 196608, 0, -196611, 0, 0, -131075, 0, 0, -131074, 0, 0, -196610, 0, 0, -262146, 196608, 0, -262145, 196608, 0, -196609, 0, 0, -131073, 0, 0, -196608, 0, 0, -262144, 0, 0, -327680, 196608, 0, 196602, 65536, 2)
 
 [node name="CollisionBoxes" parent="IsometricMap/MapLayer2" index="2"]
-layer_0/tile_data = PackedInt32Array(-65539, 0, 262144, -65538, 0, 262144, -65537, 0, 262144, -131072, 0, 262144)
+layer_0/tile_data = PackedInt32Array(-65539, 0, 262144, -65538, 0, 262144, -65537, 0, 262144, -131072, 0, 262144, 196602, 0, 327680)
 
 [node name="MapLayer3" parent="IsometricMap" instance=ExtResource("2_654a0")]
 z_layer = 2
 
 [node name="Walls" parent="IsometricMap/MapLayer3" index="0"]
-layer_0/tile_data = PackedInt32Array(-327683, 0, 0, -262147, 0, 2, -262146, 0, 2, -262145, 0, 2, -327680, 0, 2, -327682, 0, 0, -327681, 0, 0, -393216, 0, 0, -458752, 0, 0, -393217, 0, 0, -393218, 0, 0, -393219, 0, 0, -458755, 0, 0, -458754, 0, 0, -458753, 0, 0, -524288, 0, 0)
+layer_0/tile_data = PackedInt32Array(-327683, 0, 0, -262147, 65536, 2, -262146, 0, 2, -262145, 0, 2, -327680, 0, 2, -327682, 0, 0, -327681, 0, 0, -393216, 0, 0, -458752, 0, 0, -393217, 0, 0, -393218, 0, 0, -393219, 0, 0, -458755, 0, 0, -458754, 0, 0, -458753, 0, 0, -524288, 0, 0)
 
 [node name="Ground" parent="IsometricMap/MapLayer3" index="1"]
-layer_0/tile_data = PackedInt32Array(-262147, 0, 2, -262146, 0, 2, -262145, 0, 2, -327680, 0, 2, -458755, 0, 0, -393219, 0, 0, -327683, 0, 0, -327682, 0, 0, -327681, 0, 0, -393216, 0, 0, -458752, 0, 0, -524288, 0, 0, -458753, 0, 0, -458754, 0, 0, -393218, 0, 0, -393217, 0, 0)
+layer_0/tile_data = PackedInt32Array(-262147, 65536, 2, -262146, 0, 2, -262145, 0, 2, -327680, 0, 2, -458755, 0, 0, -393219, 0, 0, -327683, 0, 0, -327682, 0, 0, -327681, 0, 0, -393216, 0, 0, -458752, 0, 0, -524288, 0, 0, -458753, 0, 0, -458754, 0, 0, -393218, 0, 0, -393217, 0, 0)
 
 [node name="CollisionBoxes" parent="IsometricMap/MapLayer3" index="2"]
-layer_0/tile_data = PackedInt32Array(-262147, 0, 262144, -262146, 0, 262144, -262145, 0, 262144, -327680, 0, 262144)
+layer_0/tile_data = PackedInt32Array(-262147, 0, 327680, -262146, 0, 262144, -262145, 0, 262144, -327680, 0, 262144)
 
 [node name="DFUnit" parent="IsometricMap" instance=ExtResource("2_03ykn")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
+[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionSW" to="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionSW" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionSW" to="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionSW" method="_on_body_exited" flags=18]
 [connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionS" to="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionS" method="_on_body_entered" flags=18]
 [connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionS" to="IsometricMap/MapLayer2/CollisionBoxes/ZTransitionS" method="_on_body_exited" flags=18]
-[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529599" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529599" method="_on_body_entered" flags=18]
-[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529599" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529599" method="_on_body_exited" flags=18]
-[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529600" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529600" method="_on_body_entered" flags=18]
-[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529600" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529600" method="_on_body_exited" flags=18]
-[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529601" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529601" method="_on_body_entered" flags=18]
-[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529601" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@529601" method="_on_body_exited" flags=18]
-[connection signal="body_entered" from="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534303" to="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534303" method="_on_body_entered" flags=18]
-[connection signal="body_exited" from="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534303" to="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534303" method="_on_body_exited" flags=18]
-[connection signal="body_entered" from="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534304" to="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534304" method="_on_body_entered" flags=18]
-[connection signal="body_exited" from="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534304" to="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534304" method="_on_body_exited" flags=18]
-[connection signal="body_entered" from="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534305" to="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534305" method="_on_body_entered" flags=18]
-[connection signal="body_exited" from="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534305" to="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@534305" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20161" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20161" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20161" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20161" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20162" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20162" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20162" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20162" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20163" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20163" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20163" to="IsometricMap/MapLayer2/CollisionBoxes/@ZTransitionS@20163" method="_on_body_exited" flags=18]
 [connection signal="body_entered" from="IsometricMap/MapLayer3/CollisionBoxes/ZTransitionS" to="IsometricMap/MapLayer3/CollisionBoxes/ZTransitionS" method="_on_body_entered" flags=18]
 [connection signal="body_exited" from="IsometricMap/MapLayer3/CollisionBoxes/ZTransitionS" to="IsometricMap/MapLayer3/CollisionBoxes/ZTransitionS" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@20164" to="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@20164" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@20164" to="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@20164" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@20165" to="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@20165" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@20165" to="IsometricMap/MapLayer3/CollisionBoxes/@ZTransitionS@20165" method="_on_body_exited" flags=18]
+[connection signal="body_entered" from="IsometricMap/MapLayer3/CollisionBoxes/ZTransitionSW" to="IsometricMap/MapLayer3/CollisionBoxes/ZTransitionSW" method="_on_body_entered" flags=18]
+[connection signal="body_exited" from="IsometricMap/MapLayer3/CollisionBoxes/ZTransitionSW" to="IsometricMap/MapLayer3/CollisionBoxes/ZTransitionSW" method="_on_body_exited" flags=18]
 
 [editable path="IsometricMap"]
 [editable path="IsometricMap/MapLayer"]
