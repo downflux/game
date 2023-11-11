@@ -5,3 +5,4 @@ From [Heartlessdragoon](https://www.spriters-resource.com/game_boy_advance/pokem
 From [Kaori](https://www.spriters-resource.com/game_boy_advance/pokemonemerald/sheet/8347/) for reference.
 From [soulcaliburfan](https://www.spriters-resource.com/game_boy_advance/pokemonemerald/sheet/8324/) for reference.
 From [Marnic](https://www.spriters-resource.com/game_boy_advance/pokemonemerald/sheet/8325/) for reference.
+From [Furs The Fox, Lunar994](https://www.spriters-resource.com/game_boy_advance/pokemonemerald/sheet/8329/) for reference.
