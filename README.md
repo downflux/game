@@ -17,5 +17,5 @@ go.exe env GOPATH
     a. set Windows `$PATH` to the appropriate `mingw64\bin` directory
 
 ```sh
-gd.exe
+gd.exe run
 ```
