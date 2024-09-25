@@ -1,10 +1,8 @@
-# gd-game
+# Installation
 
-## Installation
+## Windows
 
-### Windows
-
-#### Grow Graphics
+### Grow Graphics
 
 See [documentation](https://learn.grow.graphics/documentation/)
 
@@ -18,11 +16,3 @@ See [documentation](https://learn.grow.graphics/documentation/)
     ```
 1. Install `gcc` toolchain from https://winlibs.com/#download-release
 1. Set Windows `${PATH}` to the appropriate `mingw64\bin` directory
-
-## Running
-
-### Windows
-
-```sh
-gd.exe run
-```
