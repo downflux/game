@@ -2,12 +2,8 @@
 
 ## Installation
 
-See [INSTALL.md](INSTALL.md)
+See INSTALL.md
 
 ## Running
 
-### Windows
-
-```sh
-gd.exe run
-```
+See go/README.md
