@@ -7,7 +7,7 @@ import (
 )
 
 type N struct {
-	gd.Class[N, gd.Node2D] `gd:"DownFluxExampleNode"`
+	gd.Class[N, gd.Node2D] `gd:"DFExampleNode"`
 }
 
 func (n *N) Ready() {
