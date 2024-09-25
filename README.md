@@ -2,19 +2,26 @@
 
 ## Installation
 
-### Grow Graphics
-https://learn.grow.graphics/documentation/overview/
+### Windows
 
-1. install `gd`
+#### Grow Graphics
 
-```sh
-go.exe install grow.graphics/gd/cmd/gd@master
-go.exe env GOPATH
-```
-1. Ensure Godot v4.3 binary exists as godot-4.3.exe in the $GOPATH directory
-1. Install `gcc` toolchain
-    a. for Windows install from https://winlibs.com/#download-release
-    a. set Windows `$PATH` to the appropriate `mingw64\bin` directory
+See [documentation](https://learn.grow.graphics/documentation/)
+
+1. Install `gd`
+    ```sh
+    go.exe install grow.graphics/gd/cmd/gd@master
+    ```
+1. Ensure the Godot v4.3 binary is installed as `godot-4.3.exe` in `${GOPATH}/bin`
+    ```sh
+    go.exe env GOPATH
+    ```
+1. Install `gcc` toolchain from https://winlibs.com/#download-release
+1. Set Windows `${PATH}` to the appropriate `mingw64\bin` directory
+
+## Running
+
+### Windows
 
 ```sh
 gd.exe run
