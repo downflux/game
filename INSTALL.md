@@ -1,5 +1,11 @@
 # Installation
 
+**N.B.**: Ensure symlinks are checked out as symlinks and not plaintext files.
+
+    ```sh
+    git config core.symlinks true
+    ```
+
 ## Windows
 
 ### Grow Graphics
