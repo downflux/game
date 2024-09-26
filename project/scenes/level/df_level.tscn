@@ -5,3 +5,5 @@
 [node name="Camera" type="Camera3D" parent="."]
 
 [node name="Map" type="GridMap" parent="."]
+
+[node name="Terrain" type="GridMap" parent="."]
