@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/downflux/gd-game/nodes/example"
+	"github.com/downflux/gd-game/nodes/level"
 	"grow.graphics/gd"
 	"grow.graphics/gd/gdextension"
 )
@@ -11,6 +11,6 @@ func main() {
 	if !ok {
 		return
 	}
-	gd.Register[example.T](godot)
-	gd.Register[example.N](godot)
+
+	gd.Register[level.N](godot)
 }

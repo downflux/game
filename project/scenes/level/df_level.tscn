@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://wpfr3hmagfx6"]
+
+[node name="DFLevel" type="DFLevel"]
+
+[node name="Camera" type="Camera3D" parent="."]
+
+[node name="Map" type="GridMap" parent="."]
