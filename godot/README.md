@@ -10,6 +10,6 @@ in-editor nodes, as well as nodes and behavior as defined in the Golang files.
 
 When importing 2D graphics for `Sprite3D` billboards, make sure to
 
-1. set `Sprite3DBase.flags.texture_filter = TEXTURE_FILTER_NEAREST_WITH_MIPMAPS`
+1. set `Sprite3DBase.flags.texture_filter = TEXTURE_FILTER_NEAREST`
 1. set import options for the PNG file as `Import as Texture2D` and
    `Compress.Mode = Lossless`
