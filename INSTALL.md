@@ -1,10 +1,21 @@
 # Installation
 
-**N.B.**: Ensure symlinks are checked out as symlinks and not plaintext files.
+1. Ensure symlinks are checked out as symlinks and not plaintext files.
 
-```sh
-git config core.symlinks true
-```
+    ```sh
+    git config core.symlinks true
+    ```
+
+1. Also make sure to initialize submodules and configure them for SSH access to
+   prevent future pain.
+
+    ```sh
+    git submodule update --init --recursive
+    git submodule update --remote --recursive  # Update all submodules
+    cd third_party/gd-game-assets
+    git remote set-url origin git@github.com:downflux/gd-game-assets.git
+    ```
+
 
 ## Windows
 
