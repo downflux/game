@@ -7,8 +7,8 @@ import (
 type N struct {
 	gd.Class[N, gd.Node2D] `gd:"DFTile"`
 
-	Texture         gd.PackedScene
-	GroundCollision gd.PackedScene
+	Texture         gd.PackedScene  // Sprite2D
+	GroundCollision gd.PackedScene  // CollisionPolygon2D
 
 	t  gd.Sprite2D
 	cg gd.CollisionPolygon2D
@@ -58,4 +58,10 @@ func (n *N) Ready() {
 			return
 		}
 	}
+
+	n.Super().AsNode().AddChild(n.t.AsNode(), true, gd.NodeInternalModeDisabled)
+	n.t.GetTexture(n.Temporary)
+	/*fmt.Println(
+		n.t.GetTexture(n.Temporary).AsTexture2D().GetImage(n.Temporary).AsImage().GetSize().X(),
+	)*/
 }
