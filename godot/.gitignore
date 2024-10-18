@@ -17,3 +17,5 @@ mono_crash.*.json
 # DLLs generated from github.com/grow-graphics/gd
 *.dll
 *.TMP
+*.so
+*.gdextension

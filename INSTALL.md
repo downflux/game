@@ -12,7 +12,7 @@
     ```sh
     git submodule update --init --recursive
     git submodule update --remote --recursive  # Update all submodules
-    cd third_party/gd-game-assets
+    cd third_party/github.com/downflux/gd-game-assets
     git remote set-url origin git@github.com:downflux/gd-game-assets.git
     ```
 
@@ -37,3 +37,21 @@ See [documentation](https://learn.grow.graphics/documentation/)
 
 1. Install `gcc` toolchain from https://winlibs.com/#download-release
 1. Set Windows `${PATH}` to the appropriate `mingw64\bin` directory
+
+## Linux
+
+### Grow Graphics
+
+See [documentation](https://learn.grow.graphics/documentation/)
+
+1. Install `gd`
+
+    ```sh
+    go install grow.graphics/gd/cmd/gd@master
+    ```
+
+1. Ensure the Godot v4.3 binary is installed as `godot-4.3.exe` in `${GOPATH}/bin`
+
+    ```sh
+    go env GOPATH
+    ```
