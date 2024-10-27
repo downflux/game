@@ -14,6 +14,7 @@
     git submodule update --remote --recursive  # Update all submodules
     cd third_party/github.com/downflux/gd-game-assets
     git remote set-url origin git@github.com:downflux/gd-game-assets.git
+    git checkout main
     ```
 
 ## Windows
