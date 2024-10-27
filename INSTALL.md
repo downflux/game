@@ -21,9 +21,8 @@
 
 ### Symlinks
 
-Recreate the [src/graphics](src/graphics) symlink manually. See
-https://stackoverflow.com/a/59761201 -- it seems like Windows symlink on
-checkout, while functional, still interfere with Golang `os.Mkdir`.
+Recreate symlinks manually. See https://stackoverflow.com/a/59761201 -- it seems
+like Windows symlink on checkout may still be corrupted.
 
 ### Grow Graphics
 
