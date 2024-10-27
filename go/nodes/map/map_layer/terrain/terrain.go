@@ -1,4 +1,4 @@
-package map_layer
+package terrain
 
 import (
 	"fmt"

@@ -16,3 +16,4 @@ func (n *N) Ready() {
 
 func (n *N) Foo() {
 	fmt.Printf("calling test function Foo\n")
+}

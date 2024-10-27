@@ -1,15 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bmhmiv43fqo4c"]
+[gd_scene load_steps=3 format=3 uid="uid://bmhmiv43fqo4c"]
 
-[ext_resource type="PackedScene" uid="uid://orm661ykkodv" path="res://scenes/example/df_example_node.tscn" id="1_1gwv5"]
-[ext_resource type="Script" path="res://scenes/example/df_example_node.gd" id="2_jwltc"]
-[ext_resource type="PackedScene" uid="uid://ci2icbjqmqem4" path="res://scenes/level/tiles/grass.tscn" id="3_tagff"]
-[ext_resource type="PackedScene" uid="uid://c4ts7mvh3dp4b" path="res://scenes/level/tiles/collision_shape_grass.tscn" id="4_rguju"]
+[ext_resource type="PackedScene" uid="uid://orm661ykkodv" path="res://scenes/example/example_node.tscn" id="1_1gwv5"]
+[ext_resource type="Script" path="res://scenes/example/example_node.gd" id="2_jwltc"]
 
 [node name="Node" type="Node"]
 
-[node name="DFExampleNode" parent="." instance=ExtResource("1_1gwv5")]
+[node name="ExampleNode" parent="." instance=ExtResource("1_1gwv5")]
 script = ExtResource("2_jwltc")
-
-[node name="DFTile" type="DFTile" parent="."]
-Texture = ExtResource("3_tagff")
-GroundCollision = ExtResource("4_rguju")
