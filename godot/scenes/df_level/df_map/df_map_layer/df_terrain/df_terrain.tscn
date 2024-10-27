@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bblluebrbtrhi"]
 
-[ext_resource type="Texture2D" uid="uid://c4h03t3pgdcxy" path="res://assets/sprites/map/terrain.png" id="1_xovg0"]
+[ext_resource type="Texture2D" uid="uid://c4h03t3pgdcxy" path="res://assets/sprites/terrain/terrain.png" id="1_xovg0"]
 [ext_resource type="Script" path="res://scenes/df_level/df_map/df_map_layer/df_terrain/df_terrain.gd" id="2_23njv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uqivy"]
