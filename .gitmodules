@@ -1,4 +1,4 @@
 [submodule "third_party/github.com/downflux/gd-game-assets"]
 	path = third_party/github.com/downflux/gd-game-assets
-	url = https://github.com/downflux/gd-game-assets
+	url = ssh://git@github.com:downflux/gd-game-assets.git
 	branch = main
