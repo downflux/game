@@ -16,8 +16,13 @@
     git remote set-url origin git@github.com:downflux/gd-game-assets.git
     ```
 
-
 ## Windows
+
+### Symlinks
+
+Recreate the [src/graphics](src/graphics) symlink manually. See
+https://stackoverflow.com/a/59761201 -- it seems like Windows symlink on
+checkout, while functional, still interfere with Golang `os.Mkdir`.
 
 ### Grow Graphics
 
