@@ -2,8 +2,8 @@
 
 ## Installation
 
-See [INSTALL.md]
+See [INSTALL.md](INSTALL.md)
 
 ## Running
 
-See [go/README.md]
+See [go/README.md](go/README.md)
