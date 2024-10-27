@@ -2,8 +2,7 @@ package main
 
 import (
 	"github.com/downflux/gd-game/nodes/example"
-	"github.com/downflux/gd-game/nodes/level"
-	"github.com/downflux/gd-game/nodes/tile"
+	// "github.com/downflux/gd-game/nodes/map/map_layer"
 	"grow.graphics/gd"
 	"grow.graphics/gd/gdextension"
 )
@@ -14,7 +13,6 @@ func main() {
 		return
 	}
 
-	gd.Register[level.N](godot)
 	gd.Register[example.N](godot)
-	gd.Register[tile.N](godot)
+	// gd.Register[map_layer.N](godot)
 }

@@ -11,5 +11,8 @@ type N struct {
 }
 
 func (n *N) Ready() {
-	fmt.Println("The Example node is ready")
+	fmt.Printf("the Example node is ready\n")
 }
+
+func (n *N) Foo() {
+	fmt.Printf("calling test function Foo\n")

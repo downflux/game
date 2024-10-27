@@ -1,13 +1,13 @@
 module github.com/downflux/gd-game
 
-go 1.23.1
+go 1.23.2
 
-require grow.graphics/gd v0.0.0-20240815211949-e3f44d06622e
+require grow.graphics/gd v0.0.0-20241022194933-9578a164b165
 
 require (
-	golang.org/x/text v0.15.0 // indirect
-	grow.graphics/rd v0.0.0-20240706100320-00baa9f2a15d // indirect
+	golang.org/x/text v0.19.0 // indirect
+	grow.graphics/rd v0.0.0-20240706224352-a970c8ef87b1 // indirect
 	grow.graphics/uc v0.0.0-20240128001120-57fde712a2f4 // indirect
 	grow.graphics/xy v0.0.0-20240603021049-7427233fc3a9 // indirect
-	runtime.link v0.0.0-20240712224500-eb0d0c7331a3 // indirect
+	runtime.link v0.0.0-20241021212621-968973d3b1d7 // indirect
 )
