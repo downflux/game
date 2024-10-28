@@ -7,7 +7,7 @@ enum NavigationLayer {
 	NAVICATION_LAYER_SEA,
 }
 
-func debug_get_navigation_layer(terrain_set: int, terrain: int):
+func debug_get_navigation_layer(_terrain_set: int, terrain: int):
 	return {
 		0: NavigationLayer.NAVIGATION_LAYER_GROUND,
 		1: NavigationLayer.NAVICATION_LAYER_SEA,
@@ -26,12 +26,11 @@ func _input(event: InputEvent):
 		print("DEBUG(map_layer.gd): clicked on tile ", debug_get_tile_coordinates(e.position))
 		var t = $DFTerrain.get_cell_tile_data(debug_get_tile_coordinates(e.position))
 		if t != null:
-			print("DEBUG(map_layer.gd): navication layer ", NavigationLayer.keys()[(debug_get_navigation_layer(
+			print("DEBUG(map_layer.gd): navigation layer ", NavigationLayer.keys()[(debug_get_navigation_layer(
 				t.get_terrain_set(),
 				t.get_terrain(),
 			))])
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func _ready():
+	$DFNavigationUI.show_path([Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1), Vector2i(2, 2), Vector2i(1, 3)])

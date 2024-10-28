@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=4 uid="uid://b53edvkg200f8"]
+[gd_scene load_steps=4 format=4 uid="uid://b53edvkg200f8"]
 
 [ext_resource type="Script" path="res://scenes/df_level/df_map/df_map_layer/df_map_layer.gd" id="1_dmu0v"]
+[ext_resource type="PackedScene" uid="uid://6p2oy6b4jnvh" path="res://scenes/df_level/df_map/df_map_layer/df_navigation_ui/df_navigation_ui.tscn" id="2_cid6y"]
 [ext_resource type="PackedScene" uid="uid://bblluebrbtrhi" path="res://scenes/df_level/df_map/df_map_layer/df_terrain/df_terrain.tscn" id="2_o0d2r"]
 
 [node name="DFMapLayer" type="Node2D"]
@@ -9,6 +10,9 @@ script = ExtResource("1_dmu0v")
 [node name="DFTerrain" parent="." instance=ExtResource("2_o0d2r")]
 tile_map_data = PackedByteArray("AAAAAAAAAAAIAAoAAAAAAP//AAAGAAIAAAABAP//AAAGAAIAAAABAAAAAAAGAAIAAAABAAEAAAAGAAIAAAAAAAEAAAAGAAIAAAD//wEAAAAGAAIAAAD//wAAAAAGAAIAAAD/////AAAGAAIAAAA=")
 
+[node name="DFNavigationUI" parent="." instance=ExtResource("2_cid6y")]
+
 [node name="DebugCamera" type="Camera2D" parent="."]
+visible = false
 offset = Vector2(15, 10)
 zoom = Vector2(5, 5)
