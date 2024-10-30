@@ -15,6 +15,8 @@ enum d {
 }
 
 var _ATLAS_LOOKUP = {
+	[d.DIRECTION_UNKNOWN, d.DIRECTION_UNKNOWN]: Vector2i(8, 8),
+	
 	[d.DIRECTION_UNKNOWN, d.DIRECTION_E]:  Vector2i(0, 9),
 	[d.DIRECTION_UNKNOWN, d.DIRECTION_SE]: Vector2i(1, 9),
 	[d.DIRECTION_UNKNOWN, d.DIRECTION_S]:  Vector2i(2, 9),
@@ -68,9 +70,9 @@ var _ATLAS_LOOKUP = {
 	[d.DIRECTION_NW, d.DIRECTION_W]:  Vector2i(0, 6),
 	[d.DIRECTION_NW, d.DIRECTION_NE]: Vector2i(3, 6),
 	
-	[d.DIRECTION_NW, d.DIRECTION_W]:  Vector2i(0, 7),
-	[d.DIRECTION_NW, d.DIRECTION_W]:  Vector2i(1, 7),
-	[d.DIRECTION_NW, d.DIRECTION_NE]: Vector2i(3, 7),
+	[d.DIRECTION_N, d.DIRECTION_W]:  Vector2i(0, 7),
+	[d.DIRECTION_N, d.DIRECTION_NW]: Vector2i(1, 7),
+	[d.DIRECTION_N, d.DIRECTION_NE]: Vector2i(3, 7),
 }
 
 # _get_direction gets the direction between two cells, calculated as the vector
