@@ -1,4 +1,4 @@
-package potential_map
+package layer
 
 import (
 	"fmt"

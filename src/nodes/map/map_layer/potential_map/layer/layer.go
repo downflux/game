@@ -7,7 +7,9 @@ package layer
 import (
 	"math"
 
-	"graphics.gd"
+	"graphics.gd/variant/Rect2i"
+	"graphics.gd/variant/Vector2i"
+	"github.com/downflux/gd-game/internal/errors"
 )
 
 type O struct {
@@ -16,8 +18,9 @@ type O struct {
 	Attenuation float64
 }
 
-type L struct {
-	region gd.Rect2i
+type N struct {
+	// region is the region over which the field is defined.
+	region Rect2i.PositionSize
 
 	// sources represents a 2D grid of individual scalar contributions.
 	sources [][]int
@@ -31,69 +34,69 @@ type L struct {
 	Attenuation float64
 }
 
-func New(o O) *L {
-	l := &L{
-		Attenuation: o.Attenuation
+func New(o O) *N {
+	n := &N{
+		Attenuation: o.Attenuation,
 	}
-	l.Clear()
-	return l
+	n.Clear()
+	return n
 }
 
-func (l *L) Clear() {
-	l.SetRegion(gd.Rect2i{Position: gd.Vector2i{0, 0}, Size: gd.Vector2i{0, 0}})
+func (n *N) Clear() {
+	n.SetRegion(Rect2i.PositionSize{Position: Vector2i.XY{0, 0}, Size: Vector2i.XY{0, 0}})
 }
 
 // SetRegion preps the node for subsequent use. This must be called before
 // calling SetPointWeight.
-func (l *L) SetRegion(r gd.Rect2i) {
-	l.region = gd.Rect2i{
+func (n *N) SetRegion(r Rect2i.PositionSize) {
+	n.region = Rect2i.PositionSize{
 		Position: r.Position,
 		Size:     r.Size,
 	}
-	l.sources = [][]int{}
-	l.weights = [][]int{}
-	for i := int64(0); i < r.Size.X(); i++ {
-		l.sources = append(l.sources, make([]int, r.Size.Y()))
-		l.weights = append(l.weights, make([]int, r.Size.Y()))
+	n.sources = [][]int{}
+	n.weights = [][]int{}
+	for i := int32(0); i < r.Size.X; i++ {
+		n.sources = append(n.sources, make([]int, r.Size.Y))
+		n.weights = append(n.weights, make([]int, r.Size.Y))
 	}
 }
 
-func (l *L) GetRegion() gd.Rect2i { return l.region }
+func (n *N) GetRegion() Rect2i.PositionSize { return n.region }
 
-func (l *L) SetPointWeight(id gd.Vector2i, w int) gd.Error {
-	if !l.region.HasPoint(id) {
-		return gd.ErrParameterRangeError
+func (n *N) SetPointWeight(id Vector2i.XY, w int) errors.Error {
+	if !Rect2i.HasPoint(n.region, id) {
+		return errors.ErrParameterRangeError
 	}
 
-	offset := id.Sub(l.region.Position)
-	l.applyWeight(offset, 0, -l.sources[offset.X()][offset.Y()])
-	l.sources[offset.X()][offset.Y()] = w
-	l.applyWeight(offset, 0, w)
+	offset := Vector2i.Sub(id, n.region.Position)
+	n.applyWeight(offset, 0, -n.sources[offset.X][offset.Y])
+	n.sources[offset.X][offset.Y] = w
+	n.applyWeight(offset, 0, w)
 
-	return gd.Ok
+	return errors.Ok
 }
 
 // applyWeight implements a BFS over the 2D grid and sets some attenuated value
 // over the different boarders.
-func (l *L) applyWeight(offset gd.Vector2i, depth int32, w int) {
-	open := []gd.Vector2i{}
+func (n *N) applyWeight(offset Vector2i.XY, depth int32, w int) {
+	open := []Vector2i.XY{}
 	min := int32(-depth)
 	max := int32(depth)
 	for i := min; i <= max; i++ {
 		open = append(
 			open,
-			gd.Vector2i{int32(offset.X()) + i, int32(offset.Y()) - depth},
+			Vector2i.XY{int32(offset.X) + i, int32(offset.Y) - depth},
 		)
 		if depth != 0 {
 			open = append(
 				open,
-				gd.Vector2i{int32(offset.X()) + i, int32(offset.Y()) + depth},
+				Vector2i.XY{int32(offset.X) + i, int32(offset.Y) + depth},
 			)
 			if i != min && i != max {
 				open = append(
 					open,
-					gd.Vector2i{int32(offset.X()) + depth, int32(offset.Y()) + i},
-					gd.Vector2i{int32(offset.X()) - depth, int32(offset.Y()) + i},
+					Vector2i.XY{int32(offset.X) + depth, int32(offset.Y) + i},
+					Vector2i.XY{int32(offset.X) - depth, int32(offset.Y) + i},
 				)
 			}
 		}
@@ -101,17 +104,17 @@ func (l *L) applyWeight(offset gd.Vector2i, depth int32, w int) {
 
 	stop := true
 	for _, c := range open {
-		if l.region.HasPoint(c) {
-			l := c.Sub(offset).Length()
-			w := math.Floor(float64(w) * math.Pow(l.Attenuation, l))
+		if Rect2i.HasPoint(n.region, c) {
+			l := Vector2i.Length(Vector2i.Sub(c, offset))
+			w := math.Floor(float64(w) * math.Pow(n.Attenuation, float64(l)))
 			if w > 0 {
 				stop = false
-				l.weights[c.X()][c.Y()] += int(w)
+				n.weights[c.X][c.Y] += int(w)
 			}
 		}
 	}
 
 	if !stop {
-		l.applyWeight(offset, depth+1, w)
+		n.applyWeight(offset, depth+1, w)
 	}
 }
