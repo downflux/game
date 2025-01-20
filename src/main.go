@@ -3,16 +3,16 @@ package main
 import (
 	"github.com/downflux/gd-game/nodes/example"
 	// "github.com/downflux/gd-game/nodes/map/map_layer/terrain"
-	"grow.graphics/gd"
-	"grow.graphics/gd/gdextension"
+	// "github.com/downflux/gd-game/nodes/map/map_layer/potential_map"
+	"graphics.gd/classdb"
+	"graphics.gd/startup"
 )
 
 func main() {
-	godot, ok := gdextension.Link()
-	if !ok {
-		return
-	}
+	classdb.Register[example.N]()
+	classdb.Register[example.DFExampleTileMapLayer]()
+	// classdb.Register[terrain.N]()
+	// classdb.Register[potential_map.N]()
 
-	gd.Register[example.N](godot)
-	// gd.Register[terrain.N](godot)
+	startup.Engine()
 }

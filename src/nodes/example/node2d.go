@@ -3,11 +3,12 @@ package example
 import (
 	"fmt"
 
-	"grow.graphics/gd"
+	"graphics.gd/classdb"
+	"graphics.gd/classdb/Node2D"
 )
 
 type N struct {
-	gd.Class[N, gd.Node2D] `gd:"DFExampleNode"`
+	classdb.Extension[N, Node2D.Instance] `gd:"DFExampleNode"`
 }
 
 func (n *N) Ready() {

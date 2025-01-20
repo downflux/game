@@ -17,6 +17,5 @@ script = ExtResource("3_1iqrh")
 [node name="DFNavigationUI" parent="." instance=ExtResource("2_cid6y")]
 
 [node name="DebugCamera" type="Camera2D" parent="."]
-visible = false
-offset = Vector2(15, 10)
+offset = Vector2(10, 20)
 zoom = Vector2(5, 5)

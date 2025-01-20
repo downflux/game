@@ -3,7 +3,8 @@ package example
 import (
 	"fmt"
 
-	"grow.graphics/gd"
+	"graphics.gd/classdb"
+	"graphics.gd/classdb/SceneTree"
 )
 
 // T is a custom SceneTree.
@@ -12,7 +13,7 @@ import (
 // struct extending gd.SceneTree will ensure the custom struct will be used as
 // the main loop.
 type T struct {
-	gd.Class[T, gd.SceneTree] `gd:"DFExampleSceneTree"`
+	classdb.Extension[T, SceneTree.Instance] `gd:"DFExampleSceneTree"`
 }
 
 // Initialize implements the Godot MainLoop _initialize interface (virtual function).

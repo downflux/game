@@ -1,27 +1,24 @@
 package terrain
 
 import (
-	"fmt"
-
-	"grow.graphics/gd"
+	"graphics.gd/classdb"
+	"graphics.gd/classdb/Resource"
+	"graphics.gd/classdb/TileMapLayer"
+	"graphics.gd/classdb/TileSet"
 )
 
 const (
-	path = "res://scenes/level/terrain.tres"
+	path = "res://assets/tilesets/terrain.tres"
 )
 
 type N struct {
-	gd.Class[N, gd.TileMapLayer] `gd:"DFMapLayer"`
+	classdb.Extension[N, TileMapLayer.Instance] `gd:"DFMapLayer"`
 
-	gd.Tool
+	classdb.Tool
 }
 
 func (n *N) Ready() {
-	if s, ok := gd.Load[gd.TileSet](n.Temporary, path); !ok {
-		fmt.Printf("cannot load TileSet\n")
-		return
-	} else {
-		n.Super().AsTileMapLayer().SetTileSet(s)
-	}
+	n.Super().AsTileMapLayer().SetTileSet(
+		Resource.Load[TileSet.Instance](path))
 	n.Super().AsCanvasItem().SetYSortEnabled(true)
 }
