@@ -7,9 +7,9 @@ package layer
 import (
 	"math"
 
+	"github.com/downflux/gd-game/internal/errors"
 	"graphics.gd/variant/Rect2i"
 	"graphics.gd/variant/Vector2i"
-	"github.com/downflux/gd-game/internal/errors"
 )
 
 type O struct {
@@ -74,6 +74,14 @@ func (n *N) SetPointWeight(id Vector2i.XY, w int) errors.Error {
 	n.applyWeight(offset, 0, w)
 
 	return errors.Ok
+}
+
+func (n *N) GetPointWeight(id Vector2i.XY) (int, errors.Error) {
+	if !Rect2i.HasPoint(n.region, id) {
+		return 255, errors.ErrParameterRangeError
+	}
+
+	return n.weights[id.X][id.Y], errors.Ok
 }
 
 // applyWeight implements a BFS over the 2D grid and sets some attenuated value

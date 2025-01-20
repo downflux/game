@@ -1,135 +1,90 @@
-// Package potential_map applys a scalar field over a 2D grid.
-//
-// This field is comprised of sources and sinks which decay in a set manner and
-// represents the tendency towards a specific path in the grid.
+// Package potential_map contains all potential map layers for a game instance.
 package potential_map
 
-/*
 import (
-	"math"
-
-	"graphics.gd"
+	"github.com/downflux/gd-game/internal/errors"
+	"github.com/downflux/gd-game/nodes/map/map_layer/potential_map/layer"
+	"graphics.gd/classdb"
+	"graphics.gd/classdb/Node2D"
+	"graphics.gd/variant/Rect2i"
+	"graphics.gd/variant/Vector2i"
 )
 
-type MapLayerID int
-type MapLayerTeam int
-type MapLayer int
+type (
+	LayerID      int // LayerID = LayerTag | LayerTerrain | LayerTeam
+	LayerTeam    int // 5 bits
+	LayerTerrain int // 4 bits
+	LayerTag     int // 7 bits
+)
+
+func ToLayerID(team LayerTeam, terrain LayerTerrain, tag LayerTag) LayerID {
+	return LayerID(int(team) | int(terrain)<<8 | int(tag)<<16)
+}
+func (id LayerID) Team() LayerTeam       { return LayerTeam(0x00f | id) }
+func (id LayerID) Terrain() LayerTerrain { return LayerTerrain(0x0f0 | id>>8) }
+func (id LayerID) Tag() LayerTag         { return LayerTag(0xf00 | id>>16) }
 
 const (
-	MapLayerUnknown = 0
-	MapLayerUnits   = 1 << iota
-	MapLayerBuildings
+	LayerTeamUnknown = 0
 
-	MapLayerTeamUnknown = 0
+	LayerTerrainUnknown = 0
+	LayerTerrainLand    = 1 << iota
+	LayerTerrainAir
+	LayerTerrainSea
+
+	LayerTagUnknown = 0
+	LayerTagTerrain = 1 << iota
+	LayerTagUnit
+	LayerTagBuilding
 )
 
+var (
+	lookup = map[LayerTag]float64{
+		LayerTagTerrain:  1,
+		LayerTagUnit:     0.7,
+		LayerTagBuilding: 0.9,
+	}
+)
+
+type O struct {
+	Region Rect2i.PositionSize
+}
+
 type N struct {
-	gd.Class[N, gd.Node2D] `gd:"DFPotentialMap"`
+	classdb.Extension[N, Node2D.Instance] `gd:"DFPotentialMap"`
 
-	layers map[MapLayerID]*l
+	region Rect2i.PositionSize
+	layers map[LayerID]*layer.N
 }
 
-func (n *N) Ready() {
-	layers = map[MapLayerID]*l{}
-}
-type l struct {
-	layer MapLayer
-	team MapLayerTeam
-
-	region gd.Rect2i
-
-	// sources represents a 2D grid of individual scalar contributions.
-	sources [][]int
-
-	// weights is a scalar cache; this cache may be rebuilt from
-	// recalculating the field from the sources.
-	weights [][]int
-
-	// Attenuation is a number in the range [0, 1). This designates how
-	// strongly any source influence will fade over the map.
-	Attenuation float64
-}
-
-func newLayer(t MapLayerTeam, ml MapLayer) *l {
-	m := &l{
-}
-
-func (n *l) Ready() {
-	n.SetRegion(gd.Rect2i{Position: gd.Vector2i{0, 0}, Size: gd.Vector2i{0, 0}})
-}
-
-func (n *l) Clear() { n.Ready() }
-
-// SetRegion preps the node for subsequent use. This must be called before
-// calling SetPointWeight.
-func (n *l) SetRegion(r gd.Rect2i) {
-	n.region = gd.Rect2i{
-		Position: r.Position,
-		Size:     r.Size,
+func New(o O) *N {
+	n := &N{
+		region: o.Region,
+		layers: map[LayerID]*layer.N{},
 	}
-	n.sources = [][]int{}
-	n.weights = [][]int{}
-	for i := int64(0); i < r.Size.X(); i++ {
-		n.sources = append(n.sources, make([]int, r.Size.Y()))
-		n.weights = append(n.weights, make([]int, r.Size.Y()))
+	n.Clear()
+	return n
+}
+
+func (n *N) Clear() {
+	for _, l := range n.layers {
+		l.Clear()
+		l.SetRegion(n.region)
 	}
 }
 
-func (n *l) GetRegion() gd.Rect2i { return n.region }
-
-func (n *l) SetPointWeight(id gd.Vector2i, w int) gd.Error {
-	if !n.region.HasPoint(id) {
-		return gd.ErrParameterRangeError
+func (n *N) SetPointWeight(mask LayerID, id Vector2i.XY, w int) errors.Error {
+	if _, ok := lookup[mask.Tag()]; !ok {
+		return errors.ErrParameterRangeError
 	}
-
-	offset := id.Sub(n.region.Position)
-	n.applyWeight(offset, 0, -n.sources[offset.X()][offset.Y()])
-	n.sources[offset.X()][offset.Y()] = w
-	n.applyWeight(offset, 0, w)
-
-	return gd.Ok
+	if _, ok := n.layers[mask]; !ok {
+		n.layers[mask] = layer.New(layer.O{
+			Attenuation: lookup[mask.Tag()],
+		})
+	}
+	return n.layers[mask].SetPointWeight(id, w)
 }
 
-// applyWeight implements a BFS over the 2D grid and sets some attenuated value
-// over the different boarders.
-func (n *l) applyWeight(offset gd.Vector2i, depth int32, w int) {
-	open := []gd.Vector2i{}
-	min := int32(-depth)
-	max := int32(depth)
-	for i := min; i <= max; i++ {
-		open = append(
-			open,
-			gd.Vector2i{int32(offset.X()) + i, int32(offset.Y()) - depth},
-		)
-		if depth != 0 {
-			open = append(
-				open,
-				gd.Vector2i{int32(offset.X()) + i, int32(offset.Y()) + depth},
-			)
-			if i != min && i != max {
-				open = append(
-					open,
-					gd.Vector2i{int32(offset.X()) + depth, int32(offset.Y()) + i},
-					gd.Vector2i{int32(offset.X()) - depth, int32(offset.Y()) + i},
-				)
-			}
-		}
-	}
-
-	stop := true
-	for _, c := range open {
-		if n.region.HasPoint(c) {
-			l := c.Sub(offset).Length()
-			w := math.Floor(float64(w) * math.Pow(n.Attenuation, l))
-			if w > 0 {
-				stop = false
-				n.weights[c.X()][c.Y()] += int(w)
-			}
-		}
-	}
-
-	if !stop {
-		n.applyWeight(offset, depth+1, w)
-	}
+func (n *N) GetPointWeight(team LayerTeam, terrain LayerTerrain, tag LayerTag, id Vector2i.XY) (int, errors.Error) {
+	return 0, errors.Ok
 }
-*/
