@@ -6,4 +6,4 @@ See [INSTALL.md](INSTALL.md)
 
 ## Running
 
-See [go/README.md](go/README.md)
+See [src/README.md](src/README.md)

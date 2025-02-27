@@ -77,6 +77,7 @@ func _bfs(layer: Layer, open_id: Vector2i, h: Callable) -> Vector2i:
 	
 	return candidate
 
+
 func get_id_path(
 	layer: Layer,
 	from_id: Vector2i,
@@ -99,6 +100,7 @@ func get_id_path(
 		func(id: Vector2i) -> float: return (from_id - id).length_squared())
 	
 	return _layers[layer].get_id_path(src_id, dest_id, allow_partial_path)
+
 
 func set_region(region: Rect2i):
 	for l in _layers:

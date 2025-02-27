@@ -13,7 +13,7 @@ const (
 )
 
 type DFExampleTileMapLayer struct {
-	classdb.Extension[N, TileMapLayer.Instance]
+	classdb.Extension[DFExampleTileMapLayer, TileMapLayer.Instance]
 
 	classdb.Tool
 }

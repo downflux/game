@@ -1,13 +1,19 @@
 github.com/tetratelabs/wazero v1.8.2 h1:yIgLR/b2bN31bjxwXHD8a3d+BogigR952csSDdLYEv4=
 github.com/tetratelabs/wazero v1.8.2/go.mod h1:yAI0XTsMBhREkM/YDAK/zNou3GoiAce1P6+rp/wQhjs=
+github.com/tetratelabs/wazero v1.9.0 h1:IcZ56OuxrtaEz8UYNRHBrUa9bYeX9oVY93KspZZBf/I=
+github.com/tetratelabs/wazero v1.9.0/go.mod h1:TSbcXCfFP0L2FGkRPxHphadXPjo1T6W+CseNNY7EkjM=
 golang.org/x/text v0.15.0 h1:h1V/4gjBv8v9cjcR6+AR5+/cIYK5N/WAgiv4xlsEtAk=
 golang.org/x/text v0.15.0/go.mod h1:18ZOQIKpY8NJVqYksKHtTdi31H5itFRjB5/qKTNYzSU=
 golang.org/x/text v0.19.0 h1:kTxAhCbGbxhK0IwgSKiMO5awPoDQ0RpfiVYBfK860YM=
 golang.org/x/text v0.19.0/go.mod h1:BuEKDfySbSR4drPmRPG/7iBdf8hvFMuRexcpahXilzY=
 golang.org/x/text v0.21.0 h1:zyQAAkrwaneQ066sspRyJaG9VNi/YJ1NfzcGB3hZ/qo=
 golang.org/x/text v0.21.0/go.mod h1:4IBbMaMmOPCJ8SecivzSH54+73PCFmPWxNTLm+vZkEQ=
+golang.org/x/text v0.22.0 h1:bofq7m3/HAFvbF51jz3Q9wLg3jkvSPuiZu/pD1XwgtM=
+golang.org/x/text v0.22.0/go.mod h1:YRoo4H8PVmsu+E3Ou7cqLVH8oXWIHVoX0jqUWALQhfY=
 graphics.gd v0.0.0-20250115192803-cb25f73ace85 h1:pZQyn61RDp2QWrLPOnM2fDREghKcEIeLQao9PCoYP90=
 graphics.gd v0.0.0-20250115192803-cb25f73ace85/go.mod h1:Ba6RRAbAUus6SNLWQW0bM1Aw0VWnEYusF/mtd56WmIs=
+graphics.gd v0.0.0-20250218093300-7db9c1f06164 h1:hVqdXiND82Uz9eoigCZC4R/qM+OUPeN/eDpjovEO0LE=
+graphics.gd v0.0.0-20250218093300-7db9c1f06164/go.mod h1:jB0P4sCh+O8hgbA7gi+C33jraC/tqcByguT4VCbPB2U=
 grow.graphics/gd v0.0.0-20240815211949-e3f44d06622e h1:ziUak9dE4h3M2y+MwG1+/bKMwC3y/227z/9wbgpeAgo=
 grow.graphics/gd v0.0.0-20240815211949-e3f44d06622e/go.mod h1:2XqsIQrFPtQ2NemYzIK55+/Tzg89zwglWO/UwRhuQeE=
 grow.graphics/gd v0.0.0-20241022194933-9578a164b165 h1:/fwppd0K1SGL8dkLGTNNDusLY2zMA7xcZsHSm1cJ5YQ=
@@ -26,3 +32,5 @@ runtime.link v0.0.0-20241021212621-968973d3b1d7 h1:KlTxtXywGUBiwBoE1kH0DeCZsaquH
 runtime.link v0.0.0-20241021212621-968973d3b1d7/go.mod h1:bs9lT/R79BfIAGcCHrCWiEdDec5nUNSBBjDmAvAsasU=
 runtime.link v0.0.0-20241203235822-266e6dd4f99d h1:HzPoM8kUlHbNziC53/jrA4x0Su2XGDLU0VAw/xs8goc=
 runtime.link v0.0.0-20241203235822-266e6dd4f99d/go.mod h1:bs9lT/R79BfIAGcCHrCWiEdDec5nUNSBBjDmAvAsasU=
+runtime.link v0.0.0-20250227020446-f6e80d2cfb2e h1:3PmHOB7/rEmT6XZTtnvNKHk7WQ9hpMylZkQ8lwC98J4=
+runtime.link v0.0.0-20250227020446-f6e80d2cfb2e/go.mod h1:13rTs4Rs4/Z512Vh1Rkak+nJUERb9f4MpCZQyUrcTwM=

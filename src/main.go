@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	classdb.Register[example.N]()
+	classdb.Register[example.DFExampleNode]()
 	classdb.Register[example.DFExampleTileMapLayer]()
 	// classdb.Register[potential_map.N]()
 
