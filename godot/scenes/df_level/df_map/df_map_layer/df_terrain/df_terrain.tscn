@@ -8,6 +8,7 @@ y_sort_enabled = true
 tile_set = ExtResource("1_vr6jn")
 
 [node name="DebugMesh" type="Node2D" parent="."]
+visible = false
 z_index = 1
 script = ExtResource("3_odtgp")
 debug = true
