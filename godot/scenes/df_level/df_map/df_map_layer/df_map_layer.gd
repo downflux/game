@@ -40,9 +40,13 @@ func _ready():
 	
 	# Set up pathfinding layers
 	for c in $DFTerrain.get_used_cells():
-		var ls = []
-		if $DFTerrain.get_cell_tile_data(c).get_custom_data("TraversibleGround"):
-			ls += [DFNavigation.L.LAYER_GROUND]
-		if $DFTerrain.get_cell_tile_data(c).get_custom_data("TraversibleSea"):
-			ls += [DFNavigation.L.LAYER_SEA]
-		$DFNavigation.set_point_solid(ls, c, false)
+		var l = DFNavigation.L.LAYER_UNKNOWN
+		var g = $DFTerrain.get_cell_tile_data(c).get_custom_data("TraversibleGround")
+		var s = $DFTerrain.get_cell_tile_data(c).get_custom_data("TraversibleSea")
+		if g and s:
+			l = DFNavigation.L.LAYER_AMPHIBIOUS
+		elif g:
+			l = DFNavigation.L.LAYER_GROUND
+		elif s:
+			l = DFNavigation.L.LAYER_SEA
+		$DFNavigation.set_point_solid(l, c, false)
