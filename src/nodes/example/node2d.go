@@ -6,11 +6,11 @@
 // The DFExampleNode may be instantiated by creating a "DFExampleNode" instance
 // in the Godot UI. A script may be attached to this instance, e.g.
 //
-//   extends DFExampleNode
+//	extends DFExampleNode
 //
-//   func _ready():
-//     simple_function()
-//     # _hidden_function()  # Not accessible from GDScript.
+//	func _ready():
+//	  simple_function()
+//	  # _hidden_function()  # Not accessible from GDScript.
 //
 // Note the naming differences here. graphics.gd automatically converts naming
 // conventions between GDScript and Golang.

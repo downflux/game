@@ -1,3 +1,4 @@
+# DFNavigationUI overlays any UI elements for unit paths.
 extends TileMapLayer
 class_name DFNavigationUI
 

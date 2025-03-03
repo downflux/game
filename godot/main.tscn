@@ -1,3 +1,7 @@
-[gd_scene format=3 uid="uid://bmhmiv43fqo4c"]
+[gd_scene load_steps=2 format=3 uid="uid://bmhmiv43fqo4c"]
+
+[ext_resource type="PackedScene" uid="uid://b53edvkg200f8" path="res://scenes/df_level/df_map/df_map_layer/df_map_layer.tscn" id="1_7o2pq"]
 
 [node name="Node" type="Node"]
+
+[node name="DFMapLayer" parent="." instance=ExtResource("1_7o2pq")]

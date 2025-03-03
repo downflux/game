@@ -1,13 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bblluebrbtrhi"]
+[gd_scene load_steps=3 format=3 uid="uid://bblluebrbtrhi"]
 
 [ext_resource type="TileSet" uid="uid://bl66rtf53am0u" path="res://assets/tilesets/terrain.tres" id="1_vr6jn"]
-[ext_resource type="Script" path="res://scenes/df_level/df_map/df_map_layer/df_terrain/df_terrain.gd" id="2_23njv"]
 [ext_resource type="Script" path="res://scenes/df_level/df_map/df_map_layer/df_terrain/debug_mesh.gd" id="3_odtgp"]
 
 [node name="DFTerrain" type="TileMapLayer"]
 y_sort_enabled = true
 tile_set = ExtResource("1_vr6jn")
-script = ExtResource("2_23njv")
 
 [node name="DebugMesh" type="Node2D" parent="."]
 z_index = 1
