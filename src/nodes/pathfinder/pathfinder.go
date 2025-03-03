@@ -4,6 +4,7 @@ import (
 	"math"
 	"math/rand"
 
+	"github.com/downflux/gd-game/internal/geo"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/AStarGrid2D"
 	"graphics.gd/classdb/Node"
@@ -11,7 +12,6 @@ import (
 	"graphics.gd/variant/Enum"
 	"graphics.gd/variant/Object"
 	"graphics.gd/variant/Rect2i"
-	"graphics.gd/variant/Vector2"
 	"graphics.gd/variant/Vector2i"
 )
 
@@ -45,6 +45,10 @@ var LToMapLayer = map[L]MapLayer{
 
 var Layers = Enum.Values[L]()
 
+const (
+	CellShape = AStarGrid2D.CellShapeIsometricRight
+)
+
 type N struct {
 	classdb.Extension[N, Node.Instance] `gd:"DFNavigation"`
 
@@ -60,8 +64,8 @@ func (n *N) Ready() {
 	}
 
 	for k, g := range n.layers {
-		g.SetCellShape(AStarGrid2D.CellShapeIsometricRight)
-		g.SetCellSize(Vector2.XY{32, 16})
+		g.SetCellShape(CellShape)
+		g.SetCellSize(geo.CellSize)
 
 		// Due to the way that the tile sprites are drawn,
 		//
