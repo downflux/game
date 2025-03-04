@@ -11,25 +11,33 @@ func debug_get_tile_coordinates(local: Vector2) -> Vector2i:
 	return $DFTerrain.local_to_map(local)
 
 
+func get_tile_layer(id: Vector2i) -> DFNavigation.L:
+	var t = $DFTerrain.get_cell_tile_data(id)
+	var l = DFNavigation.L.LAYER_UNKNOWN
+	if t != null:
+		var g = t.get_custom_data("TraversibleGround")
+		var s = t.get_custom_data("TraversibleSea")
+		if g and s:
+			l = DFNavigation.L.LAYER_AMPHIBIOUS
+		elif g:
+			l = DFNavigation.L.LAYER_GROUND
+		elif s:
+			l = DFNavigation.L.LAYER_SEA
+	return l
+
+
 func _input(event: InputEvent):
 	# Mouse in viewport coordinates.
 	if event is InputEventMouseButton and event.pressed:
 		var e = make_input_local(event)
 		_src = debug_get_tile_coordinates(e.position)
-		if $DFTerrain.get_cell_tile_data(_src).get_custom_data("TraversibleSea"):
-			_layer = DFNavigation.L.LAYER_SEA
-		if $DFTerrain.get_cell_tile_data(_src).get_custom_data("TraversibleGround"):
-			_layer = DFNavigation.L.LAYER_GROUND
+		print("DEBUG(df_map_layer.gd:_input): position = ", e.position, ", _src = ", _src, " $DFTerrain.position = ", $DFTerrain.position)
+		_layer = get_tile_layer(_src)
 	if event is InputEventMouseButton and event.is_released():
 		var e = make_input_local(event)
 		_dst = debug_get_tile_coordinates(e.position)
 		$DFNavigationUI.show_path(
-			$DFNavigation.get_id_path(
-				_layer,
-				_src,
-				_dst,
-				true,
-			),
+			$DFNavigation.get_id_path(_layer, _src, _dst, true),
 		)
 		_layer = DFNavigation.L.LAYER_UNKNOWN
 
@@ -40,13 +48,4 @@ func _ready():
 	
 	# Set up pathfinding layers
 	for c in $DFTerrain.get_used_cells():
-		var l = DFNavigation.L.LAYER_UNKNOWN
-		var g = $DFTerrain.get_cell_tile_data(c).get_custom_data("TraversibleGround")
-		var s = $DFTerrain.get_cell_tile_data(c).get_custom_data("TraversibleSea")
-		if g and s:
-			l = DFNavigation.L.LAYER_AMPHIBIOUS
-		elif g:
-			l = DFNavigation.L.LAYER_GROUND
-		elif s:
-			l = DFNavigation.L.LAYER_SEA
-		$DFNavigation.set_point_solid(l, c, false)
+		$DFNavigation.set_point_solid(get_tile_layer(c), c, false)
