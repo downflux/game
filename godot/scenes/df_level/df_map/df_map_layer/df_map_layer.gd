@@ -28,19 +28,19 @@ func get_tile_layer(id: Vector2i) -> DFNavigation.L:
 
 func _input(event: InputEvent):
 	# Mouse in viewport coordinates.
-	if event is InputEventMouseButton and event.pressed:
-		var e = make_input_local(event)
-		_src = debug_get_tile_coordinates(e.position)
-		print("DEBUG(df_map_layer.gd:_input): position = ", e.position, ", _src = ", _src, " $DFTerrain.position = ", $DFTerrain.position)
-		_layer = get_tile_layer(_src)
-	if event is InputEventMouseButton and event.is_released():
-		var e = make_input_local(event)
-		_dst = debug_get_tile_coordinates(e.position)
-		$DFNavigationUI.show_path(
-			$DFNavigation.get_id_path(_layer, _src, _dst, true),
-		)
-		_layer = DFNavigation.L.LAYER_UNKNOWN
-
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.is_pressed():
+			var e = make_input_local(event)
+			_src = debug_get_tile_coordinates(e.position)
+			print("DEBUG(df_map_layer.gd:_input): position = ", e.position, ", _src = ", _src, " $DFTerrain.position = ", $DFTerrain.position)
+			_layer = get_tile_layer(_src)
+		if event.is_released():
+			var e = make_input_local(event)
+			_dst = debug_get_tile_coordinates(e.position)
+			$DFNavigationUI.show_path(
+				$DFNavigation.get_id_path(_layer, _src, _dst, true),
+			)
+			_layer = DFNavigation.L.LAYER_UNKNOWN
 
 
 func _ready():
