@@ -15,23 +15,38 @@ func TestToGrid(t *testing.T) {
 	}{
 		{
 			name:  "Trivial",
-			world: Vector2.XY{0, 0},
+			world: Vector2.XY{16, 8},
 			want:  Vector2i.XY{0, 0},
 		},
 		{
-			name:  "Trivial/CellSize",
-			world: Vector2.XY{32, 16},
-			want:  Vector2i.XY{1, 1},
-		},
-		{
-			name:  "Within",
-			world: Vector2.XY{31, 15},
+			name:  "Trivial/Within/Y+",
+			world: Vector2.XY{16, 15},
 			want:  Vector2i.XY{0, 0},
 		},
 		{
-			name:  "Adjacent",
-			world: Vector2.XY{33, 16},
-			want:  Vector2i.XY{1, 1},
+			name:  "Trivial/Within/Y-",
+			world: Vector2.XY{16, 1},
+			want:  Vector2i.XY{0, 0},
+		},
+		{
+			name:  "Trivial/Within/X+",
+			world: Vector2.XY{31, 8},
+			want:  Vector2i.XY{0, 0},
+		},
+		{
+			name:  "Trivial/Within/X-",
+			world: Vector2.XY{1, 8},
+			want:  Vector2i.XY{0, 0},
+		},
+		{
+			name:  "Adjacent/X",
+			world: Vector2.XY{33, 1},
+			want:  Vector2i.XY{1, 0},
+		},
+		{
+			name:  "Adjacent/Y",
+			world: Vector2.XY{1, 16},
+			want:  Vector2i.XY{0, 1},
 		},
 	} {
 		t.Run(c.name, func(t *testing.T) {
@@ -54,8 +69,18 @@ func TestToWorld(t *testing.T) {
 			want: Vector2.XY{16, 8},
 		},
 		{
-			name: "Adjacent",
+			name: "Adjacent/X",
 			grid: Vector2i.XY{1, 0},
+			want: Vector2.XY{32, 0},
+		},
+		{
+			name: "Adjacent/Y",
+			grid: Vector2i.XY{0, 1},
+			want: Vector2.XY{32, 16},
+		},
+		{
+			name: "Diagonal",
+			grid: Vector2i.XY{1, 1},
 			want: Vector2.XY{48, 8},
 		},
 	} {
