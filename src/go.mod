@@ -2,10 +2,10 @@ module github.com/downflux/gd-game
 
 go 1.24.0
 
-require graphics.gd v0.0.0-20250304060231-b67d1b4a3c7e
+require graphics.gd v0.0.0-20250309061445-e98c866f35bf
 
 require (
 	github.com/tetratelabs/wazero v1.9.0 // indirect
-	golang.org/x/text v0.22.0 // indirect
-	runtime.link v0.0.0-20250302233944-c090ca2115bd // indirect
+	golang.org/x/text v0.23.0 // indirect
+	runtime.link v0.0.0-20250307034040-539330d519ad // indirect
 )

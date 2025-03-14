@@ -1,13 +1,16 @@
 package unit
 
 import (
+	"fmt"
+
 	"github.com/downflux/gd-game/internal/geo"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/Node2D"
 	"graphics.gd/classdb/Tween"
+	"graphics.gd/variant"
 	"graphics.gd/variant/Object"
-	"graphics.gd/variant/Vector2i"
 	"graphics.gd/variant/Vector2"
+	"graphics.gd/variant/Vector2i"
 )
 
 type MoveState int
@@ -15,8 +18,8 @@ type MoveState int
 const (
 	MoveStateInvalid MoveState = iota
 	MoveStateIdle
-	MoveStateArrived
-	MoveStateWalk
+	MoveStateCheckpoint
+	MoveStateTransit
 )
 
 type N struct {
@@ -49,27 +52,46 @@ func (n *N) MoveState() MoveState {
 		return n.smove
 	}
 
-	if geo.ToWorld(n.head) != n.Super().AsNode2D().Position() {
-		n.smove = MoveStateWalk
+	if n.tmove != Tween.Nil && n.tmove.IsValid() {
+		n.smove = MoveStateTransit
+	} else if geo.ToWorld(n.head) != n.Super().AsNode2D().Position() {
+		n.smove = MoveStateTransit
+	} else if len(n.tail) == 0 {
+		n.smove = MoveStateIdle
 	} else {
-		if len(n.tail) == 0 {
-			n.smove = MoveStateIdle
-		} else {
-			n.smove = MoveStateArrived
-		}
+		n.smove = MoveStateCheckpoint
 	}
 	return n.smove
 }
 
+func (n *N) Set(k string, v any) bool {
+	if k == "position" {
+		n.Super().AsNode2D().SetPosition(variant.As[Vector2.XY](variant.New(v)))
+	}
+	return true
+}
+
+/*func (n *N) Position() Vector2.XY {
+	return Vector2.XY{0, 0}
+}
+*/
+
 func (n *N) move() {
-	if n.MoveState() == MoveStateWalk || n.MoveState() == MoveStateIdle {
+	if n.MoveState() == MoveStateTransit || n.MoveState() == MoveStateIdle {
 		return
 	}
 
 	n.head, n.tail = n.tail[0], n.tail[1:]
 	n.invalidateMoveState()
 
-	dt := Vector2.Length(Vector2.Sub(n.Super().AsNode2D().Position(), geo.ToWorld(n.head))) / n.Speed
+	dv := Vector2i.Length(
+		Vector2i.Sub(
+			n.Grid(),
+			n.head,
+		),
+	)
+
+	dt := dv / n.Speed
 
 	n.tmove = n.Super().AsNode().CreateTween()
 	n.tmove.SetProcessMode(Tween.TweenProcessPhysics)
@@ -80,8 +102,11 @@ func (n *N) move() {
 	n.tmove.Play()
 }
 
+func (n *N) teleport() {
+}
+
 func (n *N) Ready() {
-	n.Speed = 32
+	n.Speed = 1
 
 	n.Super().SetPosition(geo.ToWorld(Vector2i.XY{0, 0}))
 	n.head = n.Grid()

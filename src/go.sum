@@ -10,6 +10,8 @@ golang.org/x/text v0.21.0 h1:zyQAAkrwaneQ066sspRyJaG9VNi/YJ1NfzcGB3hZ/qo=
 golang.org/x/text v0.21.0/go.mod h1:4IBbMaMmOPCJ8SecivzSH54+73PCFmPWxNTLm+vZkEQ=
 golang.org/x/text v0.22.0 h1:bofq7m3/HAFvbF51jz3Q9wLg3jkvSPuiZu/pD1XwgtM=
 golang.org/x/text v0.22.0/go.mod h1:YRoo4H8PVmsu+E3Ou7cqLVH8oXWIHVoX0jqUWALQhfY=
+golang.org/x/text v0.23.0 h1:D71I7dUrlY+VX0gQShAThNGHFxZ13dGLBHQLVl1mJlY=
+golang.org/x/text v0.23.0/go.mod h1:/BLNzu4aZCJ1+kcD0DNRotWKage4q2rGVAg4o22unh4=
 graphics.gd v0.0.0-20250115192803-cb25f73ace85 h1:pZQyn61RDp2QWrLPOnM2fDREghKcEIeLQao9PCoYP90=
 graphics.gd v0.0.0-20250115192803-cb25f73ace85/go.mod h1:Ba6RRAbAUus6SNLWQW0bM1Aw0VWnEYusF/mtd56WmIs=
 graphics.gd v0.0.0-20250218093300-7db9c1f06164 h1:hVqdXiND82Uz9eoigCZC4R/qM+OUPeN/eDpjovEO0LE=
@@ -20,6 +22,8 @@ graphics.gd v0.0.0-20250303045251-01268d739618 h1:Pio2DNGez4gfx0XdV3aLvEB6qxg0ed
 graphics.gd v0.0.0-20250303045251-01268d739618/go.mod h1:jB0P4sCh+O8hgbA7gi+C33jraC/tqcByguT4VCbPB2U=
 graphics.gd v0.0.0-20250304060231-b67d1b4a3c7e h1:IuXIFVu56Dv1Xq6hV9FfHT4sWfF6Wkzjz9ieZUDoxQU=
 graphics.gd v0.0.0-20250304060231-b67d1b4a3c7e/go.mod h1:jB0P4sCh+O8hgbA7gi+C33jraC/tqcByguT4VCbPB2U=
+graphics.gd v0.0.0-20250309061445-e98c866f35bf h1:m0RT+p032v7iGXOon/lYm2PjZUliXRUWFKdwy4pszcU=
+graphics.gd v0.0.0-20250309061445-e98c866f35bf/go.mod h1:jB0P4sCh+O8hgbA7gi+C33jraC/tqcByguT4VCbPB2U=
 grow.graphics/gd v0.0.0-20240815211949-e3f44d06622e h1:ziUak9dE4h3M2y+MwG1+/bKMwC3y/227z/9wbgpeAgo=
 grow.graphics/gd v0.0.0-20240815211949-e3f44d06622e/go.mod h1:2XqsIQrFPtQ2NemYzIK55+/Tzg89zwglWO/UwRhuQeE=
 grow.graphics/gd v0.0.0-20241022194933-9578a164b165 h1:/fwppd0K1SGL8dkLGTNNDusLY2zMA7xcZsHSm1cJ5YQ=
@@ -42,3 +46,5 @@ runtime.link v0.0.0-20250227020446-f6e80d2cfb2e h1:3PmHOB7/rEmT6XZTtnvNKHk7WQ9hp
 runtime.link v0.0.0-20250227020446-f6e80d2cfb2e/go.mod h1:13rTs4Rs4/Z512Vh1Rkak+nJUERb9f4MpCZQyUrcTwM=
 runtime.link v0.0.0-20250302233944-c090ca2115bd h1:OHEmQINuLIrVsjkp8w+xwRZkFTGIX111irN77bTaWqQ=
 runtime.link v0.0.0-20250302233944-c090ca2115bd/go.mod h1:13rTs4Rs4/Z512Vh1Rkak+nJUERb9f4MpCZQyUrcTwM=
+runtime.link v0.0.0-20250307034040-539330d519ad h1:Kn7RPsxKd6lKrJge6ZXaPaLQXUJgnVbymy78EIqCTwY=
+runtime.link v0.0.0-20250307034040-539330d519ad/go.mod h1:13rTs4Rs4/Z512Vh1Rkak+nJUERb9f4MpCZQyUrcTwM=
