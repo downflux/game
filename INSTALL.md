@@ -17,6 +17,8 @@
     git checkout main
     ```
 
+    Also see https://stackoverflow.com/questions/18770545/.
+
 ## Windows
 
 ### Symlinks
