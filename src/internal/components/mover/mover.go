@@ -1,6 +1,8 @@
 package mover
 
 import (
+	"fmt"
+
 	"github.com/downflux/gd-game/internal/fsm/move"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/Node2D"
@@ -60,6 +62,8 @@ func (n *N) Process(d float32) {
 	Object.Use(n.tween)
 
 	switch s := n.state.State(); s {
+	case move.StateUnknown:
+		fallthrough
 	case move.StateTransit:
 		fallthrough
 	case move.StateIdle:
@@ -100,5 +104,7 @@ func (n *N) Process(d float32) {
 			}
 		})
 		n.tween.Play()
+	default:
+		panic(fmt.Errorf("invalid state encountered: %v", s))
 	}
 }

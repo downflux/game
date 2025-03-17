@@ -1,7 +1,7 @@
 package move
 
 import (
-	"fmt"
+	"github.com/downflux/gd-game/internal/fsm"
 )
 
 type S int
@@ -29,33 +29,11 @@ var (
 )
 
 type FSM struct {
-	valid bool
-	cache S
+	*fsm.FSM[S]
 }
 
-func New() *FSM { return &FSM{} }
-
-func (m *FSM) Invalidate() { m.valid = false }
-
-func (m *FSM) State() S {
-	if !m.valid {
-		return StateUnknown
+func New() *FSM {
+	return &FSM{
+		fsm.New[S](transitions),
 	}
-	return m.cache
-}
-
-func (m *FSM) SetState(s S) error {
-	if m.valid == false {
-		m.cache = s
-		m.valid = true
-		return nil
-	}
-
-	if ts, ok := transitions[m.cache]; ok {
-		if _, ok := ts[s]; ok {
-			m.cache = s
-			return nil
-		}
-	}
-	return fmt.Errorf("invalid cache transition: %v -> %v", m.cache, s)
 }
