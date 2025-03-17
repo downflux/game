@@ -14,6 +14,12 @@ const (
 )
 
 var (
+	t = []fsm.E[S]{
+		fsm.E[S]{Source: StateIdle, Destination: StateCheckpoint},
+		fsm.E[S]{Source: StateTransit, Destination: StateCheckpoint},
+		fsm.E[S]{Source: StateCheckpoint, Destination: StateIdle},
+		fsm.E[S]{Source: StateCheckpoint, Destination: StateTransit},
+	}
 	transitions = map[S]map[S]bool{
 		StateIdle: map[S]bool{
 			StateCheckpoint: true,
@@ -34,6 +40,6 @@ type FSM struct {
 
 func New() *FSM {
 	return &FSM{
-		fsm.New[S](transitions),
+		fsm.New[S](fsm.O[S]{Transitions: t}), // transitions),
 	}
 }
