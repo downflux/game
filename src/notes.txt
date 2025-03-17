@@ -1,0 +1,37 @@
+Moveable
+
+* click to move
+* click to teleport
+
+What are the states of a moveable object?
+
+* IDLE
+* TARGET_SELECTION
+* IN_TRANSIT
+
+Move Modes
+
+* WALK
+* TELEPORT
+
+Properties
+
+type N struct {
+  Position  Vector2.XY
+  Speed     float32
+  MoveQueue []struct{Vector2.XY, MoveMode}
+}
+
+API
+
+type I interface {
+  AppendQueue([]struct{Vector2.XY, MoveMove})
+  SetQueue([]struct{Vector2.XY, MoveMode})
+}
+
+
+State Information
+
+1. If (h, t) := MoveQueue is both nil, then state is IDLE
+1. if h is nil but t is not, then state is TARGET_SELECTION
+1. if h is not nil, then state is IN_TRANSITION
