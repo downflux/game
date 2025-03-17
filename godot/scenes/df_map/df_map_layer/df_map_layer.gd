@@ -38,10 +38,8 @@ func _input(event: InputEvent):
 			var e = make_input_local(event)
 			_dst = debug_get_tile_coordinates(e.position)
 			var p = $DFNavigation.get_id_path(_layer, _src, _dst, true)
-			# $DFUnit.set("f", $DFTerrain.map_to_local(_src))
-			# $DFUnit.set_position($DFTerrain.map_to_local(_src))  # DEBUG
-			$DFUnit.set_path(p)  # DEBUG
-			$DFUnit.set("speed", 33)
+			# $DFUnit.position = $DFTerrain.map_to_local(p[0])
+			$DFUnit.move(p)  # DEBUG
 			$DFNavigationUI.show_path(
 				$DFNavigation.get_id_path(_layer, _src, _dst, true),
 			)
