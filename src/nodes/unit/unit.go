@@ -5,7 +5,6 @@ import (
 	"github.com/downflux/gd-game/internal/geo"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/Node2D"
-	"graphics.gd/variant/Vector2"
 	"graphics.gd/variant/Vector2i"
 )
 
@@ -14,8 +13,6 @@ type N struct {
 
 	mover *mover.N
 }
-
-func (n *N) Head() Vector2i.XY { return geo.ToGrid(n.mover.Head().Position) }
 
 func (n *N) Move(path []Vector2i.XY) {
 	ps := []mover.M{}
@@ -28,13 +25,22 @@ func (n *N) Move(path []Vector2i.XY) {
 	n.mover.SetPath(ps)
 }
 
+func (n *N) Get(k string) any {
+	if k == "position" {
+		if n.mover != nil {
+			return geo.ToGrid(n.mover.Head().Position)
+		}
+	}
+	return nil
+}
+
 func (n *N) Set(k string, v any) bool {
 	if k == "position" {
 		if n.mover != nil {
-			if p, ok := v.(Vector2.XY); ok {
+			if p, ok := v.(Vector2i.XY); ok {
 				n.mover.SetPath([]mover.M{
 					{
-						Position: p,
+						Position: geo.ToWorld(p),
 						MoveType: mover.MoveTypes.Teleport,
 					},
 				})

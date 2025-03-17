@@ -32,13 +32,11 @@ func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_released():
 			var e = make_input_local(event)
-			# _src = debug_get_tile_coordinates($DFUnit.position)
-			_src = $DFUnit.head()
+			_src = $DFUnit.position
 			_dst = debug_get_tile_coordinates(e.position)
 			var _layer = get_tile_layer(_src)
 			
 			var p = $DFNavigation.get_id_path(_layer, _src, _dst, true)
-			
 			$DFUnit.move(p)
 			$DFNavigationUI.show_path(
 				$DFNavigation.get_id_path(_layer, _src, _dst, true),
@@ -48,7 +46,7 @@ func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 		if event.is_released():
 			var e = make_input_local(event)
-			_dst = $DFTerrain.map_to_local(debug_get_tile_coordinates(e.position))
+			_dst = debug_get_tile_coordinates(e.position)
 			$DFUnit.position = _dst
 			$DFNavigationUI.show_path([])
 
