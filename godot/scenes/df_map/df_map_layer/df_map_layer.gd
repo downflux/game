@@ -4,7 +4,6 @@ class_name DFMapLayer
 
 var _src = Vector2i(0, 0)
 var _dst = Vector2i(0, 0)
-var _layer = DFNavigation.L.LAYER_UNKNOWN
 
 
 func debug_get_tile_coordinates(local: Vector2) -> Vector2i:
@@ -28,22 +27,30 @@ func get_tile_layer(id: Vector2i) -> DFNavigation.L:
 
 func _input(event: InputEvent):
 	# Mouse in viewport coordinates.
+	
+	# Move from current position to mouse click.
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.is_pressed():
-			var e = make_input_local(event)
-			_src = debug_get_tile_coordinates(e.position)
-			print("DEBUG(df_map_layer.gd:_input): position = ", e.position, ", _src = ", _src, " $DFTerrain.position = ", $DFTerrain.position)
-			_layer = get_tile_layer(_src)
 		if event.is_released():
 			var e = make_input_local(event)
+			# _src = debug_get_tile_coordinates($DFUnit.position)
+			_src = $DFUnit.head()
 			_dst = debug_get_tile_coordinates(e.position)
+			var _layer = get_tile_layer(_src)
+			
 			var p = $DFNavigation.get_id_path(_layer, _src, _dst, true)
-			# $DFUnit.position = $DFTerrain.map_to_local(p[0])
-			$DFUnit.move(p)  # DEBUG
+			
+			$DFUnit.move(p)
 			$DFNavigationUI.show_path(
 				$DFNavigation.get_id_path(_layer, _src, _dst, true),
 			)
-			_layer = DFNavigation.L.LAYER_UNKNOWN
+	
+	# Teleport
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+		if event.is_released():
+			var e = make_input_local(event)
+			_dst = $DFTerrain.map_to_local(debug_get_tile_coordinates(e.position))
+			$DFUnit.position = _dst
+			$DFNavigationUI.show_path([])
 
 
 func _ready():

@@ -11,9 +11,9 @@ import (
 )
 
 type T Enum.Int[struct {
-	Unknown  T `gd:"NOVE_TYPE_UNKNOWN"`
-	Walk     T `gd:"NOVE_TYPE_WALK"`
-	Teleport T `gd:"NOVE_TYPE_TELEPORT"`
+	Unknown  T `gd:"MOVE_TYPE_UNKNOWN"`
+	Walk     T `gd:"MOVE_TYPE_WALK"`
+	Teleport T `gd:"MOVE_TYPE_TELEPORT"`
 }]
 
 var MoveTypes = Enum.Values[T]()
@@ -36,6 +36,8 @@ type N struct {
 }
 
 func (n *N) Ready() { n.state = move.New() }
+
+func (n *N) Head() M { return n.head }
 
 func (n *N) SetPath(path []M) {
 	n.tail = nil

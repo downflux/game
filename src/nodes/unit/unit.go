@@ -1,8 +1,8 @@
 package unit
 
 import (
-	"github.com/downflux/gd-game/internal/geo"
 	"github.com/downflux/gd-game/internal/components/mover"
+	"github.com/downflux/gd-game/internal/geo"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/Node2D"
 	"graphics.gd/variant/Vector2"
@@ -14,6 +14,8 @@ type N struct {
 
 	mover *mover.N
 }
+
+func (n *N) Head() Vector2i.XY { return geo.ToGrid(n.mover.Head().Position) }
 
 func (n *N) Move(path []Vector2i.XY) {
 	ps := []mover.M{}
