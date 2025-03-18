@@ -4,6 +4,19 @@ import (
 	"fmt"
 )
 
+func ToEdgeCache[T ~int](edges []E[T]) map[T]map[T]bool {
+	transitions := map[T]map[T]bool{}
+
+	for _, e := range edges {
+		if _, ok := transitions[e.Source]; !ok {
+			transitions[e.Source] = map[T]bool{}
+		}
+		transitions[e.Source][e.Destination] = true
+	}
+
+	return transitions
+}
+
 type FSM[T ~int] struct {
 	valid bool
 	cache T
@@ -17,22 +30,13 @@ type E[T ~int] struct {
 }
 
 type O[T ~int] struct {
-	Transitions []E[T]
+	Transitions map[T]map[T]bool
 }
 
 func New[T ~int](o O[T]) *FSM[T] {
-	fsm := &FSM[T]{
-		transitions: map[T]map[T]bool{},
+	return &FSM[T]{
+		transitions: o.Transitions,
 	}
-
-	for _, t := range o.Transitions {
-		if _, ok := fsm.transitions[t.Source]; !ok {
-			fsm.transitions[t.Source] = map[T]bool{}
-		}
-		fsm.transitions[t.Source][t.Destination] = true
-	}
-
-	return fsm
 }
 
 func (m *FSM[T]) Invalidate() { m.valid = false }

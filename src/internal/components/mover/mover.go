@@ -3,7 +3,7 @@ package mover
 import (
 	"fmt"
 
-	"github.com/downflux/gd-game/internal/fsm/move"
+	"github.com/downflux/gd-game/internal/fsm/move/amphibious"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/Node2D"
 	"graphics.gd/classdb/Tween"
@@ -34,10 +34,10 @@ type N struct {
 
 	head  M
 	tail  []M
-	state *move.FSM
+	state *amphibious.FSM
 }
 
-func (n *N) Ready() { n.state = move.New() }
+func (n *N) Ready() { n.state = amphibious.New() }
 
 func (n *N) Head() M { return n.head }
 
@@ -50,8 +50,8 @@ func (n *N) AppendPath(path []M) {
 	n.tail = append(n.tail, path...)
 
 	if len(n.tail) > 0 {
-		if s := n.state.State(); s == move.StateIdle || s == move.StateUnknown {
-			if err := n.state.SetState(move.StateCheckpoint); err != nil {
+		if s := n.state.State(); s == amphibious.StateIdle || s == amphibious.StateUnknown {
+			if err := n.state.SetState(amphibious.StateCheckpoint); err != nil {
 				panic(err)
 			}
 		}
@@ -62,15 +62,15 @@ func (n *N) Process(d float32) {
 	Object.Use(n.tween)
 
 	switch s := n.state.State(); s {
-	case move.StateUnknown:
+	case amphibious.StateUnknown:
 		fallthrough
-	case move.StateTransit:
+	case amphibious.StateTransit:
 		fallthrough
-	case move.StateIdle:
+	case amphibious.StateIdle:
 		return
-	case move.StateCheckpoint:
+	case amphibious.StateCheckpoint:
 		if len(n.tail) == 0 {
-			if err := n.state.SetState(move.StateIdle); err != nil {
+			if err := n.state.SetState(amphibious.StateIdle); err != nil {
 				panic(err)
 			}
 			return
@@ -89,7 +89,7 @@ func (n *N) Process(d float32) {
 			dt = dv / n.Speed
 		}
 
-		if err := n.state.SetState(move.StateTransit); err != nil {
+		if err := n.state.SetState(amphibious.StateTransit); err != nil {
 			panic(err)
 		}
 
@@ -99,7 +99,7 @@ func (n *N) Process(d float32) {
 			n.AsObject(), "position", n.head.Position, dt,
 		)
 		n.tween.TweenCallback(func() {
-			if err := n.state.SetState(move.StateCheckpoint); err != nil {
+			if err := n.state.SetState(amphibious.StateCheckpoint); err != nil {
 				panic(err)
 			}
 		})
