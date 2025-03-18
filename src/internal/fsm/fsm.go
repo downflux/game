@@ -1,9 +1,19 @@
+// Package fsm defines a finite state machine implementation.
+//
+// This implementation takes as input a set of valid state transitions and
+// allows the internal state to be subsequently changed along valid edges.
 package fsm
 
 import (
 	"fmt"
 )
 
+// ToEdgeCache precomputes the adjacency matrix for a set of states.
+//
+// The adjacency matrix for an FSM will not change -- it is not useful to
+// recalculate this structure for every time the FSM is initialized. The caller
+// will keep a copy of this cache stored to be set directly in the FSM
+// constructor.
 func ToEdgeCache[T ~int](edges []E[T]) map[T]map[T]bool {
 	transitions := map[T]map[T]bool{}
 
@@ -24,6 +34,7 @@ type FSM[T ~int] struct {
 	transitions map[T]map[T]bool
 }
 
+// E is a definition of a valid transition edge.
 type E[T ~int] struct {
 	Source      T
 	Destination T
@@ -39,6 +50,8 @@ func New[T ~int](o O[T]) *FSM[T] {
 	}
 }
 
+// Invalidate explicitly sets the state of the FSM as unknown -- this allows
+// manually setting the internal state by subsequently calling SetState().
 func (m *FSM[T]) Invalidate() { m.valid = false }
 
 func (m *FSM[T]) State() T {
