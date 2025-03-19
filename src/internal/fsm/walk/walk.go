@@ -1,4 +1,4 @@
-package amphibious
+package walk
 
 import (
 	"github.com/downflux/gd-game/internal/fsm"

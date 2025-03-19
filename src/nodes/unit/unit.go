@@ -1,8 +1,8 @@
 package unit
 
 import (
-	"github.com/downflux/gd-game/internal/components"
-	"github.com/downflux/gd-game/internal/components/mover/data"
+	"github.com/downflux/gd-game/internal/components/walker"
+	"github.com/downflux/gd-game/internal/data/mover"
 	"github.com/downflux/gd-game/internal/geo"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/Node2D"
@@ -12,15 +12,15 @@ import (
 type N struct {
 	classdb.Extension[N, Node2D.Instance] `gd:"DFUnit"`
 
-	mover *mover.N
+	mover *walker.N
 }
 
 func (n *N) Move(path []Vector2i.XY) {
-	ps := []data.M[mover.T]{}
+	ps := []mover.M[walker.T]{}
 	for _, p := range path {
-		ps = append(ps, data.M[mover.T]{
+		ps = append(ps, mover.M[walker.T]{
 			Position: geo.ToWorld(p),
-			MoveType: mover.MoveTypeWalk,
+			MoveType: walker.MoveTypeWalk,
 		})
 	}
 	n.mover.SetPath(ps)
@@ -39,10 +39,10 @@ func (n *N) Set(k string, v any) bool {
 	if k == "position" {
 		if n.mover != nil {
 			if p, ok := v.(Vector2i.XY); ok {
-				n.mover.SetPath([]data.M[mover.T]{
+				n.mover.SetPath([]mover.M[walker.T]{
 					{
 						Position: geo.ToWorld(p),
-						MoveType: mover.MoveTypeTeleport,
+						MoveType: walker.MoveTypeTeleport,
 					},
 				})
 				return true
@@ -54,7 +54,7 @@ func (n *N) Set(k string, v any) bool {
 }
 
 func (n *N) Ready() {
-	n.mover = &mover.N{
+	n.mover = &walker.N{
 		Speed: 32,
 	}
 	n.Super().AsNode().AddChild(n.mover.Super().AsNode())

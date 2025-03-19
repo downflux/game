@@ -1,4 +1,4 @@
-package data
+package mover
 
 import (
 	"graphics.gd/variant/Vector2"
