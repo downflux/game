@@ -13,4 +13,5 @@
 [node name="DFUnit" type="DFUnit" parent="DFMapLayer"]
 
 [node name="Sprite2D" type="Sprite2D" parent="DFMapLayer/DFUnit"]
+y_sort_enabled = true
 texture = ExtResource("3_lquwl")

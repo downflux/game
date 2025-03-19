@@ -23,7 +23,7 @@ const (
 type N struct {
 	classdb.Extension[N, Node.Instance]
 
-	Speed float32
+	Speed int
 
 	mover *mover.N[T]
 	tween Tween.Instance
@@ -82,7 +82,7 @@ func (n *N) Visit(d *mover.N[T]) error {
 					n.mover.Position(),
 					head.Position,
 				),
-			) / n.Speed
+			) / float32(n.Speed)
 		}
 
 		n.tween = n.Super().AsNode().CreateTween()
