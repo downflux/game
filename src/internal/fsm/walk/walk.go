@@ -13,6 +13,15 @@ const (
 	StateTransit
 )
 
+func (s S) String() string {
+	return map[S]string{
+		StateUnknown:    "Unknown",
+		StateIdle:       "Idle",
+		StateCheckpoint: "Checkpoint",
+		StateTransit:    "Transit",
+	}[s]
+}
+
 var (
 	transitions = fsm.ToEdgeCache(
 		[]fsm.E[S]{

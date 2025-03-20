@@ -1,13 +1,26 @@
 package unit
 
 import (
+	"fmt"
+
 	"github.com/downflux/gd-game/internal/components/walker"
 	"github.com/downflux/gd-game/internal/data/mover"
+	"github.com/downflux/gd-game/internal/fsm/walk"
 	"github.com/downflux/gd-game/internal/geo"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/Node2D"
+	"graphics.gd/variant/Callable"
 	"graphics.gd/variant/Vector2i"
 )
+
+// f is a function to be attached to a signal.
+//
+// Attach via
+//
+//	n.mover.FSM().Signal().Attach(f)
+var f = Callable.New(func(s any) {
+	fmt.Printf("DEBUG(unit.go): f: Attached FSM state transition received trigger %v\n", s.(walk.S).String())
+})
 
 type N struct {
 	classdb.Extension[N, Node2D.Instance] `gd:"DFUnit"`
@@ -79,6 +92,7 @@ func (n *N) Ready() {
 		Speed: 32,
 	}
 	n.Super().AsNode().AddChild(n.mover.Super().AsNode())
+	n.mover.FSM().Signal().Attach(f)
 }
 
 func (n *N) Process(d float32) {

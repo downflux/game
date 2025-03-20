@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/downflux/gd-game/internal/data/mover"
+	"github.com/downflux/gd-game/internal/fsm"
 	"github.com/downflux/gd-game/internal/fsm/walk"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/Node"
@@ -54,6 +55,8 @@ func (n *N) SetPath(path []mover.M[T]) {
 		}
 	}
 }
+
+func (n *N) FSM() fsm.RO[walk.S] { return n.fsm }
 
 func (n *N) Visit(d *mover.N[T]) error {
 	switch s := n.fsm.State(); s {

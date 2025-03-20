@@ -6,6 +6,8 @@ package fsm
 
 import (
 	"fmt"
+
+	"graphics.gd/variant/Signal"
 )
 
 // ToEdgeCache precomputes the adjacency matrix for a set of states.
@@ -27,11 +29,18 @@ func ToEdgeCache[T ~int](edges []E[T]) map[T]map[T]bool {
 	return transitions
 }
 
+type RO[T ~int] interface {
+	State() T
+	Signal() *Signal.Solo[T]
+}
+
 type FSM[T ~int] struct {
 	valid bool
 	cache T
 
 	transitions map[T]map[T]bool
+
+	signal Signal.Solo[T]
 }
 
 // E is a definition of a valid transition edge.
@@ -52,7 +61,10 @@ func New[T ~int](o O[T]) *FSM[T] {
 
 // Invalidate explicitly sets the state of the FSM as unknown -- this allows
 // manually setting the internal state by subsequently calling SetState().
-func (m *FSM[T]) Invalidate() { m.valid = false }
+func (m *FSM[T]) Invalidate() {
+	m.valid = false
+	m.signal.Emit(T(0))
+}
 
 func (m *FSM[T]) State() T {
 	if !m.valid {
@@ -65,14 +77,18 @@ func (m *FSM[T]) SetState(s T) error {
 	if !m.valid {
 		m.cache = s
 		m.valid = true
+		m.signal.Emit(s)
 		return nil
 	}
 
 	if possible, ok := m.transitions[m.cache]; ok {
 		if _, ok := possible[s]; ok {
 			m.cache = s
+			m.signal.Emit(s)
 			return nil
 		}
 	}
 	return fmt.Errorf("invalid transition: %v -> %v", T(m.cache), T(s))
 }
+
+func (m *FSM[T]) Signal() *Signal.Solo[T] { return &m.signal }
