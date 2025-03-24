@@ -48,24 +48,33 @@ func (n *N) Move(path []Vector2i.XY) {
 	n.mover.SetPath(ps)
 }
 
+// GetPathSource returns the TileMapLayer cell from which the caller must use
+// when query for a path. This cell may be different from the actual current
+// position of the unit.
+//
+// Consider the case where a unit is in position X and with head (i.e. currently
+// animated towards a destination) Y != X. The caller will logically attempt to
+// set a path using the current node's position X. The path generated from this
+// query may be of the form [X, Y, Z, ...] -- that is to say, the unit will move
+// back to X after its current animation is finished.
+func (n *N) GetPathSource() Vector2i.XY {
+	if n.mover != nil {
+		return geo.ToGrid(n.mover.Data().Head().Position)
+	}
+	return Vector2i.XY{}
+}
+
 // Get overrides the native node.position query and returns the cell position of
 // the node.
 //
-// N.B.: Object.Advanced(n.Super().AsObject()).AsObject() does not expose the
-// internal.Object.Get() base method. We must manually handle all property sets
-// in this case.
+// N.B.:
+//
+//	Object.Advanced(n.Super().AsObject()).AsObject()
+//
+// does not expose the internal.Object.Get() base method. We must manually
+// handle all property sets in this case.
 func (n *N) Get(k string) any {
 	switch k {
-	case "head":
-		// Consider the case where a unit is in position X and with head
-		// (i.e. currently animated towards a destination) Y != X. The
-		// caller will logically attempt to set a path using the current
-		// node's position X. The path generated from this query may be
-		// of the form [X, Y, Z, ...] -- that is to say, the unit will
-		// move back to X after its current animation is finished.
-		if n.mover != nil {
-			return geo.ToGrid(n.mover.Data().Head().Position)
-		}
 	case "position":
 		if n.mover != nil {
 			return geo.ToGrid(n.mover.Data().Position())

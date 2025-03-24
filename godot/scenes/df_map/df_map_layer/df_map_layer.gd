@@ -32,7 +32,7 @@ func _input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_released():
 			var e = make_input_local(event)
-			_src = $DFUnit.head
+			_src = $DFUnit.get_path_source()
 			_dst = debug_get_tile_coordinates(e.position)
 			var _layer = get_tile_layer(_src)
 			
