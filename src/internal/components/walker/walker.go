@@ -76,6 +76,7 @@ func (n *N) Visit(d *mover.N[T]) error {
 		}
 
 		head := n.mover.Tail()[0]
+		n.mover.SetHead(head)
 		n.mover.SetPath(n.mover.Tail()[1:])
 
 		dt := float32(0)

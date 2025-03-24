@@ -27,8 +27,9 @@ func New[T ~int]() *N[T] {
 func (n *N[T]) Position() Vector2.XY     { return n.position }
 func (n *N[T]) SetPosition(p Vector2.XY) { n.position = p }
 
-func (n *N[T]) Head() M[T]   { return n.head }
-func (n *N[T]) Tail() []M[T] { return n.tail }
+func (n *N[T]) SetHead(p M[T]) { n.head = p }
+func (n *N[T]) Head() M[T]     { return n.head }
+func (n *N[T]) Tail() []M[T]   { return n.tail }
 
 func (n *N[T]) SetPath(path []M[T]) { n.tail = append([]M[T]{}, path...) }
 

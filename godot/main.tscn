@@ -11,6 +11,7 @@
 [node name="DFMapLayer" parent="." instance=ExtResource("2_1bvp3")]
 
 [node name="DFUnit" type="DFUnit" parent="DFMapLayer"]
+debug = true
 
 [node name="Sprite2D" type="Sprite2D" parent="DFMapLayer/DFUnit"]
 y_sort_enabled = true
