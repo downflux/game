@@ -5,62 +5,40 @@ import (
 	"math/rand"
 
 	"github.com/downflux/gd-game/internal/geo"
+	"github.com/downflux/gd-game/nodes/map/constants/layer"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/AStarGrid2D"
 	"graphics.gd/classdb/Node"
 	"graphics.gd/variant/Array"
-	"graphics.gd/variant/Enum"
 	"graphics.gd/variant/Object"
+	"graphics.gd/variant/Enum"
 	"graphics.gd/variant/Rect2i"
 	"graphics.gd/variant/Vector2i"
 )
-
-// MapLayer is an internal representation of the different layers in a tile map.
-// This internal representation is a bitmask.
-type MapLayer int
-
-const (
-	LayerUnknown MapLayer = 0
-	LayerGround           = 1 << iota
-	LayerAir
-	LayerSea
-
-	LayerAmphibious = LayerGround | LayerSea
-)
-
-type L Enum.Int[struct {
-	Unknown    L `gd:"LAYER_UNKNOWN"`
-	Ground     L `gd:"LAYER_GROUND"`
-	Air        L `gd:"LAYER_AIR"`
-	Sea        L `gd:"LAYER_SEA"`
-	Amphibious L `gd:"LAYER_AMPHIBIOUS"`
-}]
-
-var LToMapLayer = map[L]MapLayer{
-	Layers.Ground:     LayerGround,
-	Layers.Air:        LayerAir,
-	Layers.Sea:        LayerSea,
-	Layers.Amphibious: LayerAmphibious,
-}
-
-var Layers = Enum.Values[L]()
 
 const (
 	CellShape = AStarGrid2D.CellShapeIsometricRight
 )
 
+type Animal Enum.Int[struct {
+	Cat Animal
+	Dog Animal
+}]
+
+var Animals = Enum.Values[Animal]()
+
 type N struct {
 	classdb.Extension[N, Node.Instance] `gd:"DFNavigation"`
 
-	layers map[MapLayer]AStarGrid2D.Instance
+	layers map[layer.Bitmask]AStarGrid2D.Instance
 }
 
 func (n *N) Ready() {
-	n.layers = map[MapLayer]AStarGrid2D.Instance{
-		LayerGround:     AStarGrid2D.New(),
-		LayerAir:        AStarGrid2D.New(),
-		LayerSea:        AStarGrid2D.New(),
-		LayerAmphibious: AStarGrid2D.New(),
+	n.layers = map[layer.Bitmask]AStarGrid2D.Instance{
+		layer.BitmaskGround:     AStarGrid2D.New(),
+		layer.BitmaskAir:        AStarGrid2D.New(),
+		layer.BitmaskSea:        AStarGrid2D.New(),
+		layer.BitmaskAmphibious: AStarGrid2D.New(),
 	}
 
 	for k, g := range n.layers {
@@ -81,7 +59,7 @@ func (n *N) Ready() {
 		//   S L
 		//   L L
 		var mode AStarGrid2D.DiagonalMode
-		if k == LayerSea {
+		if k == layer.BitmaskSea {
 			mode = AStarGrid2D.DiagonalModeOnlyIfNoObstacles
 		} else {
 			mode = AStarGrid2D.DiagonalModeAtLeastOneWalkable
@@ -101,8 +79,8 @@ func (n *N) Process(d float32) {
 	}
 }
 
-func (n *N) SetPointSolid(l L, id Vector2i.XY, v bool) {
-	ml, ok := LToMapLayer[l]
+func (n *N) SetPointSolid(l layer.E, id Vector2i.XY, v bool) {
+	ml, ok := layer.EToBitmask[l]
 	if !ok {
 		return
 	}
@@ -123,8 +101,8 @@ func (n *N) SetPointSolid(l L, id Vector2i.XY, v bool) {
 // that the underlying region was not empty when calling
 //
 //	FillSolidRegion(l, r, true)
-func (n *N) FillSolidRegion(l L, r Rect2i.PositionSize, v bool) {
-	ml, ok := LToMapLayer[l]
+func (n *N) FillSolidRegion(l layer.E, r Rect2i.PositionSize, v bool) {
+	ml, ok := layer.EToBitmask[l]
 	if !ok {
 		return
 	}
@@ -165,7 +143,7 @@ func neighbors(id Vector2i.XY, offset int32) []Vector2i.XY {
 //	func(id Vector2i) float32
 //
 // If there is no open cell, bfs returns the original input.
-func (n *N) bfs(ml MapLayer, id Vector2i.XY, h func(id Vector2i.XY) float32) Vector2i.XY {
+func (n *N) bfs(ml layer.Bitmask, id Vector2i.XY, h func(id Vector2i.XY) float32) Vector2i.XY {
 	g, ok := n.layers[ml]
 	if !ok {
 		return id
@@ -208,8 +186,8 @@ func (n *N) bfs(ml MapLayer, id Vector2i.XY, h func(id Vector2i.XY) float32) Vec
 // sea), GetIDPath will choose a nearby accessible tile and path to that
 // instead. This function also accepts the allow_partial_paths input bool, which
 // will return paths in the case that e.g. a wall blocks the path.
-func (n *N) GetIDPath(l L, src Vector2i.XY, dst Vector2i.XY, partial bool) Array.Contains[Vector2i.XY] {
-	ml, ok := LToMapLayer[l]
+func (n *N) GetIDPath(l layer.E, src Vector2i.XY, dst Vector2i.XY, partial bool) Array.Contains[Vector2i.XY] {
+	ml, ok := layer.EToBitmask[l]
 	if !ok {
 		return Array.New[Vector2i.XY]()
 	}

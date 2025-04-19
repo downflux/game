@@ -25,7 +25,8 @@ var f = Callable.New(func(s any) {
 type N struct {
 	classdb.Extension[N, Node2D.Instance] `gd:"DFUnit"`
 
-	Debug bool
+	Debug    bool
+	Priority int
 
 	// mover signifies that this unit is a ground / seaborne unit. This
 	// node does not animate flight.
