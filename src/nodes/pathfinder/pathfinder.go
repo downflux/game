@@ -11,7 +11,6 @@ import (
 	"graphics.gd/classdb/Node"
 	"graphics.gd/variant/Array"
 	"graphics.gd/variant/Object"
-	"graphics.gd/variant/Enum"
 	"graphics.gd/variant/Rect2i"
 	"graphics.gd/variant/Vector2i"
 )
@@ -19,13 +18,6 @@ import (
 const (
 	CellShape = AStarGrid2D.CellShapeIsometricRight
 )
-
-type Animal Enum.Int[struct {
-	Cat Animal
-	Dog Animal
-}]
-
-var Animals = Enum.Values[Animal]()
 
 type N struct {
 	classdb.Extension[N, Node.Instance] `gd:"DFNavigation"`
@@ -79,8 +71,8 @@ func (n *N) Process(d float32) {
 	}
 }
 
-func (n *N) SetPointSolid(l layer.E, id Vector2i.XY, v bool) {
-	ml, ok := layer.EToBitmask[l]
+func (n *N) SetPointSolid(l layer.L, id Vector2i.XY, v bool) {
+	ml, ok := layer.LToBitmask[l]
 	if !ok {
 		return
 	}
@@ -101,8 +93,8 @@ func (n *N) SetPointSolid(l layer.E, id Vector2i.XY, v bool) {
 // that the underlying region was not empty when calling
 //
 //	FillSolidRegion(l, r, true)
-func (n *N) FillSolidRegion(l layer.E, r Rect2i.PositionSize, v bool) {
-	ml, ok := layer.EToBitmask[l]
+func (n *N) FillSolidRegion(l layer.L, r Rect2i.PositionSize, v bool) {
+	ml, ok := layer.LToBitmask[l]
 	if !ok {
 		return
 	}
@@ -186,8 +178,8 @@ func (n *N) bfs(ml layer.Bitmask, id Vector2i.XY, h func(id Vector2i.XY) float32
 // sea), GetIDPath will choose a nearby accessible tile and path to that
 // instead. This function also accepts the allow_partial_paths input bool, which
 // will return paths in the case that e.g. a wall blocks the path.
-func (n *N) GetIDPath(l layer.E, src Vector2i.XY, dst Vector2i.XY, partial bool) Array.Contains[Vector2i.XY] {
-	ml, ok := layer.EToBitmask[l]
+func (n *N) GetIDPath(l layer.L, src Vector2i.XY, dst Vector2i.XY, partial bool) Array.Contains[Vector2i.XY] {
+	ml, ok := layer.LToBitmask[l]
 	if !ok {
 		return Array.New[Vector2i.XY]()
 	}

@@ -13,4 +13,4 @@ type D struct {
 	dim Vector2i.XY
 }
 
-func New(dim Vector2i.XY
+func New(dim Vector2i.XY) {}

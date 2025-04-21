@@ -1,8 +1,8 @@
 package layer
 
 import (
-	"graphics.gd/classdb/Node"
 	"graphics.gd/classdb"
+	"graphics.gd/classdb/Node"
 	"graphics.gd/variant/Enum"
 )
 
@@ -13,33 +13,34 @@ type Bitmask int
 
 const (
 	BitmaskUnknown Bitmask = 0
-	BitmaskGround        = 1 << iota
+	BitmaskGround          = 1 << iota
 	BitmaskAir
 	BitmaskSea
 
 	BitmaskAmphibious = BitmaskGround | BitmaskSea
 )
 
-type E Enum.Int[struct {
-	Unknown    E `gd:"LAYER_UNKNOWN"`
-	Ground     E `gd:"LAYER_GROUND"`
-	Air        E `gd:"LAYER_AIR"`
-	Sea        E `gd:"LAYER_SEA"`
-	Amphibious E `gd:"LAYER_AMPHIBIOUS"`
+type L Enum.Int[struct {
+	Unknown    L `gd:"LAYER_UNKNOWN"`
+	Ground     L `gd:"LAYER_GROUND"`
+	Air        L `gd:"LAYER_AIR"`
+	Sea        L `gd:"LAYER_SEA"`
+	Amphibious L `gd:"LAYER_AMPHIBIOUS"`
 }]
 
-var EToBitmask = map[E]Bitmask{
+var LToBitmask = map[L]Bitmask{
 	Layers.Ground:     BitmaskGround,
 	Layers.Air:        BitmaskAir,
 	Layers.Sea:        BitmaskSea,
 	Layers.Amphibious: BitmaskAmphibious,
 }
 
-var Layers = Enum.Values[E]()
+var Layers = Enum.Values[L]()
 
 type N struct {
 	classdb.Extension[N, Node.Instance] `gd:"DFLayerEnum"`
-	Foo E
-}
 
-func (n *N) Bar(e E) E { return e } 
+	// The namespace of the enum is tied to the first Node instance which
+	// uses it.
+	UnusedL L
+}

@@ -14,8 +14,10 @@ func main() {
 	classdb.Register[example.DFExampleNode]()
 	classdb.Register[example.DFExampleTileMapLayer]()
 
-	classdb.Register[pathfinder.N]()
+	// Load enums in the designated namespace first.
 	classdb.Register[layer.N]()
+
+	classdb.Register[pathfinder.N]()
 	classdb.Register[unit.N]()
 	// classdb.Register[potential_map.N]()
 
