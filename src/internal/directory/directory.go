@@ -10,7 +10,7 @@ type U interface {
 
 type D struct {
 	lookup map[int]map[int][]U
-	dim Vector2i.XY
+	dim    Vector2i.XY
 }
 
 func New(dim Vector2i.XY) {}

@@ -28,11 +28,19 @@ type L Enum.Int[struct {
 	Amphibious L `gd:"LAYER_AMPHIBIOUS"`
 }]
 
-var LToBitmask = map[L]Bitmask{
-	Layers.Ground:     BitmaskGround,
-	Layers.Air:        BitmaskAir,
-	Layers.Sea:        BitmaskSea,
-	Layers.Amphibious: BitmaskAmphibious,
+func (l *L) Bitmask() Bitmask {
+	m := map[L]Bitmask{
+		Layers.Ground:     BitmaskGround,
+		Layers.Air:        BitmaskAir,
+		Layers.Sea:        BitmaskSea,
+		Layers.Amphibious: BitmaskAmphibious,
+	}
+
+	if b, ok := m[l]; !ok {
+		return BitmaskUnknown
+	} else {
+		return b
+	}
 }
 
 var Layers = Enum.Values[L]()

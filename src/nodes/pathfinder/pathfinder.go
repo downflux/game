@@ -72,10 +72,8 @@ func (n *N) Process(d float32) {
 }
 
 func (n *N) SetPointSolid(l layer.L, id Vector2i.XY, v bool) {
-	ml, ok := layer.LToBitmask[l]
-	if !ok {
-		return
-	}
+	ml := l.Bitmask()
+	if ml == layer.BitmaskUnknown { return }
 
 	for k, g := range n.layers {
 		if ml&k == k {
