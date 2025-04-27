@@ -1,8 +1,6 @@
-package layer
+package map_layer
 
 import (
-	"graphics.gd/classdb"
-	"graphics.gd/classdb/Node"
 	"graphics.gd/variant/Enum"
 )
 
@@ -28,7 +26,7 @@ type L Enum.Int[struct {
 	Amphibious L `gd:"LAYER_AMPHIBIOUS"`
 }]
 
-func (l *L) Bitmask() Bitmask {
+func (l *L) Bitmask() (Bitmask, bool) {
 	m := map[L]Bitmask{
 		Layers.Ground:     BitmaskGround,
 		Layers.Air:        BitmaskAir,
@@ -36,19 +34,11 @@ func (l *L) Bitmask() Bitmask {
 		Layers.Amphibious: BitmaskAmphibious,
 	}
 
-	if b, ok := m[l]; !ok {
-		return BitmaskUnknown
+	if b, ok := m[*l]; !ok {
+		return BitmaskUnknown, false
 	} else {
-		return b
+		return b, true
 	}
 }
 
 var Layers = Enum.Values[L]()
-
-type N struct {
-	classdb.Extension[N, Node.Instance] `gd:"DFLayerEnum"`
-
-	// The namespace of the enum is tied to the first Node instance which
-	// uses it.
-	UnusedL L
-}

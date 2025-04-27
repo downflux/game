@@ -9,18 +9,18 @@ var _dst = Vector2i(0, 0)
 func debug_get_tile_coordinates(local: Vector2) -> Vector2i:
 	return $DFTerrain.local_to_map(local)
 
-func get_tile_layer(id: Vector2i) -> DFLayerEnum.L:
+func get_tile_layer(id: Vector2i) -> DFNavigation.L:
 	var t = $DFTerrain.get_cell_tile_data(id)
-	var l = DFLayerEnum.L.LAYER_UNKNOWN
+	var l = DFNavigation.L.LAYER_UNKNOWN
 	if t != null:
 		var g = t.get_custom_data("TraversibleGround")
 		var s = t.get_custom_data("TraversibleSea")
 		if g and s:
-			l = DFLayerEnum.L.LAYER_AMPHIBIOUS
+			l = DFNavigation.L.LAYER_AMPHIBIOUS
 		elif g:
-			l = DFLayerEnum.L.LAYER_GROUND
+			l = DFNavigation.L.LAYER_GROUND
 		elif s:
-			l = DFLayerEnum.L.LAYER_SEA
+			l = DFNavigation.L.LAYER_SEA
 	return l
 
 func _input(event: InputEvent):

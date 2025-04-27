@@ -30,6 +30,8 @@ graphics.gd v0.0.0-20250322010628-2783e95fbd29 h1:7RGJBlj10X23wqMvW1DrpugNymccKa
 graphics.gd v0.0.0-20250322010628-2783e95fbd29/go.mod h1:jB0P4sCh+O8hgbA7gi+C33jraC/tqcByguT4VCbPB2U=
 graphics.gd v0.0.0-20250421072543-c834905221fe h1:l0C6XYUfOGdzdLKWzQFGF3aG40JAnFA+58ZNb1SXjvI=
 graphics.gd v0.0.0-20250421072543-c834905221fe/go.mod h1:jB0P4sCh+O8hgbA7gi+C33jraC/tqcByguT4VCbPB2U=
+graphics.gd v0.0.0-20250426000505-773a6dfbf178 h1:WctvSgSEFtf7+A0YaKkYOlgltGb+5Gk4kkcoOrpaSBo=
+graphics.gd v0.0.0-20250426000505-773a6dfbf178/go.mod h1:jB0P4sCh+O8hgbA7gi+C33jraC/tqcByguT4VCbPB2U=
 grow.graphics/gd v0.0.0-20240815211949-e3f44d06622e h1:ziUak9dE4h3M2y+MwG1+/bKMwC3y/227z/9wbgpeAgo=
 grow.graphics/gd v0.0.0-20240815211949-e3f44d06622e/go.mod h1:2XqsIQrFPtQ2NemYzIK55+/Tzg89zwglWO/UwRhuQeE=
 grow.graphics/gd v0.0.0-20241022194933-9578a164b165 h1:/fwppd0K1SGL8dkLGTNNDusLY2zMA7xcZsHSm1cJ5YQ=

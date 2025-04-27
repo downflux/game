@@ -5,11 +5,10 @@ import (
 	"math/rand"
 
 	"github.com/downflux/gd-game/internal/geo"
-	"github.com/downflux/gd-game/nodes/map/constants/layer"
+	"github.com/downflux/gd-game/nodes/enums/map_layer"
 	"graphics.gd/classdb"
 	"graphics.gd/classdb/AStarGrid2D"
 	"graphics.gd/classdb/Node"
-	"graphics.gd/variant/Array"
 	"graphics.gd/variant/Object"
 	"graphics.gd/variant/Rect2i"
 	"graphics.gd/variant/Vector2i"
@@ -22,15 +21,15 @@ const (
 type N struct {
 	classdb.Extension[N, Node.Instance] `gd:"DFNavigation"`
 
-	layers map[layer.Bitmask]AStarGrid2D.Instance
+	layers map[map_layer.Bitmask]AStarGrid2D.Instance
 }
 
 func (n *N) Ready() {
-	n.layers = map[layer.Bitmask]AStarGrid2D.Instance{
-		layer.BitmaskGround:     AStarGrid2D.New(),
-		layer.BitmaskAir:        AStarGrid2D.New(),
-		layer.BitmaskSea:        AStarGrid2D.New(),
-		layer.BitmaskAmphibious: AStarGrid2D.New(),
+	n.layers = map[map_layer.Bitmask]AStarGrid2D.Instance{
+		map_layer.BitmaskGround:     AStarGrid2D.New(),
+		map_layer.BitmaskAir:        AStarGrid2D.New(),
+		map_layer.BitmaskSea:        AStarGrid2D.New(),
+		map_layer.BitmaskAmphibious: AStarGrid2D.New(),
 	}
 
 	for k, g := range n.layers {
@@ -51,7 +50,7 @@ func (n *N) Ready() {
 		//   S L
 		//   L L
 		var mode AStarGrid2D.DiagonalMode
-		if k == layer.BitmaskSea {
+		if k == map_layer.BitmaskSea {
 			mode = AStarGrid2D.DiagonalModeOnlyIfNoObstacles
 		} else {
 			mode = AStarGrid2D.DiagonalModeAtLeastOneWalkable
@@ -71,13 +70,15 @@ func (n *N) Process(d float32) {
 	}
 }
 
-func (n *N) SetPointSolid(l layer.L, id Vector2i.XY, v bool) {
-	ml := l.Bitmask()
-	if ml == layer.BitmaskUnknown { return }
+func (n *N) SetPointSolid(l map_layer.L, id Vector2i.XY, v bool) {
+	ml, ok := l.Bitmask()
+	if !ok {
+		return
+	}
 
 	for k, g := range n.layers {
 		if ml&k == k {
-			AStarGrid2D.Advanced(g).SetPointSolid(id, v)
+			AStarGrid2D.Expanded(g).SetPointSolid(id, v)
 		}
 	}
 }
@@ -91,15 +92,15 @@ func (n *N) SetPointSolid(l layer.L, id Vector2i.XY, v bool) {
 // that the underlying region was not empty when calling
 //
 //	FillSolidRegion(l, r, true)
-func (n *N) FillSolidRegion(l layer.L, r Rect2i.PositionSize, v bool) {
-	ml, ok := layer.LToBitmask[l]
+func (n *N) FillSolidRegion(l map_layer.L, r Rect2i.PositionSize, v bool) {
+	ml, ok := l.Bitmask()
 	if !ok {
 		return
 	}
 
 	for k, g := range n.layers {
 		if ml&k == k {
-			AStarGrid2D.Advanced(g).FillSolidRegion(r, v)
+			AStarGrid2D.Expanded(g).FillSolidRegion(r, v)
 		}
 	}
 }
@@ -133,7 +134,7 @@ func neighbors(id Vector2i.XY, offset int32) []Vector2i.XY {
 //	func(id Vector2i) float32
 //
 // If there is no open cell, bfs returns the original input.
-func (n *N) bfs(ml layer.Bitmask, id Vector2i.XY, h func(id Vector2i.XY) float32) Vector2i.XY {
+func (n *N) bfs(ml map_layer.Bitmask, id Vector2i.XY, h func(id Vector2i.XY) float32) Vector2i.XY {
 	g, ok := n.layers[ml]
 	if !ok {
 		return id
@@ -176,20 +177,20 @@ func (n *N) bfs(ml layer.Bitmask, id Vector2i.XY, h func(id Vector2i.XY) float32
 // sea), GetIDPath will choose a nearby accessible tile and path to that
 // instead. This function also accepts the allow_partial_paths input bool, which
 // will return paths in the case that e.g. a wall blocks the path.
-func (n *N) GetIDPath(l layer.L, src Vector2i.XY, dst Vector2i.XY, partial bool) Array.Contains[Vector2i.XY] {
-	ml, ok := layer.LToBitmask[l]
+func (n *N) GetIDPath(l map_layer.L, src Vector2i.XY, dst Vector2i.XY, partial bool) []Vector2i.XY {
+	ml, ok := l.Bitmask()
 	if !ok {
-		return Array.New[Vector2i.XY]()
+		return nil
 	}
 
 	g, ok := n.layers[ml]
 	if !ok {
-		return Array.New[Vector2i.XY]()
+		return nil
 	}
 
 	h := func(id Vector2i.XY) float32 { return Vector2i.LengthSquared(Vector2i.Sub(src, id)) }
 
-	return AStarGrid2D.Advanced(g).GetIdPath(
+	return AStarGrid2D.Expanded(g).GetIdPath(
 		Vector2i.XY(n.bfs(ml, src, h)),
 		Vector2i.XY(n.bfs(ml, dst, h)),
 		partial,
