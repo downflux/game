@@ -28,6 +28,8 @@ type N struct {
 	Debug    bool
 	Priority int
 
+	Team team.T
+
 	// mover signifies that this unit is a ground / seaborne unit. This
 	// node does not animate flight.
 	mover *walker.N
@@ -50,7 +52,7 @@ func (n *N) Move(path []Vector2i.XY) {
 }
 
 // GetPathSource returns the TileMapLayer cell from which the caller must use
-// when query for a path. This cell may be different from the actual current
+// when querying for a path. This cell may be different from the actual current
 // position of the unit.
 //
 // Consider the case where a unit is in position X and with head (i.e. currently

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://6p2oy6b4jnvh"]
 
 [ext_resource type="TileSet" uid="uid://bbx1ob5wh7703" path="res://assets/tilesets/navigation_ui.tres" id="1_fqxqo"]
-[ext_resource type="Script" uid="uid://1pvmyx6wfhrb" path="res://scenes/df_map/df_map_layer/df_navigation_ui/df_navigation_ui.gd" id="2_tuglf"]
+[ext_resource type="Script" uid="uid://1pvmyx6wfhrb" path="res://scenes/client/df_map/df_map_layer/df_navigation_ui/df_navigation_ui.gd" id="2_tuglf"]
 
 [node name="DFNavigationUI" type="TileMapLayer"]
 z_index = 1
