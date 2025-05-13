@@ -28,7 +28,7 @@ type N struct {
 	Debug    bool
 	Priority int
 
-	Team team.T
+	// Team team.T
 
 	// mover signifies that this unit is a ground / seaborne unit. This
 	// node does not animate flight.

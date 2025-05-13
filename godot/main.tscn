@@ -1,10 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://bmhmiv43fqo4c"]
+[gd_scene load_steps=4 format=3 uid="uid://bmhmiv43fqo4c"]
 
-[ext_resource type="PackedScene" uid="uid://d03aokhheswa5" path="res://scenes/client/client.tscn" id="1_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://drc2to4fm12hj" path="res://scenes/server/server.tscn" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cfd40nkcpenqg" path="res://scenes/camera/camera.tscn" id="2_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://b53edvkg200f8" path="res://scenes/df_map/df_map_layer/df_map_layer.tscn" id="3_lquwl"]
+[ext_resource type="Texture2D" uid="uid://jq65k8elik6x" path="res://assets/sprites/units/debug.png" id="4_7mycd"]
 
-[node name="Node" type="Node"]
+[node name="Client" type="Node"]
 
-[node name="Client" parent="." instance=ExtResource("1_0xm2m")]
+[node name="Camera2" parent="." instance=ExtResource("2_1bvp3")]
 
-[node name="Server" parent="." instance=ExtResource("2_h2yge")]
+[node name="DFMapLayer2" parent="." instance=ExtResource("3_lquwl")]
+
+[node name="DFUnit" type="DFUnit" parent="DFMapLayer2"]
+debug = true
+
+[node name="Sprite2D" type="Sprite2D" parent="DFMapLayer2/DFUnit"]
+y_sort_enabled = true
+texture = ExtResource("4_7mycd")
