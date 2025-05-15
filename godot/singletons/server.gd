@@ -13,6 +13,7 @@ func _on_connected_to_server():
 	info("connected to server: %s:%s" % [HOST, PORT])
 	server_foo.rpc_id(1, get_instance_id())
 
+
 func _on_connection_failed():
 	info("failed to connect to server: %s:%s" % [HOST, PORT])
 
@@ -35,10 +36,9 @@ func connect_to_server(host: String, port: int):
 	multiplayer.multiplayer_peer = PEER
 
 
-
 @rpc("authority", "call_local", "reliable")
-func client_fooback(instance: int, value: int):
-	info("local scene %d recieved server value %d" % [instance, value])
+func client_fooback(instance: int, value: Dictionary):
+	info("local scene %d recieved server value %s" % [instance, value])
 
 
 # Define server stubs.
