@@ -11,7 +11,7 @@ func info(s: String):
 
 func _on_connected_to_server():
 	info("connected to server: %s:%s" % [HOST, PORT])
-	server_foo.rpc_id(1, get_instance_id())
+	server_request_client_data.rpc_id(1, get_instance_id())
 
 
 func _on_connection_failed():
@@ -37,11 +37,11 @@ func connect_to_server(host: String, port: int):
 
 
 @rpc("authority", "call_local", "reliable")
-func client_fooback(instance: int, value: Dictionary):
+func client_return_client_data(instance: int, value: Dictionary):
 	info("local scene %d recieved server value %s" % [instance, value])
 
 
 # Define server stubs.
 @rpc("any_peer", "call_local", "reliable")
-func server_foo(_instance: int):
+func server_request_client_data(_instance: int):
 	return
