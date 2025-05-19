@@ -5,24 +5,21 @@ var PEER = ENetMultiplayerPeer.new()
 @export var PORT = 7777
 
 
-func info(s: String):
-	print("I %s %s: %s" % [Time.get_time_string_from_system(true), get_script().get_path().split("/")[-1], s])
-
-
 func _on_connected_to_server():
-	info("connected to server: %s:%s" % [HOST, PORT])
+	Logger.info("connected to server: %s:%s" % [HOST, PORT])
 	server_request_client_data.rpc_id(1, get_instance_id())
 
 
 func _on_connection_failed():
-	info("failed to connect to server: %s:%s" % [HOST, PORT])
+	Logger.info("failed to connect to server: %s:%s" % [HOST, PORT])
 
 
 func _on_server_disconnected():
-	info("disconnected from server")
+	Logger.info("disconnected from server")
 
 
 func _ready():
+	Logger.verbosity = Logger.VERBOSITY_LEVEL.DEBUG
 	connect_to_server(HOST, PORT)
 
 
@@ -38,7 +35,7 @@ func connect_to_server(host: String, port: int):
 
 @rpc("authority", "call_local", "reliable")
 func client_receive_client_data(instance: int, value: Dictionary):
-	info("local scene %d recieved server value %s" % [instance, value])
+	Logger.info("local scene %d recieved server value %s" % [instance, value])
 
 
 # Define server stubs.
