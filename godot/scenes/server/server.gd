@@ -40,14 +40,13 @@ func start(port: int, max_clients: int):
 	info("server started")
 
 
-
 @rpc("any_peer", "call_local", "reliable")
 func server_request_client_data(instance: int):
 	var id = multiplayer.get_remote_sender_id()
-	client_return_client_data.rpc_id(id, instance, get_node("State/Players/" + str(id)).serialize(0))
+	client_receive_client_data.rpc_id(id, instance, get_node("State/Players/" + str(id)).serialize(0))
 
 
 # Define client stubs.
 @rpc("authority", "call_local", "reliable")
-func client_return_client_data(_instance: int, _value: Dictionary):
+func client_receive_client_data(_instance: int, _value: Dictionary):
 	return
