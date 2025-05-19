@@ -1,43 +1,44 @@
 extends Node
 
-var PEER = ENetMultiplayerPeer.new()
-var PORT = 7777
-var MAX_CLIENTS = 4
+@export var _port: int = 7777
+@export var _max_clients: int = 4
+@export var verbosity: Logger.VERBOSITY_LEVEL = Logger.VERBOSITY_LEVEL.INFO
+@export var use_native_logging: bool = true
 
+var peer = ENetMultiplayerPeer.new()
 
 # Convenience lookup modules
 @onready var player_verification = $PlayerVerification
 
 
-func info(s: String):
-	print("I %s %s: %s" % [Time.get_time_string_from_system(true), get_script().get_path().split("/")[-1], s])
-
-
 func _on_peer_connected(id: int):
-	info("user connected: %s" % [id])
+	Logger.debug("user connected: %s" % [id])
 	player_verification.verify(id)
 
 
 func _on_peer_disconnected(id: int):
-	info("user disconnected: %s" % [id])
+	Logger.debug("user disconnected: %s" % [id])
 	# TODO(minkezhang): Save game data. This is especially useful for when clients
 	# disconnect temporarily.
 	get_node("State/Players/" + str(id)).queue_free()
 
 
 func _ready():
-	start(PORT, MAX_CLIENTS)
+	Logger.verbosity = verbosity
+	Logger.use_native = use_native_logging
+	
+	start(_port, _max_clients)
 
 
 func start(port: int, max_clients: int):
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	
-	PEER.create_server(port, max_clients)
+	peer.create_server(port, max_clients)
 	
-	multiplayer.multiplayer_peer = PEER
+	multiplayer.multiplayer_peer = peer
 	
-	info("server started")
+	Logger.debug("server started")
 
 
 @rpc("any_peer", "call_local", "reliable")

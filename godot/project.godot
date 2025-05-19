@@ -11,9 +11,12 @@ config_version=5
 [application]
 
 config/name="server"
-run/main_scene="uid://danyo7sb7e6ty"
+run/main_scene="uid://dd6y01xi5hrbk"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
+
+[autoload]
+
+Logger="*res://addons/downflux_common/logger/logger.tscn"
 
 [rendering]
 
