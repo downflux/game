@@ -37,7 +37,7 @@ func connect_to_server(host: String, port: int):
 
 
 @rpc("authority", "call_local", "reliable")
-func client_return_client_data(instance: int, value: Dictionary):
+func client_receive_client_data(instance: int, value: Dictionary):
 	info("local scene %d recieved server value %s" % [instance, value])
 
 
