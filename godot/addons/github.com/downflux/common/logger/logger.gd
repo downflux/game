@@ -24,15 +24,13 @@ var _verbosity_prefix: Dictionary = {
 
 
 func _log(level: VERBOSITY_LEVEL, s: String):
-	if level > verbosity:
+	if level >= verbosity:
 		var timestamp = Time.get_time_string_from_system(true)
 		var frame = get_stack()[2]
 		var stack = "%s(%s):%s" % [frame["source"].split("/")[-1], frame["function"], frame["line"]]
 		if not use_native:
 			print("%s%s %s: %s" % [_verbosity_prefix.get(level, "U"), timestamp, stack, s])
 			return
-		
-		print("USING NATIVE")
 		
 		match level:
 			VERBOSITY_LEVEL.DEBUG:
@@ -54,7 +52,6 @@ func info(s: String):
 
 
 func warning(s: String):
-	print("IN WARNING")
 	_log(VERBOSITY_LEVEL.WARNING, s)
 
 
