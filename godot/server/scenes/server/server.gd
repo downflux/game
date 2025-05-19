@@ -20,6 +20,9 @@ func _on_peer_connected(id: int):
 
 func _on_peer_disconnected(id: int):
 	info("user disconnected: %s" % [id])
+	# TODO(minkezhang): Save game data. This is especially useful for when clients
+	# disconnect temporarily.
+	get_node("State/Players/" + str(id)).queue_free()
 
 
 func _ready():
@@ -39,12 +42,12 @@ func start(port: int, max_clients: int):
 
 
 @rpc("any_peer", "call_local", "reliable")
-func server_foo(instance: int):
+func server_request_client_data(instance: int):
 	var id = multiplayer.get_remote_sender_id()
-	client_fooback.rpc_id(id, instance, get_node(str(id)).serialize(0))
+	client_return_client_data.rpc_id(id, instance, get_node("State/Players/" + str(id)).serialize(0))
 
 
 # Define client stubs.
 @rpc("authority", "call_local", "reliable")
-func client_fooback(_instance: int, _value: Dictionary):
+func client_return_client_data(_instance: int, _value: Dictionary):
 	return

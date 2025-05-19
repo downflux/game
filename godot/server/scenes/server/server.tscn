@@ -8,3 +8,7 @@ script = ExtResource("1_qgrco")
 
 [node name="PlayerVerification" type="Node" parent="."]
 script = ExtResource("2_375b0")
+
+[node name="State" type="Node" parent="."]
+
+[node name="Players" type="Node" parent="State"]

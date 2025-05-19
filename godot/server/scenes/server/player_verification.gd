@@ -28,7 +28,7 @@ func verify(pid: int, token: String = "0xPIZZA") -> bool:
 	
 	var p = player_state_scene.instantiate()
 	p.name = str(pid)
-	get_parent().add_child(p, true)
+	get_parent().get_node("State/Players").add_child(p, true)
 	
 	p.session_id = pid
 	p.username = _DEBUG_PLAYER_CREDENTIALS[token]["name"]
