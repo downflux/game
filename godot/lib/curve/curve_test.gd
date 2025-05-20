@@ -3,27 +3,27 @@ extends Node
 
 
 func test_step_pre():
-	assert(DFCurveUtils.get_value($SimpleBoolStep, -1) == false)
+	assert($SimpleBoolStep.get_value(0) == false)
 
 
 func test_step_post():
-	assert(DFCurveUtils.get_value($SimpleBoolStep, 1000) == true)
+	assert($SimpleBoolStep.get_value(1000) == true)
 
 
 func test_step_interpolate():
-	assert(DFCurveUtils.get_value($SimpleBoolStep, 101) == false)
+	assert($SimpleBoolStep.get_value(101) == false)
 
 
 func test_linear_pre():
-	assert(DFCurveUtils.get_value($SimpleFloatLinear, -1) == 10)
+	assert($SimpleFloatLinear.get_value(-1) == 10)
 
 
 func test_linear_post():
-	assert(DFCurveUtils.get_value($SimpleFloatLinear, 1000) == 20)
+	assert($SimpleFloatLinear.get_value(1000) == 20)
 
 
 func test_linear_interpolate():
-	assert(DFCurveUtils.get_value($SimpleFloatLinear, 101) == 11)
+	assert($SimpleFloatLinear.get_value(101) == 11)
 
 
 func _ready():

@@ -23,6 +23,10 @@ var money: DFCurveFloat = DFCurveFloat.new()
 var units: Dictionary[int, bool] = {}  # { unit_id: int -> bool }; units stored in WorldState.
 
 
+func _ready():
+	add_child(money)
+
+
 # Serialize data to be exported when e.g. saving game and communicating with
 # client.
 func to_dict(permission: DFEnums.Permission) -> Dictionary:
