@@ -8,7 +8,12 @@ extends Node
 var peer = ENetMultiplayerPeer.new()
 
 # Convenience lookup modules
-@onready var player_verification = $PlayerVerification
+@onready var player_verification: Node = $PlayerVerification
+@onready var state: Node = $State
+
+
+func get_player(id: int) -> PlayerState:
+	return get_node("State/Players/" + str(id))
 
 
 func _on_peer_connected(id: int):
@@ -20,7 +25,7 @@ func _on_peer_disconnected(id: int):
 	Logger.debug("user disconnected: %s" % [id])
 	# TODO(minkezhang): Save game data. This is especially useful for when clients
 	# disconnect temporarily.
-	get_node("State/Players/" + str(id)).queue_free()
+	get_player(id).queue_free()
 
 
 func _ready():
@@ -44,7 +49,17 @@ func start(port: int, max_clients: int):
 @rpc("any_peer", "call_local", "reliable")
 func server_request_client_data(instance: int):
 	var id = multiplayer.get_remote_sender_id()
-	client_receive_client_data.rpc_id(id, instance, get_node("State/Players/" + str(id)).serialize(0))
+	client_receive_client_data.rpc_id(
+		id,
+		instance,
+		state.to_dict(
+			DFEnums.Permission.PERMISSION_FULL,
+			state.Filter.FILTER_PLAYER_STATIC,
+		)
+		# get_player(id).to_dict(
+		# 	Enums.Permission.PERMISSION_FULL,
+		# ),
+	)
 
 
 # Define client stubs.
