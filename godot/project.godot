@@ -16,7 +16,7 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 
 [autoload]
 
-Logger="*res://addons/downflux_common/logger/logger.tscn"
+Logger="*res://addons/downflux_common/singletons/logger/logger.tscn"
 
 [rendering]
 
