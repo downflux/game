@@ -33,7 +33,7 @@ func connect_to_server(host: String, port: int):
 
 @rpc("authority", "call_local", "reliable")
 func client_receive_data(nid: int, value: Dictionary):
-	Logger.debug("local scene %d recieved server value %s" % [nid, value])
+	Logger.debug("local scene %d recieved server value \n%s" % [nid, JSON.stringify(value, "\t")])
 
 
 # Define server stubs.
