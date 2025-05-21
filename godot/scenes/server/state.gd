@@ -1,4 +1,5 @@
 extends Node
+class_name DFState
 
 # Convenience lookup modules
 @onready var players: Node = $Players
@@ -11,20 +12,13 @@ enum Filter {
 	FILTER_UNIT_DYNAMIC   = 8,
  }
 
-func to_dict(permissions: DFEnums.Permission, filters: Filter) -> Dictionary:
-	var state = {
-		DFStateKeys.ServerTimestamp: Time.get_unix_time_from_system(),
+func to_dict(sid: int, query: Dictionary) -> Dictionary:
+	return {
+		DFStateKeys.KDFState: {
+			DFStateKeys.KDFPlayers: players.to_dict(sid, query.get(
+				DFStateKeys.KDFPlayers, {},
+			)),
+			DFStateKeys.KDFUnits: {},
+			DFStateKeys.KDFBuildings: {},
+		},
 	}
-	
-	
-	if filters & Filter.FILTER_PLAYER_STATIC:
-		var ps = {}
-		for p in players.get_children():
-			ps.merge({
-				p.session_id: p.to_dict(permissions),
-			})
-		state.merge({
-			DFStateKeys.Players: ps,
-		})
-	
-	return state

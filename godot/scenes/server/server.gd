@@ -47,22 +47,23 @@ func start(port: int, max_clients: int):
 
 
 @rpc("any_peer", "call_local", "reliable")
-func server_request_client_data(instance: int):
-	var id = multiplayer.get_remote_sender_id()
-	client_receive_client_data.rpc_id(
-		id,
-		instance,
+func server_request_data(nid: int):
+	var sid = multiplayer.get_remote_sender_id()
+	var data = {
+			DFStateKeys.KDFServerTimestamp: Time.get_unix_time_from_system(),
+	}
+	data.merge(
 		state.to_dict(
-			DFEnums.Permission.PERMISSION_FULL,
-			state.Filter.FILTER_PLAYER_STATIC,
+			sid,
+			DFQuery.generate(DFEnums.DataFilter.FILTER_PLAYERS).get(
+				DFStateKeys.KDFState, {},
+			)
 		)
-		# get_player(id).to_dict(
-		# 	Enums.Permission.PERMISSION_FULL,
-		# ),
 	)
+	client_receive_data.rpc_id(sid, nid, data)
 
 
 # Define client stubs.
 @rpc("authority", "call_local", "reliable")
-func client_receive_client_data(_instance: int, _value: Dictionary):
+func client_receive_data(_nid: int, _value: Dictionary):
 	return

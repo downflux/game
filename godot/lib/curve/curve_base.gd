@@ -73,10 +73,10 @@ func get_value(timestamp: int) -> Variant:
 	return v if v != null else self.default_value
 
 
-func to_dict(_permission: DFEnums.Permission) -> Dictionary:
+func to_dict() -> Dictionary:
 	return {
-		DFStateKeys.CurveType: curve_type,
-		DFStateKeys.Timestamps: timestamps,
-		DFStateKeys.Data: self.data,
-		DFStateKeys.DefaultValue: self.default_value,
+		DFStateKeys.KDFCurveType: curve_type,
+		DFStateKeys.KDFCurveTimestamps: timestamps,
+		DFStateKeys.KDFCurveData: self.data,
+		DFStateKeys.KDFCurveDefaultValue: self.default_value,
 	}
