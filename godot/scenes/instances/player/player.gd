@@ -2,8 +2,8 @@
 #
 # This state contains both user authentication details (e.g. login mint) as well
 # as game state, e.g. list of units this player controls, etc.
-extends Node
-class_name PlayerState
+extends DFStateBase
+class_name Player
 
 var _anonymous_usernames = [
 	"Thing 1",
@@ -30,10 +30,26 @@ func _ready():
 
 # Serialize data to be exported when e.g. saving game and communicating with
 # client.
-func to_dict(sid: int, query: Dictionary) -> Dictionary:
-	return {
-		DFStateKeys.KDFPlayerUsername: alias if streamer_mode else username,
-		DFStateKeys.KDFPlayerFaction: faction,
-		DFStateKeys.KDFPlayerMoney: money.to_dict() if query.get(DFStateKeys.KDFPlayerMoney, false) and sid == session_id else {},
-		DFStateKeys.KDFPlayerUnits: units if sid == session_id else {}
+func to_dict(sid: int, filter: DFEnums.DataFilter, query: Dictionary) -> Dictionary:
+	var data = {
 	}
+	
+	if query.get(DFStateKeys.KDFPlayerUsername, false):
+		data.merge({
+			DFStateKeys.KDFPlayerUsername: alias if streamer_mode else username,
+		})
+	if query.get(DFStateKeys.KDFPlayerFaction, false):
+		data.merge({
+			DFStateKeys.KDFPlayerFaction: faction,
+		})
+	if query.get(DFStateKeys.KDFPlayerMoney, false):
+		if ((
+			not (filter & DFEnums.DataFilter.FILTER_UPDATES)
+		) or (
+			filter & DFEnums.DataFilter.FILTER_UPDATES and money.is_dirty
+		)) and sid == session_id:
+			data.merge({
+				DFStateKeys.KDFPlayerMoney: money.to_dict(sid, filter, query),
+			})
+
+	return data

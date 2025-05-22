@@ -12,7 +12,7 @@ var peer = ENetMultiplayerPeer.new()
 @onready var state: Node = $State
 
 
-func get_player(id: int) -> PlayerState:
+func get_player(id: int) -> Player:
 	return get_node("State/Players/" + str(id))
 
 
@@ -47,23 +47,29 @@ func start(port: int, max_clients: int):
 
 
 @rpc("any_peer", "call_local", "reliable")
-func server_request_data(nid: int):
+func server_request_state(nid: int):
 	var sid = multiplayer.get_remote_sender_id()
 	var data = {
 			DFStateKeys.KDFServerTimestamp: Time.get_unix_time_from_system(),
 	}
+	var filter = (
+		DFEnums.DataFilter.FILTER_PLAYERS 
+		| DFEnums.DataFilter.FILTER_CURVES
+		| DFEnums.DataFilter.FILTER_UPDATES
+	)
 	data.merge(
 		state.to_dict(
 			sid,
-			DFQuery.generate(DFEnums.DataFilter.FILTER_PLAYERS).get(
+			filter,
+			DFQuery.generate(filter).get(
 				DFStateKeys.KDFState, {},
 			)
 		)
 	)
-	client_receive_data.rpc_id(sid, nid, data)
+	client_receive_state.rpc_id(sid, nid, data)
 
 
 # Define client stubs.
 @rpc("authority", "call_local", "reliable")
-func client_receive_data(_nid: int, _value: Dictionary):
+func client_receive_state(_nid: int, _value: Dictionary):
 	return

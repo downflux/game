@@ -8,7 +8,7 @@
 # TODO(minkezhang): Implement authentication server.
 extends Node
 
-@onready var player_state_scene = preload("res://scenes/instances/player_state/player_state.tscn")
+@onready var player_state_scene = preload("res://scenes/instances/player/player.tscn")
 
 
 var _DEBUG_PLAYER_CREDENTIALS = {  # { mint: String -> Dictionary }

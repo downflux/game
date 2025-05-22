@@ -4,7 +4,7 @@
 #   default_value: Variant
 #
 # properties. These properties may be definite types.
-extends Node
+extends DFStateBase
 class_name DFCurveBase
 
 enum Type {
@@ -19,6 +19,7 @@ enum Type {
 
 
 func remove_data(ts: Array[int]):
+	is_dirty = true
 	for t in ts:
 		var i = timestamps.find(t)
 		if i != -1:
@@ -27,6 +28,7 @@ func remove_data(ts: Array[int]):
 
 
 func add_data(data: Dictionary[int, Variant]):
+	is_dirty = true
 	for t in data:
 		var i = timestamps.find(t)
 		if i == -1:
@@ -73,7 +75,7 @@ func get_value(timestamp: int) -> Variant:
 	return v if v != null else self.default_value
 
 
-func to_dict() -> Dictionary:
+func to_dict(sid: int, filter: DFEnums.DataFilter, query: Dictionary) -> Dictionary:
 	return {
 		DFStateKeys.KDFCurveType: curve_type,
 		DFStateKeys.KDFCurveTimestamps: timestamps,
