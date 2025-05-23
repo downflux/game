@@ -3,8 +3,8 @@ class_name DFEnums
 
 
 enum DataFilter {
-	FILTER_NONE      = 0,
-	FILTER_PLAYERS   = 1,
-	FILTER_UNITS     = 2,
-	FILTER_BUILDINGS = 4,
+	FILTER_NONE    = 0,
+	FILTER_UPDATES = 1,
+	FILTER_CURVES  = 2,
+	FILTER_PLAYERS = 4,
 }
