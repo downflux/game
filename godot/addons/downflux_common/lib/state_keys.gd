@@ -17,7 +17,6 @@ const KDFBuildings       = "buildings"
 # Players
 const KDFPlayerUsername = "username"
 const KDFPlayerMoney    = "money"
-const KDFPlayerUnits    = "units"
 const KDFPlayerFaction  = "faction"
 
 # Curves
