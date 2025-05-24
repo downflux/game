@@ -9,9 +9,9 @@ var is_dirty: bool:
 
 
 func to_dict(
-	sid: int,
-	filter: DFEnums.DataFilter,
-	query: Dictionary
+	_sid: int,
+	_filter: DFEnums.DataFilter,
+	_query: Dictionary
 ) -> Dictionary:
 	Logger.error("to_dict not implemented")
 	

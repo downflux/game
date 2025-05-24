@@ -49,23 +49,21 @@ func start(port: int, max_clients: int):
 @rpc("any_peer", "call_local", "reliable")
 func server_request_state(nid: int):
 	var sid = multiplayer.get_remote_sender_id()
-	var data = {
-			DFStateKeys.KDFServerTimestamp: Time.get_unix_time_from_system(),
-	}
 	var filter = (
 		DFEnums.DataFilter.FILTER_PLAYERS 
 		| DFEnums.DataFilter.FILTER_CURVES
 		| DFEnums.DataFilter.FILTER_UPDATES
 	)
-	data.merge(
-		state.to_dict(
+	
+	var data = {
+		DFStateKeys.KDFServerTimestamp: Time.get_unix_time_from_system(),
+		DFStateKeys.KDFState: state.to_dict(
 			sid,
 			filter,
-			DFQuery.generate(filter).get(
-				DFStateKeys.KDFState, {},
-			)
+			DFQuery.generate(filter).get(DFStateKeys.KDFState, {})
 		)
-	)
+	}
+	
 	client_receive_state.rpc_id(sid, nid, data)
 
 

@@ -35,21 +35,19 @@ func to_dict(sid: int, filter: DFEnums.DataFilter, query: Dictionary) -> Diction
 	}
 	
 	if query.get(DFStateKeys.KDFPlayerUsername, false):
-		data.merge({
-			DFStateKeys.KDFPlayerUsername: alias if streamer_mode else username,
-		})
+		data[DFStateKeys.KDFPlayerUsername] = alias if streamer_mode else username
 	if query.get(DFStateKeys.KDFPlayerFaction, false):
-		data.merge({
-			DFStateKeys.KDFPlayerFaction: faction,
-		})
+		data[DFStateKeys.KDFPlayerFaction] = faction
 	if query.get(DFStateKeys.KDFPlayerMoney, false):
 		if ((
 			not (filter & DFEnums.DataFilter.FILTER_UPDATES)
 		) or (
 			filter & DFEnums.DataFilter.FILTER_UPDATES and money.is_dirty
-		)) and sid == session_id:
-			data.merge({
-				DFStateKeys.KDFPlayerMoney: money.to_dict(sid, filter, query),
-			})
+		)) and (sid == session_id or sid == 1):
+			data[DFStateKeys.KDFPlayerMoney] = money.to_dict(
+				sid,
+				filter,
+				{},
+			)
 
 	return data

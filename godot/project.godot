@@ -18,6 +18,10 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 
 Logger="*res://addons/downflux_common/singletons/logger/logger.tscn"
 
+[physics]
+
+common/physics_ticks_per_second=10
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

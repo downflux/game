@@ -75,7 +75,11 @@ func get_value(timestamp: int) -> Variant:
 	return v if v != null else self.default_value
 
 
-func to_dict(sid: int, filter: DFEnums.DataFilter, query: Dictionary) -> Dictionary:
+func to_dict(
+	_sid: int,
+	_filter: DFEnums.DataFilter,
+	_query: Dictionary
+) -> Dictionary:
 	return {
 		DFStateKeys.KDFCurveType: curve_type,
 		DFStateKeys.KDFCurveTimestamps: timestamps,
