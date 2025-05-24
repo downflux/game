@@ -77,9 +77,11 @@ func get_value(timestamp: int) -> Variant:
 
 func to_dict(
 	_sid: int,
-	_filter: DFEnums.DataFilter,
+	_full: bool,
 	_query: Dictionary
 ) -> Dictionary:
+	if not _full and not is_dirty:
+		return {}
 	return {
 		DFStateKeys.KDFCurveType: curve_type,
 		DFStateKeys.KDFCurveTimestamps: timestamps,

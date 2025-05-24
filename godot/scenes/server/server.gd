@@ -55,13 +55,15 @@ func server_request_state(nid: int):
 		| DFEnums.DataFilter.FILTER_UPDATES
 	)
 	
+	state.is_dirty = false
 	var data = {
 		DFStateKeys.KDFServerTimestamp: Time.get_unix_time_from_system(),
 		DFStateKeys.KDFState: state.to_dict(
 			sid,
-			filter,
+			false,
 			DFQuery.generate(filter).get(DFStateKeys.KDFState, {})
-		)
+		),
+		"full": false,
 	}
 	
 	client_receive_state.rpc_id(sid, nid, data)
