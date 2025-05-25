@@ -1,10 +1,15 @@
-# Log defines logging utility functions.
-#
-# This scene should be imported as a singleton. This scene does not offer
-# a wrapper for the "assert" keyword.
+class_name DFLogger
 extends Node
+## Log defines logging utility functions.
+##
+## This scene should be imported as a singleton. This scene does not offer
+## a wrapper for the "assert" keyword.
 
+## Defines the minimum verbosity of messages. Messages below this verbosity are
+## not shown in logs.
 @export var verbosity: VERBOSITY_LEVEL = VERBOSITY_LEVEL.INFO
+
+## If [code]true[/code], uses the default Godot logging functions instead.
 @export var use_native: bool = true
 
 enum VERBOSITY_LEVEL {
