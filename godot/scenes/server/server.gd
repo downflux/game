@@ -33,7 +33,7 @@ func _ready():
 	start(_port, _max_clients)
 
 
-func _push_data(p: DFPlayer):
+func _publish_state(p: DFPlayer):
 	if p.is_subscribed:
 		var data = {
 			DFStateKeys.KDFState: state.to_dict(
@@ -47,7 +47,7 @@ func _push_data(p: DFPlayer):
 		}
 		p.request_partial = true
 		
-		client_push_state.rpc_id(p.session_id, p.node_id, data)
+		client_publish_state.rpc_id(p.session_id, p.node_id, data)
 
 
 func _physics_process(_delta):
@@ -55,7 +55,7 @@ func _physics_process(_delta):
 	# updated date to all clients.
 	if state.is_dirty:
 		for p in state.players.get_children():
-			_push_data(p)
+			_publish_state(p)
 
 
 func start(port: int, max_clients: int):
@@ -81,5 +81,5 @@ func server_request_subscription(nid: int):
 
 # Define client stubs.
 @rpc("authority", "call_local", "reliable")
-func client_push_state(_nid: int, _value: Dictionary):
+func client_publish_state(_nid: int, _value: Dictionary):
 	return
