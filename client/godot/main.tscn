@@ -3,7 +3,9 @@
 [ext_resource type="Script" uid="uid://b3ropj8difau1" path="res://main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://cfd40nkcpenqg" path="res://scenes/camera/camera.tscn" id="2_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://b53edvkg200f8" path="res://scenes/df_map/df_map_layer/df_map_layer.tscn" id="3_lquwl"]
-[ext_resource type="Texture2D" uid="uid://jq65k8elik6x" path="res://assets/sprites/units/debug.png" id="4_7mycd"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_h2yge"]
+load_path = "res://.godot/imported/debug.png-97020d448e854da455bec68209740303.ctex"
 
 [node name="Main" type="Node"]
 script = ExtResource("1_1bvp3")
@@ -21,4 +23,4 @@ debug = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Client/DFMapLayer/DFUnit"]
 y_sort_enabled = true
-texture = ExtResource("4_7mycd")
+texture = SubResource("CompressedTexture2D_h2yge")
