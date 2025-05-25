@@ -32,7 +32,7 @@ func connect_to_server(host: String, port: int):
 
 
 @rpc("authority", "call_local", "reliable")
-func client_push_state(nid: int, value: Dictionary):
+func client_publish_state(nid: int, value: Dictionary):
 	Logger.debug("local scene %d recieved server value \n%s" % [nid, JSON.stringify(value, "\t")])
 
 
