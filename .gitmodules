@@ -1,3 +1,4 @@
 [submodule "third_party/downflux/game-assets"]
 	path = third_party/downflux/game-assets
 	url = https://github.com/downflux/game-assets
+	branch = main
