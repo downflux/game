@@ -7,7 +7,7 @@ var _port: int
 
 func _on_connected_to_server():
 	Logger.debug("connected to server: %s:%s" % [_host, _port])
-	server_request_state.rpc_id(1, get_instance_id())
+	server_request_subscription.rpc_id(1, get_instance_id())
 
 
 func _on_connection_failed():
@@ -32,11 +32,11 @@ func connect_to_server(host: String, port: int):
 
 
 @rpc("authority", "call_local", "reliable")
-func client_receive_state(nid: int, value: Dictionary):
+func client_push_state(nid: int, value: Dictionary):
 	Logger.debug("local scene %d recieved server value \n%s" % [nid, JSON.stringify(value, "\t")])
 
 
 # Define server stubs.
 @rpc("any_peer", "call_local", "reliable")
-func server_request_state(_nid: int):
+func server_request_subscription(_nid: int):
 	return

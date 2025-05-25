@@ -1,3 +1,5 @@
+class_name DFStateKeys
+extends Node
 # Module defines the list of world state dictionary key strings when
 # communicating between server and client.
 #
@@ -5,14 +7,18 @@
 # allows us to keep scripts readable.
 #
 # TODO(minkezhang): Move to the common project.
-extends Node
-class_name DFStateKeys
 
-const KDFServerTimestamp = "server_timestamp"
-const KDFState           = "state"
-const KDFPlayers         = "players"
-const KDFUnits           = "units"
-const KDFBuildings       = "buildings"
+const KDFPartial = "partial"
+const KDFIsFreed = "is_freed"
+
+const KDFTimestampMSec = "timestamp_msec"
+const KDFState         = "state"
+const KDFPlayers       = "players"
+
+# TODO(minkezhang): Implement these.
+const KDFUnits     = "units"
+const KDFBuildings = "buildings"
+const KDFEntities  = "entities"
 
 # Players
 const KDFPlayerUsername = "username"

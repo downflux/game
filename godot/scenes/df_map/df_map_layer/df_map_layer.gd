@@ -1,6 +1,5 @@
-extends Node2D
 class_name DFMapLayer
-
+extends Node2D
 
 var _src = Vector2i(0, 0)
 var _dst = Vector2i(0, 0)
