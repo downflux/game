@@ -26,7 +26,7 @@ const KDFPlayerMoney    = "money"
 const KDFPlayerFaction  = "faction"
 
 # Curves
-const KDFCurveType         = "curve_type"
-const KDFCurveTimestamps   = "timestamps"
-const KDFCurveData         = "data"
-const KDFCurveDefaultValue = "default_value"
+const KDFCurveType          = "curve_type"
+const KDFCurveTimestampMSec = "timestamps_msec"
+const KDFCurveData          = "data"
+const KDFCurveDefaultValue  = "default_value"

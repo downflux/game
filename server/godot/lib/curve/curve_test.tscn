@@ -13,8 +13,6 @@ data = Dictionary[int, bool]({
 100: false,
 110: true
 })
-curve_type = 1
-timestamps_msec = Array[int]([100, 110])
 metadata/_custom_type_script = "uid://b6kslhaauyoe6"
 
 [node name="SimpleFloatLinear" type="Node" parent="."]
@@ -23,5 +21,4 @@ data = Dictionary[int, float]({
 100: 10.0,
 110: 20.0
 })
-timestamps_msec = Array[int]([100, 110])
 metadata/_custom_type_script = "uid://dxyeod1rhmbom"
