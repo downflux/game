@@ -32,11 +32,11 @@ func connect_to_server(host: String, port: int):
 
 
 @rpc("authority", "call_local", "reliable")
-func client_publish_state(nid: int, value: Dictionary):
+func client_publish_state(nid: int, value: Dictionary) -> void:
 	Logger.debug("local scene %d recieved server value \n%s" % [nid, JSON.stringify(value, "\t")])
 
 
 # Define server stubs.
 @rpc("any_peer", "call_local", "reliable")
-func server_request_subscription(_nid: int):
+func server_request_subscription(_nid: int) -> void:
 	return
