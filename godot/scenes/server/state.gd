@@ -4,6 +4,7 @@ extends DFStateBase
 # Convenience lookup modules
 @onready var players: Node = $Players
 
+## The number of milliseconds since the server started.
 var timestamp_msec: int
 
 

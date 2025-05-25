@@ -1,9 +1,14 @@
+class_name DFServer
 extends Node
 
-@export var _port: int = 7777
-@export var _max_clients: int = 4
-@export var verbosity: Logger.VERBOSITY_LEVEL = Logger.VERBOSITY_LEVEL.INFO
-@export var use_native_logging: bool = true
+## Server listening port.
+@export var port: int = 7777
+
+## Max number of clients which can connect to this server.
+@export var max_clients: int = 4
+
+@export var _verbosity: Logger.VERBOSITY_LEVEL = Logger.VERBOSITY_LEVEL.INFO
+@export var _use_native_logging: bool = true
 
 # Convenience lookup modules
 @onready var player_verification: Node = $PlayerVerification
@@ -27,10 +32,10 @@ func _on_peer_disconnected(sid: int):
 
 
 func _ready():
-	Logger.verbosity = verbosity
-	Logger.use_native = use_native_logging
+	Logger.verbosity = _verbosity
+	Logger.use_native = _use_native_logging
 	
-	start(_port, _max_clients)
+	_start(port, max_clients)
 
 
 func _publish_state(p: DFPlayer):
@@ -58,20 +63,24 @@ func _physics_process(_delta):
 			_publish_state(p)
 
 
-func start(port: int, max_clients: int):
+func _start(p: int, c: int):
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	
 	var peer = ENetMultiplayerPeer.new()
-	peer.create_server(port, max_clients)
+	peer.create_server(p, c)
 	
 	multiplayer.multiplayer_peer = peer
 	
 	Logger.debug("server started")
 
 
+## Marks an incoming peer connection as a subscriber of the [DFState] data.
+## [br][br]
+## Clients will set [param nid] indicating which node will handle this data,
+## e.g. via [method Node.get_instance_id].
 @rpc("any_peer", "call_local", "reliable")
-func server_request_subscription(nid: int):
+func server_request_subscription(nid: int) -> void:
 	var sid = multiplayer.get_remote_sender_id()
 	var p = state.players.get_player(sid)
 	p.node_id = nid
@@ -80,6 +89,8 @@ func server_request_subscription(nid: int):
 
 
 # Define client stubs.
+
+## Called by [DFServer] at most once a physics tick to send data to each client.
 @rpc("authority", "call_local", "reliable")
-func client_publish_state(_nid: int, _value: Dictionary):
+func client_publish_state(_nid: int, _value: Dictionary) -> void:
 	return

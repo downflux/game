@@ -1,12 +1,16 @@
 class_name DFStateBase
 extends Node
+## Base class representing a server object which needs to be synced with
+## clients.
 
-# is_dirty marks this node as having altered within the most recent tick.
-#
-# We will propagate setting the dirty bit upwards to the overall server state
-# so that we can traverse the tree quickly downwards when exporting the server
-# state. We will propagate clearing the dirty bit downwards, as we will call
-# this operation from the server state itself after every tick.
+## Marks this node as having been altered within the most recent tick.
+## [br][br]
+## We will propagate setting the dirty bit upwards to [DFState] so that we can
+## traverse the tree quickly downwards when exporting the server state.
+## [br][br]
+## This property will be set by the root node(s) (e.g. [DFState]) after
+## all changes have been processed, and will propagate clearing the dirty bit
+## downwards.
 var is_dirty: bool:
 	set(v):
 		is_dirty = v
@@ -27,7 +31,11 @@ var is_dirty: bool:
 				if c is DFStateBase and c.is_dirty:
 					c.is_dirty = v
 
-
+## Marks this node as intended to be deleted at the end of the frame.
+## [br][br]
+## Subclasses of DFStateBase [b]must[/b] set [member is_deleted] instead of
+## calling [member Node.queue_free]. Once set, [member is_deleted] will never be
+## toggled back to [code]false[/code].
 var is_deleted: bool:
 	set(v):
 		if v == false:
@@ -42,20 +50,25 @@ var is_deleted: bool:
 		return is_deleted
 
 
-# Returns a dict representation of the state of the node.
-#
-# @param sid The calling session ID. The server session ID is always 1.
-# @param partial If set to true and the dirty bit is cleared, return an empty
-#  dictionary object.
-# @param query The query struct which dictates how to process the data.
+@warning_ignore_start("unused_parameter")
+## Virtual method that returns a dictionary representation of the state of the
+## node.
+## [br][br]
+## [param sid] is set to the session ID of the requesting player, [b]or[/b] to
+## [code]1[/code] for the server session ID. If [param partial] is
+## [code]true[/code], this function must return an empty dictionary
+## [code]{}[/code] if the dirty bit [param is_dirty] is cleared. [param query]
+## is a dictionary object which is used to indicate which fields to include in
+## the returned dictionary.
 func to_dict(
-	_sid: int,
-	_partial: bool,
-	_query: Dictionary,
+	sid: int,
+	partial: bool,
+	query: Dictionary,
 ) -> Dictionary:
 	Logger.error("to_dict not implemented")
 	
 	return {}
+@warning_ignore_restore("unused_parameter")
 
 
 func _ready():

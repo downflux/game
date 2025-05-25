@@ -5,7 +5,7 @@ extends DFCurveBase
 @export var default_value: bool = false
 
 
-func add_data(d: Dictionary[int, bool]):
+func add_data(d: Dictionary[int, bool]) -> void:
 	super.add_data(d)
 
 
