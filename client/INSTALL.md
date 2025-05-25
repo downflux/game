@@ -42,6 +42,11 @@ See [documentation](https://learn.grow.graphics/documentation/)
     go.exe env GOPATH
     ```
 
+1. Re-compile extensions
+    ```sh
+    gd.exe
+    ```
+
 1. Install `gcc` toolchain from https://winlibs.com/#download-release
 1. Set Windows `${PATH}` to the appropriate `mingw64\bin` directory
 
@@ -61,4 +66,9 @@ See [documentation](https://learn.grow.graphics/documentation/)
 
     ```sh
     go env GOPATH
+    ```
+
+1. Re-compile extensions
+    ```sh
+    gd
     ```
