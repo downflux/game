@@ -46,8 +46,6 @@ var is_deleted: bool:
 			if c is DFStateBase and not c.is_deleted:
 				c.is_deleted = true
 		is_dirty = true  # Ensure this change is handled.
-	get:
-		return is_deleted
 
 
 @warning_ignore_start("unused_parameter")

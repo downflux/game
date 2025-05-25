@@ -20,7 +20,7 @@ Logger="*res://addons/downflux_common/singletons/logger/logger.tscn"
 
 [physics]
 
-common/physics_ticks_per_second=10
+common/physics_ticks_per_second=1
 
 [rendering]
 

@@ -11,7 +11,7 @@ extends Node
 @export var _use_native_logging: bool = true
 
 # Convenience lookup modules
-@onready var player_verification: Node = $PlayerVerification
+@onready var player_verification: DFPlayerVerification = $PlayerVerification
 @onready var state: DFState = $State
 
 
@@ -39,28 +39,32 @@ func _ready():
 
 
 func _publish_state(p: DFPlayer):
-	if p.is_subscribed:
-		var data = {
-			DFStateKeys.KDFState: state.to_dict(
-				p.session_id,
-				p.request_partial,
-				DFQuery.generate(
-					DFEnums.DataFilter.FILTER_ALL,
-				).get(DFStateKeys.KDFState, {})
-			),
-			DFStateKeys.KDFPartial: p.request_partial,
-		}
-		p.request_partial = true
-		
-		client_publish_state.rpc_id(p.session_id, p.node_id, data)
+	if not p.is_subscribed:
+		return
+	
+	if not p.is_dirty and p.request_partial:
+		return
+	
+	var data = {
+		DFStateKeys.KDFState: state.to_dict(
+			p.session_id,
+			p.request_partial,
+			DFQuery.generate(
+				DFEnums.DataFilter.FILTER_ALL,
+			).get(DFStateKeys.KDFState, {})
+		),
+		DFStateKeys.KDFPartial: p.request_partial,
+	}
+	p.request_partial = true
+	
+	client_publish_state.rpc_id(p.session_id, p.node_id, data)
 
 
 func _physics_process(_delta):
 	# The state node as a child of server is processed before server. Broadcast
 	# updated date to all clients.
-	if state.is_dirty:
-		for p in state.players.get_children():
-			_publish_state(p)
+	for p in state.players.get_children():
+		_publish_state(p)
 
 
 func _start(p: int, c: int):
