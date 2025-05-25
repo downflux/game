@@ -39,10 +39,9 @@ func _ready():
 
 
 func _publish_state(p: DFPlayer):
-	if not p.is_subscribed:
-		return
-	
-	if not p.is_dirty and p.request_partial:
+	if not p.is_subscribed or (
+		not state.is_dirty and p.request_partial
+	):
 		return
 	
 	var data = {
