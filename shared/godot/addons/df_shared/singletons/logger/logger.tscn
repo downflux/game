@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfci6m6gbn23c"]
+
+[ext_resource type="Script" uid="uid://di2jiwqco13lu" path="res://addons/df_shared/singletons/logger/logger.gd" id="1_r5dpi"]
+
+[node name="Logger" type="Node"]
+script = ExtResource("1_r5dpi")

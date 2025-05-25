@@ -17,7 +17,7 @@ config/features=PackedStringArray("4.4")
 [autoload]
 
 Server="*res://singletons/server.gd"
-Logger="*res://addons/downflux_common/singletons/logger/logger.tscn"
+Logger="*res://addons/df_shared/singletons/logger/logger.tscn"
 
 [display]
 
