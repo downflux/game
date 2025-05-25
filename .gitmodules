@@ -1,6 +1,6 @@
-[submodule "third_party/github.com/downflux/gd-game-assets"]
-	path = third_party/github.com/downflux/gd-game-assets
-	url = https://github.com/downflux/gd-game-assets
+[submodule "third_party/github.com/downflux/game-assets"]
+	path = third_party/github.com/downflux/game-assets
+	url = https://github.com/downflux/game-assets
 	branch = main
 [submodule "third_party/github.com/downflux/common"]
 	path = third_party/github.com/downflux/common
