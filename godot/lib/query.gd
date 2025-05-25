@@ -1,5 +1,5 @@
-extends Node
 class_name DFQuery
+extends Node
 
 
 static func generate(filters: DFEnums.DataFilter) -> Dictionary:

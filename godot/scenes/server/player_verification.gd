@@ -1,3 +1,4 @@
+extends Node
 # Module which defines how to initialize and track an incoming player connection
 # request.
 #
@@ -6,7 +7,6 @@
 # authentication server.
 #
 # TODO(minkezhang): Implement authentication server.
-extends Node
 
 @onready var player_state_scene = preload("res://scenes/instances/player/player.tscn")
 

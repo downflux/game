@@ -1,5 +1,5 @@
-# TODO(minkezhang): Migrate to GUT test framework.
 extends Node
+# TODO(minkezhang): Migrate to GUT test framework.
 
 
 func test_step_pre():

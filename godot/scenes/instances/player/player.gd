@@ -1,9 +1,10 @@
+class_name DFPlayer
+extends DFStateBase
 # Module which defines the totality of the player game state.
 #
 # This state contains both user authentication details (e.g. login mint) as well
 # as game state, e.g. list of units this player controls, etc.
-extends DFStateBase
-class_name Player
+
 
 var _anonymous_usernames = [
 	"Thing 1",
@@ -11,7 +12,13 @@ var _anonymous_usernames = [
 	"Thing 3",
 ]
 
-var session_id: int = 0  # Populated by server.gd.
+# Server-populated vars.
+#
+# These are not visible to other players and therefore not tracked by is_dirty.
+var session_id: int = 0
+var node_id: int = 0               # The client's subscription node.
+var is_subscribed: bool = false
+var request_partial: bool = false  # Next message should be the full state.
 
 # User authentication properties
 var username: String = ""
@@ -30,9 +37,14 @@ func _ready():
 
 # Serialize data to be exported when e.g. saving game and communicating with
 # client.
-func to_dict(sid: int, full: bool, query: Dictionary) -> Dictionary:
-	if not full and not is_dirty:
+func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
+	if partial and not is_dirty:
 		return {}
+	
+	if is_freed:
+		return {
+			DFStateKeys.KDFIsFreed: is_freed,
+		}
 	
 	var data = {}
 	
@@ -41,9 +53,9 @@ func to_dict(sid: int, full: bool, query: Dictionary) -> Dictionary:
 	if query.get(DFStateKeys.KDFPlayerFaction, false):
 		data[DFStateKeys.KDFPlayerFaction] = faction
 	if query.get(DFStateKeys.KDFPlayerMoney, false):
-		if (full or (
-			not full and money.is_dirty
+		if (not partial or (
+			partial and money.is_dirty
 		)) and (sid == session_id or sid == 1):
-			data[DFStateKeys.KDFPlayerMoney] = money.to_dict(sid, full, {})
+			data[DFStateKeys.KDFPlayerMoney] = money.to_dict(sid, partial, {})
 
 	return data

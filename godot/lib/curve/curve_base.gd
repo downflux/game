@@ -1,11 +1,11 @@
+class_name DFCurveBase
+extends DFStateBase
 # DFCurveBase is a partial class -- extensions must add the
 #
 #   data: Dictionary[int, Variant]
 #   default_value: Variant
 #
 # properties. These properties may be definite types.
-extends DFStateBase
-class_name DFCurveBase
 
 enum Type {
 	TYPE_LINEAR,
@@ -77,10 +77,10 @@ func get_value(timestamp: int) -> Variant:
 
 func to_dict(
 	_sid: int,
-	_full: bool,
+	partial: bool,
 	_query: Dictionary
 ) -> Dictionary:
-	if not _full and not is_dirty:
+	if partial and not is_dirty:
 		return {}
 	return {
 		DFStateKeys.KDFCurveType: curve_type,

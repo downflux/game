@@ -1,5 +1,5 @@
-extends DFCurveBase
 class_name DFCurveFloat
+extends DFCurveBase
 
 @export var data: Dictionary[int, float] = {}
 @export var default_value: float = 0

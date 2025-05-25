@@ -9,11 +9,8 @@ var peer = ENetMultiplayerPeer.new()
 
 # Convenience lookup modules
 @onready var player_verification: Node = $PlayerVerification
-@onready var state: Node = $State
-
-
-func get_player(id: int) -> Player:
-	return get_node("State/Players/" + str(id))
+@onready var state: DFState = $State
+@onready var players: DFPlayers = $State/Players
 
 
 func _on_peer_connected(id: int):
@@ -25,7 +22,9 @@ func _on_peer_disconnected(id: int):
 	Logger.debug("user disconnected: %s" % [id])
 	# TODO(minkezhang): Save game data. This is especially useful for when clients
 	# disconnect temporarily.
-	get_player(id).queue_free()
+	var p = players.get_player(id)
+	p.is_subscribed = false
+	p.is_freed = true
 
 
 func _ready():
@@ -46,30 +45,35 @@ func start(port: int, max_clients: int):
 	Logger.debug("server started")
 
 
+func _physics_process(_delta):
+	if state.is_dirty:
+		for p in players.get_children():
+			p = p as DFPlayer
+			if p.is_subscribed:
+				var data = {
+					DFStateKeys.KDFState: state.to_dict(
+						p.session_id,
+						p.request_partial,
+						DFQuery.generate(
+							DFEnums.DataFilter.FILTER_ALL,
+						).get(DFStateKeys.KDFState, {})
+					),
+					DFStateKeys.KDFPartial: p.request_partial,
+				}
+				client_push_state.rpc_id(p.session_id, p.node_id, data)
+				p.request_partial = true
+
+
 @rpc("any_peer", "call_local", "reliable")
-func server_request_state(nid: int):
+func server_request_subscription(nid: int):
 	var sid = multiplayer.get_remote_sender_id()
-	var filter = (
-		DFEnums.DataFilter.FILTER_PLAYERS 
-		| DFEnums.DataFilter.FILTER_CURVES
-		| DFEnums.DataFilter.FILTER_UPDATES
-	)
-	
-	state.is_dirty = false
-	var data = {
-		DFStateKeys.KDFServerTimestamp: Time.get_unix_time_from_system(),
-		DFStateKeys.KDFState: state.to_dict(
-			sid,
-			false,
-			DFQuery.generate(filter).get(DFStateKeys.KDFState, {})
-		),
-		"full": false,
-	}
-	
-	client_receive_state.rpc_id(sid, nid, data)
+	var p = players.get_player(sid)
+	p.node_id = nid
+	p.request_partial = false
+	p.is_subscribed = true
 
 
 # Define client stubs.
 @rpc("authority", "call_local", "reliable")
-func client_receive_state(_nid: int, _value: Dictionary):
+func client_push_state(_nid: int, _value: Dictionary):
 	return
