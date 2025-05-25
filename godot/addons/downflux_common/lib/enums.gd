@@ -11,3 +11,9 @@ enum DataFilter {
 		| FILTER_PLAYERS
 	)
 }
+
+enum Faction {
+	FACTION_NEUTRAL,
+	FACTION_ALPHA,
+	FACTION_BETA,
+}
