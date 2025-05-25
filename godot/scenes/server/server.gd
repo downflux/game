@@ -5,8 +5,6 @@ extends Node
 @export var verbosity: Logger.VERBOSITY_LEVEL = Logger.VERBOSITY_LEVEL.INFO
 @export var use_native_logging: bool = true
 
-var peer = ENetMultiplayerPeer.new()
-
 # Convenience lookup modules
 @onready var player_verification: Node = $PlayerVerification
 @onready var state: DFState = $State
@@ -24,7 +22,7 @@ func _on_peer_disconnected(id: int):
 	# disconnect temporarily.
 	var p = players.get_player(id)
 	p.is_subscribed = false
-	p.is_freed = true
+	p.is_deleted = true
 
 
 func _ready():
@@ -34,34 +32,41 @@ func _ready():
 	start(_port, _max_clients)
 
 
+func _push_data(p: DFPlayer):
+	if p.is_subscribed:
+		var data = {
+			DFStateKeys.KDFState: state.to_dict(
+				p.session_id,
+				p.request_partial,
+				DFQuery.generate(
+					DFEnums.DataFilter.FILTER_ALL,
+				).get(DFStateKeys.KDFState, {})
+			),
+			DFStateKeys.KDFPartial: p.request_partial,
+		}
+		p.request_partial = true
+		
+		client_push_state.rpc_id(p.session_id, p.node_id, data)
+
+
+func _physics_process(_delta):
+	# The state node as a child of server is processed before server. Broadcast
+	# updated date to all clients.
+	if state.is_dirty:
+		for p in players.get_children():
+			_push_data(p)
+
+
 func start(port: int, max_clients: int):
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	
+	var peer = ENetMultiplayerPeer.new()
 	peer.create_server(port, max_clients)
 	
 	multiplayer.multiplayer_peer = peer
 	
 	Logger.debug("server started")
-
-
-func _physics_process(_delta):
-	if state.is_dirty:
-		for p in players.get_children():
-			p = p as DFPlayer
-			if p.is_subscribed:
-				var data = {
-					DFStateKeys.KDFState: state.to_dict(
-						p.session_id,
-						p.request_partial,
-						DFQuery.generate(
-							DFEnums.DataFilter.FILTER_ALL,
-						).get(DFStateKeys.KDFState, {})
-					),
-					DFStateKeys.KDFPartial: p.request_partial,
-				}
-				client_push_state.rpc_id(p.session_id, p.node_id, data)
-				p.request_partial = true
 
 
 @rpc("any_peer", "call_local", "reliable")

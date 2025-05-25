@@ -5,7 +5,6 @@ extends DFStateBase
 # This state contains both user authentication details (e.g. login mint) as well
 # as game state, e.g. list of units this player controls, etc.
 
-
 var _anonymous_usernames = [
 	"Thing 1",
 	"Thing 2",
@@ -26,7 +25,7 @@ var streamer_mode: bool = false
 @onready var alias: String = _anonymous_usernames.pick_random()
 
 # Game state properties
-var faction: String = ""  # TODO(minkezhang): Change to enum.
+var faction: DFEnums.Faction
 var money: DFCurveFloat = DFCurveFloat.new()
 var units: Dictionary[int, bool] = {}  # { unit_id: int -> bool }; units stored in WorldState.
 
@@ -41,9 +40,9 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	if partial and not is_dirty:
 		return {}
 	
-	if is_freed:
+	if is_deleted:
 		return {
-			DFStateKeys.KDFIsFreed: is_freed,
+			DFStateKeys.KDFIsFreed: is_deleted,
 		}
 	
 	var data = {}

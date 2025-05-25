@@ -20,7 +20,7 @@ var is_dirty: bool:
 			# delete operation and will delete remote nodes separately. We can safely
 			# remove the node. Since queue_free() removes children as well, there is
 			# no need to call queue_free() on children explicitly.
-			if is_freed:
+			if is_deleted:
 				queue_free()
 			
 			for c in get_children():
@@ -28,19 +28,19 @@ var is_dirty: bool:
 					c.is_dirty = v
 
 
-var is_freed: bool:
+var is_deleted: bool:
 	set(v):
 		if v == false:
 			return
 		
-		print("setting is_freed = true ", name)
-		is_freed = true
+		is_deleted = true
 		for c in get_children():
-			if c is DFStateBase and not c.is_freed:
-				c.is_freed = true
+			if c is DFStateBase and not c.is_deleted:
+				c.is_deleted = true
 		is_dirty = true  # Ensure this change is handled.
 	get:
-		return is_freed
+		return is_deleted
+
 
 # Returns a dict representation of the state of the node.
 #
