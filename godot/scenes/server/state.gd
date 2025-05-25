@@ -1,8 +1,6 @@
 class_name DFState
 extends DFStateBase
 
-const _CACHE_LENGTH = 10
-
 # Convenience lookup modules
 @onready var players: Node = $Players
 

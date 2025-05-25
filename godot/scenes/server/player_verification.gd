@@ -13,24 +13,23 @@ extends Node
 
 var _DEBUG_PLAYER_CREDENTIALS = {  # { mint: String -> Dictionary }
 	"0xPIZZA": {
-		"name": "Panucci",
+		DFStateKeys.KDFPlayerUsername: "Panucci",
 	},
 	"0xPUB": {
-		"name": "O'ZORGNAX",
+		DFStateKeys.KDFPlayerUsername: "O'ZORGNAX",
 	},
 }
 
 
-func verify(pid: int, token: String = "0xPIZZA") -> bool:
+func verify(sid: int, token: String = "0xPIZZA") -> DFPlayer:
 	# TODO(minkezhang): Implement mint matching.
 	if token not in _DEBUG_PLAYER_CREDENTIALS:
-		return false
+		return null
 	
 	var p = player_state_scene.instantiate()
-	p.name = str(pid)
-	get_parent().get_node("State/Players").add_child(p, true)
+	p.session_id = 0
+	p.session_id = sid
+	p.name = str(sid)
+	p.username = _DEBUG_PLAYER_CREDENTIALS[token][DFStateKeys.KDFPlayerUsername]
 	
-	p.session_id = pid
-	p.username = _DEBUG_PLAYER_CREDENTIALS[token]["name"]
-	
-	return true
+	return p

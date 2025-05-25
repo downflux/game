@@ -8,19 +8,20 @@ extends Node
 # Convenience lookup modules
 @onready var player_verification: Node = $PlayerVerification
 @onready var state: DFState = $State
-@onready var players: DFPlayers = $State/Players
 
 
-func _on_peer_connected(id: int):
-	Logger.debug("user connected: %s" % [id])
-	player_verification.verify(id)
+func _on_peer_connected(sid: int):
+	Logger.debug("user connected: %s" % [sid])
+	var p = player_verification.verify(sid)
+	if p != null:
+		state.players.add_child(p, true)
 
 
-func _on_peer_disconnected(id: int):
-	Logger.debug("user disconnected: %s" % [id])
+func _on_peer_disconnected(sid: int):
+	Logger.debug("user disconnected: %s" % [sid])
 	# TODO(minkezhang): Save game data. This is especially useful for when clients
 	# disconnect temporarily.
-	var p = players.get_player(id)
+	var p = state.players.get_player(sid)
 	p.is_subscribed = false
 	p.is_deleted = true
 
@@ -53,7 +54,7 @@ func _physics_process(_delta):
 	# The state node as a child of server is processed before server. Broadcast
 	# updated date to all clients.
 	if state.is_dirty:
-		for p in players.get_children():
+		for p in state.players.get_children():
 			_push_data(p)
 
 
@@ -72,7 +73,7 @@ func start(port: int, max_clients: int):
 @rpc("any_peer", "call_local", "reliable")
 func server_request_subscription(nid: int):
 	var sid = multiplayer.get_remote_sender_id()
-	var p = players.get_player(sid)
+	var p = state.players.get_player(sid)
 	p.node_id = nid
 	p.request_partial = false
 	p.is_subscribed = true
