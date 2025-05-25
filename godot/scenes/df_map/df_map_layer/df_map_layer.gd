@@ -8,6 +8,7 @@ var _dst = Vector2i(0, 0)
 func debug_get_tile_coordinates(local: Vector2) -> Vector2i:
 	return $DFTerrain.local_to_map(local)
 
+
 func get_tile_layer(id: Vector2i) -> DFNavigation.L:
 	var t = $DFTerrain.get_cell_tile_data(id)
 	var l = DFNavigation.L.LAYER_UNKNOWN
@@ -21,6 +22,7 @@ func get_tile_layer(id: Vector2i) -> DFNavigation.L:
 		elif s:
 			l = DFNavigation.L.LAYER_SEA
 	return l
+
 
 func _input(event: InputEvent):
 	# Mouse in viewport coordinates.
