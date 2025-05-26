@@ -14,9 +14,15 @@ enum ObstacleType {
 }
 
 enum MapLayer {
+	LAYER_UNKNOWN,
 	LAYER_AIR,
 	LAYER_GROUND,
 	LAYER_SEA,
 	## TODO(minkezhang): Implement LAYER_AMPHIBIOUS.
 	LAYER_AMPHIBIOUS,
+}
+
+const UNIMPLEMENTED_MAP_LAYERS: Dictionary[MapLayer, bool] = {
+	MapLayer.LAYER_AMPHIBIOUS: true,
+	MapLayer.LAYER_UNKNOWN: true,
 }

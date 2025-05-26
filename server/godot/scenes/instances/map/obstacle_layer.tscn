@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://yixxpuv3rttg"]
+
+[ext_resource type="TileSet" uid="uid://cusuvr6lkjsn3" path="res://scenes/instances/map/terrain.tres" id="1_5stbx"]
+[ext_resource type="Script" uid="uid://d1malykkrx6ty" path="res://scenes/instances/map/obstacle_layer.gd" id="2_iptit"]
+
+[node name="TileMapLayer" type="TileMapLayer"]
+tile_set = ExtResource("1_5stbx")
+script = ExtResource("2_iptit")

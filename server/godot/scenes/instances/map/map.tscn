@@ -1,18 +1,47 @@
 [gd_scene load_steps=3 format=3 uid="uid://kltb0o2v28xq"]
 
 [ext_resource type="Script" uid="uid://cjrmows5q3sff" path="res://scenes/instances/map/map.gd" id="1_15stn"]
-[ext_resource type="PackedScene" uid="uid://yixxpuv3rttg" path="res://scenes/instances/map/map_layer.tscn" id="2_u0xde"]
+[ext_resource type="PackedScene" uid="uid://d3adipjciibpw" path="res://scenes/instances/map/map_layer.tscn" id="2_u0xde"]
 
 [node name="Map" type="Node2D"]
 script = ExtResource("1_15stn")
 
 [node name="Air" parent="." instance=ExtResource("2_u0xde")]
-tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0)
-
-[node name="Ground" parent="." instance=ExtResource("2_u0xde")]
-tile_map_data = PackedByteArray(0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 2, 0, 0, 0, 1, 0, 1, 0, 0, 0, 4, 0, 2, 0, 0, 0, 2, 0, 1, 0, 0, 0)
 map_layer = 1
 
-[node name="Sea" parent="." instance=ExtResource("2_u0xde")]
-tile_map_data = PackedByteArray(0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 4, 0, 0, 0, 1, 0, 2, 0, 0, 0, 4, 0, 4, 0, 0, 0, 2, 0, 2, 0, 0, 0)
+[node name="Terrain" parent="Air" index="0"]
+map_layer = 1
+
+[node name="Structure" parent="Air" index="1"]
+map_layer = 1
+
+[node name="Unit" parent="Air" index="2"]
+map_layer = 1
+
+[node name="Ground" parent="." instance=ExtResource("2_u0xde")]
 map_layer = 2
+
+[node name="Terrain" parent="Ground" index="0"]
+map_layer = 2
+
+[node name="Structure" parent="Ground" index="1"]
+map_layer = 2
+
+[node name="Unit" parent="Ground" index="2"]
+map_layer = 2
+
+[node name="Sea" parent="." instance=ExtResource("2_u0xde")]
+map_layer = 3
+
+[node name="Terrain" parent="Sea" index="0"]
+map_layer = 3
+
+[node name="Structure" parent="Sea" index="1"]
+map_layer = 3
+
+[node name="Unit" parent="Sea" index="2"]
+map_layer = 3
+
+[editable path="Air"]
+[editable path="Ground"]
+[editable path="Sea"]

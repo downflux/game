@@ -1,24 +1,21 @@
+@tool
 class_name DFMap
 extends Node2D
 ## Generates a server-side map for pathfinding.
 
 @export var region: Rect2i
 
-@onready var air: DFTileMapLayer    = $Air
-@onready var ground: DFTileMapLayer = $Ground
-@onready var sea: DFTileMapLayer    = $Sea
-
-@onready var _layer_lookup: Dictionary[DFServerEnums.MapLayer, DFTileMapLayer] = {
-	DFServerEnums.MapLayer.LAYER_AIR:    air,
-	DFServerEnums.MapLayer.LAYER_GROUND: ground,
-	DFServerEnums.MapLayer.LAYER_SEA:    sea,
+@onready var _map_layer_lookup: Dictionary[DFServerEnums.MapLayer, DFTileMapLayer] = {
+	DFServerEnums.MapLayer.LAYER_AIR:    $Air,
+	DFServerEnums.MapLayer.LAYER_GROUND: $Ground,
+	DFServerEnums.MapLayer.LAYER_SEA:    $Sea,
 }
 
-var _occupied: Dictionary[DFServerEnums.MapLayer, Dictionary] = {
-	DFServerEnums.MapLayer.LAYER_AIR:        {} as Dictionary[Vector2i, DFServerEnums.ObstacleType],
-	DFServerEnums.MapLayer.LAYER_GROUND:     {} as Dictionary[Vector2i, DFServerEnums.ObstacleType],
-	DFServerEnums.MapLayer.LAYER_SEA:        {} as Dictionary[Vector2i, DFServerEnums.ObstacleType],
-}
+var _occupied: Dictionary[DFServerEnums.MapLayer, Dictionary] = {}
+
+
+func get_occupied() -> Dictionary[DFServerEnums.MapLayer, Dictionary]:
+	return _occupied
 
 
 ## Update the runtime state-of-truth and set the cell [param v] of map layer
@@ -26,53 +23,65 @@ var _occupied: Dictionary[DFServerEnums.MapLayer, Dictionary] = {
 ## obstacle types, the caller must know the [param src] type of the cell; this
 ## is to prevent erroneously overwriting cells.
 func swap_state(
-	layer: DFServerEnums.MapLayer,
 	v: Vector2i,
-	src: DFServerEnums.ObstacleType,
-	dst: DFServerEnums.ObstacleType,
+	src_map_layer: DFServerEnums.MapLayer,
+	dst_map_layer: DFServerEnums.MapLayer,
+	src_obstacle_layer: DFServerEnums.ObstacleType,
+	dst_obstacle_layer: DFServerEnums.ObstacleType,
 	) -> bool:
-	if layer not in _occupied:
+	if (
+		src_map_layer != DFServerEnums.MapLayer.LAYER_UNKNOWN
+	) and (
+		src_obstacle_layer != DFServerEnums.ObstacleType.OBSTACLE_NONE
+	) and (
+		v not in _occupied[src_map_layer][src_obstacle_layer]
+	):
+		return false
+	if (
+		dst_map_layer != DFServerEnums.MapLayer.LAYER_UNKNOWN
+	) and (
+		dst_obstacle_layer != DFServerEnums.ObstacleType.OBSTACLE_NONE
+	) and (
+		v in _occupied[dst_map_layer][dst_obstacle_layer]
+	):
 		return false
 	
-	var g = _occupied[layer]
-	if src != DFServerEnums.ObstacleType.OBSTACLE_NONE and ((
-		v not in g
-	) or (
-		not src == g[v]
-	)):
-		return false
-	
-	g[v] = dst
-	_layer_lookup[layer].set_obstacle(dst, v)
-	
-	return true
+	# The respective DFTileMapLayer._occupied dicts are updated by calling each
+	# layer's swap_state function, so there is no need to manually clear the dict
+	# here in the calling function.
+	return (
+		(
+			src_map_layer == DFServerEnums.MapLayer.LAYER_UNKNOWN
+		) or (
+			_map_layer_lookup[src_map_layer].swap_state(
+				v,
+				src_obstacle_layer,
+				DFServerEnums.ObstacleType.OBSTACLE_NONE
+			)
+		)
+	) and (
+		(
+			dst_map_layer == DFServerEnums.MapLayer.LAYER_UNKNOWN
+		) or (
+			_map_layer_lookup[dst_map_layer].swap_state(
+				v,
+				DFServerEnums.ObstacleType.OBSTACLE_NONE,
+				dst_obstacle_layer,
+			)
+		)
+	)
 
 
-# Load initial map state to the runtime state-of-truth.
-func _read_from_map_layers():
-	for l in [air, ground, sea]:
-		var data = l.get_obstacles()
-		for obstacle: DFServerEnums.ObstacleType in data:
-			for v: Vector2i in data[obstacle]:
-				_occupied[l.map_layer][v] = obstacle
+func _process(_delta):
+	if Engine.is_editor_hint():
+		for map_layer in _map_layer_lookup.keys():
+			_map_layer_lookup[map_layer].map_layer = map_layer
 
 
 func _ready():
-	_read_from_map_layers()
-	
-	swap_state(
-		DFServerEnums.MapLayer.LAYER_GROUND,
-		Vector2i(0, 6),
-		DFServerEnums.ObstacleType.OBSTACLE_NONE,
-		DFServerEnums.ObstacleType.OBSTACLE_TERRAIN,
-	)
-	swap_state(
-		DFServerEnums.MapLayer.LAYER_SEA,
-		Vector2i(0, 6),
-		DFServerEnums.ObstacleType.OBSTACLE_NONE,
-		DFServerEnums.ObstacleType.OBSTACLE_TERRAIN,
-	)
-
+	if not Engine.is_editor_hint():
+		for map_layer in _map_layer_lookup.keys():
+			_occupied[map_layer] = _map_layer_lookup[map_layer].get_occupied()
 
 
 """

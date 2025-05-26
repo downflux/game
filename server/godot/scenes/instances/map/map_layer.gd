@@ -1,43 +1,61 @@
+@tool
 class_name DFTileMapLayer
-extends TileMapLayer
-## Defines an obstacle layer for a map.
-##
-## This node will be used as a source of truth during import, but will then
-## cede authority to [DFMap]. This node will be updated during runtime by
-## [DFMap].
-
+extends Node
 
 @export var map_layer: DFServerEnums.MapLayer
 
-const _TILESET_SOURCE_ID: int = 0
+@onready var _obstacle_layer_lookup: Dictionary[DFServerEnums.ObstacleType, DFTileMapObstacleLayer] = {
+	DFServerEnums.ObstacleType.OBSTACLE_TERRAIN:   $Terrain,
+	DFServerEnums.ObstacleType.OBSTACLE_STRUCTURE: $Structure,
+	DFServerEnums.ObstacleType.OBSTACLE_UNIT:      $Unit,
+}
+
+var _occupied: Dictionary = {} as Dictionary[DFServerEnums.ObstacleType, Dictionary]
 
 
-func _get_atlas_coords(
-	obstacle: DFServerEnums.ObstacleType,
-) -> Vector2i:
-	if obstacle == DFServerEnums.ObstacleType.OBSTACLE_NONE:
-		return Vector2i(-1, -1)
-	return Vector2i(obstacle - 1, map_layer)
+func get_occupied() -> Dictionary[DFServerEnums.ObstacleType, Dictionary]:
+	return _occupied as Dictionary[DFServerEnums.ObstacleType, Dictionary]
 
 
-func set_obstacle(obstacle: DFServerEnums.ObstacleType, v: Vector2i):
-	if obstacle == DFServerEnums.ObstacleType.OBSTACLE_NONE:
-		erase_cell(v)
-	else:
-		set_cell(
+func swap_state(
+	v: Vector2i,
+	src_obstacle_layer: DFServerEnums.ObstacleType,
+	dst_obstacle_layer: DFServerEnums.ObstacleType,
+) -> bool:
+	if (
+		src_obstacle_layer != DFServerEnums.ObstacleType.OBSTACLE_NONE
+	) and (
+		v not in _occupied[src_obstacle_layer]
+	):
+		return false
+	if (
+		dst_obstacle_layer != DFServerEnums.ObstacleType.OBSTACLE_NONE
+	) and (
+		v in _occupied[dst_obstacle_layer]
+	):
+		return false
+	
+	if src_obstacle_layer != DFServerEnums.ObstacleType.OBSTACLE_NONE:
+		_occupied[src_obstacle_layer].erase(v)
+		_obstacle_layer_lookup[src_obstacle_layer].set_occupied(v, true)
+	
+	if dst_obstacle_layer != DFServerEnums.ObstacleType.OBSTACLE_NONE:
+		_occupied[dst_obstacle_layer][v] = true
+		_obstacle_layer_lookup[dst_obstacle_layer].set_occupied(
 			v,
-			_TILESET_SOURCE_ID,
-			_get_atlas_coords(obstacle),
-		)
+			dst_obstacle_layer == DFServerEnums.ObstacleType.OBSTACLE_NONE)
+	
+	return true
 
 
-func get_obstacles() -> Dictionary:
-	var data: Dictionary = {}
-	for obstacle: DFServerEnums.ObstacleType in DFServerEnums.ObstacleType.values():
-		if obstacle == DFServerEnums.ObstacleType.OBSTACLE_NONE:
-			continue
-		data[obstacle] = get_used_cells_by_id(
-			_TILESET_SOURCE_ID,
-			_get_atlas_coords(obstacle)
-		)
-	return data
+func _process(_delta):
+	if Engine.is_editor_hint():
+		for obstacle_layer in _obstacle_layer_lookup.keys():
+			_obstacle_layer_lookup[obstacle_layer].map_layer = map_layer
+			_obstacle_layer_lookup[obstacle_layer].obstacle_layer = obstacle_layer
+
+
+func _ready():
+	if not Engine.is_editor_hint():
+		for obstacle_layer in _obstacle_layer_lookup.keys():
+			_occupied[obstacle_layer] = _obstacle_layer_lookup[obstacle_layer].get_occupied()
