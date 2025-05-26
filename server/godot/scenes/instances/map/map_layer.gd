@@ -2,7 +2,16 @@
 class_name DFTileMapLayer
 extends Node
 
-@export var map_layer: DFServerEnums.MapLayer
+@export var map_layer: DFServerEnums.MapLayer:
+	set(v):
+		if Engine.is_editor_hint():
+			var p = get_parent()
+			if p != null and p is DFMap:
+				v = map_layer
+		map_layer = v
+		for obstacle_layer in _obstacle_layer_lookup.keys():
+			_obstacle_layer_lookup[obstacle_layer].map_layer = map_layer
+
 
 @onready var _obstacle_layer_lookup: Dictionary[DFServerEnums.ObstacleType, DFTileMapObstacleLayer] = {
 	DFServerEnums.ObstacleType.OBSTACLE_TERRAIN:   $Terrain,
@@ -48,14 +57,10 @@ func swap_state(
 	return true
 
 
-func _process(_delta):
+func _ready():
 	if Engine.is_editor_hint():
 		for obstacle_layer in _obstacle_layer_lookup.keys():
-			_obstacle_layer_lookup[obstacle_layer].map_layer = map_layer
 			_obstacle_layer_lookup[obstacle_layer].obstacle_layer = obstacle_layer
-
-
-func _ready():
 	if not Engine.is_editor_hint():
 		for obstacle_layer in _obstacle_layer_lookup.keys():
 			_occupied[obstacle_layer] = _obstacle_layer_lookup[obstacle_layer].get_occupied()

@@ -72,13 +72,10 @@ func swap_state(
 	)
 
 
-func _process(_delta):
+func _ready():
 	if Engine.is_editor_hint():
 		for map_layer in _map_layer_lookup.keys():
 			_map_layer_lookup[map_layer].map_layer = map_layer
-
-
-func _ready():
 	if not Engine.is_editor_hint():
 		for map_layer in _map_layer_lookup.keys():
 			_occupied[map_layer] = _map_layer_lookup[map_layer].get_occupied()

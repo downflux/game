@@ -1,3 +1,4 @@
+@tool
 class_name DFTileMapObstacleLayer
 extends TileMapLayer
 ## Defines an obstacle layer for a map.
@@ -7,8 +8,21 @@ extends TileMapLayer
 ## [DFMap].
 
 
-@export var map_layer: DFServerEnums.MapLayer
-@export var obstacle_layer: DFServerEnums.ObstacleType
+@export var map_layer: DFServerEnums.MapLayer:
+	set(v):
+		if Engine.is_editor_hint():
+			var p = get_parent()
+			if p != null and p is DFTileMapLayer:
+				v = p.map_layer
+		map_layer = v
+
+@export var obstacle_layer: DFServerEnums.ObstacleType:
+	set(v):
+		if Engine.is_editor_hint():
+			var p = get_parent()
+			if p != null and p is DFTileMapLayer:
+				v = obstacle_layer
+		obstacle_layer = v
 
 const _TILESET_SOURCE_ID: int = 0
 
@@ -24,8 +38,9 @@ func _validate() -> bool:
 
 
 func _ready():
-	if not _validate():
-		Logger.error("TileMapLayer is incorrectly configured")
+	if not Engine.is_editor_hint():
+		if not _validate():
+			Logger.error("TileMapLayer is incorrectly configured")
 
 
 ## Sets a cell to the [DFTileMapObstacleLayer] [member obstacle_layer] value.
