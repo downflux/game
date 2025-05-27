@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://ybr87hygknhc"]
+
+[ext_resource type="Script" uid="uid://bdx2k6fxfocdg" path="res://scenes/instances/player_map/player_map.gd" id="1_2hat3"]
+[ext_resource type="PackedScene" uid="uid://dbdr5navw34ny" path="res://scenes/instances/player_map/player_map_layer.tscn" id="2_qvr28"]
+
+[node name="PlayerMap" type="Node"]
+script = ExtResource("1_2hat3")
+
+[node name="Air" parent="." instance=ExtResource("2_qvr28")]
+map_layer = 1
+
+[node name="Ground" parent="." instance=ExtResource("2_qvr28")]
+map_layer = 2
+
+[node name="Sea" parent="." instance=ExtResource("2_qvr28")]
+map_layer = 3

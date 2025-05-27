@@ -18,10 +18,6 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 
 Logger="*res://addons/df_shared/singletons/logger/logger.tscn"
 
-[physics]
-
-common/physics_ticks_per_second=10
-
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

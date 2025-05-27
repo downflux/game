@@ -2,7 +2,7 @@ class_name DFState
 extends DFStateBase
 
 # Convenience lookup modules
-@onready var players: Node = $Players
+@onready var players: DFPlayers = $Players
 
 ## The number of milliseconds since the server started.
 var timestamp_msec: int

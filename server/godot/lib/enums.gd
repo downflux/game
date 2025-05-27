@@ -18,6 +18,7 @@ enum MapLayer {
 	LAYER_AIR,
 	LAYER_GROUND,
 	LAYER_SEA,
+	
 	## TODO(minkezhang): Implement LAYER_AMPHIBIOUS.
 	LAYER_AMPHIBIOUS,
 }

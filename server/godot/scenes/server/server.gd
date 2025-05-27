@@ -1,6 +1,8 @@
 class_name DFServer
 extends Node
 
+const _PHYSICS_TICKS_PER_SECOND: int = 10
+
 ## Server listening port.
 @export var port: int = 7777
 
@@ -32,6 +34,10 @@ func _on_peer_disconnected(sid: int):
 
 
 func _ready():
+	# Setting the physics FPS as a project setting seems to impact the Godot
+	# editor itself.
+	Engine.set_physics_ticks_per_second(_PHYSICS_TICKS_PER_SECOND)
+	
 	Logger.verbosity = _verbosity
 	Logger.use_native = _use_native_logging
 	
