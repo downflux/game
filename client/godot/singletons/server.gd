@@ -36,7 +36,18 @@ func client_publish_state(nid: int, value: Dictionary) -> void:
 	Logger.debug("local scene %d recieved server value \n%s" % [nid, JSON.stringify(value, "\t")])
 
 
+@rpc("authority", "call_local", "reliable")
+func client_send_path(nid: int, path: Array[Vector2i]):
+	instance_from_id(nid).set_vector_path(path)
+
+
 # Define server stubs.
+
 @rpc("any_peer", "call_local", "reliable")
 func server_request_subscription(_nid: int) -> void:
+	return
+
+
+@rpc("any_peer", "call_local", "reliable")
+func server_request_move(_nid: int, _src: Vector2i, _dst: Vector2i):
 	return

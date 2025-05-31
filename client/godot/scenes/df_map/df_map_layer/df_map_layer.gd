@@ -24,6 +24,15 @@ func get_tile_layer(id: Vector2i) -> DFNavigation.L:
 	return l
 
 
+var _p: Array[Vector2i]
+
+
+func set_vector_path(path: Array[Vector2i]):
+	_p = path
+	$DFUnit.move(path)
+	$DFNavigationUI.show_path(path)
+
+
 func _input(event: InputEvent):
 	# Mouse in viewport coordinates.
 	
@@ -35,11 +44,10 @@ func _input(event: InputEvent):
 			_dst = debug_get_tile_coordinates(e.position)
 			var _layer = get_tile_layer(_src)
 			
-			var p = $DFNavigation.get_id_path(_layer, _src, _dst, true)
-			$DFUnit.move(p)
-			$DFNavigationUI.show_path(
-				$DFNavigation.get_id_path(_layer, _src, _dst, true),
-			)
+			Logger.info("requesting move")
+			
+			Server.server_request_move.rpc_id(1, get_instance_id(), _src, _dst)
+			# set_vector_path($DFNavigation.get_id_path(_layer, _src, _dst, true))
 	
 	# Teleport
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:

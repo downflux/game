@@ -15,6 +15,7 @@ const _PHYSICS_TICKS_PER_SECOND: int = 10
 # Convenience lookup modules
 @onready var player_verification: DFPlayerVerification = $PlayerVerification
 @onready var state: DFState = $State
+@onready var map: DFMap = $State/Map
 
 
 func _on_peer_connected(sid: int):
@@ -97,9 +98,24 @@ func server_request_subscription(nid: int) -> void:
 	p.is_subscribed = true
 
 
+## Request server to calculate a path for a unit or set of units.
+## [br][br]
+## TODO(minkezhang): Send unit UUID instead of src Vector2i.
+@rpc("any_peer", "call_local", "reliable")
+func server_request_move(nid: int, src: Vector2i, dst: Vector2i):
+	Logger.info("Requested move: %v to %v" % [src, dst])
+	client_send_path.rpc_id(multiplayer.get_remote_sender_id(), nid, map.get_vector_path(src, dst, DFServerEnums.MapLayer.LAYER_GROUND))
+
+
 # Define client stubs.
 
-## Called by [DFServer] at most once a physics tick to send data to each client.
+## [DFServer] pushes game state to each client most once a physics tick.
 @rpc("authority", "call_local", "reliable")
 func client_publish_state(_nid: int, _value: Dictionary) -> void:
 	return
+
+
+## Push planned path to requesting client.
+@rpc("authority", "call_local", "reliable")
+func client_send_path(_nid: int, _path: Array[Vector2i]):
+	pass

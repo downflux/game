@@ -17,14 +17,14 @@ extends Node
 }
 
 
-func get_obstacles() -> Dictionary[DFServerEnums.MapLayer, Array]:
+func get_occupied() -> Dictionary[DFServerEnums.MapLayer, Array]:
 	var occupied = {} as Dictionary[DFServerEnums.MapLayer, Array]
-	for map_layer in _map_layer_lookup.keys():
+	for map_layer in _map_layer_lookup:
 		occupied[map_layer] = _map_layer_lookup[map_layer].get_occupied()
 	return occupied
 
 
 func _ready():
 	if Engine.is_editor_hint():
-		for map_layer in _map_layer_lookup.keys():
+		for map_layer in _map_layer_lookup:
 			_map_layer_lookup[map_layer].map_layer = map_layer
