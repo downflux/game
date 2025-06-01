@@ -33,9 +33,7 @@ func verify(sid: int, token: String = "0xPIZZA") -> DFPlayer:
 		return null
 	
 	var p = player_state_scene.instantiate()
-	p.session_id = 0
 	p.session_id = sid
-	p.name = str(sid)
 	p.username = _DEBUG_PLAYER_CREDENTIALS[token][DFStateKeys.KDFPlayerUsername]
 	
 	return p

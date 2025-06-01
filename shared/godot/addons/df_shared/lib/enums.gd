@@ -13,17 +13,27 @@ enum DataFilter {
 	## Return all player data.
 	FILTER_PLAYERS = 1 << 2,
 	
+	## Return all unit data.
+	FILTER_UNITS = 1 << 4,
+	
 	## Return all data.
 	FILTER_ALL = (
 		FILTER_CURVES
 		| FILTER_PLAYERS
+		| FILTER_UNITS
 	)
 }
 
 ## Define game factions. Each meaningful object in the game belongs to some
 ## faction.
 enum Faction {
-	FACTION_NEUTRAL,
+	FACTION_NONE,
 	FACTION_ALPHA,
 	FACTION_BETA,
+}
+
+## Define game unit types.
+enum UnitType {
+	UNIT_NONE,
+	UNIT_GI,
 }

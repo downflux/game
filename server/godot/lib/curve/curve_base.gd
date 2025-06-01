@@ -104,3 +104,7 @@ func to_dict(
 		DFStateKeys.KDFCurveData: self.data,
 		DFStateKeys.KDFCurveDefaultValue: self.default_value,
 	}
+
+
+func _init(t: Type):
+	curve_type = t

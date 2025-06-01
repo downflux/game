@@ -69,5 +69,5 @@ func to_dict(
 @warning_ignore_restore("unused_parameter")
 
 
-func _ready():
+func _init():
 	is_dirty = true

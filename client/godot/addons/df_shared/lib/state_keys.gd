@@ -25,8 +25,17 @@ const KDFPlayerUsername = "username"
 const KDFPlayerMoney    = "money"
 const KDFPlayerFaction  = "faction"
 
+# Units
+const KDFUnitID       = "unit_id"
+const KDFUnitType     = "unit_type"
+const KDFUnitMapLayer = "map_layer"
+const KDFUnitX        = "x"
+const KDFUnitY        = "y"
+const KDFUnitTheta    = "theta"
+const KDFUnitHealth   = "health"
+
 # Curves
-const KDFCurveType         = "curve_type"
-const KDFCurveTimestamps   = "timestamps"
-const KDFCurveData         = "data"
-const KDFCurveDefaultValue = "default_value"
+const KDFCurveType          = "curve_type"
+const KDFCurveTimestampMSec = "timestamps_msec"
+const KDFCurveData          = "data"
+const KDFCurveDefaultValue  = "default_value"

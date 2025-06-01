@@ -44,7 +44,7 @@ var username: String = ""
 # Game state properties
 
 var faction: DFEnums.Faction
-var money: DFCurveFloat = DFCurveFloat.new()
+var money: DFCurveFloat          = DFCurveFloat.new(DFCurveBase.Type.TYPE_LINEAR)
 var units: Dictionary[int, bool] = {}  # { unit_id: int -> bool }; units stored in WorldState.
 
 

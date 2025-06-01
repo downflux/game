@@ -15,14 +15,16 @@ const _PHYSICS_TICKS_PER_SECOND: int = 10
 # Convenience lookup modules
 @onready var player_verification: DFPlayerVerification = $PlayerVerification
 @onready var state: DFState = $State
-@onready var map: DFMap = $State/Map
 
 
 func _on_peer_connected(sid: int):
 	Logger.debug("user connected: %s" % [sid])
 	var p = player_verification.verify(sid)
 	if p != null:
-		state.players.add_child(p, true)
+		state.players.add_player(p)
+		
+		var debug_unit = DFUnitBase.new()
+		state.units.add_unit(debug_unit)
 
 
 func _on_peer_disconnected(sid: int):
@@ -103,8 +105,15 @@ func server_request_subscription(nid: int) -> void:
 ## TODO(minkezhang): Send unit UUID instead of src Vector2i.
 @rpc("any_peer", "call_local", "reliable")
 func server_request_move(nid: int, src: Vector2i, dst: Vector2i):
-	Logger.info("Requested move: %v to %v" % [src, dst])
-	client_send_path.rpc_id(multiplayer.get_remote_sender_id(), nid, map.get_vector_path(src, dst, DFServerEnums.MapLayer.LAYER_GROUND))
+	client_send_path.rpc_id(
+		multiplayer.get_remote_sender_id(),
+		nid,
+		state.map.get_vector_path(
+			src,
+			dst,
+			DFServerEnums.MapLayer.LAYER_GROUND,
+		),
+	)
 
 
 # Define client stubs.

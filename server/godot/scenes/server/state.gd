@@ -3,6 +3,8 @@ extends DFStateBase
 
 # Convenience lookup modules
 @onready var players: DFPlayers = $Players
+@onready var units: DFUnits     = $Units
+@onready var map: DFMap         = $Map
 
 ## The number of milliseconds since the server started.
 var timestamp_msec: int
@@ -19,6 +21,10 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	var q = query.get(DFStateKeys.KDFPlayers, {})
 	if q:
 		data[DFStateKeys.KDFPlayers] = players.to_dict(sid, partial, q)
+	
+	q = query.get(DFStateKeys.KDFUnits, {})
+	if q:
+		data[DFStateKeys.KDFUnits] = units.to_dict(sid, partial, q)
 	
 	return data
 

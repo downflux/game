@@ -2,6 +2,11 @@ class_name DFPlayers
 extends DFStateBase
 
 
+func add_player(player: DFPlayer):
+	player.name = str(player.session_id)
+	add_child(player, true)
+
+
 func get_player(sid: int) -> DFPlayer:
 	return get_node(str(sid))
 
@@ -12,7 +17,7 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	
 	var data = {}
 	
-	for p in get_children():
+	for p: DFPlayer in get_children():
 		if partial and not p.is_dirty:
 			continue
 		
