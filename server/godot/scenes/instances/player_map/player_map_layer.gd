@@ -2,7 +2,7 @@
 class_name DFPlayerMapLayer
 extends TileMapLayer
 
-@export var map_layer: DFServerEnums.MapLayer:
+@export var map_layer: DFEnums.MapLayer:
 	set(v):
 		var p = get_parent()
 		if p != null and p is DFPlayerMap:

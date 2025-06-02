@@ -10,15 +10,15 @@ extends Node
 
 @export var region: Rect2i
 
-@onready var _map_layer_lookup: Dictionary[DFServerEnums.MapLayer, DFPlayerMapLayer] = {
-	DFServerEnums.MapLayer.LAYER_AIR:    $Air,
-	DFServerEnums.MapLayer.LAYER_GROUND: $Ground,
-	DFServerEnums.MapLayer.LAYER_SEA:    $Sea,
+@onready var _map_layer_lookup: Dictionary[DFEnums.MapLayer, DFPlayerMapLayer] = {
+	DFEnums.MapLayer.LAYER_AIR:    $Air,
+	DFEnums.MapLayer.LAYER_GROUND: $Ground,
+	DFEnums.MapLayer.LAYER_SEA:    $Sea,
 }
 
 
-func get_occupied() -> Dictionary[DFServerEnums.MapLayer, Array]:
-	var occupied = {} as Dictionary[DFServerEnums.MapLayer, Array]
+func get_occupied() -> Dictionary[DFEnums.MapLayer, Array]:
+	var occupied = {} as Dictionary[DFEnums.MapLayer, Array]
 	for map_layer in _map_layer_lookup:
 		occupied[map_layer] = _map_layer_lookup[map_layer].get_occupied()
 	return occupied

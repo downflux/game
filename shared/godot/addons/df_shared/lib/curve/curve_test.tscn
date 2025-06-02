@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dn0x17rapnll0"]
+[gd_scene load_steps=4 format=3 uid="uid://s4k1rflpv5rh"]
 
-[ext_resource type="Script" uid="uid://dkbcfqgosn6nk" path="res://lib/curve/curve_test.gd" id="1_crm8e"]
-[ext_resource type="Script" uid="uid://dxyeod1rhmbom" path="res://lib/curve/curve_float.gd" id="3_of3u6"]
-[ext_resource type="Script" uid="uid://b6kslhaauyoe6" path="res://lib/curve/curve_boolean.gd" id="3_x6om4"]
+[ext_resource type="Script" uid="uid://dkbcfqgosn6nk" path="res://addons/df_shared/lib/curve/curve_test.gd" id="1_crm8e"]
+[ext_resource type="Script" uid="uid://dxyeod1rhmbom" path="res://addons/df_shared/lib/curve/curve_float.gd" id="3_of3u6"]
+[ext_resource type="Script" uid="uid://b6kslhaauyoe6" path="res://addons/df_shared/lib/curve/curve_boolean.gd" id="3_x6om4"]
 
 [node name="CurveTest" type="Node"]
 script = ExtResource("1_crm8e")

@@ -14,7 +14,7 @@ const _PHYSICS_TICKS_PER_SECOND: int = 10
 
 # Convenience lookup modules
 @onready var player_verification: DFPlayerVerification = $PlayerVerification
-@onready var state: DFState = $State
+@onready var state: DFServerState = $State
 
 
 func _on_peer_connected(sid: int):
@@ -23,7 +23,7 @@ func _on_peer_connected(sid: int):
 	if p != null:
 		state.players.add_player(p)
 		
-		var debug_unit = DFUnitBase.new()
+		var debug_unit = DFServerUnitBase.new()
 		state.units.add_unit(debug_unit)
 
 
@@ -47,7 +47,7 @@ func _ready():
 	_start(port, max_clients)
 
 
-func _publish_state(p: DFPlayer):
+func _publish_state(p: DFServerPlayer):
 	if not p.is_subscribed or (
 		not state.is_dirty and p.request_partial
 	):
@@ -111,7 +111,7 @@ func server_request_move(nid: int, src: Vector2i, dst: Vector2i):
 		state.map.get_vector_path(
 			src,
 			dst,
-			DFServerEnums.MapLayer.LAYER_GROUND,
+			DFEnums.MapLayer.LAYER_GROUND,
 		),
 	)
 

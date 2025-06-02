@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://c5kersqjtvblo"]
+[gd_scene load_steps=2 format=3 uid="uid://brwnayofcyuo"]
 
-[ext_resource type="Script" uid="uid://cxp5u50ibnxpt" path="res://scenes/instances/player/player.gd" id="1_1k2f2"]
+[ext_resource type="Script" uid="uid://ynpwn1pjkex0" path="res://scenes/instances/player/player.gd" id="1_1k2f2"]
 
-[node name="PlayerState" type="Node"]
+[node name="Player" type="Node"]
 script = ExtResource("1_1k2f2")

@@ -1,13 +1,13 @@
-class_name DFPlayers
+class_name DFServerPlayers
 extends DFStateBase
 
 
-func add_player(player: DFPlayer):
+func add_player(player: DFServerPlayer):
 	player.name = str(player.session_id)
 	add_child(player, true)
 
 
-func get_player(sid: int) -> DFPlayer:
+func get_player(sid: int) -> DFServerPlayer:
 	return get_node(str(sid))
 
 
@@ -17,7 +17,7 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	
 	var data = {}
 	
-	for p: DFPlayer in get_children():
+	for p: DFServerPlayer in get_children():
 		if partial and not p.is_dirty:
 			continue
 		

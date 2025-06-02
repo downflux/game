@@ -1,4 +1,4 @@
-class_name DFUnits
+class_name DFServerUnits
 extends DFStateBase
 
 var _uid: int = 0
@@ -10,13 +10,13 @@ func _generate_unit_id() -> int:
 	return uid
 
 
-func add_unit(unit: DFUnitBase):
-	unit.uid = _generate_unit_id()
-	unit.name = str(unit.uid)
+func add_unit(unit: DFServerUnitBase):
+	unit.unit_id = _generate_unit_id()
+	unit.name = str(unit.unit_id)
 	add_child(unit, true)
 
 
-func get_unit(uid: int) -> DFUnitBase:
+func get_unit(uid: int) -> DFServerUnitBase:
 	return get_node(str(uid))
 
 
@@ -26,10 +26,10 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	
 	var data = {}
 	
-	for u: DFUnitBase in get_children():
+	for u: DFServerUnitBase in get_children():
 		if partial and not u.is_dirty:
 			continue
 		
-		data[u.uid] = u.to_dict(sid, partial, query)
+		data[u.unit_id] = u.to_dict(sid, partial, query)
 	
 	return data

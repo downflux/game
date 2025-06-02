@@ -5,11 +5,11 @@ extends Node
 var _pathfinder: AStarGrid2D = AStarGrid2D.new()
 
 
-func configure_pf(region: Rect2i, map_layer: DFServerEnums.MapLayer):
+func configure_pf(region: Rect2i, map_layer: DFEnums.MapLayer):
 	_pathfinder.set_region(region)
 	
 	match map_layer:
-		DFServerEnums.MapLayer.LAYER_SEA:
+		DFEnums.MapLayer.LAYER_SEA:
 			_pathfinder.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
 		_:
 			_pathfinder.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_AT_LEAST_ONE_WALKABLE

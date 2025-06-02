@@ -1,10 +1,10 @@
-class_name DFState
+class_name DFServerState
 extends DFStateBase
 
 # Convenience lookup modules
-@onready var players: DFPlayers = $Players
-@onready var units: DFUnits     = $Units
-@onready var map: DFMap         = $Map
+@onready var players: DFServerPlayers = $Players
+@onready var units: DFServerUnits     = $Units
+@onready var map: DFServerMap         = $Map
 
 ## The number of milliseconds since the server started.
 var timestamp_msec: int

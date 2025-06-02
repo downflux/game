@@ -9,9 +9,13 @@ extends Node
 var _DEBUG_PLAYER_CREDENTIALS = {  # { mint: String -> Dictionary }
 	"0xPIZZA": {
 		DFStateKeys.KDFPlayerUsername: "Panucci",
+		DFServerStateKeys.KDFPlayerID: "abcd-ef-ghij",
+		DFServerStateKeys.KDFPlayerStreamerMode: true,
 	},
 	"0xPUB": {
 		DFStateKeys.KDFPlayerUsername: "O'ZORGNAX",
+		DFServerStateKeys.KDFPlayerID: "zyxw-vu-tsrq",
+		DFServerStateKeys.KDFPlayerStreamerMode: false,
 	},
 }
 
@@ -28,12 +32,14 @@ var _DEBUG_PLAYER_CREDENTIALS = {  # { mint: String -> Dictionary }
 ## [code]null[/code] if it is not.
 ## [br][br]
 ## TODO(minkezhang): Implement authentication server.
-func verify(sid: int, token: String = "0xPIZZA") -> DFPlayer:
+func verify(sid: int, token: String = "0xPIZZA") -> DFServerPlayer:
 	if token not in _DEBUG_PLAYER_CREDENTIALS:
 		return null
 	
-	var p = player_state_scene.instantiate()
+	var p: DFServerPlayer = player_state_scene.instantiate()
 	p.session_id = sid
-	p.username = _DEBUG_PLAYER_CREDENTIALS[token][DFStateKeys.KDFPlayerUsername]
+	p.player_id = _DEBUG_PLAYER_CREDENTIALS[token][DFServerStateKeys.KDFPlayerID]
+	p.streamer_mode = _DEBUG_PLAYER_CREDENTIALS[token][DFServerStateKeys.KDFPlayerStreamerMode]
+	p.state.username = _DEBUG_PLAYER_CREDENTIALS[token][DFStateKeys.KDFPlayerUsername]
 	
 	return p

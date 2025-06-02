@@ -5,8 +5,6 @@ extends Node
 #
 # In order to minimize data transfer, we may need compress the key length. This
 # allows us to keep scripts readable.
-#
-# TODO(minkezhang): Move to the common project.
 
 const KDFPartial = "partial"
 const KDFIsFreed = "is_freed"
@@ -26,7 +24,6 @@ const KDFPlayerMoney    = "money"
 const KDFPlayerFaction  = "faction"
 
 # Units
-const KDFUnitID       = "unit_id"
 const KDFUnitType     = "unit_type"
 const KDFUnitMapLayer = "map_layer"
 const KDFUnitX        = "x"

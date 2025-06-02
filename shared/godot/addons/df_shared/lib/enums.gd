@@ -37,3 +37,13 @@ enum UnitType {
 	UNIT_NONE,
 	UNIT_GI,
 }
+
+enum MapLayer {
+	LAYER_UNKNOWN,
+	LAYER_AIR,
+	LAYER_GROUND,
+	LAYER_SEA,
+	
+	## TODO(minkezhang): Implement LAYER_AMPHIBIOUS.
+	LAYER_AMPHIBIOUS,
+}

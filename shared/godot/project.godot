@@ -13,6 +13,10 @@ config_version=5
 config/name="downflux-shared"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
+[autoload]
+
+Logger="*res://addons/df_shared/singletons/logger/logger.tscn"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
