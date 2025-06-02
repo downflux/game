@@ -11,6 +11,8 @@ func _generate_unit_id() -> int:
 
 
 func add_unit(unit: DFServerUnitBase):
+	is_dirty = true
+	
 	unit.unit_id = _generate_unit_id()
 	unit.name = str(unit.unit_id)
 	add_child(unit, true)

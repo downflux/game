@@ -23,10 +23,12 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	
 	var data = {}
 	
-	if query.get(DFStateKeys.KDFPlayerUsername, false):
+	# Read-only properties do not change and do not need to be re-broadcasted.
+	if query.get(DFStateKeys.KDFPlayerUsername, false) and not partial:
 		data[DFStateKeys.KDFPlayerUsername] = username
-	if query.get(DFStateKeys.KDFPlayerFaction, false):
+	if query.get(DFStateKeys.KDFPlayerFaction, false) and not partial:
 		data[DFStateKeys.KDFPlayerFaction] = faction
+	
 	if query.get(DFStateKeys.KDFPlayerMoney, false):
 		if not partial or (
 			partial and money.is_dirty

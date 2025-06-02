@@ -3,6 +3,8 @@ extends DFStateBase
 
 
 func add_player(player: DFServerPlayer):
+	is_dirty = true
+	
 	player.name = str(player.session_id)
 	add_child(player, true)
 

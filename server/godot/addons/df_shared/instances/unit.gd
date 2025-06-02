@@ -27,6 +27,7 @@ func to_dict(
 	
 	var data = {}
 	
+	# Read-only properties do not change and do not need to be re-broadcasted.
 	if query.get(DFStateKeys.KDFUnitType, false) and not partial:
 		data[DFStateKeys.KDFUnitType] = unit_type
 	

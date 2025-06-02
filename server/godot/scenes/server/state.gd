@@ -19,11 +19,11 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 		return data
 	
 	var q = query.get(DFStateKeys.KDFPlayers, {})
-	if q:
+	if q and players.is_dirty:
 		data[DFStateKeys.KDFPlayers] = players.to_dict(sid, partial, q)
 	
 	q = query.get(DFStateKeys.KDFUnits, {})
-	if q:
+	if q and units.is_dirty:
 		data[DFStateKeys.KDFUnits] = units.to_dict(sid, partial, q)
 	
 	return data

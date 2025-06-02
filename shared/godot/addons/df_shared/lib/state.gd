@@ -38,6 +38,7 @@ var is_dirty: bool:
 ## toggled back to [code]false[/code].
 var is_deleted: bool:
 	set(v):
+		Logger.debug("setting is_deleted for node %s" % [name])
 		if v == false:
 			return
 		
