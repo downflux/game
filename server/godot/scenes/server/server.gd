@@ -15,6 +15,7 @@ const _PHYSICS_TICKS_PER_SECOND: int = 10
 # Convenience lookup modules
 @onready var player_verification: DFPlayerVerification = $PlayerVerification
 @onready var state: DFServerState = $State
+@onready var unit_factory: DFServerUnitFactory = $UnitFactory
 
 
 func _on_peer_connected(sid: int):
@@ -22,9 +23,8 @@ func _on_peer_connected(sid: int):
 	var p = player_verification.verify(sid)
 	if p != null:
 		state.players.add_player(p)
-		
-		var debug_unit = DFServerUnitBase.new()
-		state.units.add_unit(debug_unit)
+	
+		state.units.add_unit(unit_factory.create_unit())
 
 
 func _on_peer_disconnected(sid: int):
@@ -65,7 +65,7 @@ func _publish_state(p: DFServerPlayer):
 	}
 	p.request_partial = true
 	
-	client_publish_state.rpc_id(p.session_id, p.node_id, data)
+	client_publish_state.rpc_id(p.session_id, data)
 
 
 func _physics_process(_delta):
@@ -92,10 +92,9 @@ func _start(p: int, c: int):
 ## Clients will set [param nid] indicating which node will handle this data,
 ## e.g. via [method Node.get_instance_id].
 @rpc("any_peer", "call_local", "reliable")
-func server_request_subscription(nid: int) -> void:
+func server_request_subscription():
 	var sid = multiplayer.get_remote_sender_id()
 	var p = state.players.get_player(sid)
-	p.node_id = nid
 	p.request_partial = false
 	p.is_subscribed = true
 
@@ -120,11 +119,11 @@ func server_request_move(nid: int, src: Vector2i, dst: Vector2i):
 
 ## [DFServer] pushes game state to each client most once a physics tick.
 @rpc("authority", "call_local", "reliable")
-func client_publish_state(_nid: int, _value: Dictionary) -> void:
+func client_publish_state(_value: Dictionary):
 	return
 
 
 ## Push planned path to requesting client.
 @rpc("authority", "call_local", "reliable")
 func client_send_path(_nid: int, _path: Array[Vector2i]):
-	pass
+	return

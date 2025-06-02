@@ -94,17 +94,23 @@ func get_value(t: int) -> Variant:
 func to_dict(
 	_sid: int,
 	partial: bool,
-	_query: Dictionary
+	query: Dictionary
 ) -> Dictionary:
 	if partial and not is_dirty:
 		return {}
-	return {
-		DFStateKeys.KDFCurveType: curve_type,
+	
+	var data: Dictionary = {}
+	
+	# Read-only properties do not change and do not need to be re-broadcasted.
+	if query.get(DFStateKeys.KDFCurveType, false) and not partial:
+		data[DFStateKeys.KDFCurveType] = curve_type
+	if query.get(DFStateKeys.KDFCurveDefaultValue, false) and not partial:
+		data[DFStateKeys.KDFCurveDefaultValue] = self.default_value
+
+	
+	data.merge({
 		DFStateKeys.KDFCurveTimestampMSec: timestamps_msec,
 		DFStateKeys.KDFCurveData: self.data,
-		DFStateKeys.KDFCurveDefaultValue: self.default_value,
-	}
-
-
-func _init(t: Type):
-	curve_type = t
+	})
+	
+	return data

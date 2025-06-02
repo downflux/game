@@ -1,7 +1,7 @@
 class_name DFServerPlayer
 extends DFStateBase
 
-var state: DFPlayer = DFPlayer.new()
+@onready var player_state: DFPlayer = $PlayerState
 
 
 # Server-populated vars.
@@ -11,10 +11,6 @@ var state: DFPlayer = DFPlayer.new()
 ## Session ID of the client. This is dictated by the incoming RPC ID received
 ## from [method DFServer.server_request_subscription].
 var session_id: int
-
-## Node ID as reported by the client. This node [b]must[/b] exist on the client
-## and will receive the data sent by [method DFServer.client_publish_state].
-var node_id: int
 
 ## If [code]true[/code], the server will attempt to push data to this client.
 var is_subscribed: bool
@@ -50,7 +46,7 @@ func to_dict(
 	if sid != 1 and sid != session_id:
 		query.erase(DFStateKeys.KDFPlayerMoney)
 	
-	var data = state.to_dict(sid, partial, query)
+	var data = player_state.to_dict(sid, partial, query)
 	if (
 		query.get(DFStateKeys.KDFPlayerUsername, false)
 	) and (

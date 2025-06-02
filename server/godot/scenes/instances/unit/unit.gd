@@ -1,13 +1,13 @@
 class_name DFServerUnitBase
 extends DFStateBase
 
+@onready var unit_state: DFUnitBase = $UnitState
+
 # Server-populated vars.
 #
 # These are not visible to other players and therefore not tracked by is_dirty.
 
 var unit_id: int
-
-var state: DFUnitBase = DFUnitBase.new()
 
 
 func to_dict(
@@ -18,4 +18,4 @@ func to_dict(
 	if partial and not is_dirty:
 		return {}
 	
-	return state.to_dict(sid, partial, query)
+	return unit_state.to_dict(sid, partial, query)

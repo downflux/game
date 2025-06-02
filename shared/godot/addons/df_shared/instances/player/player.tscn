@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5p255a46yxlo"]
+
+[ext_resource type="Script" uid="uid://cxp5u50ibnxpt" path="res://addons/df_shared/instances/player/player.gd" id="1_1gtlr"]
+[ext_resource type="Script" uid="uid://xx70fjnoqs4s" path="res://addons/df_shared/lib/curve/curve_int.gd" id="2_gt1cu"]
+
+[node name="Player" type="Node"]
+script = ExtResource("1_1gtlr")
+
+[node name="Money" type="Node" parent="."]
+script = ExtResource("2_gt1cu")
+metadata/_custom_type_script = "uid://xx70fjnoqs4s"

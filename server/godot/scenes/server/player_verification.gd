@@ -3,7 +3,7 @@ extends Node
 ## Defines how to initialize and track an incoming player connection
 ## request.
 
-@onready var player_state_scene: PackedScene = preload("res://scenes/instances/player/player.tscn")
+@onready var player_scene: PackedScene = preload("res://scenes/instances/player/player.tscn")
 
 
 var _DEBUG_PLAYER_CREDENTIALS = {  # { mint: String -> Dictionary }
@@ -36,10 +36,13 @@ func verify(sid: int, token: String = "0xPIZZA") -> DFServerPlayer:
 	if token not in _DEBUG_PLAYER_CREDENTIALS:
 		return null
 	
-	var p: DFServerPlayer = player_state_scene.instantiate()
+	var p: DFServerPlayer = player_scene.instantiate()
+	p.name = str(sid)
+	add_child(p, true)
+	
 	p.session_id = sid
 	p.player_id = _DEBUG_PLAYER_CREDENTIALS[token][DFServerStateKeys.KDFPlayerID]
 	p.streamer_mode = _DEBUG_PLAYER_CREDENTIALS[token][DFServerStateKeys.KDFPlayerStreamerMode]
-	p.state.username = _DEBUG_PLAYER_CREDENTIALS[token][DFStateKeys.KDFPlayerUsername]
+	p.player_state.username = _DEBUG_PLAYER_CREDENTIALS[token][DFStateKeys.KDFPlayerUsername]
 	
 	return p

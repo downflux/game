@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://uqgyi36eb4gt"]
+
+[ext_resource type="Script" uid="uid://ccpe6m3bjjce2" path="res://addons/df_shared/instances/unit/unit.gd" id="1_2ic7m"]
+[ext_resource type="Script" uid="uid://xx70fjnoqs4s" path="res://addons/df_shared/lib/curve/curve_int.gd" id="2_d02rc"]
+[ext_resource type="Script" uid="uid://dxyeod1rhmbom" path="res://addons/df_shared/lib/curve/curve_float.gd" id="3_d02rc"]
+
+[node name="Unit" type="Node"]
+script = ExtResource("1_2ic7m")
+
+[node name="MapLayer" type="Node" parent="."]
+script = ExtResource("2_d02rc")
+curve_type = 1
+metadata/_custom_type_script = "uid://xx70fjnoqs4s"
+
+[node name="X" type="Node" parent="."]
+script = ExtResource("3_d02rc")
+metadata/_custom_type_script = "uid://dxyeod1rhmbom"
+
+[node name="Y" type="Node" parent="."]
+script = ExtResource("3_d02rc")
+metadata/_custom_type_script = "uid://dxyeod1rhmbom"
+
+[node name="Theta" type="Node" parent="."]
+script = ExtResource("3_d02rc")
+metadata/_custom_type_script = "uid://dxyeod1rhmbom"
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_d02rc")
+metadata/_custom_type_script = "uid://xx70fjnoqs4s"

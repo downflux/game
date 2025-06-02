@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://dd6y01xi5hrbk"]
+[gd_scene load_steps=9 format=3 uid="uid://dd6y01xi5hrbk"]
 
 [ext_resource type="Script" uid="uid://dtyu4t60qoyae" path="res://scenes/server/server.gd" id="1_qgrco"]
 [ext_resource type="Script" uid="uid://8k00yh0o76w7" path="res://scenes/server/player_verification.gd" id="2_375b0"]
 [ext_resource type="Script" uid="uid://breenhe6o810l" path="res://scenes/server/state.gd" id="3_2t17j"]
+[ext_resource type="Script" uid="uid://dw06faoh7s6xt" path="res://scenes/server/unit_factory.gd" id="3_3e01g"]
 [ext_resource type="Script" uid="uid://bfcroglyr16vp" path="res://scenes/server/players.gd" id="4_jqkn5"]
 [ext_resource type="PackedScene" uid="uid://kltb0o2v28xq" path="res://scenes/map/map.tscn" id="5_hkcox"]
 [ext_resource type="PackedScene" uid="uid://qkh8hu8njn0s" path="res://assets/maps/example.tscn" id="5_kr8px"]
@@ -15,6 +16,9 @@ _use_native_logging = false
 
 [node name="PlayerVerification" type="Node" parent="."]
 script = ExtResource("2_375b0")
+
+[node name="UnitFactory" type="Node" parent="."]
+script = ExtResource("3_3e01g")
 
 [node name="State" type="Node" parent="."]
 script = ExtResource("3_2t17j")

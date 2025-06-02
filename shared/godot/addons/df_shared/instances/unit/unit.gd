@@ -2,14 +2,15 @@ class_name DFUnitBase
 extends DFStateBase
 ## Base unit class definition.
 
+@onready var map_layer: DFCurveInt = $MapLayer
+@onready var x: DFCurveFloat       = $X
+@onready var y: DFCurveFloat       = $Y
+@onready var theta: DFCurveFloat   = $Theta
+@onready var health: DFCurveInt    = $Health
+
 # Game state properties
 
 var unit_type: DFEnums.UnitType
-var map_layer: DFCurveInt = DFCurveInt.new(DFCurveBase.Type.TYPE_STEP)
-var x: DFCurveFloat       = DFCurveFloat.new(DFCurveBase.Type.TYPE_LINEAR)
-var y: DFCurveFloat       = DFCurveFloat.new(DFCurveBase.Type.TYPE_LINEAR)
-var theta: DFCurveFloat   = DFCurveFloat.new(DFCurveBase.Type.TYPE_LINEAR)
-var health: DFCurveInt    = DFCurveInt.new(DFCurveBase.Type.TYPE_LINEAR)
 
 
 func to_dict(

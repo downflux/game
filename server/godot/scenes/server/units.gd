@@ -1,21 +1,11 @@
 class_name DFServerUnits
 extends DFStateBase
 
-var _uid: int = 0
-
-
-func _generate_unit_id() -> int:
-	var uid = _uid + 1
-	_uid += 1
-	return uid
-
 
 func add_unit(unit: DFServerUnitBase):
 	is_dirty = true
 	
-	unit.unit_id = _generate_unit_id()
-	unit.name = str(unit.unit_id)
-	add_child(unit, true)
+	unit.reparent(self)
 
 
 func get_unit(uid: int) -> DFServerUnitBase:

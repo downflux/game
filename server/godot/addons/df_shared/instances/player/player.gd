@@ -5,9 +5,10 @@ extends DFStateBase
 ## This state contains both user authentication details (e.g. login mint) as
 ## well as game state, e.g. the current money of the player, etc.
 
+@onready var money: DFCurveInt = $Money
+
 var username: String
 var faction: DFEnums.Faction
-var money: DFCurveInt = DFCurveInt.new(DFCurveBase.Type.TYPE_LINEAR)
 
 
 # Serialize data to be exported when e.g. saving game and communicating with
