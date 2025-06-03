@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://6n7fgutlmbxl"]
-
-[ext_resource type="Script" uid="uid://ow0tqqowjx3a" path="res://scenes/instances/unit/unit.gd" id="1_gd18f"]
-[ext_resource type="PackedScene" uid="uid://uqgyi36eb4gt" path="res://addons/df_shared/instances/unit/unit.tscn" id="2_emlkw"]
-
-[node name="Unit" type="Node"]
-script = ExtResource("1_gd18f")
-
-[node name="UnitState" parent="." instance=ExtResource("2_emlkw")]

@@ -2,15 +2,15 @@ class_name DFUnitBase
 extends DFStateBase
 ## Base unit class definition.
 
+# Game state properties
+
+@export var unit_type: DFEnums.UnitType
+
 @onready var map_layer: DFCurveInt = $MapLayer
 @onready var x: DFCurveFloat       = $X
 @onready var y: DFCurveFloat       = $Y
 @onready var theta: DFCurveFloat   = $Theta
 @onready var health: DFCurveInt    = $Health
-
-# Game state properties
-
-var unit_type: DFEnums.UnitType
 
 
 func to_dict(

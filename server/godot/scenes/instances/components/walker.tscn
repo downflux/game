@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://cte0p5b3o1o5j"]
+
+[ext_resource type="Script" uid="uid://c32c6q1nhgfjf" path="res://scenes/instances/components/walker.gd" id="1_7lmc8"]
+[ext_resource type="Script" uid="uid://dxyeod1rhmbom" path="res://addons/df_shared/lib/curve/curve_float.gd" id="2_b8nke"]
+
+[node name="Walker" type="Node"]
+script = ExtResource("1_7lmc8")
+
+[node name="Speed" type="Node" parent="."]
+script = ExtResource("2_b8nke")
+metadata/_custom_type_script = "uid://dxyeod1rhmbom"

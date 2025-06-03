@@ -1,7 +1,7 @@
 class_name DFServerUnitBase
 extends DFStateBase
 
-@onready var unit_state: DFUnitBase = $UnitState
+@export var unit_state: DFUnitBase
 
 # Server-populated vars.
 #
