@@ -42,22 +42,40 @@ func remove_data(ts: Array[int]) -> void:
 			timestamps_msec.remove_at(i)
 			self.data.erase(i)
 
-## Add keyframes with time [code]timestamps_msec[/code] and associated data. 
-func add_data(data: Dictionary[int, Variant]) -> void:
+
+## Truncates all data before or after the given timestamp.
+func truncate_data(t: int, forward: bool):
 	is_dirty = true
-	for t in data:
-		var i = timestamps_msec.find(t)
-		if i == -1:
-			timestamps_msec.append(t)
-		data[t] = data[t]
-	timestamps_msec.sort()
+	var i = get_adjacent_timestamp(t, forward)
+	if forward:
+		for j in range(i, len(timestamps_msec)):
+			if j != -1:
+				self.data.erase(timestamps_msec[j])
+				timestamps_msec.resize(i)
+	else:
+		for j in range(0, i - 1):
+			self.data.erase(timestamps_msec[j])
+			timestamps_msec.reverse()
+			timestamps_msec.resize(i)
+			timestamps_msec.reverse()
+
+
+## Add keyframes with time [code]timestamps_msec[/code] and associated data. 
+func add_data(t: int, v: Variant) -> void:
+	is_dirty = true
+	var i = timestamps_msec.find(t)
+	if i == -1:
+		timestamps_msec.append(t)
+	else:
+		timestamps_msec.insert(i, t)
+	self.data[t] = v
 
 
 func _get_value_step(t: int) -> Variant:
 	if not timestamps_msec:
 		return self.default_value
 	
-	var i = timestamps_msec.find_custom(func(u: int) -> bool: return u > t)
+	var i = get_adjacent_timestamp(t, true)
 	if i <= 0:
 		return self.data[timestamps_msec[i]]
 	
@@ -68,7 +86,7 @@ func _get_value_linear(t: int) -> Variant:
 	if not timestamps_msec:
 		return self.default_value
 	
-	var i = timestamps_msec.find_custom(func(u: int) -> bool: return u > t)
+	var i = get_adjacent_timestamp(t, true) 
 	
 	if i <= 0:
 		return self.data[timestamps_msec[i]]
@@ -89,6 +107,13 @@ func get_value(t: int) -> Variant:
 		DFCurveBase.Type.TYPE_STEP:
 			v = _get_value_step(t)
 	return v if v != null else self.default_value
+
+
+## Get the adjacent timestamp of the input [param t] which does not include
+## [param t] itself.
+func get_adjacent_timestamp(t: int, forward: bool) -> int:
+	var i = timestamps_msec.find_custom(func(u: int) -> bool: return u > t)
+	return i if forward else i - 1
 
 
 func to_dict(

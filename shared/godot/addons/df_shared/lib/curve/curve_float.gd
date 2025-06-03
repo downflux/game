@@ -5,9 +5,5 @@ extends DFCurveBase
 @export var default_value: float = 0
 
 
-func add_data(d: Dictionary[int, float]) -> void:
-	super.add_data(d)
-
-
 func get_value(timestamp: int) -> float:
 	return super.get_value(timestamp)

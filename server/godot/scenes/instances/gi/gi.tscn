@@ -18,12 +18,11 @@ default_value = 2
 [node name="Health" parent="Unit" index="4"]
 default_value = 100
 
-[node name="Walker" parent="." node_paths=PackedStringArray("x", "y") instance=ExtResource("3_g2vgm")]
+[node name="Walker" parent="." node_paths=PackedStringArray("x", "y", "map_layer") instance=ExtResource("3_g2vgm")]
+speed = 0.5
 x = NodePath("../Unit/X")
 y = NodePath("../Unit/Y")
-
-[node name="Speed" parent="Walker" index="0"]
-default_value = 0.5
+map_layer = NodePath("../Unit/MapLayer")
 
 [editable path="Unit"]
 [editable path="Walker"]

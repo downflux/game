@@ -6,6 +6,14 @@ func test_step_pre():
 	assert($SimpleBoolStep.get_value(0) == false)
 
 
+func test_step_pre_at():
+	assert($SimpleBoolStep.get_value(100) == false)
+
+
+func test_step_post_at():
+	assert($SimpleBoolStep.get_value(110) == true)
+
+
 func test_step_post():
 	assert($SimpleBoolStep.get_value(1000) == true)
 
@@ -16,6 +24,14 @@ func test_step_interpolate():
 
 func test_linear_pre():
 	assert($SimpleFloatLinear.get_value(-1) == 10)
+
+
+func test_linear_pre_at():
+	assert($SimpleBoolStep.get_value(100) == 10)
+
+
+func test_linear_post_at():
+	assert($SimpleBoolStep.get_value(110) == 20)
 
 
 func test_linear_post():
