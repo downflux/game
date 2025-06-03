@@ -30,10 +30,24 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	if query.get(DFStateKeys.KDFPlayerFaction, false) and not partial:
 		data[DFStateKeys.KDFPlayerFaction] = faction
 	
-	if query.get(DFStateKeys.KDFPlayerMoney, false):
-		if not partial or (
-			partial and money.is_dirty
-		):
+	if query.get(DFStateKeys.KDFPlayerMoney, false) and (
+		money.is_dirty or not partial
+	):
 			data[DFStateKeys.KDFPlayerMoney] = money.to_dict(sid, partial, {})
 
 	return data
+
+
+func from_dict(partial: bool, data: Dictionary):
+	if DFStateKeys.KDFIsFreed in data:
+		self.is_deleted = true
+		return
+	
+	if DFStateKeys.KDFPlayerUsername in data and not partial:
+		username = data[DFStateKeys.KDFPlayerUsername]
+	
+	if DFStateKeys.KDFPlayerFaction in data and not partial:
+		faction = data[DFStateKeys.KDFPlayerFaction]
+	
+	if DFStateKeys.KDFPlayerMoney in data:
+		money.from_dict(partial, data[DFStateKeys.KDFPlayerMoney])

@@ -106,7 +106,6 @@ func to_dict(
 		data[DFStateKeys.KDFCurveType] = curve_type
 	if query.get(DFStateKeys.KDFCurveDefaultValue, false) and not partial:
 		data[DFStateKeys.KDFCurveDefaultValue] = self.default_value
-
 	
 	data.merge({
 		DFStateKeys.KDFCurveTimestampMSec: timestamps_msec,
@@ -114,3 +113,27 @@ func to_dict(
 	})
 	
 	return data
+
+
+func from_dict(partial: bool, data: Dictionary):
+	if DFStateKeys.KDFCurveType in data and not partial:
+		curve_type = data[DFStateKeys.KDFCurveType]
+	if DFStateKeys.KDFCurveDefaultValue in data and not partial:
+		self.default_value = data[DFStateKeys.KDFCurveDefaultValue]
+	
+	if DFStateKeys.KDFCurveTimestampMSec in data:
+		if partial:
+			var unique: Dictionary[int, bool] = {}
+			timestamps_msec.append_array(data.get(DFStateKeys.KDFCurveTimestampMSec, []))
+			for t in timestamps_msec:
+				unique[t] = true
+			timestamps_msec = unique.keys()
+			timestamps_msec.sort()
+		else:
+			timestamps_msec = data.get(DFStateKeys.KDFCurveTimestampMSec, [])
+	
+	if DFStateKeys.KDFCurveData in data:
+		if partial:
+			self.data.merge(data.get(DFStateKeys.KDFCurveData, {}))
+		else:
+			self.data = data.get(DFStateKeys.KDFCurveData, {})

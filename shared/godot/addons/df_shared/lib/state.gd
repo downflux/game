@@ -69,5 +69,22 @@ func to_dict(
 @warning_ignore_restore("unused_parameter")
 
 
+@warning_ignore_start("unused_parameter")
+## Virtual method which takes in a serialized dictionary of the node state and
+## updates the node.
+## [br][br]
+## [param partial] dictates merging behavior. Setting to [code]true[/code] is
+## the equivalent of the [code]PATCH[/code] operation, wereas setting to
+## [code]false[/code] is the equivalent of [code]PUT[/code].
+func from_dict(
+	partial: bool,
+	data: Dictionary,
+):
+	Logger.error("to_dict not implemented")
+	
+	return
+@warning_ignore_restore("unused_parameter")
+
+
 func _init():
 	is_dirty = true

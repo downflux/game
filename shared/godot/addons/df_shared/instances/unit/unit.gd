@@ -33,28 +33,52 @@ func to_dict(
 		data[DFStateKeys.KDFUnitType] = unit_type
 	
 	if query.get(DFStateKeys.KDFUnitMapLayer, false) and (
-		not partial or (partial and map_layer.is_dirty)
+		map_layer.is_dirty or not partial
 	):
 		data[DFStateKeys.KDFUnitMapLayer] = map_layer.to_dict(sid, partial, {})
 	
 	if query.get(DFStateKeys.KDFUnitX, false) and (
-		not partial or (partial and x.is_dirty)
+		x.is_dirty or not partial
 	):
 		data[DFStateKeys.KDFUnitX] = x.to_dict(sid, partial, {})
 	
 	if query.get(DFStateKeys.KDFUnitY, false) and (
-		not partial or (partial and y.is_dirty)
+		y.is_dirty or not partial
 	):
 		data[DFStateKeys.KDFUnitY] = y.to_dict(sid, partial, {})
 	
 	if query.get(DFStateKeys.KDFUnitTheta, false) and (
-		not partial or (partial and theta.is_dirty)
+		theta.is_dirty or not partial
 	):
 		data[DFStateKeys.KDFUnitTheta] = theta.to_dict(sid, partial, {})
 	
 	if query.get(DFStateKeys.KDFUnitHealth, false) and (
-		not partial or (partial and health.is_dirty)
+		health.is_dirty or not partial
 	):
 		data[DFStateKeys.KDFUnitHealth] = health.to_dict(sid, partial, {})
 	
 	return data
+
+
+func from_dict(partial: bool, data: Dictionary):
+	if DFStateKeys.KDFIsFreed in data:
+		is_deleted = true
+		return
+	
+	if DFStateKeys.KDFUnitType in data and not partial:
+		unit_type = data[DFStateKeys.KDFUnitType]
+	
+	if DFStateKeys.KDFUnitMapLayer in data:
+		map_layer.from_dict(partial, data[DFStateKeys.KDFUnitMapLayer])
+
+	if DFStateKeys.KDFUnitX in data:
+		x.from_dict(partial, data[DFStateKeys.KDFUnitX])
+
+	if DFStateKeys.KDFUnitY in data:
+		y.from_dict(partial, data[DFStateKeys.KDFUnitY])
+
+	if DFStateKeys.KDFUnitTheta in data:
+		theta.from_dict(partial, data[DFStateKeys.KDFUnitTheta])
+
+	if DFStateKeys.KDFUnitHealth in data:
+		health.from_dict(partial, data[DFStateKeys.KDFUnitHealth])

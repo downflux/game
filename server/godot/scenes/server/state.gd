@@ -15,17 +15,22 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 		DFStateKeys.KDFTimestampMSec: timestamp_msec,
 	}
 	
+	Logger.debug("sid: %s, partial: %s, query: %s" % [str(sid), str(partial), str(query)])
+	
 	if partial and not is_dirty:
 		return data
 	
-	var q = query.get(DFStateKeys.KDFPlayers, {})
-	if q and players.is_dirty:
-		data[DFStateKeys.KDFPlayers] = players.to_dict(sid, partial, q)
+	if DFStateKeys.KDFPlayers in query and (
+		players.is_dirty or not partial
+	):
+		data[DFStateKeys.KDFPlayers] = players.to_dict(sid, partial, query[DFStateKeys.KDFPlayers])
 	
-	q = query.get(DFStateKeys.KDFUnits, {})
-	if q and units.is_dirty:
-		data[DFStateKeys.KDFUnits] = units.to_dict(sid, partial, q)
+	if DFStateKeys.KDFUnits in query and (
+		units.is_dirty or not partial
+	):
+		data[DFStateKeys.KDFUnits] = units.to_dict(sid, partial, query[DFStateKeys.KDFUnits])
 	
+	Logger.debug("data: %s" % str(data))
 	return data
 
 
