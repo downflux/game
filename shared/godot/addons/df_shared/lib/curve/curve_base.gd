@@ -27,14 +27,12 @@ enum Type {
 ## The type of interpolation for this curve.
 @export var curve_type: Type
 
-## A list of keyframe timestamps. These timestamps are of the same scale as
-## [member DFState.timestamp_msec]
+## A list of keyframe timestamps. Timestamps are non-negative integers.
 @export var timestamps_msec: Array[int] = []
 
 
-## Remove the input keyframes with time [code]timestamps_msec[/code] and
-## associated data. 
-func erase_data(t: int) -> void:
+## Remove the keyframe at time [param t]. 
+func erase_keyframe(t: int) -> void:
 	if t not in self.data:
 		return
 	
@@ -44,14 +42,13 @@ func erase_data(t: int) -> void:
 	self.data.erase(t)
 
 
-## Truncates all data before or after the given timestamp.
+## Truncates all keyframes before or after the given timestamp [param t].
 ## [br][br]
-## Data in the range [code](-∞, t)[/code] and [code](t, ∞)[/code] are deleted.
-func trim_data(t: int, before: bool):
+## Keyframes in the range [code](-∞, t)[/code] and [code](t, ∞)[/code] are
+## deleted.
+func trim_keyframes(t: int, before: bool):
 	if before:
 		var i = _get_prev_timestamp_index(t)
-		if t in self.data:
-			i -= 1
 		if i > -1:
 			is_dirty = true
 			for j in range(0, i + 1):
@@ -61,6 +58,10 @@ func trim_data(t: int, before: bool):
 			timestamps_msec.reverse()
 	else:
 		var i = _get_next_timestamp_index(t)
+		if t in self.data:
+			i += 1
+		if i == len(timestamps_msec):
+			i = -1
 		if i > -1:
 			is_dirty = true
 			for j in range(i, len(timestamps_msec)):
@@ -68,8 +69,8 @@ func trim_data(t: int, before: bool):
 			timestamps_msec.resize(i)
 
 
-## Add keyframes with time [code]timestamps_msec[/code] and associated data. 
-func add_data(t: int, v: Variant) -> void:
+## Add keyframe at timestamp [param t]. 
+func add_keyframe(t: int, v: Variant) -> void:
 	is_dirty = true
 	
 	if t not in self.data:
@@ -124,16 +125,42 @@ func get_value(t: int) -> Variant:
 	return v if v != null else self.default_value
 
 
-## Get the adjacent timestamp of the input [param t] which does not include
-## [param t] itself.
+## Get the index of the next keyframe timestamp in the interval
+## [code][t, ∞)[/code].
+## [br][br]
+## Note that the interval is half-closed; if [param t] falls on a keyframe, we
+## return the index of that keyframe. Returns [code]-1[/code] if [param t] is at
+## or past the last keyframe.
 func _get_next_timestamp_index(t: int) -> int:
-	var i: int = timestamps_msec.bsearch(t, false)
+	var i: int = timestamps_msec.bsearch(t, true)
 	return i if i < len(timestamps_msec) else -1
 
 
+## Get the next keyframe timestamp in the interval [code][t, ∞)[/code].
+## [br][br]
+## Note that the interval is half-closed; if [param t] falls on a keyframe, we
+## return that keyframe. Returns [code]-1[/code] if [param t] is at or past the
+## last keyframe.
+func get_next_timestamp(t: int) -> int:
+	var i: int = _get_next_timestamp_index(t)
+	return timestamps_msec[i] if i > -1 else -1
+
+
+## Get the index of the last keyframe timestamp in the interval
+## [code](-∞, t][/code].
+## [br][br]
+## Returns [code]-1[/code] if [param t] is at or before the first keyframe.
 func _get_prev_timestamp_index(t: int) -> int:
 	var i: int = _get_next_timestamp_index(t)
 	return i - 1 if i != -1 else len(timestamps_msec) - 1
+
+
+## Get the last keyframe timestamp in the interval [code](-∞, t][/code].
+## [br][br]
+## Returns [code]-1[/code] if [param t] is at or before the first keyframe.
+func get_prev_timestamp(t: int) -> int:
+	var i: int = _get_prev_timestamp_index(t)
+	return timestamps_msec[i] if i > -1 else -1
 
 
 func to_dict(
