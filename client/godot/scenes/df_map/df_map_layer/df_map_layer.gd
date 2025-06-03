@@ -46,7 +46,7 @@ func _input(event: InputEvent):
 			
 			Logger.info("requesting move")
 			
-			Server.server_request_move.rpc_id(1, get_instance_id(), _src, _dst)
+			Server.server_request_move.rpc_id(1, get_instance_id(), 1, _src, _dst)
 			# set_vector_path($DFNavigation.get_id_path(_layer, _src, _dst, true))
 	
 	# Teleport

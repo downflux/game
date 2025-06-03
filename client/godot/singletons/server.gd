@@ -1,5 +1,7 @@
 extends Node
 
+signal state_published(state: Dictionary)
+
 var peer = ENetMultiplayerPeer.new()
 var _host: String
 var _port: int
@@ -7,7 +9,7 @@ var _port: int
 
 func _on_connected_to_server():
 	Logger.debug("connected to server: %s:%s" % [_host, _port])
-	server_request_subscription.rpc_id(1, get_instance_id())
+	server_request_subscription.rpc_id(1)
 
 
 func _on_connection_failed():
@@ -32,8 +34,8 @@ func connect_to_server(host: String, port: int):
 
 
 @rpc("authority", "call_local", "reliable")
-func client_publish_state(nid: int, value: Dictionary) -> void:
-	Logger.debug("local scene %d recieved server value \n%s" % [nid, JSON.stringify(value, "\t")])
+func client_publish_state(value: Dictionary):
+	state_published.emit(value)
 
 
 @rpc("authority", "call_local", "reliable")
@@ -44,10 +46,10 @@ func client_send_path(nid: int, path: Array[Vector2i]):
 # Define server stubs.
 
 @rpc("any_peer", "call_local", "reliable")
-func server_request_subscription(_nid: int) -> void:
+func server_request_subscription():
 	return
 
 
 @rpc("any_peer", "call_local", "reliable")
-func server_request_move(_nid: int, _src: Vector2i, _dst: Vector2i):
+func server_request_move(_nid: int, _uid: int, _src: Vector2i, _dst: Vector2i):
 	return
