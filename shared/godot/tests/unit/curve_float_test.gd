@@ -2,13 +2,15 @@ extends GdUnitTestSuite
 
 
 func _create_float_curve(
-	timestamps_msec: Array[int],
 	data: Dictionary[int, float],
 	curve_type: DFCurveBase.Type,
 	default_value: float
 ) -> DFCurveFloat:
 	var c: DFCurveFloat = DFCurveFloat.new()
 	add_child(c)
+	
+	var timestamps_msec = data.keys()
+	timestamps_msec.sort()
 	
 	c.timestamps_msec = timestamps_msec
 	c.data = data
@@ -20,7 +22,6 @@ func _create_float_curve(
 
 func test_linear_get_value():
 	var c: DFCurveFloat = _create_float_curve(
-		[100, 110, 120],
 		{
 			100: 10,
 			110: 11,

@@ -49,7 +49,7 @@ func erase_data(t: int) -> void:
 ## Data in the range [code](-∞, t)[/code] and [code](t, ∞)[/code] are deleted.
 func trim_data(t: int, before: bool):
 	if before:
-		var i = get_prev_timestamp_index(t)
+		var i = _get_prev_timestamp_index(t)
 		if t in self.data:
 			i -= 1
 		if i > -1:
@@ -60,7 +60,7 @@ func trim_data(t: int, before: bool):
 			timestamps_msec.resize(len(timestamps_msec) - (i + 1))
 			timestamps_msec.reverse()
 	else:
-		var i = get_next_timestamp_index(t)
+		var i = _get_next_timestamp_index(t)
 		if i > -1:
 			is_dirty = true
 			for j in range(i, len(timestamps_msec)):
@@ -83,7 +83,7 @@ func _get_value_step(t: int) -> Variant:
 	if t in self.data:
 		return self.data[t]
 	
-	var i: int = get_prev_timestamp_index(t)
+	var i: int = _get_prev_timestamp_index(t)
 	if i == -1:
 		return self.default_value
 	
@@ -94,12 +94,12 @@ func _get_value_linear(t: int) -> Variant:
 	if t in self.data:
 		return self.data[t]
 	
-	var i = get_prev_timestamp_index(t)
+	var i = _get_prev_timestamp_index(t)
 	
 	if i == -1:
 		return self.default_value
 	
-	var j = get_next_timestamp_index(t)
+	var j = _get_next_timestamp_index(t)
 	
 	if j == -1:
 		return self.data[timestamps_msec[len(timestamps_msec) - 1]]
@@ -126,13 +126,13 @@ func get_value(t: int) -> Variant:
 
 ## Get the adjacent timestamp of the input [param t] which does not include
 ## [param t] itself.
-func get_next_timestamp_index(t: int) -> int:
+func _get_next_timestamp_index(t: int) -> int:
 	var i: int = timestamps_msec.bsearch(t, false)
 	return i if i < len(timestamps_msec) else -1
 
 
-func get_prev_timestamp_index(t: int) -> int:
-	var i: int = get_next_timestamp_index(t)
+func _get_prev_timestamp_index(t: int) -> int:
+	var i: int = _get_next_timestamp_index(t)
 	return i - 1 if i != -1 else len(timestamps_msec) - 1
 
 

@@ -2,13 +2,15 @@ extends GdUnitTestSuite
 
 
 func _create_float_curve(
-	timestamps_msec: Array[int],
 	data: Dictionary[int, float],
 	curve_type: DFCurveBase.Type,
 	default_value: float
 ) -> DFCurveFloat:
 	var c: DFCurveFloat = DFCurveFloat.new()
 	add_child(c)
+	
+	var timestamps_msec = data.keys()
+	timestamps_msec.sort()
 	
 	c.timestamps_msec = timestamps_msec
 	c.data = data
@@ -17,10 +19,49 @@ func _create_float_curve(
 	
 	return c
 
+func test_get_next_timestamp_index():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_STEP,
+		false,
+	)
+	
+	# The next timestamp for time before first timestamp will return the first
+	# recorded timestamp.
+	assert_int(c._get_next_timestamp_index(0)).is_equal(0)
+	
+	assert_int(c._get_next_timestamp_index(105)).is_equal(1)
+	
+	# get_next_timestamp filters for a strictly greater than association.
+	assert_int(c._get_next_timestamp_index(110)).is_equal(2)
+	
+	# No valid timestamp exists for time past the last recorded timestamp.
+	assert_int(c._get_next_timestamp_index(125)).is_equal(-1)
+
+
+func test_get_prev_timestamp_index():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_STEP,
+		false,
+	)
+	
+	assert_int(c._get_prev_timestamp_index(0)).is_equal(-1)
+	assert_int(c._get_prev_timestamp_index(105)).is_equal(0)
+	assert_int(c._get_prev_timestamp_index(110)).is_equal(1)
+	assert_int(c._get_prev_timestamp_index(125)).is_equal(2)
+
 
 func test_add_data():
 	var c: DFCurveFloat = _create_float_curve(
-		[100, 110, 120],
 		{
 			100: 10,
 			110: 11,
@@ -48,7 +89,6 @@ func test_add_data():
 
 func test_erase_data():
 	var c: DFCurveFloat = _create_float_curve(
-		[100, 110, 120],
 		{
 			100: 10,
 			110: 11,
@@ -71,7 +111,6 @@ func test_erase_data():
 
 func test_trim_data_noop():
 	var c: DFCurveFloat = _create_float_curve(
-		[100, 110, 120],
 		{
 			100: 10,
 			110: 11,
@@ -94,7 +133,6 @@ func test_trim_data_noop():
 
 func test_trim_data_before():
 	var c: DFCurveFloat = _create_float_curve(
-		[100, 110, 120],
 		{
 			100: 10,
 			110: 11,
@@ -115,7 +153,6 @@ func test_trim_data_before():
 
 func test_trim_data_before_no_exact_match():
 	var c: DFCurveFloat = _create_float_curve(
-		[100, 110, 120],
 		{
 			100: 10,
 			110: 11,
@@ -136,7 +173,6 @@ func test_trim_data_before_no_exact_match():
 
 func test_trim_data_before_all():
 	var c: DFCurveFloat = _create_float_curve(
-		[100, 110, 120],
 		{
 			100: 10,
 			110: 11,
@@ -154,7 +190,6 @@ func test_trim_data_before_all():
 
 func test_trim_data_after():
 	var c: DFCurveFloat = _create_float_curve(
-		[100, 110, 120],
 		{
 			100: 10,
 			110: 11,
@@ -175,7 +210,6 @@ func test_trim_data_after():
 
 func test_trim_data_after_no_exact_match():
 	var c: DFCurveFloat = _create_float_curve(
-		[100, 110, 120],
 		{
 			100: 10,
 			110: 11,
@@ -196,7 +230,6 @@ func test_trim_data_after_no_exact_match():
 
 func test_trim_data_after_all():
 	var c: DFCurveFloat = _create_float_curve(
-		[100, 110, 120],
 		{
 			100: 10,
 			110: 11,
