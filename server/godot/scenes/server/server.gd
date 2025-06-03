@@ -69,8 +69,14 @@ func _publish_state(p: DFServerPlayer):
 
 
 func _physics_process(_delta):
-	# The state node as a child of server is processed before server. Broadcast
-	# updated date to all clients.
+	# _physics_process is called in tree order, i.e. DFServer._physics_process is
+	# called before DFServerState._physics_process. This is important as the
+	# DFServerState manually clears its own is_dirty bit at the end if every
+	# physics frame.
+	#
+	# See
+	# https://docs.godotengine.org/en/stable/tutorials/scripting/scene_tree.html#tree-order
+	# for more information.
 	for p in state.players.get_children():
 		_publish_state(p)
 

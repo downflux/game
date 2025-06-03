@@ -15,8 +15,6 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 		DFStateKeys.KDFTimestampMSec: timestamp_msec,
 	}
 	
-	Logger.debug("sid: %s, partial: %s, query: %s" % [str(sid), str(partial), str(query)])
-	
 	if partial and not is_dirty:
 		return data
 	
@@ -30,7 +28,6 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	):
 		data[DFStateKeys.KDFUnits] = units.to_dict(sid, partial, query[DFStateKeys.KDFUnits])
 	
-	Logger.debug("data: %s" % str(data))
 	return data
 
 
