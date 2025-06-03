@@ -34,67 +34,82 @@ enum Type {
 
 ## Remove the input keyframes with time [code]timestamps_msec[/code] and
 ## associated data. 
-func remove_data(ts: Array[int]) -> void:
+func erase_data(t: int) -> void:
+	if t not in self.data:
+		return
+	
 	is_dirty = true
-	for t in ts:
-		var i = timestamps_msec.find(t)
-		if i != -1:
-			timestamps_msec.remove_at(i)
-			self.data.erase(i)
+	var i = timestamps_msec.bsearch(t)
+	timestamps_msec.remove_at(timestamps_msec.bsearch(t))
+	self.data.erase(t)
 
 
 ## Truncates all data before or after the given timestamp.
-func truncate_data(t: int, forward: bool):
-	is_dirty = true
-	var i = get_adjacent_timestamp(t, forward)
-	if forward:
-		for j in range(i, len(timestamps_msec)):
-			if j != -1:
+## [br][br]
+## Data in the range [code](-∞, t)[/code] and [code](t, ∞)[/code] are deleted.
+func trim_data(t: int, before: bool):
+	if before:
+		var i = get_prev_timestamp_index(t)
+		if t in self.data:
+			i -= 1
+		if i > -1:
+			is_dirty = true
+			for j in range(0, i + 1):
 				self.data.erase(timestamps_msec[j])
-				timestamps_msec.resize(i)
+			timestamps_msec.reverse()
+			timestamps_msec.resize(len(timestamps_msec) - (i + 1))
+			timestamps_msec.reverse()
 	else:
-		for j in range(0, i - 1):
-			self.data.erase(timestamps_msec[j])
-			timestamps_msec.reverse()
+		var i = get_next_timestamp_index(t)
+		if i > -1:
+			is_dirty = true
+			for j in range(i, len(timestamps_msec)):
+				self.data.erase(timestamps_msec[j])
 			timestamps_msec.resize(i)
-			timestamps_msec.reverse()
 
 
 ## Add keyframes with time [code]timestamps_msec[/code] and associated data. 
 func add_data(t: int, v: Variant) -> void:
 	is_dirty = true
-	var i = timestamps_msec.find(t)
-	if i == -1:
-		timestamps_msec.append(t)
-	else:
+	
+	if t not in self.data:
+		var i = timestamps_msec.bsearch(t)
 		timestamps_msec.insert(i, t)
+	
 	self.data[t] = v
 
 
 func _get_value_step(t: int) -> Variant:
-	if not timestamps_msec:
+	if t in self.data:
+		return self.data[t]
+	
+	var i: int = get_prev_timestamp_index(t)
+	if i == -1:
 		return self.default_value
 	
-	var i = get_adjacent_timestamp(t, true)
-	if i <= 0:
-		return self.data[timestamps_msec[i]]
-	
-	return self.data[timestamps_msec[i - 1]]
+	return self.data[timestamps_msec[i]]
 
 
 func _get_value_linear(t: int) -> Variant:
-	if not timestamps_msec:
+	if t in self.data:
+		return self.data[t]
+	
+	var i = get_prev_timestamp_index(t)
+	
+	if i == -1:
 		return self.default_value
 	
-	var i = get_adjacent_timestamp(t, true) 
+	var j = get_next_timestamp_index(t)
 	
-	if i <= 0:
-		return self.data[timestamps_msec[i]]
+	if j == -1:
+		return self.data[timestamps_msec[len(timestamps_msec) - 1]]
 	
-	return self.data[timestamps_msec[i - 1]] + (
-		self.data[timestamps_msec[i]] - self.data[timestamps_msec[i - 1]]
+	return self.data[timestamps_msec[i]] + (
+		self.data[timestamps_msec[j]] - self.data[timestamps_msec[i]]
 	) / (
-		timestamps_msec[i] - timestamps_msec[i - 1]
+		timestamps_msec[j] - timestamps_msec[i]
+	) * (
+		t - timestamps_msec[i]
 	)
 
 
@@ -111,9 +126,14 @@ func get_value(t: int) -> Variant:
 
 ## Get the adjacent timestamp of the input [param t] which does not include
 ## [param t] itself.
-func get_adjacent_timestamp(t: int, forward: bool) -> int:
-	var i = timestamps_msec.find_custom(func(u: int) -> bool: return u > t)
-	return i if forward else i - 1
+func get_next_timestamp_index(t: int) -> int:
+	var i: int = timestamps_msec.bsearch(t, false)
+	return i if i < len(timestamps_msec) else -1
+
+
+func get_prev_timestamp_index(t: int) -> int:
+	var i: int = get_next_timestamp_index(t)
+	return i - 1 if i != -1 else len(timestamps_msec) - 1
 
 
 func to_dict(

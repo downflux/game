@@ -17,6 +17,14 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 
 Logger="*res://addons/df_shared/singletons/logger/logger.tscn"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+
+[gdunit4]
+
+ui/toolbar/run_overall=true
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
