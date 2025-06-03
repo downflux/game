@@ -102,9 +102,9 @@ func to_dict(
 	var data: Dictionary = {}
 	
 	# Read-only properties do not change and do not need to be re-broadcasted.
-	if query.get(DFStateKeys.KDFCurveType, false) and not partial:
+	if not partial:
 		data[DFStateKeys.KDFCurveType] = curve_type
-	if query.get(DFStateKeys.KDFCurveDefaultValue, false) and not partial:
+	if not partial:
 		data[DFStateKeys.KDFCurveDefaultValue] = self.default_value
 	
 	data.merge({

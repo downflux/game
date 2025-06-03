@@ -6,11 +6,11 @@ extends DFStateBase
 
 @export var unit_type: DFEnums.UnitType
 
-@onready var map_layer: DFCurveInt = $MapLayer
-@onready var x: DFCurveFloat       = $X
-@onready var y: DFCurveFloat       = $Y
-@onready var theta: DFCurveFloat   = $Theta
-@onready var health: DFCurveInt    = $Health
+@onready var map_layer: DFCurveMapLayer = $MapLayer
+@onready var x: DFCurveFloat            = $X
+@onready var y: DFCurveFloat            = $Y
+@onready var theta: DFCurveFloat        = $Theta
+@onready var health: DFCurveInt         = $Health
 
 
 func to_dict(

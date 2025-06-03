@@ -12,9 +12,18 @@ metadata/_custom_type_script = "uid://ow0tqqowjx3a"
 [node name="Unit" parent="." instance=ExtResource("2_hqhda")]
 unit_type = 1
 
+[node name="MapLayer" parent="Unit" index="0"]
+default_value = 2
+
+[node name="Health" parent="Unit" index="4"]
+default_value = 100
+
 [node name="Walker" parent="." node_paths=PackedStringArray("x", "y") instance=ExtResource("3_g2vgm")]
 x = NodePath("../Unit/X")
 y = NodePath("../Unit/Y")
+
+[node name="Speed" parent="Walker" index="0"]
+default_value = 0.5
 
 [editable path="Unit"]
 [editable path="Walker"]
