@@ -8,7 +8,7 @@ extends Node
 
 
 func set_vector_path(timestamp: int, path: Array[Vector2i]):
-	var t: int = x.get_next_timestamp(x.get_window_end_timestamp(timestamp))
+	var t: int = x.get_window_end_timestamp(timestamp)
 	if t == -1:
 		t = timestamp
 	

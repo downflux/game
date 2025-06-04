@@ -107,15 +107,25 @@ func server_request_subscription():
 	p.is_subscribed = true
 
 
+func _request_move(sid: int, nid: int, uid: int, dst: Vector2i):
+	var path: Array[Vector2i] = state.get_vector_path(uid, dst)
+	state.set_vector_path(uid, path)
+	
+	client_send_path.rpc_id(sid, nid, path)
+
+
 ## Request server to calculate a path for a unit or set of units.
 ## [br][br]
 ## TODO(minkezhang): Send unit UUID instead of src Vector2i.
 @rpc("any_peer", "call_local", "reliable")
 func server_request_move(nid: int, uid: int, dst: Vector2i):
-	var path: Array[Vector2i] = state.get_vector_path(uid, dst)
-	state.set_vector_path(uid, path)
+	var sid = multiplayer.get_remote_sender_id()
 	
-	client_send_path.rpc_id(multiplayer.get_remote_sender_id(), nid, path)
+	state.m_commands.lock()
+	
+	state.commands[sid] = Callable(self, "_request_move").bind(sid, nid, uid, dst)
+	
+	state.m_commands.unlock()
 
 
 # Define client stubs.

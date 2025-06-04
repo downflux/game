@@ -11,9 +11,10 @@ var _m_messages: Mutex = Mutex.new()
 
 
 func enqueue_state(data: Dictionary):
-	while not _m_messages.try_lock():
-		pass
+	_m_messages.lock()
+	
 	_messages.append(data)
+	
 	_m_messages.unlock()
 
 

@@ -10,8 +10,15 @@ extends DFStateBase
 var timestamp_msec: int
 
 
+var commands: Dictionary[int, Callable] = {}
+var m_commands: Mutex = Mutex.new()
+
+
 func get_vector_path(uid: int, dst: Vector2i) -> Array[Vector2i]:
 	var u: DFServerUnitBase = units.get_unit(uid)
+	if u == null:
+		return []
+	
 	var t: int = u.unit_state.x.get_window_end_timestamp(timestamp_msec)
 	if t == -1:
 		t = timestamp_msec
@@ -25,7 +32,11 @@ func get_vector_path(uid: int, dst: Vector2i) -> Array[Vector2i]:
 
 
 func set_vector_path(uid: int, path: Array[Vector2i]):
-	units.get_unit(uid).get_node("Walker").set_vector_path(
+	var u: DFServerUnitBase = units.get_unit(uid)
+	if u == null or u.get_node("Walker") == null:
+		return
+	
+	u.get_node("Walker").set_vector_path(
 		timestamp_msec,
 		path,
 	)
@@ -54,7 +65,10 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 
 func _physics_process(_delta):
 	timestamp_msec = Time.get_ticks_msec()
-	
-	# TODO(minkezhang): Implement state handling.
-	
 	is_dirty = false
+
+	m_commands.lock()
+	for sid: int in commands:
+		commands[sid].call()
+	commands = {}
+	m_commands.unlock()
