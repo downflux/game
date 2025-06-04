@@ -24,6 +24,7 @@ func from_dict(
 		if p == null:
 			p = player_scene.instantiate()
 			p.name = str(sid)
+			p.is_self = sid == multiplayer.get_unique_id()
 			
 			add_player(p)
 		p.from_dict(partial, data[sid])

@@ -3,6 +3,10 @@ extends DFStateBase
 
 @onready var player_state: DFPlayer = $Player
 
+## If set to true, this is the player interacting with this instance of the
+## client.
+var is_self: bool
+
 
 func from_dict(
 	partial: bool,
