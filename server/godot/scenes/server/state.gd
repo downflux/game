@@ -12,7 +12,10 @@ var timestamp_msec: int
 
 func get_vector_path(uid: int, dst: Vector2i) -> Array[Vector2i]:
 	var u: DFServerUnitBase = units.get_unit(uid)
-	var t: int = u.unit_state.x.get_adjacent_timestamp(timestamp_msec, true)
+	var t: int = u.unit_state.x.get_window_end_timestamp(timestamp_msec)
+	if t == -1:
+		t = timestamp_msec
+	
 	var src: Vector2 = Vector2(
 		u.unit_state.x.get_value(t),
 		u.unit_state.y.get_value(t),
@@ -22,7 +25,6 @@ func get_vector_path(uid: int, dst: Vector2i) -> Array[Vector2i]:
 
 
 func set_vector_path(uid: int, path: Array[Vector2i]):
-	Logger.debug(str(path))
 	units.get_unit(uid).get_node("Walker").set_vector_path(
 		timestamp_msec,
 		path,

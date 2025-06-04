@@ -151,11 +151,17 @@ func get_window_start_timestamp(t: int) -> int:
 ## Get the index of the next keyframe in the open interval [code](t, ∞)[/code].
 ## Return [code]-1[/code] if [param t] lies past the last keyframe.
 func _get_next_timestamp_index(t: int) -> int:
+	if t == -1:
+		return t
+	
 	var i: int = timestamps_msec.bsearch(t, false)
 	return i if i < len(timestamps_msec) else -1
 
 
 func get_next_timestamp(t: int) -> int:
+	if t == -1:
+		return t
+	
 	var i: int = _get_next_timestamp_index(t)
 	return timestamps_msec[i] if i != -1 else -1
 

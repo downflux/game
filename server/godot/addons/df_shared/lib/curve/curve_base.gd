@@ -27,74 +27,85 @@ enum Type {
 ## The type of interpolation for this curve.
 @export var curve_type: Type
 
-## A list of keyframe timestamps. These timestamps are of the same scale as
-## [member DFState.timestamp_msec]
+## A list of keyframe timestamps. Timestamps are non-negative integers.
 @export var timestamps_msec: Array[int] = []
 
 
-## Remove the input keyframes with time [code]timestamps_msec[/code] and
-## associated data. 
-func remove_data(ts: Array[int]) -> void:
+## Remove the keyframe at time [param t]. 
+func erase_keyframe(t: int) -> void:
+	if t not in self.data:
+		return
+	
 	is_dirty = true
-	for t in ts:
-		var i = timestamps_msec.find(t)
-		if i != -1:
-			timestamps_msec.remove_at(i)
-			self.data.erase(i)
+	var i = timestamps_msec.bsearch(t)
+	timestamps_msec.remove_at(timestamps_msec.bsearch(t))
+	self.data.erase(t)
 
 
-## Truncates all data before or after the given timestamp.
-func truncate_data(t: int, forward: bool):
-	is_dirty = true
-	var i = get_adjacent_timestamp(t, forward)
-	if forward:
-		for j in range(i, len(timestamps_msec)):
-			if j != -1:
+## Truncates all keyframes before or after the window containing [param t].
+func trim_keyframes(t: int, before: bool):
+	if before:
+		var i = _get_window_start_timestamp_index(t)
+		if i > -1:
+			is_dirty = true
+			for j in range(0, i + 1):
 				self.data.erase(timestamps_msec[j])
-				timestamps_msec.resize(i)
-	else:
-		for j in range(0, i - 1):
-			self.data.erase(timestamps_msec[j])
 			timestamps_msec.reverse()
+			timestamps_msec.resize(len(timestamps_msec) - (i + 1))
+			timestamps_msec.reverse()
+	else:
+		var i = _get_window_end_timestamp_index(t)
+		if t in self.data:
+			i += 1
+		if i == len(timestamps_msec):
+			i = -1
+		if i > -1:
+			is_dirty = true
+			for j in range(i, len(timestamps_msec)):
+				self.data.erase(timestamps_msec[j])
 			timestamps_msec.resize(i)
-			timestamps_msec.reverse()
 
 
-## Add keyframes with time [code]timestamps_msec[/code] and associated data. 
-func add_data(t: int, v: Variant) -> void:
+## Add keyframe at timestamp [param t]. 
+func add_keyframe(t: int, v: Variant) -> void:
 	is_dirty = true
-	var i = timestamps_msec.find(t)
-	if i == -1:
-		timestamps_msec.append(t)
-	else:
+	
+	if t not in self.data:
+		var i = timestamps_msec.bsearch(t)
 		timestamps_msec.insert(i, t)
+	
 	self.data[t] = v
 
 
 func _get_value_step(t: int) -> Variant:
-	if not timestamps_msec:
+	if t in self.data:
+		return self.data[t]
+	
+	var i: int = _get_window_start_timestamp_index(t)
+	if i == -1:
 		return self.default_value
 	
-	var i = get_adjacent_timestamp(t, true)
-	if i <= 0:
-		return self.data[timestamps_msec[i]]
-	
-	return self.data[timestamps_msec[i - 1]]
+	return self.data[timestamps_msec[i]]
 
 
 func _get_value_linear(t: int) -> Variant:
-	if not timestamps_msec:
+	if t in self.data:
+		return self.data[t]
+	
+	var i = _get_window_start_timestamp_index(t)
+	if i == -1:
 		return self.default_value
 	
-	var i = get_adjacent_timestamp(t, true) 
+	var j = _get_window_end_timestamp_index(t)
+	if j == -1:
+		return self.data[timestamps_msec[len(timestamps_msec) - 1]]
 	
-	if i <= 0:
-		return self.data[timestamps_msec[i]]
-	
-	return self.data[timestamps_msec[i - 1]] + (
-		self.data[timestamps_msec[i]] - self.data[timestamps_msec[i - 1]]
+	return self.data[timestamps_msec[i]] + (
+		self.data[timestamps_msec[j]] - self.data[timestamps_msec[i]]
 	) / (
-		timestamps_msec[i] - timestamps_msec[i - 1]
+		timestamps_msec[j] - timestamps_msec[i]
+	) * (
+		t - timestamps_msec[i]
 	)
 
 
@@ -109,11 +120,50 @@ func get_value(t: int) -> Variant:
 	return v if v != null else self.default_value
 
 
-## Get the adjacent timestamp of the input [param t] which does not include
-## [param t] itself.
-func get_adjacent_timestamp(t: int, forward: bool) -> int:
-	var i = timestamps_msec.find_custom(func(u: int) -> bool: return u > t)
-	return i if forward else i - 1
+## Get the index of the next keyframe which contains the timestamp [param t].
+## [br][br]
+## A window is defined as [code](i - 1, i][/code], where [code]i[/code] is the
+## keyframe index. Note that the interval is half-closed; if [param t] falls on
+## a keyframe, we return the index of that keyframe. Returns [code]-1[/code] if
+## [param t] is at or past the last keyframe.
+func _get_window_end_timestamp_index(t: int) -> int:
+	var i: int = timestamps_msec.bsearch(t, true)
+	return i if i < len(timestamps_msec) else -1
+
+
+func get_window_end_timestamp(t: int) -> int:
+	var i: int = _get_window_end_timestamp_index(t)
+	return timestamps_msec[i] if i != -1 else -1
+
+
+## Get the index of the previous keyframe which contains the timestamp
+## [param t].
+func _get_window_start_timestamp_index(t: int) -> int:
+	var i: int = _get_window_end_timestamp_index(t)
+	return i - 1 if i != -1 else len(timestamps_msec) - 1
+
+
+func get_window_start_timestamp(t: int) -> int:
+	var i: int = _get_window_start_timestamp_index(t)
+	return timestamps_msec[i] if i != -1 else -1
+
+
+## Get the index of the next keyframe in the open interval [code](t, ∞)[/code].
+## Return [code]-1[/code] if [param t] lies past the last keyframe.
+func _get_next_timestamp_index(t: int) -> int:
+	if t == -1:
+		return t
+	
+	var i: int = timestamps_msec.bsearch(t, false)
+	return i if i < len(timestamps_msec) else -1
+
+
+func get_next_timestamp(t: int) -> int:
+	if t == -1:
+		return t
+	
+	var i: int = _get_next_timestamp_index(t)
+	return timestamps_msec[i] if i != -1 else -1
 
 
 func to_dict(

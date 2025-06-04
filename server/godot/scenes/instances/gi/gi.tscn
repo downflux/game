@@ -19,7 +19,7 @@ default_value = 2
 default_value = 100
 
 [node name="Walker" parent="." node_paths=PackedStringArray("x", "y", "map_layer") instance=ExtResource("3_g2vgm")]
-speed = 0.5
+speed = 1.0
 x = NodePath("../Unit/X")
 y = NodePath("../Unit/Y")
 map_layer = NodePath("../Unit/MapLayer")
