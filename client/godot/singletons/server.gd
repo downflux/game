@@ -7,6 +7,18 @@ var _host: String
 var _port: int
 
 
+var server_start_timestamp_msec: int
+var frame_delay_msec: int = 100
+
+
+func get_server_timestamp_msec() -> int:
+	return (
+		int(Time.get_unix_time_from_system() * 1000)
+	) - (
+		server_start_timestamp_msec
+	) - frame_delay_msec
+
+
 func _on_connected_to_server():
 	Logger.debug("connected to server: %s:%s" % [_host, _port])
 	server_request_subscription.rpc_id(1)
@@ -31,6 +43,11 @@ func connect_to_server(host: String, port: int):
 	peer.create_client(host, port)
 	
 	multiplayer.multiplayer_peer = peer
+
+
+@rpc("authority", "call_local", "reliable")
+func client_set_server_state_timestamp_msec(timestamp_msec: int):
+	server_start_timestamp_msec = int(Time.get_unix_time_from_system() * 1000) - timestamp_msec
 
 
 @rpc("authority", "call_local", "reliable")

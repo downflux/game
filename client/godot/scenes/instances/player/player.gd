@@ -21,7 +21,7 @@ func _ready():
 
 
 func _process(delta):
-	money.text = "$%d" % [player_state.money.get_value(0)]
+	money.text = "$%d" % [player_state.money.get_value(Server.get_server_timestamp_msec())]
 
 
 func from_dict(

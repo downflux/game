@@ -25,6 +25,8 @@ func _on_peer_connected(sid: int):
 		state.players.add_player(p)
 	
 		state.units.add_unit(unit_factory.create_unit())
+	
+	client_set_server_state_timestamp_msec.rpc_id(sid, state.timestamp_msec)
 
 
 func _on_peer_disconnected(sid: int):
@@ -137,4 +139,10 @@ func client_publish_state(_value: Dictionary):
 ## Push planned path to requesting client.
 @rpc("authority", "call_local", "reliable")
 func client_send_path(_nid: int, _path: Array[Vector2i]):
+	return
+
+
+## Sends the timestamp at which the server started.
+@rpc("authority", "call_local", "reliable")
+func client_set_server_state_timestamp_msec(timestamp_msec: int):
 	return

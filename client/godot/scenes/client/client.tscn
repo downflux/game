@@ -30,5 +30,6 @@ script = ExtResource("5_gmu12")
 debug = true
 
 [node name="Sprite2D" type="Sprite2D" parent="DFMapLayer/DFUnit"]
+visible = false
 y_sort_enabled = true
 texture = SubResource("CompressedTexture2D_h2yge")
