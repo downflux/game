@@ -20,7 +20,7 @@ func _ready():
 	ui.visible = is_self
 
 
-func _process(delta):
+func _process(_delta):
 	money.text = "$%d" % [player_state.money.get_value(Server.get_server_timestamp_msec())]
 
 

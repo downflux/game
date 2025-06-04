@@ -196,18 +196,16 @@ func from_dict(partial: bool, data: Dictionary):
 	if DFStateKeys.KDFCurveDefaultValue in data and not partial:
 		self.default_value = data[DFStateKeys.KDFCurveDefaultValue]
 	
+	# When merging timestamps, we replace the tail of the current keyframes
+	# with incoming data.
 	if DFStateKeys.KDFCurveTimestampMSec in data:
 		if partial:
 			var ts = data[DFStateKeys.KDFCurveTimestampMSec]
 			if ts:
-				var i := timestamps_msec.bsearch(ts[0])
+				# Truncate all future points in local state.
+				trim_keyframes(get_window_start_timestamp(ts[0]), false)
 				
-				# Merge sort the two timestamp arrays.
-				for t in ts:
-					if t not in self.data:
-						while i < len(timestamps_msec) and timestamps_msec[i] < t:
-							i += 1
-						timestamps_msec.insert(i, t)
+				timestamps_msec.append_array(ts)
 		else:
 			timestamps_msec = data.get(DFStateKeys.KDFCurveTimestampMSec, [])
 	

@@ -306,6 +306,72 @@ func test_trim_keyframes_after_last():
 	assert_dict(c.data).is_equal({})
 
 
+func test_from_dict_patch_no_exact_match():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	
+	c.from_dict(true, {
+		DFStateKeys.KDFCurveTimestampMSec: [
+			101, 115,
+		],
+	})
+	
+	assert_array(c.timestamps_msec).is_equal([
+		100, 101, 115,
+	])
+
+
+func test_from_dict_patch_before_first():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	
+	c.from_dict(true, {
+		DFStateKeys.KDFCurveTimestampMSec: [
+			99, 101, 115,
+		],
+	})
+	
+	assert_array(c.timestamps_msec).is_equal([
+		99, 101, 115,
+	])
+
+
+func test_from_dict_patch_after_last():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	
+	c.from_dict(true, {
+		DFStateKeys.KDFCurveTimestampMSec: [
+			130, 150,
+		],
+	})
+	
+	assert_array(c.timestamps_msec).is_equal([
+		100, 110, 120, 130, 150,
+	])
+
+
 func test_from_dict_patch():
 	var c: DFCurveFloat = _create_float_curve(
 		{
@@ -319,10 +385,10 @@ func test_from_dict_patch():
 	
 	c.from_dict(true, {
 		DFStateKeys.KDFCurveTimestampMSec: [
-			101, 115, 130, 131,
+			110, 150,
 		],
 	})
 	
 	assert_array(c.timestamps_msec).is_equal([
-		100, 101, 110, 115, 120, 130, 131,
+		100, 110, 150,
 	])
