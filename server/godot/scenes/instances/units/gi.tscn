@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://dlxcybhfkv7gj"]
+
+[ext_resource type="Script" uid="uid://ow0tqqowjx3a" path="res://lib/unit.gd" id="1_bkn7i"]
+[ext_resource type="PackedScene" uid="uid://uqgyi36eb4gt" path="res://addons/df_shared/instances/unit/unit.tscn" id="2_yl24q"]
+[ext_resource type="PackedScene" uid="uid://cte0p5b3o1o5j" path="res://scenes/instances/components/walker.tscn" id="3_1o50a"]
+
+[node name="GI" type="Node" node_paths=PackedStringArray("unit_state")]
+script = ExtResource("1_bkn7i")
+unit_state = NodePath("Unit")
+metadata/_custom_type_script = "uid://ow0tqqowjx3a"
+
+[node name="Unit" parent="." instance=ExtResource("2_yl24q")]
+unit_type = 1
+
+[node name="MapLayer" parent="Unit" index="0"]
+default_value = 2
+
+[node name="Health" parent="Unit" index="4"]
+default_value = 100
+
+[node name="Walker" parent="." node_paths=PackedStringArray("x", "y", "map_layer") instance=ExtResource("3_1o50a")]
+speed = 1.0
+x = NodePath("../Unit/X")
+y = NodePath("../Unit/Y")
+map_layer = NodePath("../Unit/MapLayer")
+
+[editable path="Unit"]
+[editable path="Walker"]

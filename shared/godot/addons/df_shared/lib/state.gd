@@ -16,7 +16,7 @@ var is_dirty: bool:
 		is_dirty = v
 		if v:
 			var p = get_parent()
-			if p is DFStateBase and not p.is_dirty:
+			if p is DFStateBase:
 				p.is_dirty = v
 		if not v:
 			# If the changes from the node is processed after a call to
@@ -28,7 +28,7 @@ var is_dirty: bool:
 				queue_free()
 			
 			for c in get_children():
-				if c is DFStateBase and c.is_dirty:
+				if c is DFStateBase:
 					c.is_dirty = v
 
 ## Marks this node as intended to be deleted at the end of the frame.

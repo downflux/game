@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://r3kqx4cb7nt5"]
+[gd_scene load_steps=8 format=3 uid="uid://r3kqx4cb7nt5"]
 
 [ext_resource type="PackedScene" uid="uid://cfd40nkcpenqg" path="res://scenes/camera/camera.tscn" id="1_drkvg"]
 [ext_resource type="Script" uid="uid://btcscmedveits" path="res://scenes/client/client.gd" id="1_oismd"]
 [ext_resource type="Script" uid="uid://d3qjcr5nhjmji" path="res://scenes/client/state.gd" id="1_s2gpv"]
 [ext_resource type="PackedScene" uid="uid://b53edvkg200f8" path="res://scenes/df_map/df_map_layer/df_map_layer.tscn" id="2_s2gpv"]
+[ext_resource type="Script" uid="uid://dpkukv8q7kayd" path="res://scenes/client/players.gd" id="4_icqby"]
+[ext_resource type="Script" uid="uid://b5fhfq1hq3b8m" path="res://scenes/client/units.gd" id="5_gmu12"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_h2yge"]
 load_path = "res://.godot/imported/debug.png-97020d448e854da455bec68209740303.ctex"
@@ -17,12 +19,14 @@ script = ExtResource("1_oismd")
 script = ExtResource("1_s2gpv")
 
 [node name="Players" type="Node" parent="State"]
+script = ExtResource("4_icqby")
 
 [node name="Units" type="Node" parent="State"]
+script = ExtResource("5_gmu12")
 
 [node name="DFMapLayer" parent="." instance=ExtResource("2_s2gpv")]
 
-[node name="DFUnit" type="DFUnit" parent="DFMapLayer"]
+[node name="DFUnit" type="DFGoUnit" parent="DFMapLayer"]
 debug = true
 
 [node name="Sprite2D" type="Sprite2D" parent="DFMapLayer/DFUnit"]

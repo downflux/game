@@ -1,7 +1,7 @@
 class_name DFServerPlayer
 extends DFStateBase
 
-@onready var player_state: DFPlayer = $PlayerState
+@onready var player_state: DFPlayer = $Player
 
 
 # Server-populated vars.

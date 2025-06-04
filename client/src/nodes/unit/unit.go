@@ -23,7 +23,7 @@ var f = Callable.New(func(s any) {
 })
 
 type N struct {
-	classdb.Extension[N, Node2D.Instance] `gd:"DFUnit"`
+	classdb.Extension[N, Node2D.Instance] `gd:"DFGoUnit"`
 
 	Debug    bool
 	Priority int

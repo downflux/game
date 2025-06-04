@@ -1,7 +1,7 @@
 class_name DFServerUnitFactory
 extends Node
 
-@onready var debug_unit_scene: PackedScene = preload("res://scenes/instances/gi/gi.tscn")
+@onready var debug_unit_scene: PackedScene = preload("res://scenes/instances/units/gi.tscn")
 
 var _uid: int = 0
 

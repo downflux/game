@@ -9,7 +9,7 @@ func add_unit(unit: DFServerUnitBase):
 
 
 func get_unit(uid: int) -> DFServerUnitBase:
-	return get_node(str(uid))
+	return get_node_or_null(str(uid))
 
 
 func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:

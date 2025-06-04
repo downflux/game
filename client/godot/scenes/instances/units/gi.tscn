@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://buj5nosgbox6b"]
+
+[ext_resource type="Script" uid="uid://ceu8m84ifmmdk" path="res://lib/unit.gd" id="1_xy0ir"]
+[ext_resource type="PackedScene" uid="uid://uqgyi36eb4gt" path="res://addons/df_shared/instances/unit/unit.tscn" id="2_xy0ir"]
+
+[node name="GI" type="Node" node_paths=PackedStringArray("unit_state")]
+script = ExtResource("1_xy0ir")
+unit_state = NodePath("Unit")
+metadata/_custom_type_script = "uid://ceu8m84ifmmdk"
+
+[node name="Unit" parent="." instance=ExtResource("2_xy0ir")]

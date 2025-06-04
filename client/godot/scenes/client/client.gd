@@ -6,8 +6,33 @@ extends Node
 
 @onready var state: DFClientState = $State
 
+var _messages: Array[Dictionary]
+var _m_messages: Mutex = Mutex.new()
+
+
+func enqueue_state(data: Dictionary):
+	while not _m_messages.try_lock():
+		pass
+	_messages.append(data)
+	_m_messages.unlock()
+
 
 func _ready():
-	Server.state_published.connect(state.enqueue_state)
+	Server.state_published.connect(enqueue_state)
 	
 	Server.connect_to_server(host, port)
+
+
+func _process(_delta):
+	_m_messages.lock()
+	
+	for m in _messages:
+		Logger.debug("processing server value \n%s" % [JSON.stringify(m, "\t")])
+		
+		state.from_dict(
+			m.get(DFStateKeys.KDFPartial, false),
+			m.get(DFStateKeys.KDFState, {}),
+		)
+	_messages = []
+	
+	_m_messages.unlock()

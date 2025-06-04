@@ -9,7 +9,7 @@ func add_player(player: DFServerPlayer):
 
 
 func get_player(sid: int) -> DFServerPlayer:
-	return get_node(str(sid))
+	return get_node_or_null(str(sid))
 
 
 func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:

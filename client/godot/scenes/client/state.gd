@@ -1,14 +1,19 @@
 class_name DFClientState
-extends Node
+extends DFStateBase
 
-var _messages: Array[Dictionary]
+@onready var players: DFClientPlayers = $Players
+@onready var units: DFClientUnits = $Units
 
 
-func enqueue_state(state: Dictionary):
-	_messages.append(state)
+func from_dict(
+	partial: bool,
+	data: Dictionary,
+):
+	if DFStateKeys.KDFPlayers in data:
+		players.from_dict(partial, data[DFStateKeys.KDFPlayers])
+	if DFStateKeys.KDFUnits in data:
+		units.from_dict(partial, data[DFStateKeys.KDFUnits])
 
 
 func _process(_delta):
-	for m in _messages:
-		Logger.debug("processing server value \n%s" % [JSON.stringify(m, "\t")])
-	_messages = []
+	is_dirty = false
