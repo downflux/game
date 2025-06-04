@@ -20,16 +20,15 @@ func get_vector_path(uid: int, dst: Vector2i) -> Array[Vector2i]:
 	if u == null:
 		return []
 	
-	var t: int = u.unit_state.x.get_window_end_timestamp(timestamp_msec)
+	var t: int = u.unit_state.position.get_window_end_timestamp(timestamp_msec)
 	if t == -1:
 		t = timestamp_msec
 	
-	var src: Vector2 = Vector2(
-		u.unit_state.x.get_value(t),
-		u.unit_state.y.get_value(t),
+	return map.get_vector_path(
+		u.unit_state.position.get_value(t),
+		dst,
+		u.unit_state.map_layer.get_value(t),
 	)
-	
-	return map.get_vector_path(src, dst, u.unit_state.map_layer.get_value(t))
 
 
 func set_vector_path(uid: int, path: Array[Vector2i]):

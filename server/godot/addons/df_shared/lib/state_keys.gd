@@ -26,8 +26,7 @@ const KDFPlayerFaction  = "faction"
 # Units
 const KDFUnitType     = "unit_type"
 const KDFUnitMapLayer = "map_layer"
-const KDFUnitX        = "x"
-const KDFUnitY        = "y"
+const KDFUnitPosition = "position"
 const KDFUnitTheta    = "theta"
 const KDFUnitHealth   = "health"
 

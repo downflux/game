@@ -16,13 +16,12 @@ unit_type = 1
 [node name="MapLayer" parent="Unit" index="0"]
 default_value = 2
 
-[node name="Health" parent="Unit" index="4"]
+[node name="Health" parent="Unit" index="2"]
 default_value = 100
 
-[node name="Walker" parent="." node_paths=PackedStringArray("x", "y", "map_layer") instance=ExtResource("3_1o50a")]
+[node name="Walker" parent="." node_paths=PackedStringArray("position", "map_layer") instance=ExtResource("3_1o50a")]
 speed = 1.0
-x = NodePath("../Unit/X")
-y = NodePath("../Unit/Y")
+position = NodePath("../Unit/Position")
 map_layer = NodePath("../Unit/MapLayer")
 
 [editable path="Unit"]

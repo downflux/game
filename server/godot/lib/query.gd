@@ -29,8 +29,7 @@ static func generate(filters: DFEnums.DataFilter) -> Dictionary:
 		if filters & DFEnums.DataFilter.FILTER_CURVES:
 			q[DFStateKeys.KDFState][DFStateKeys.KDFUnits].merge({
 				DFStateKeys.KDFUnitMapLayer: true,
-				DFStateKeys.KDFUnitX:        true,
-				DFStateKeys.KDFUnitY:        true,
+				DFStateKeys.KDFUnitPosition: true,
 				DFStateKeys.KDFUnitTheta:    true,
 				DFStateKeys.KDFUnitHealth:   true,
 			})

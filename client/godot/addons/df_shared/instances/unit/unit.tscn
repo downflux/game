@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://uqgyi36eb4gt"]
+[gd_scene load_steps=6 format=3 uid="uid://uqgyi36eb4gt"]
 
 [ext_resource type="Script" uid="uid://ccpe6m3bjjce2" path="res://addons/df_shared/instances/unit/unit.gd" id="1_2ic7m"]
 [ext_resource type="Script" uid="uid://bftvung1s5jq1" path="res://addons/df_shared/lib/curve/curve_map_layer.gd" id="2_8b3pg"]
 [ext_resource type="Script" uid="uid://xx70fjnoqs4s" path="res://addons/df_shared/lib/curve/curve_int.gd" id="2_d02rc"]
 [ext_resource type="Script" uid="uid://dxyeod1rhmbom" path="res://addons/df_shared/lib/curve/curve_float.gd" id="3_d02rc"]
+[ext_resource type="Script" uid="uid://cw565wyqxktrp" path="res://addons/df_shared/lib/curve/curve_vector2.gd" id="5_xxkxp"]
 
 [node name="Unit" type="Node"]
 script = ExtResource("1_2ic7m")
@@ -13,14 +14,6 @@ script = ExtResource("2_8b3pg")
 curve_type = 1
 metadata/_custom_type_script = "uid://bftvung1s5jq1"
 
-[node name="X" type="Node" parent="."]
-script = ExtResource("3_d02rc")
-metadata/_custom_type_script = "uid://dxyeod1rhmbom"
-
-[node name="Y" type="Node" parent="."]
-script = ExtResource("3_d02rc")
-metadata/_custom_type_script = "uid://dxyeod1rhmbom"
-
 [node name="Theta" type="Node" parent="."]
 script = ExtResource("3_d02rc")
 metadata/_custom_type_script = "uid://dxyeod1rhmbom"
@@ -28,3 +21,7 @@ metadata/_custom_type_script = "uid://dxyeod1rhmbom"
 [node name="Health" type="Node" parent="."]
 script = ExtResource("2_d02rc")
 metadata/_custom_type_script = "uid://xx70fjnoqs4s"
+
+[node name="Position" type="Node" parent="."]
+script = ExtResource("5_xxkxp")
+metadata/_custom_type_script = "uid://cw565wyqxktrp"

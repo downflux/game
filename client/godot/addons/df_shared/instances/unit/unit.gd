@@ -7,8 +7,7 @@ extends DFStateBase
 @export var unit_type: DFEnums.UnitType
 
 @onready var map_layer: DFCurveMapLayer = $MapLayer
-@onready var x: DFCurveFloat            = $X
-@onready var y: DFCurveFloat            = $Y
+@onready var position: DFCurveVector2   = $Position
 @onready var theta: DFCurveFloat        = $Theta
 @onready var health: DFCurveInt         = $Health
 
@@ -37,15 +36,10 @@ func to_dict(
 	):
 		data[DFStateKeys.KDFUnitMapLayer] = map_layer.to_dict(sid, partial, {})
 	
-	if query.get(DFStateKeys.KDFUnitX, false) and (
-		x.is_dirty or not partial
+	if query.get(DFStateKeys.KDFUnitPosition, false) and (
+		position.is_dirty or not partial
 	):
-		data[DFStateKeys.KDFUnitX] = x.to_dict(sid, partial, {})
-	
-	if query.get(DFStateKeys.KDFUnitY, false) and (
-		y.is_dirty or not partial
-	):
-		data[DFStateKeys.KDFUnitY] = y.to_dict(sid, partial, {})
+		data[DFStateKeys.KDFUnitPosition] = position.to_dict(sid, partial, {})
 	
 	if query.get(DFStateKeys.KDFUnitTheta, false) and (
 		theta.is_dirty or not partial
@@ -71,11 +65,8 @@ func from_dict(partial: bool, data: Dictionary):
 	if DFStateKeys.KDFUnitMapLayer in data:
 		map_layer.from_dict(partial, data[DFStateKeys.KDFUnitMapLayer])
 
-	if DFStateKeys.KDFUnitX in data:
-		x.from_dict(partial, data[DFStateKeys.KDFUnitX])
-
-	if DFStateKeys.KDFUnitY in data:
-		y.from_dict(partial, data[DFStateKeys.KDFUnitY])
+	if DFStateKeys.KDFUnitPosition in data:
+		position.from_dict(partial, data[DFStateKeys.KDFUnitPosition])
 
 	if DFStateKeys.KDFUnitTheta in data:
 		theta.from_dict(partial, data[DFStateKeys.KDFUnitTheta])

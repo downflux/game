@@ -18,10 +18,7 @@ func _map_to_local(g: Vector2) -> Vector2:
 
 func _process(_delta):
 	var p = _map_to_local(
-		Vector2(
-			unit_state.x.get_value(Server.get_server_timestamp_msec()),
-			unit_state.y.get_value(Server.get_server_timestamp_msec()),
-		),
+		unit_state.position.get_value(Server.get_server_timestamp_msec()),
 	)
 	sprite.position = p
 
