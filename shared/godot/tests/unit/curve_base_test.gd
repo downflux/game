@@ -19,6 +19,74 @@ func _create_float_curve(
 	
 	return c
 
+func test_get_window_end_timestamp_index():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_STEP,
+		false,
+	)
+	
+	assert_int(c._get_window_end_timestamp_index(0)).is_equal(0)
+	assert_int(c._get_window_end_timestamp_index(105)).is_equal(1)
+	assert_int(c._get_window_end_timestamp_index(110)).is_equal(1)
+	assert_int(c._get_window_end_timestamp_index(125)).is_equal(-1)
+
+
+func test_get_window_end_timestamp():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_STEP,
+		false,
+	)
+	
+	assert_int(c.get_window_end_timestamp(0)).is_equal(100)
+	assert_int(c.get_window_end_timestamp(105)).is_equal(110)
+	assert_int(c.get_window_end_timestamp(110)).is_equal(110)
+	assert_int(c.get_window_end_timestamp(125)).is_equal(-1)
+
+
+func test_get_window_start_timestamp_index():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_STEP,
+		false,
+	)
+	
+	assert_int(c._get_window_start_timestamp_index(0)).is_equal(-1)
+	assert_int(c._get_window_start_timestamp_index(105)).is_equal(0)
+	assert_int(c._get_window_start_timestamp_index(110)).is_equal(0)
+	assert_int(c._get_window_start_timestamp_index(125)).is_equal(2)
+
+
+func test_get_window_start_timestamp():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_STEP,
+		false,
+	)
+	
+	assert_int(c.get_window_start_timestamp(0)).is_equal(-1)
+	assert_int(c.get_window_start_timestamp(105)).is_equal(100)
+	assert_int(c.get_window_start_timestamp(110)).is_equal(100)
+	assert_int(c.get_window_start_timestamp(125)).is_equal(120)
+
+
 func test_get_next_timestamp_index():
 	var c: DFCurveFloat = _create_float_curve(
 		{
@@ -32,7 +100,7 @@ func test_get_next_timestamp_index():
 	
 	assert_int(c._get_next_timestamp_index(0)).is_equal(0)
 	assert_int(c._get_next_timestamp_index(105)).is_equal(1)
-	assert_int(c._get_next_timestamp_index(110)).is_equal(1)
+	assert_int(c._get_next_timestamp_index(110)).is_equal(2)
 	assert_int(c._get_next_timestamp_index(125)).is_equal(-1)
 
 
@@ -49,42 +117,8 @@ func test_get_next_timestamp():
 	
 	assert_int(c.get_next_timestamp(0)).is_equal(100)
 	assert_int(c.get_next_timestamp(105)).is_equal(110)
-	assert_int(c.get_next_timestamp(110)).is_equal(110)
+	assert_int(c.get_next_timestamp(110)).is_equal(120)
 	assert_int(c.get_next_timestamp(125)).is_equal(-1)
-
-
-func test_get_prev_timestamp_index():
-	var c: DFCurveFloat = _create_float_curve(
-		{
-			100: 10,
-			110: 11,
-			120: 12,
-		},
-		DFCurveBase.Type.TYPE_STEP,
-		false,
-	)
-	
-	assert_int(c._get_prev_timestamp_index(0)).is_equal(-1)
-	assert_int(c._get_prev_timestamp_index(105)).is_equal(0)
-	assert_int(c._get_prev_timestamp_index(110)).is_equal(0)
-	assert_int(c._get_prev_timestamp_index(125)).is_equal(2)
-
-
-func test_get_prev_timestamp():
-	var c: DFCurveFloat = _create_float_curve(
-		{
-			100: 10,
-			110: 11,
-			120: 12,
-		},
-		DFCurveBase.Type.TYPE_STEP,
-		false,
-	)
-	
-	assert_int(c.get_prev_timestamp(0)).is_equal(-1)
-	assert_int(c.get_prev_timestamp(105)).is_equal(100)
-	assert_int(c.get_prev_timestamp(110)).is_equal(100)
-	assert_int(c.get_prev_timestamp(125)).is_equal(120)
 
 
 func test_add_keyframe():
