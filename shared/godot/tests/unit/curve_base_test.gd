@@ -304,3 +304,25 @@ func test_trim_keyframes_after_last():
 	
 	assert_array(c.timestamps_msec).is_equal([])
 	assert_dict(c.data).is_equal({})
+
+
+func test_from_dict_patch():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	
+	c.from_dict(true, {
+		DFStateKeys.KDFCurveTimestampMSec: [
+			101, 115, 130, 131,
+		],
+	})
+	
+	assert_array(c.timestamps_msec).is_equal([
+		100, 101, 110, 115, 120, 130, 131,
+	])

@@ -198,12 +198,16 @@ func from_dict(partial: bool, data: Dictionary):
 	
 	if DFStateKeys.KDFCurveTimestampMSec in data:
 		if partial:
-			var unique: Dictionary[int, bool] = {}
-			timestamps_msec.append_array(data.get(DFStateKeys.KDFCurveTimestampMSec, []))
-			for t in timestamps_msec:
-				unique[t] = true
-			timestamps_msec = unique.keys()
-			timestamps_msec.sort()
+			var ts = data[DFStateKeys.KDFCurveTimestampMSec]
+			if ts:
+				var i := timestamps_msec.bsearch(ts[0])
+				
+				# Merge sort the two timestamp arrays.
+				for t in ts:
+					if t not in self.data:
+						while i < len(timestamps_msec) and timestamps_msec[i] < t:
+							i += 1
+						timestamps_msec.insert(i, t)
 		else:
 			timestamps_msec = data.get(DFStateKeys.KDFCurveTimestampMSec, [])
 	
