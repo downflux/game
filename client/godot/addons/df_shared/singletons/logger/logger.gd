@@ -12,6 +12,8 @@ extends Node
 ## If [code]true[/code], uses the default Godot logging functions instead.
 @export var use_native: bool = true
 
+signal message_logged(s: String)
+
 enum VERBOSITY_LEVEL {
 	DEBUG,
 	INFO,
@@ -33,6 +35,7 @@ func _log(level: VERBOSITY_LEVEL, s: String):
 		var timestamp = Time.get_time_string_from_system(true)
 		var frame = get_stack()[2]
 		var stack = "%s(%s):%s" % [frame["source"].split("/")[-1], frame["function"], frame["line"]]
+		message_logged.emit("%s%s %s: %s" % [_verbosity_prefix.get(level, "U"), timestamp, stack, s])
 		if not use_native:
 			print("%s%s %s: %s" % [_verbosity_prefix.get(level, "U"), timestamp, stack, s])
 			return
