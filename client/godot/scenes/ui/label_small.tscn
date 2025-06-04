@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://cmlah3f3pcxsd"]
+
+[ext_resource type="FontFile" uid="uid://chnxdviap04yk" path="res://assets/fonts/font_3x6.png" id="1_2ggmg"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ul6bl"]
+font = ExtResource("1_2ggmg")
+
+[node name="LabelSmall" type="Label"]
+label_settings = SubResource("LabelSettings_ul6bl")
