@@ -392,3 +392,77 @@ func test_from_dict_patch():
 	assert_array(c.timestamps_msec).is_equal([
 		100, 110, 150,
 	])
+
+
+func test_gc():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	c._history_limit = 2
+	c._gc()
+	
+	assert_array(c.timestamps_msec).is_equal([
+		110, 120,
+	])
+	assert_dict(c.data).is_equal({
+		110: 11.0,
+		120: 12.0,
+	})
+
+
+func test_to_dict_export_history_limit():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	c._export_history_limit = 2
+	var data = c.to_dict(0, true, {
+		DFStateKeys.KDFCurveTimestampMSec: true,
+		DFStateKeys.KDFCurveData: true,
+	})
+	
+	assert_array(data[DFStateKeys.KDFCurveTimestampMSec]).is_equal([
+		110, 120,
+	])
+	assert_dict(data[DFStateKeys.KDFCurveData]).is_equal({
+		110: 11.0,
+		120: 12.0,
+	})
+
+
+func test_to_dict_export_history_limit_no_limit():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			100: 10,
+			110: 11,
+			120: 12,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	c._export_history_limit = 0
+	
+	var data = c.to_dict(0, true, {
+		DFStateKeys.KDFCurveTimestampMSec: true,
+		DFStateKeys.KDFCurveData: true,
+	})
+	
+	assert_array(data[DFStateKeys.KDFCurveTimestampMSec]).is_equal([
+		100, 110, 120,
+	])
+	assert_dict(data[DFStateKeys.KDFCurveData]).is_equal({
+		100: 10.0,
+		110: 11.0,
+		120: 12.0,
+	})

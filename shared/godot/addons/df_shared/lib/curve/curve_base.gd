@@ -24,6 +24,9 @@ enum Type {
 	TYPE_STEP,
 }
 
+@export var _export_history_limit: int = DFSettings.CURVE_EXPORT_HISTORY_LIMIT
+@export var _history_limit: int        = DFSettings.CURVE_HISTORY_LIMIT
+
 ## The type of interpolation for this curve.
 @export var curve_type: Type
 
@@ -182,9 +185,18 @@ func to_dict(
 	if not partial:
 		data[DFStateKeys.KDFCurveDefaultValue] = self.default_value
 	
+	var ks: Array[int] = timestamps_msec
+	var vs: Dictionary = self.data
+
+	if _export_history_limit and len(ks) > _export_history_limit:
+		ks = ks.slice(len(ks) - _export_history_limit)
+		vs = {}
+		for t in ks:
+			vs[t] = self.data[t]
+	
 	data.merge({
-		DFStateKeys.KDFCurveTimestampMSec: timestamps_msec,
-		DFStateKeys.KDFCurveData: self.data,
+		DFStateKeys.KDFCurveTimestampMSec: ks,
+		DFStateKeys.KDFCurveData: vs,
 	})
 	
 	return data
@@ -214,3 +226,20 @@ func from_dict(partial: bool, data: Dictionary):
 			self.data.merge(data.get(DFStateKeys.KDFCurveData, {}))
 		else:
 			self.data = data.get(DFStateKeys.KDFCurveData, {})
+
+
+func _gc():
+	if len(timestamps_msec) < _history_limit:
+		return
+	
+	timestamps_msec.reverse()
+	var tail: Array[int] = timestamps_msec.slice(_history_limit)
+	for t in tail:
+		self.data.erase(t)
+	timestamps_msec.resize(_history_limit)
+	timestamps_msec.reverse()
+
+
+func _physics_process(_delta):
+	if _history_limit and len(timestamps_msec) > 1.5 * _history_limit:
+		_gc()

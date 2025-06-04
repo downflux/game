@@ -68,5 +68,5 @@ func server_request_subscription():
 
 
 @rpc("any_peer", "call_local", "reliable")
-func server_request_move(_nid: int, _uid: int, _src: Vector2i, _dst: Vector2i):
+func server_request_move(_nid: int, _uid: int, _dst: Vector2i):
 	return

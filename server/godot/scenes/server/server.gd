@@ -111,21 +111,11 @@ func server_request_subscription():
 ## [br][br]
 ## TODO(minkezhang): Send unit UUID instead of src Vector2i.
 @rpc("any_peer", "call_local", "reliable")
-func server_request_move(nid: int, uid: int, src: Vector2i, dst: Vector2i):
+func server_request_move(nid: int, uid: int, dst: Vector2i):
 	var path: Array[Vector2i] = state.get_vector_path(uid, dst)
 	state.set_vector_path(uid, path)
+	
 	client_send_path.rpc_id(multiplayer.get_remote_sender_id(), nid, path)
-	"""
-	client_send_path.rpc_id(
-		multiplayer.get_remote_sender_id(),
-		nid,
-		state.map.get_vector_path(
-			src,
-			dst,
-			DFEnums.MapLayer.LAYER_GROUND,
-		),
-	)
-	"""
 
 
 # Define client stubs.
@@ -144,5 +134,5 @@ func client_send_path(_nid: int, _path: Array[Vector2i]):
 
 ## Sends the timestamp at which the server started.
 @rpc("authority", "call_local", "reliable")
-func client_set_server_state_timestamp_msec(timestamp_msec: int):
+func client_set_server_state_timestamp_msec(_timestamp_msec: int):
 	return

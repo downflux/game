@@ -18,6 +18,8 @@ func enqueue_state(data: Dictionary):
 
 
 func _ready():
+	DFSettings.CURVE_HISTORY_LIMIT = 500
+	
 	Server.state_published.connect(enqueue_state)
 	
 	Server.connect_to_server(host, port)
@@ -27,8 +29,6 @@ func _process(_delta):
 	_m_messages.lock()
 	
 	for m in _messages:
-		Logger.debug("processing server value \n%s" % [JSON.stringify(m, "\t")])
-		
 		state.from_dict(
 			m.get(DFStateKeys.KDFPartial, false),
 			m.get(DFStateKeys.KDFState, {}),
