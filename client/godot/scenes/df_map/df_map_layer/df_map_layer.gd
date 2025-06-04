@@ -44,7 +44,7 @@ func _input(event: InputEvent):
 			_dst = debug_get_tile_coordinates(e.position)
 			var _layer = get_tile_layer(_src)
 			
-			Logger.info("requesting move")
+			Logger.info("%s request move to %s" % [1, _dst])
 			
 			Server.server_request_move.rpc_id(1, get_instance_id(), 1, _dst)
 			# set_vector_path($DFNavigation.get_id_path(_layer, _src, _dst, true))

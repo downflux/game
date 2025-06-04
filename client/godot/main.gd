@@ -1,9 +1,9 @@
 extends Node
 
-@export var verbosity: Logger.VERBOSITY_LEVEL = Logger.VERBOSITY_LEVEL.INFO
-@export var use_native_logging: bool = true
+@export var logger_verbosity: Logger.VerbosityLevel = Logger.VerbosityLevel.INFO
+@export var logger_message_type: Logger.MessageType = Logger.MessageType.TYPE_SIGNAL
 
 
 func _ready():
-	Logger.verbosity = verbosity
-	Logger.use_native = use_native_logging
+	Logger.verbosity = logger_verbosity
+	Logger.message_type = logger_message_type

@@ -7,8 +7,6 @@
 
 [node name="Main" type="Node"]
 script = ExtResource("1_1bvp3")
-verbosity = 0
-use_native_logging = false
 
 [node name="UI" type="CanvasLayer" parent="."]
 

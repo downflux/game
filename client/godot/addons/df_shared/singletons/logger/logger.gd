@@ -7,14 +7,21 @@ extends Node
 
 ## Defines the minimum verbosity of messages. Messages below this verbosity are
 ## not shown in logs.
-@export var verbosity: VERBOSITY_LEVEL = VERBOSITY_LEVEL.INFO
+@export var verbosity: VerbosityLevel = VerbosityLevel.INFO
 
-## If [code]true[/code], uses the default Godot logging functions instead.
-@export var use_native: bool = true
+## If set to [code]MessageType.TYPE_NATIVE[/code], use the default Godot logging
+## functions.
+@export var message_type: MessageType = MessageType.TYPE_NATIVE
 
 signal message_logged(s: String)
 
-enum VERBOSITY_LEVEL {
+enum MessageType {
+	TYPE_NATIVE    = 1 << 1,
+	TYPE_FRAMEWORK = 1 << 2,
+	TYPE_SIGNAL    = 1 << 4,
+}
+
+enum VerbosityLevel {
 	DEBUG,
 	INFO,
 	WARNING,
@@ -23,45 +30,50 @@ enum VERBOSITY_LEVEL {
 }
 
 var _verbosity_prefix: Dictionary = {
-	VERBOSITY_LEVEL.DEBUG:   "D",
-	VERBOSITY_LEVEL.INFO:    "I",
-	VERBOSITY_LEVEL.WARNING: "W",
-	VERBOSITY_LEVEL.ERROR:   "E",
+	VerbosityLevel.DEBUG:   "D",
+	VerbosityLevel.INFO:    "I",
+	VerbosityLevel.WARNING: "W",
+	VerbosityLevel.ERROR:   "E",
 }
 
 
-func _log(level: VERBOSITY_LEVEL, s: String):
-	if level >= verbosity:
-		var timestamp = Time.get_time_string_from_system(true)
-		var frame = get_stack()[2]
-		var stack = "%s(%s):%s" % [frame["source"].split("/")[-1], frame["function"], frame["line"]]
+func _log(level: VerbosityLevel, s: String):
+	if level < verbosity:
+		return
+	
+	var timestamp = Time.get_time_string_from_system(true)
+	var frame = get_stack()[2]
+	var stack = "%s(%s):%s" % [frame["source"].split("/")[-1], frame["function"], frame["line"]]
+	
+	if message_type & MessageType.TYPE_SIGNAL:
 		message_logged.emit("%s%s %s: %s" % [_verbosity_prefix.get(level, "U"), timestamp, stack, s])
-		if not use_native:
-			print("%s%s %s: %s" % [_verbosity_prefix.get(level, "U"), timestamp, stack, s])
-			return
-		
+	
+	if message_type & MessageType.TYPE_FRAMEWORK:
+		print("%s%s %s: %s" % [_verbosity_prefix.get(level, "U"), timestamp, stack, s])
+	
+	if message_type & MessageType.TYPE_NATIVE:
 		match level:
-			VERBOSITY_LEVEL.DEBUG:
+			VerbosityLevel.DEBUG:
 				print_debug("%s%s %s: %s" % [_verbosity_prefix.get(level, "U"), timestamp, stack, s])
-			VERBOSITY_LEVEL.INFO:
+			VerbosityLevel.INFO:
 				print("%s%s %s: %s" % [_verbosity_prefix.get(level, "U"), timestamp, stack, s])
-			VERBOSITY_LEVEL.WARNING:
+			VerbosityLevel.WARNING:
 				push_warning("%s: %s" % [timestamp, s])
-			VERBOSITY_LEVEL.ERROR:
+			VerbosityLevel.ERROR:
 				push_error("%s: %s" % [timestamp, s])
 
 
 func debug(s: String):
-	_log(VERBOSITY_LEVEL.DEBUG, s)
+	_log(VerbosityLevel.DEBUG, s)
 
 
 func info(s: String):
-	_log(VERBOSITY_LEVEL.INFO, s)
+	_log(VerbosityLevel.INFO, s)
 
 
 func warning(s: String):
-	_log(VERBOSITY_LEVEL.WARNING, s)
+	_log(VerbosityLevel.WARNING, s)
 
 
 func error(s: String):
-	_log(VERBOSITY_LEVEL.ERROR, s)
+	_log(VerbosityLevel.ERROR, s)

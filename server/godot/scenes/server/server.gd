@@ -9,8 +9,8 @@ const _PHYSICS_TICKS_PER_SECOND: int = 10
 ## Max number of clients which can connect to this server.
 @export var max_clients: int = 4
 
-@export var _verbosity: Logger.VERBOSITY_LEVEL = Logger.VERBOSITY_LEVEL.INFO
-@export var _use_native_logging: bool = true
+@export var logger_verbosity: Logger.VerbosityLevel
+@export var logger_message_type: Logger.MessageType = Logger.MessageType.TYPE_NATIVE
 
 # Convenience lookup modules
 @onready var player_verification: DFPlayerVerification = $PlayerVerification
@@ -43,8 +43,8 @@ func _ready():
 	# editor itself.
 	Engine.set_physics_ticks_per_second(_PHYSICS_TICKS_PER_SECOND)
 	
-	Logger.verbosity = _verbosity
-	Logger.use_native = _use_native_logging
+	Logger.verbosity = logger_verbosity
+	Logger.message_type = logger_message_type
 	
 	_start(port, max_clients)
 

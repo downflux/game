@@ -11,8 +11,7 @@
 
 [node name="Server" type="Node"]
 script = ExtResource("1_qgrco")
-_verbosity = 0
-_use_native_logging = false
+logger_message_type = 4
 
 [node name="PlayerVerification" type="Node" parent="."]
 script = ExtResource("2_375b0")
