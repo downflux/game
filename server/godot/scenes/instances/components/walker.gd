@@ -1,5 +1,5 @@
 class_name DFServerComponentWalker
-extends Node
+extends DFServerMoverBase
 
 @export var speed: float
 @export var x: DFCurveFloat

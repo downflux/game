@@ -10,7 +10,8 @@ extends DFStateBase
 var timestamp_msec: int
 
 
-var commands: Dictionary[int, Callable] = {}
+var user_commands: Dictionary[int, Callable] = {}
+var commands: Array[Callable]
 var m_commands: Mutex = Mutex.new()
 
 
@@ -33,13 +34,10 @@ func get_vector_path(uid: int, dst: Vector2i) -> Array[Vector2i]:
 
 func set_vector_path(uid: int, path: Array[Vector2i]):
 	var u: DFServerUnitBase = units.get_unit(uid)
-	if u == null or u.get_node("Walker") == null:
+	if u == null:
 		return
 	
-	u.get_node("Walker").set_vector_path(
-		timestamp_msec,
-		path,
-	)
+	u.mover.set_vector_path(timestamp_msec, path)
 
 
 func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
@@ -68,7 +66,12 @@ func _physics_process(_delta):
 	is_dirty = false
 
 	m_commands.lock()
-	for sid: int in commands:
-		commands[sid].call()
-	commands = {}
+	
+	for sid: int in user_commands:
+		user_commands[sid].call()
+	user_commands = {}
+	for c: Callable in commands:
+		c.call()
+	commands = []
+	
 	m_commands.unlock()

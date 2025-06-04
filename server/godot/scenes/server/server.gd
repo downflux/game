@@ -123,7 +123,7 @@ func server_request_move(nid: int, uid: int, dst: Vector2i):
 	
 	state.m_commands.lock()
 	
-	state.commands[sid] = Callable(self, "_request_move").bind(sid, nid, uid, dst)
+	state.user_commands[sid] = Callable(self, "_request_move").bind(sid, nid, uid, dst)
 	
 	state.m_commands.unlock()
 
