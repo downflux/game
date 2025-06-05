@@ -13,7 +13,7 @@ func _draw():
 	
 	# Draw grid lines.
 	var r = map.get_used_rect()
-	var s = map.get_tile_set().get_tile_size()
+	var s = DFClientSettings.GRID_CELL_SIZE
 	
 	for y in range(r.position.y, r.end.y + 1):
 		var from = map.map_to_local(
@@ -35,34 +35,13 @@ func _draw():
 	
 	# Mark origin tile.
 	var origin = PackedVector2Array([
-		Vector2i(
-			map.get_tile_set().get_tile_size().x / 2,
-			0,
-		),
-		Vector2i(
-			map.get_tile_set().get_tile_size().x,
-			map.get_tile_set().get_tile_size().y / 2,
-		),
-		Vector2i(
-			map.get_tile_set().get_tile_size().x / 2,
-			map.get_tile_set().get_tile_size().y,
-		),
-		Vector2i(
-			0,
-			map.get_tile_set().get_tile_size().y / 2,
-		),
+		Vector2i(s.x / 2, 0),
+		Vector2i(s.x, s.y / 2),
+		Vector2i(s.x / 2, s.y),
+		Vector2i(0, s.y / 2),
 	])
 	draw_polygon(origin, [ Color(c, 0.5) ])
 	
 	# Mark X+ and Y+ axis.
-	draw_line(
-		map.get_tile_set().get_tile_size() / 2,
-		Vector2i(
-			map.get_tile_set().get_tile_size().x,
-			0,
-		), c, -1, false,
-	)
-	draw_line(
-		map.get_tile_set().get_tile_size() / 2,
-		map.get_tile_set().get_tile_size(), c, -1, false,
-	)
+	draw_line(s / 2, Vector2i(s.x, 0), c, -1, false)
+	draw_line(s / 2, s, c, -1, false)

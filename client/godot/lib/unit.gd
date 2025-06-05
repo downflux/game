@@ -6,19 +6,8 @@ extends DFStateBase
 @export var directive: DFUnitDirective
 
 
-var _cell_size: Vector2   = DFClientSettings.GRID_CELL_SIZE
-var _cell_offset: Vector2 = _cell_size / 2
-
-
-func _map_to_local(g: Vector2) -> Vector2:
-	return Vector2(
-		_cell_offset.x * (g.y + g.x) + _cell_offset.x,
-		_cell_offset.y * (g.y - g.x) + _cell_offset.y,
-	)
-
-
 func _process(_delta):
-	var p = _map_to_local(
+	var p = DFGeo.to_local(
 		unit_state.position.get_value(Server.get_server_timestamp_msec()),
 	)
 	sprite.position = p
