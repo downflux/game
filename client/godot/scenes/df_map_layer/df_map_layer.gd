@@ -29,8 +29,6 @@ var _p: Array[Vector2i]
 
 func set_vector_path(path: Array[Vector2i]):
 	_p = path
-	$DFUnit.move(path)
-	$DFNavigationUI.show_path(path)
 
 
 func _input(event: InputEvent):
@@ -56,11 +54,3 @@ func _input(event: InputEvent):
 			_dst = debug_get_tile_coordinates(e.position)
 			$DFUnit.position = _dst
 			$DFNavigationUI.show_path([])
-
-
-func _ready():
-	$DFNavigation.set_region($DFTerrain.get_used_rect())
-	
-	# Set up pathfinding layers
-	for c in $DFTerrain.get_used_cells():
-		$DFNavigation.set_point_solid(get_tile_layer(c), c, false)

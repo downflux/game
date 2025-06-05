@@ -3,7 +3,18 @@
 [ext_resource type="Script" uid="uid://b3ropj8difau1" path="res://main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://r3kqx4cb7nt5" path="res://scenes/client/client.tscn" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://cmlah3f3pcxsd" path="res://scenes/ui/label_small.tscn" id="2_h2yge"]
-[ext_resource type="Script" uid="uid://bxuvwupa5r5eg" path="res://logger.gd" id="3_1bvp3"]
+
+[sub_resource type="GDScript" id="GDScript_h2yge"]
+script/source = "extends Label
+
+
+func _on_message_logged(s: String):
+	text = s
+
+
+func _ready():
+	Logger.message_logged.connect(_on_message_logged)
+"
 
 [node name="Main" type="Node"]
 script = ExtResource("1_1bvp3")
@@ -14,6 +25,6 @@ script = ExtResource("1_1bvp3")
 offset_top = 65.0
 offset_right = 48.0
 offset_bottom = 79.0
-script = ExtResource("3_1bvp3")
+script = SubResource("GDScript_h2yge")
 
 [node name="Client" parent="." instance=ExtResource("2_0xm2m")]

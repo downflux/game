@@ -57,7 +57,8 @@ func client_publish_state(value: Dictionary):
 
 @rpc("authority", "call_local", "reliable")
 func client_send_path(nid: int, path: Array[Vector2i]):
-	instance_from_id(nid).set_vector_path(path)
+	pass
+	# instance_from_id(nid).set_vector_path(path)
 
 
 # Define server stubs.

@@ -23,8 +23,12 @@ func _on_peer_connected(sid: int):
 	var p = player_verification.verify(sid)
 	if p != null:
 		state.players.add_player(p)
-	
-		state.units.add_unit(unit_factory.create_unit())
+		
+		state.units.add_unit(
+			unit_factory.create_unit(
+				p.player_state.faction,
+			),
+		)
 	
 	client_set_server_state_timestamp_msec.rpc_id(sid, state.timestamp_msec)
 
@@ -121,11 +125,12 @@ func _request_move(sid: int, nid: int, uid: int, dst: Vector2i):
 func server_request_move(nid: int, uid: int, dst: Vector2i):
 	var sid = multiplayer.get_remote_sender_id()
 	
-	state.m_commands.lock()
-	
-	state.user_commands[sid] = Callable(self, "_request_move").bind(sid, nid, uid, dst)
-	
-	state.m_commands.unlock()
+	var p: DFServerPlayer = state.players.get_player(sid)
+	var u: DFServerUnitBase = state.units.get_unit(uid)
+	if p != null and u != null and p.player_state.faction == u.unit_state.faction:
+		state.m_commands.lock()
+		state.user_commands[sid] = Callable(self, "_request_move").bind(sid, nid, uid, dst)
+		state.m_commands.unlock()
 
 
 # Define client stubs.

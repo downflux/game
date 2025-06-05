@@ -12,9 +12,9 @@ const KDFIsFreed = "is_freed"
 const KDFTimestampMSec = "timestamp_msec"
 const KDFState         = "state"
 const KDFPlayers       = "players"
+const KDFUnits         = "units"
 
 # TODO(minkezhang): Implement these.
-const KDFUnits     = "units"
 const KDFBuildings = "buildings"
 const KDFEntities  = "entities"
 
@@ -29,6 +29,7 @@ const KDFUnitMapLayer = "map_layer"
 const KDFUnitPosition = "position"
 const KDFUnitTheta    = "theta"
 const KDFUnitHealth   = "health"
+const KDFUnitFaction  = "faction"
 
 # Curves
 const KDFCurveType          = "curve_type"

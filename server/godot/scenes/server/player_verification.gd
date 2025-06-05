@@ -8,14 +8,16 @@ extends Node
 
 var _DEBUG_PLAYER_CREDENTIALS = {  # { mint: String -> Dictionary }
 	"0xPIZZA": {
-		DFStateKeys.KDFPlayerUsername: "Panucci",
-		DFServerStateKeys.KDFPlayerID: "abcd-ef-ghij",
+		DFStateKeys.KDFPlayerUsername:           "Panucci",
+		DFServerStateKeys.KDFPlayerID:           "abcd-ef-ghij",
 		DFServerStateKeys.KDFPlayerStreamerMode: true,
+		DFStateKeys.KDFPlayerFaction:            DFEnums.Faction.FACTION_ALPHA,
 	},
 	"0xPUB": {
-		DFStateKeys.KDFPlayerUsername: "O'ZORGNAX",
-		DFServerStateKeys.KDFPlayerID: "zyxw-vu-tsrq",
+		DFStateKeys.KDFPlayerUsername:           "O'ZORGNAX",
+		DFServerStateKeys.KDFPlayerID:           "zyxw-vu-tsrq",
 		DFServerStateKeys.KDFPlayerStreamerMode: false,
+		DFStateKeys.KDFPlayerFaction:            DFEnums.Faction.FACTION_BETA,
 	},
 }
 
@@ -44,5 +46,6 @@ func verify(sid: int, token: String = "0xPIZZA") -> DFServerPlayer:
 	p.player_id = _DEBUG_PLAYER_CREDENTIALS[token][DFServerStateKeys.KDFPlayerID]
 	p.streamer_mode = _DEBUG_PLAYER_CREDENTIALS[token][DFServerStateKeys.KDFPlayerStreamerMode]
 	p.player_state.username = _DEBUG_PLAYER_CREDENTIALS[token][DFStateKeys.KDFPlayerUsername]
+	p.player_state.faction = _DEBUG_PLAYER_CREDENTIALS[token][DFStateKeys.KDFPlayerFaction]
 	
 	return p

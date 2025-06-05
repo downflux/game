@@ -12,11 +12,12 @@ func _generate_unit_id() -> int:
 	return uid
 
 
-func create_unit() -> DFServerUnitBase:
-	var u = debug_unit_scene.instantiate()
+func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:
+	var u: DFServerUnitBase = debug_unit_scene.instantiate()
 	
 	u.unit_id = _generate_unit_id()
 	u.name = str(u.unit_id)
+	u.unit_state.faction = faction
 	
 	add_child(u, true)
 	return u

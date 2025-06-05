@@ -3,9 +3,10 @@ extends DFStateBase
 
 @export var unit_state: DFUnitBase
 @export var sprite: Sprite2D
+@export var directive: DFUnitDirective
 
 
-var _cell_size: Vector2   = Vector2(32, 16)
+var _cell_size: Vector2   = DFClientSettings.GRID_CELL_SIZE
 var _cell_offset: Vector2 = _cell_size / 2
 
 
@@ -21,6 +22,7 @@ func _process(_delta):
 		unit_state.position.get_value(Server.get_server_timestamp_msec()),
 	)
 	sprite.position = p
+	directive.src = p
 
 
 func from_dict(

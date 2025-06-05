@@ -5,6 +5,7 @@ extends DFStateBase
 # Game state properties
 
 @export var unit_type: DFEnums.UnitType
+@export var faction: DFEnums.Faction
 
 @onready var map_layer: DFCurveMapLayer = $MapLayer
 @onready var position: DFCurveVector2   = $Position
@@ -30,6 +31,8 @@ func to_dict(
 	# Read-only properties do not change and do not need to be re-broadcasted.
 	if query.get(DFStateKeys.KDFUnitType, false) and not partial:
 		data[DFStateKeys.KDFUnitType] = unit_type
+	if query.get(DFStateKeys.KDFUnitFaction, false) and not partial:
+		data[DFStateKeys.KDFUnitFaction] = faction
 	
 	if query.get(DFStateKeys.KDFUnitMapLayer, false) and (
 		map_layer.is_dirty or not partial
@@ -61,6 +64,9 @@ func from_dict(partial: bool, data: Dictionary):
 	
 	if DFStateKeys.KDFUnitType in data and not partial:
 		unit_type = data[DFStateKeys.KDFUnitType]
+	
+	if DFStateKeys.KDFUnitFaction in data and not partial:
+		faction = data[DFStateKeys.KDFUnitFaction]
 	
 	if DFStateKeys.KDFUnitMapLayer in data:
 		map_layer.from_dict(partial, data[DFStateKeys.KDFUnitMapLayer])
