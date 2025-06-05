@@ -16,19 +16,19 @@ func _draw():
 	var s = DFClientSettings.GRID_CELL_SIZE
 	
 	for y in range(r.position.y, r.end.y + 1):
-		var from = map.map_to_local(
+		var from = DFGeo.to_local(
 			Vector2i(r.position.x, y) - Vector2i(2, 0),
 		) - Vector2(0, s.y / 2)
-		var to = map.map_to_local(
+		var to = DFGeo.to_local(
 			Vector2i(r.end.x, y) + Vector2i(0, 0),
 		) - Vector2(0, s.y / 2)
 		draw_line(from, to, c, -1, false)
 	
 	for x in range(r.position.x, r.end.x + 1):
-		var from = map.map_to_local(
+		var from = DFGeo.to_local(
 			Vector2i(x, r.position.y) - Vector2i(0, 1),
 		) - Vector2(s.x / 2, 0)
-		var to = map.map_to_local(
+		var to = DFGeo.to_local(
 			Vector2i(x, r.end.y) + Vector2i(0, 1),
 		) - Vector2(s.x / 2, 0)
 		draw_line(from, to, c, -1, false)
