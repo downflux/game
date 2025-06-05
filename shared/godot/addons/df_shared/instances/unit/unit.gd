@@ -2,7 +2,7 @@ class_name DFUnitBase
 extends DFStateBase
 ## Base unit class definition.
 
-# Game state properties
+var unit_id: int
 
 @export var unit_type: DFEnums.UnitType
 @export var faction: DFEnums.Faction
@@ -29,6 +29,8 @@ func to_dict(
 	var data = {}
 	
 	# Read-only properties do not change and do not need to be re-broadcasted.
+	if query.get(DFStateKeys.KDFUnitID, false) and not partial:
+		data[DFStateKeys.KDFUnitID] = unit_id
 	if query.get(DFStateKeys.KDFUnitType, false) and not partial:
 		data[DFStateKeys.KDFUnitType] = unit_type
 	if query.get(DFStateKeys.KDFUnitFaction, false) and not partial:
@@ -61,6 +63,9 @@ func from_dict(partial: bool, data: Dictionary):
 	if DFStateKeys.KDFIsFreed in data:
 		is_deleted = true
 		return
+	
+	if DFStateKeys.KDFUnitID in data and not partial:
+		unit_id = data[DFStateKeys.KDFUnitID]
 	
 	if DFStateKeys.KDFUnitType in data and not partial:
 		unit_type = data[DFStateKeys.KDFUnitType]

@@ -13,16 +13,14 @@ directive = NodePath("Directive")
 metadata/_custom_type_script = "uid://ceu8m84ifmmdk"
 
 [node name="Unit" parent="." instance=ExtResource("2_xy0ir")]
+unit_type = null
+faction = null
 
 [node name="Sprite" type="Sprite2D" parent="."]
 z_index = 1000
 z_as_relative = false
 texture = ExtResource("3_bkn7i")
 
-[node name="Directive" type="Line2D" parent="."]
+[node name="Directive" type="Node2D" parent="."]
 z_index = 999
-z_as_relative = false
-points = PackedVector2Array(0, 0, 100, 0, 156, 34, 72, 59, 37, 38)
-width = 1.0
-default_color = Color(0, 1, 0, 1)
 script = ExtResource("4_yl24q")

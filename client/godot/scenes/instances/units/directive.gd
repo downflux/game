@@ -1,19 +1,45 @@
 class_name DFUnitDirective
-extends Line2D
+extends Node2D
+
+var _timer: Timer
+const _wait_time_sec: int = 1
 
 var src: Vector2:
 	set(v):
 		src = v
-		redraw()
+		queue_redraw()
 
 var dst: Vector2:
 	set(v):
 		dst = v
-		redraw()
+		queue_redraw()
 
 
-func redraw():
-	visible = (src - dst).length_squared() < 1e-3
-	clear_points()
-	add_point(src)
-	add_point(dst)
+func start_timer():
+	visible = true
+	_timer.start(_wait_time_sec)
+
+
+func _draw():
+	draw_line(src, dst, Color.GREEN, -1, false)
+	draw_polygon(
+		PackedVector2Array([
+			dst - Vector2(-1, -1),
+			dst - Vector2(1, -1),
+			dst - Vector2(1, 1),
+			dst - Vector2(-1, 1),
+		]),
+		[ Color.GREEN ],
+	)
+
+
+func _process(delta):
+	visible = visible and (src - dst).length_squared() > 16
+
+
+func _ready():
+	visible = false
+	
+	_timer = Timer.new()
+	_timer.timeout.connect(func(): visible = false)
+	add_child(_timer)

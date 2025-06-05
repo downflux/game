@@ -19,11 +19,13 @@ const KDFBuildings = "buildings"
 const KDFEntities  = "entities"
 
 # Players
+const KDFPlayerID       = "player_id"  # Session ID, not the real player ID
 const KDFPlayerUsername = "username"
 const KDFPlayerMoney    = "money"
 const KDFPlayerFaction  = "faction"
 
 # Units
+const KDFUnitID       = "unid_id"
 const KDFUnitType     = "unit_type"
 const KDFUnitMapLayer = "map_layer"
 const KDFUnitPosition = "position"

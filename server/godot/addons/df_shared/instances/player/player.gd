@@ -7,6 +7,7 @@ extends DFStateBase
 
 @onready var money: DFCurveInt = $Money
 
+var player_id: int
 var username: String
 var faction: DFEnums.Faction
 
@@ -25,6 +26,8 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	var data = {}
 	
 	# Read-only properties do not change and do not need to be re-broadcasted.
+	if query.get(DFStateKeys.KDFPlayerID, false) and not partial:
+		data[DFStateKeys.KDFPlayerID] = player_id
 	if query.get(DFStateKeys.KDFPlayerUsername, false) and not partial:
 		data[DFStateKeys.KDFPlayerUsername] = username
 	if query.get(DFStateKeys.KDFPlayerFaction, false) and not partial:
@@ -42,6 +45,9 @@ func from_dict(partial: bool, data: Dictionary):
 	if DFStateKeys.KDFIsFreed in data:
 		self.is_deleted = true
 		return
+	
+	if DFStateKeys.KDFPlayerID in data and not partial:
+		player_id = data[DFStateKeys.KDFPlayerID]
 	
 	if DFStateKeys.KDFPlayerUsername in data and not partial:
 		username = data[DFStateKeys.KDFPlayerUsername]

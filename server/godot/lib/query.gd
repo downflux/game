@@ -11,6 +11,7 @@ static func generate(filters: DFEnums.DataFilter) -> Dictionary:
 	if filters & DFEnums.DataFilter.FILTER_PLAYERS:
 		q[DFStateKeys.KDFState].merge({
 			DFStateKeys.KDFPlayers: {
+				DFStateKeys.KDFPlayerID: true,
 				DFStateKeys.KDFPlayerUsername: true,
 				DFStateKeys.KDFPlayerFaction:  true,
 			}

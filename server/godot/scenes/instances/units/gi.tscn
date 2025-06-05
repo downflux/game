@@ -12,6 +12,7 @@ metadata/_custom_type_script = "uid://ow0tqqowjx3a"
 
 [node name="Unit" parent="." instance=ExtResource("2_yl24q")]
 unit_type = 1
+faction = null
 
 [node name="MapLayer" parent="Unit" index="0"]
 default_value = 2

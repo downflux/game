@@ -6,8 +6,23 @@ extends DFStateBase
 	DFEnums.UnitType.UNIT_GI: preload("res://scenes/instances/units/gi.tscn"),
 }
 
+
 func _on_unit_paths_received(paths: Dictionary):
-	Logger.debug("paths = %s" % [paths])
+	for u: DFClientUnitBase in get_children():
+		u.directive.visible = (
+			u.directive.visible
+		) and (
+			u.unit_state.unit_id in paths
+		)
+	
+	for uid in paths:
+		var u: DFClientUnitBase = get_unit(uid)
+		if u == null or not paths[uid]:
+			return
+		u.directive.dst = DFGeo.to_local(
+			paths[uid][-1],
+		)
+		u.directive.start_timer()
 
 
 func add_unit(unit: DFClientUnitBase):
