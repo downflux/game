@@ -1,26 +1,32 @@
-[gd_scene load_steps=5 format=3 uid="uid://buj5nosgbox6b"]
+[gd_scene load_steps=6 format=3 uid="uid://buj5nosgbox6b"]
 
 [ext_resource type="Script" uid="uid://ceu8m84ifmmdk" path="res://lib/unit.gd" id="1_xy0ir"]
 [ext_resource type="PackedScene" uid="uid://uqgyi36eb4gt" path="res://addons/df_shared/instances/unit/unit.tscn" id="2_xy0ir"]
+[ext_resource type="Script" uid="uid://bld34qlq2wv5u" path="res://lib/unit_ui.gd" id="3_1o50a"]
 [ext_resource type="Texture2D" uid="uid://jq65k8elik6x" path="res://assets/sprites/units/debug.png" id="3_bkn7i"]
-[ext_resource type="Script" uid="uid://bwl88aa2r6aym" path="res://scenes/instances/units/directive.gd" id="4_yl24q"]
+[ext_resource type="Script" uid="uid://bwl88aa2r6aym" path="res://lib/directive.gd" id="4_yl24q"]
 
-[node name="GI" type="Node" node_paths=PackedStringArray("unit_state", "sprite", "directive")]
+[node name="GI" type="Node" node_paths=PackedStringArray("unit_state", "directive", "ui")]
 script = ExtResource("1_xy0ir")
 unit_state = NodePath("Unit")
-sprite = NodePath("Sprite")
 directive = NodePath("Directive")
+ui = NodePath("UI")
 metadata/_custom_type_script = "uid://ceu8m84ifmmdk"
 
 [node name="Unit" parent="." instance=ExtResource("2_xy0ir")]
 unit_type = null
 faction = null
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="UI" type="Node2D" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("3_1o50a")
+sprite = NodePath("Sprite")
+metadata/_custom_type_script = "uid://bld34qlq2wv5u"
+
+[node name="Sprite" type="Sprite2D" parent="UI"]
 z_index = 1000
 z_as_relative = false
 texture = ExtResource("3_bkn7i")
 
 [node name="Directive" type="Node2D" parent="."]
-z_index = 999
 script = ExtResource("4_yl24q")
+metadata/_custom_type_script = "uid://bwl88aa2r6aym"

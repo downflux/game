@@ -2,16 +2,16 @@ class_name DFClientUnitBase
 extends DFStateBase
 
 @export var unit_state: DFUnitBase
-@export var sprite: Sprite2D
 @export var directive: DFUnitDirective
+@export var ui: DFUnitUIBase
 
 
 func _process(_delta):
 	var p = DFGeo.to_local(
 		unit_state.position.get_value(Server.get_server_timestamp_msec()),
 	)
-	sprite.position = p
-	directive.src = p
+	ui.position = p
+	directive.src = p + ui.sprite.position
 
 
 func from_dict(

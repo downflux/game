@@ -21,16 +21,16 @@ func get_server_timestamp_msec() -> int:
 
 
 func _on_connected_to_server():
-	Logger.debug("connected to server: %s:%s" % [_host, _port])
+	Logger.info("connected to server %s:%s" % [_host, _port])
 	s_request_subscription.rpc_id(1)
 
 
 func _on_connection_failed():
-	Logger.debug("failed to connect to server: %s:%s" % [_host, _port])
+	Logger.warning("failed to connect to server %s:%s" % [_host, _port])
 
 
 func _on_server_disconnected():
-	Logger.debug("disconnected from server")
+	Logger.warning("disconnected from server")
 
 
 func connect_to_server(host: String, port: int):

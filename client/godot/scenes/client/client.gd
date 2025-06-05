@@ -16,11 +16,10 @@ func _on_state_received(data: Dictionary):
 	_m_messages.unlock()
 
 
-func _ready():
-	DFSettings.CURVE_HISTORY_LIMIT = 500
-	
+func start():
 	Server.state_received.connect(_on_state_received)
 	
+	Logger.info("connecting to %s:%s..." % [host, port])
 	Server.connect_to_server(host, port)
 
 
