@@ -15,6 +15,12 @@ var commands: Array[Callable]
 var m_commands: Mutex = Mutex.new()
 
 
+func enqueue_user_command(sid: int, f: Callable):
+	m_commands.lock()
+	user_commands[sid] = f
+	m_commands.unlock()
+
+
 func get_vector_path(uid: int, dst: Vector2i) -> Array[Vector2i]:
 	var u: DFServerUnitBase = units.get_unit(uid)
 	if u == null:

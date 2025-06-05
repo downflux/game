@@ -10,18 +10,16 @@ var _messages: Array[Dictionary]
 var _m_messages: Mutex = Mutex.new()
 
 
-func enqueue_state(data: Dictionary):
+func _on_state_received(data: Dictionary):
 	_m_messages.lock()
-	
 	_messages.append(data)
-	
 	_m_messages.unlock()
 
 
 func _ready():
 	DFSettings.CURVE_HISTORY_LIMIT = 500
 	
-	Server.state_published.connect(enqueue_state)
+	Server.state_received.connect(_on_state_received)
 	
 	Server.connect_to_server(host, port)
 

@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://b53edvkg200f8"]
-
-[ext_resource type="Script" uid="uid://dojhsceg4xod6" path="res://scenes/df_map_layer/df_map_layer.gd" id="1_dmu0v"]
-
-[node name="DFMapLayer" type="Node2D"]
-script = ExtResource("1_dmu0v")

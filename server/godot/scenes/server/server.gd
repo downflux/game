@@ -30,7 +30,7 @@ func _on_peer_connected(sid: int):
 			),
 		)
 	
-	client_set_server_state_timestamp_msec.rpc_id(sid, state.timestamp_msec)
+	c_receive_server_start_timestamp_msec.rpc_id(sid, state.timestamp_msec)
 
 
 func _on_peer_disconnected(sid: int):
@@ -53,7 +53,7 @@ func _ready():
 	_start(port, max_clients)
 
 
-func _publish_state(p: DFServerPlayer):
+func _push_state(p: DFServerPlayer):
 	if not p.is_subscribed or (
 		not state.is_dirty and p.request_partial
 	):
@@ -71,7 +71,7 @@ func _publish_state(p: DFServerPlayer):
 	}
 	p.request_partial = true
 	
-	client_publish_state.rpc_id(p.session_id, data)
+	c_receive_state.rpc_id(p.session_id, data)
 
 
 func _physics_process(_delta):
@@ -84,7 +84,7 @@ func _physics_process(_delta):
 	# https://docs.godotengine.org/en/stable/tutorials/scripting/scene_tree.html#tree-order
 	# for more information.
 	for p in state.players.get_children():
-		_publish_state(p)
+		_push_state(p)
 
 
 func _start(p: int, c: int):
@@ -104,50 +104,63 @@ func _start(p: int, c: int):
 ## Clients will set [param nid] indicating which node will handle this data,
 ## e.g. via [method Node.get_instance_id].
 @rpc("any_peer", "call_local", "reliable")
-func server_request_subscription():
+func s_request_subscription():
 	var sid = multiplayer.get_remote_sender_id()
 	var p = state.players.get_player(sid)
 	p.request_partial = false
 	p.is_subscribed = true
 
 
-func _request_move(sid: int, nid: int, uid: int, dst: Vector2i):
-	var path: Array[Vector2i] = state.get_vector_path(uid, dst)
-	state.set_vector_path(uid, path)
+func _issue_move(sid: int, uids: Array[int], dst: Vector2i):
+	var p: DFServerPlayer = state.players.get_player(sid)
+	var paths: Dictionary = {}
 	
-	client_send_path.rpc_id(sid, nid, path)
+	for uid: int in uids:
+		var u: DFServerUnitBase = state.units.get_unit(uid)
+		if (
+			p != null and u != null
+		) and (
+			p.player_state.faction == u.unit_state.faction
+		):
+			var path: Array[Vector2i] = state.get_vector_path(uid, dst)
+			state.set_vector_path(uid, path)
+			
+			paths[uid] = path
+	
+	c_receive_unit_paths.rpc_id(sid, paths)
 
 
 ## Request server to calculate a path for a unit or set of units.
 ## [br][br]
 ## TODO(minkezhang): Send unit UUID instead of src Vector2i.
 @rpc("any_peer", "call_local", "reliable")
-func server_request_move(nid: int, uid: int, dst: Vector2i):
+func s_issue_move(uids: Array[int], dst: Vector2i):
 	var sid = multiplayer.get_remote_sender_id()
 	
-	var p: DFServerPlayer = state.players.get_player(sid)
-	var u: DFServerUnitBase = state.units.get_unit(uid)
-	if p != null and u != null and p.player_state.faction == u.unit_state.faction:
-		state.m_commands.lock()
-		state.user_commands[sid] = Callable(self, "_request_move").bind(sid, nid, uid, dst)
-		state.m_commands.unlock()
+	state.enqueue_user_command(
+		sid,
+		Callable(
+			self,
+			"_issue_move",
+		).bind(sid, uids, dst)
+	)
 
 
 # Define client stubs.
 
 ## [DFServer] pushes game state to each client most once a physics tick.
 @rpc("authority", "call_local", "reliable")
-func client_publish_state(_value: Dictionary):
+func c_receive_state(_value: Dictionary):
 	return
 
 
 ## Push planned path to requesting client.
 @rpc("authority", "call_local", "reliable")
-func client_send_path(_nid: int, _path: Array[Vector2i]):
+func c_receive_unit_paths(_paths: Dictionary):
 	return
 
 
 ## Sends the timestamp at which the server started.
 @rpc("authority", "call_local", "reliable")
-func client_set_server_state_timestamp_msec(_timestamp_msec: int):
+func c_receive_server_start_timestamp_msec(_timestamp_msec: int):
 	return

@@ -1,6 +1,7 @@
 extends Node
 
-signal state_published(state: Dictionary)
+signal state_received(state: Dictionary)
+signal unit_paths_received(paths: Dictionary)
 
 var peer = ENetMultiplayerPeer.new()
 var _host: String
@@ -21,7 +22,7 @@ func get_server_timestamp_msec() -> int:
 
 func _on_connected_to_server():
 	Logger.debug("connected to server: %s:%s" % [_host, _port])
-	server_request_subscription.rpc_id(1)
+	s_request_subscription.rpc_id(1)
 
 
 func _on_connection_failed():
@@ -46,28 +47,31 @@ func connect_to_server(host: String, port: int):
 
 
 @rpc("authority", "call_local", "reliable")
-func client_set_server_state_timestamp_msec(timestamp_msec: int):
-	server_start_timestamp_msec = int(Time.get_unix_time_from_system() * 1000) - timestamp_msec
+func c_receive_server_start_timestamp_msec(timestamp_msec: int):
+	server_start_timestamp_msec = (
+		int(Time.get_unix_time_from_system() * 1000)
+	) - (
+		timestamp_msec
+	)
 
 
 @rpc("authority", "call_local", "reliable")
-func client_publish_state(value: Dictionary):
-	state_published.emit(value)
+func c_receive_state(value: Dictionary):
+	state_received.emit(value)
 
 
 @rpc("authority", "call_local", "reliable")
-func client_send_path(nid: int, path: Array[Vector2i]):
-	pass
-	# instance_from_id(nid).set_vector_path(path)
+func c_receive_unit_paths(paths: Dictionary):
+	unit_paths_received.emit(paths)
 
 
 # Define server stubs.
 
 @rpc("any_peer", "call_local", "reliable")
-func server_request_subscription():
+func s_request_subscription():
 	return
 
 
 @rpc("any_peer", "call_local", "reliable")
-func server_request_move(_nid: int, _uid: int, _dst: Vector2i):
+func s_issue_move(_uids: Array[int], _dst: Vector2i):
 	return

@@ -6,6 +6,9 @@ extends DFStateBase
 	DFEnums.UnitType.UNIT_GI: preload("res://scenes/instances/units/gi.tscn"),
 }
 
+func _on_unit_paths_received(paths: Dictionary):
+	Logger.debug("paths = %s" % [paths])
+
 
 func add_unit(unit: DFClientUnitBase):
 	is_dirty = true
@@ -29,3 +32,7 @@ func from_dict(
 			
 			add_unit(u)
 		u.from_dict(partial, data[uid])
+
+
+func _ready():
+	Server.unit_paths_received.connect(_on_unit_paths_received)
