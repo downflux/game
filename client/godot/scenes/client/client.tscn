@@ -14,9 +14,8 @@ script = ExtResource("1_oismd")
 
 [node name="Camera" parent="." instance=ExtResource("1_drkvg")]
 
-[node name="Controller" type="Node2D" parent="." node_paths=PackedStringArray("map")]
+[node name="Controller" type="Node2D" parent="."]
 script = ExtResource("3_4a20m")
-map = NodePath("../State/Map/Example")
 
 [node name="State" type="Node" parent="."]
 script = ExtResource("1_s2gpv")

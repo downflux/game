@@ -33,7 +33,7 @@ func _draw():
 	)
 
 
-func _process(delta):
+func _process(_delta):
 	visible = visible and (src - dst).length_squared() > 16
 
 
