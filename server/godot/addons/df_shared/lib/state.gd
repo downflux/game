@@ -3,6 +3,15 @@ extends Node
 ## Base class representing a server object which needs to be synced with
 ## clients.
 
+@warning_ignore_start("unused_parameter")
+## Virtual method called upon setting the dirty bit.
+## [br][br]
+## Useful for classes to define additional cleanup methods.
+func _on_set_is_dirty(_v: bool):
+	pass
+@warning_ignore_restore("unused_parameter")
+
+
 ## Marks this node as having been altered within the most recent tick.
 ## [br][br]
 ## We will propagate setting the dirty bit upwards to [DFState] so that we can
@@ -14,6 +23,7 @@ extends Node
 var is_dirty: bool:
 	set(v):
 		is_dirty = v
+		self._on_set_is_dirty(v)
 		if v:
 			var p = get_parent()
 			if p is DFStateBase:

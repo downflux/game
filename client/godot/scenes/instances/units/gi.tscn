@@ -18,22 +18,21 @@ ui = NodePath("UI")
 metadata/_custom_type_script = "uid://ceu8m84ifmmdk"
 
 [node name="Unit" parent="." instance=ExtResource("2_xy0ir")]
-unit_type = null
-faction = null
 
 [node name="UI" type="Node2D" parent="." node_paths=PackedStringArray("sprite", "selector")]
+y_sort_enabled = true
 script = ExtResource("3_1o50a")
 sprite = NodePath("Sprite")
 selector = NodePath("Selector")
 metadata/_custom_type_script = "uid://bld34qlq2wv5u"
 
 [node name="Sprite" type="Sprite2D" parent="UI"]
-z_index = 1000
-z_as_relative = false
+y_sort_enabled = true
 position = Vector2(0, -6)
 texture = ExtResource("3_bkn7i")
 
 [node name="Selector" type="Sprite2D" parent="UI"]
+y_sort_enabled = true
 position = Vector2(0, -6)
 texture = ExtResource("5_0d18x")
 

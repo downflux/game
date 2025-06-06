@@ -416,7 +416,7 @@ func test_gc():
 	})
 
 
-func test_to_dict_export_history_limit():
+func test_clear_is_dirty():
 	var c: DFCurveFloat = _create_float_curve(
 		{
 			100: 10,
@@ -426,32 +426,26 @@ func test_to_dict_export_history_limit():
 		DFCurveBase.Type.TYPE_LINEAR,
 		0,
 	)
-	c._export_history_limit = 2
-	var data = c.to_dict(0, true, {
-		DFStateKeys.KDFCurveTimestampMSec: true,
-		DFStateKeys.KDFCurveData: true,
-	})
+	assert_float(c._earliest_modified_timestamp_msec).is_equal(INF)
+
+	c.add_keyframe(101, 10.1)
+	assert_float(c._earliest_modified_timestamp_msec).is_equal(101.0)
 	
-	assert_array(data[DFStateKeys.KDFCurveTimestampMSec]).is_equal([
-		110, 120,
-	])
-	assert_dict(data[DFStateKeys.KDFCurveData]).is_equal({
-		110: 11.0,
-		120: 12.0,
-	})
+	c.is_dirty = false
+	assert_float(c._earliest_modified_timestamp_msec).is_equal(INF)
 
 
-func test_to_dict_export_history_limit_no_limit():
+func test_to_dict_earliest_modified_timestamp_msec():
 	var c: DFCurveFloat = _create_float_curve(
 		{
-			100: 10,
 			110: 11,
 			120: 12,
 		},
 		DFCurveBase.Type.TYPE_LINEAR,
 		0,
 	)
-	c._export_history_limit = 0
+	c.add_keyframe(100, 10)
+	assert_float(c._earliest_modified_timestamp_msec).is_equal(100.0)
 	
 	var data = c.to_dict(0, true, {
 		DFStateKeys.KDFCurveTimestampMSec: true,
@@ -464,5 +458,63 @@ func test_to_dict_export_history_limit_no_limit():
 	assert_dict(data[DFStateKeys.KDFCurveData]).is_equal({
 		100: 10.0,
 		110: 11.0,
+		120: 12.0,
+	})
+
+
+func test_from_dict():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			110: 11,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	var d: DFCurveFloat = _create_float_curve(
+		{
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	
+	d.from_dict(
+		false, c.to_dict(0, false, {
+			DFStateKeys.KDFCurveTimestampMSec: true,
+			DFStateKeys.KDFCurveData: true,
+		})
+	)
+	
+	assert_array(d.timestamps_msec).is_equal(c.timestamps_msec)
+	assert_dict(d.data).is_equal(c.data)
+
+
+func test_from_dict_partial():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			110: 11,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	c.add_keyframe(120, 12)
+	
+	var d: DFCurveFloat = _create_float_curve(
+		{
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	
+	d.from_dict(
+		true, c.to_dict(0, true, {
+			DFStateKeys.KDFCurveTimestampMSec: true,
+			DFStateKeys.KDFCurveData: true,
+		})
+	)
+	
+	assert_array(d.timestamps_msec).is_equal([
+		120,
+	])
+	assert_dict(d.data).is_equal({
 		120: 12.0,
 	})

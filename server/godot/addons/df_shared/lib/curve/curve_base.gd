@@ -24,7 +24,6 @@ enum Type {
 	TYPE_STEP,
 }
 
-@export var _export_history_limit: int = DFSettings.CURVE_EXPORT_HISTORY_LIMIT
 @export var _history_limit: int        = DFSettings.CURVE_HISTORY_LIMIT
 
 ## The type of interpolation for this curve.
@@ -32,6 +31,18 @@ enum Type {
 
 ## A list of keyframe timestamps. Timestamps are non-negative integers.
 @export var timestamps_msec: Array[int] = []
+
+# The earliest timestamp that has been modified since the dirty bit has been
+# set. During data serialization, if partial data is to be sent, send only
+# keyframes at and after this timestamp.
+#
+# int(INF) is unreliable. See https://github.com/godotengine/godot/issues/33017.
+var _earliest_modified_timestamp_msec: float = INF
+
+
+func _on_set_is_dirty(v: bool):
+	if not v:
+		_earliest_modified_timestamp_msec = INF
 
 
 ## Remove the keyframe at time [param t]. 
@@ -41,7 +52,8 @@ func erase_keyframe(t: int) -> void:
 	
 	is_dirty = true
 	var i = timestamps_msec.bsearch(t)
-	timestamps_msec.remove_at(timestamps_msec.bsearch(t))
+	_earliest_modified_timestamp_msec = min(_earliest_modified_timestamp_msec, t)
+	timestamps_msec.remove_at(i)
 	self.data.erase(t)
 
 
@@ -51,6 +63,7 @@ func trim_keyframes(t: int, before: bool):
 		var i = _get_window_start_timestamp_index(t)
 		if i > -1:
 			is_dirty = true
+			_earliest_modified_timestamp_msec = timestamps_msec[0]
 			for j in range(0, i + 1):
 				self.data.erase(timestamps_msec[j])
 			timestamps_msec.reverse()
@@ -64,6 +77,7 @@ func trim_keyframes(t: int, before: bool):
 			i = -1
 		if i > -1:
 			is_dirty = true
+			_earliest_modified_timestamp_msec = min(_earliest_modified_timestamp_msec, t)
 			for j in range(i, len(timestamps_msec)):
 				self.data.erase(timestamps_msec[j])
 			timestamps_msec.resize(i)
@@ -72,6 +86,7 @@ func trim_keyframes(t: int, before: bool):
 ## Add keyframe at timestamp [param t]. 
 func add_keyframe(t: int, v: Variant) -> void:
 	is_dirty = true
+	_earliest_modified_timestamp_msec = min(_earliest_modified_timestamp_msec, t)
 	
 	if t not in self.data:
 		var i = timestamps_msec.bsearch(t)
@@ -185,18 +200,23 @@ func to_dict(
 	if not partial:
 		data[DFStateKeys.KDFCurveDefaultValue] = self.default_value
 	
-	var ks: Array[int] = timestamps_msec
-	var vs: Dictionary = self.data
-
-	if _export_history_limit and len(ks) > _export_history_limit:
-		ks = ks.slice(len(ks) - _export_history_limit)
-		vs = {}
+	var ks: Array[int] = []
+	var vs: Dictionary[int, Variant] = {}
+	
+	# Only include keyframes that have been edited (i.e. at and after the
+	# earliest modified timestamp since the last time the dirty bit has been
+	# cleared).
+	if partial:
+		var i: int = len(timestamps_msec)
+		if _earliest_modified_timestamp_msec < INF:
+			i = timestamps_msec.bsearch(int(_earliest_modified_timestamp_msec))
+		ks = timestamps_msec.slice(i)
 		for t in ks:
 			vs[t] = self.data[t]
 	
 	data.merge({
-		DFStateKeys.KDFCurveTimestampMSec: ks,
-		DFStateKeys.KDFCurveData: vs,
+		DFStateKeys.KDFCurveTimestampMSec: ks if partial else timestamps_msec,
+		DFStateKeys.KDFCurveData: vs if partial else self.data,
 	})
 	
 	return data

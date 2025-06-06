@@ -11,7 +11,7 @@ func _process(_delta):
 		unit_state.position.get_value(Server.get_server_timestamp_msec()),
 	)
 	ui.position = p
-	directive.src = p + ui.sprite.position
+	directive.src = p
 
 
 func from_dict(
