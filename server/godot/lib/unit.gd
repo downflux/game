@@ -11,7 +11,7 @@ extends DFStateBase
 #
 # These are not visible to other players and therefore not tracked by is_dirty.
 
-var unit_id: int
+# var unit_id: int
 
 
 func _ready():

@@ -14,23 +14,27 @@ script = ExtResource("1_oismd")
 
 [node name="Camera" parent="." instance=ExtResource("1_drkvg")]
 
-[node name="Controller" type="Node2D" parent="."]
+[node name="Controller" type="Node2D" parent="." node_paths=PackedStringArray("units")]
 script = ExtResource("3_4a20m")
+units = NodePath("../Canvas/State/Units")
 
-[node name="State" type="Node" parent="."]
+[node name="Canvas" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="State" type="Node" parent="Canvas"]
 script = ExtResource("1_s2gpv")
 
-[node name="Map" type="Node" parent="State"]
+[node name="Map" type="Node" parent="Canvas/State"]
 
-[node name="Example" parent="State/Map" instance=ExtResource("4_4a20m")]
+[node name="Example" parent="Canvas/State/Map" instance=ExtResource("4_4a20m")]
 
-[node name="Mesh" type="Node2D" parent="State/Map" node_paths=PackedStringArray("map")]
+[node name="Mesh" type="Node2D" parent="Canvas/State/Map" node_paths=PackedStringArray("map")]
 script = ExtResource("5_u3hyj")
 debug = true
 map = NodePath("../Example")
 
-[node name="Players" type="Node" parent="State"]
+[node name="Players" type="Node" parent="Canvas/State"]
 script = ExtResource("4_icqby")
 
-[node name="Units" type="Node" parent="State"]
+[node name="Units" type="Node" parent="Canvas/State"]
 script = ExtResource("5_gmu12")

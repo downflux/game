@@ -4,6 +4,7 @@ extends DFStateBase
 @export var unit_state: DFUnitBase
 @export var directive: DFUnitDirective
 @export var ui: DFUnitUIBase
+@export var collider: CollisionObject2D
 
 
 func _process(_delta):
@@ -23,3 +24,16 @@ func from_dict(
 		return
 	
 	unit_state.from_dict(partial, data)
+
+
+func _on_mouse_entered():
+	Logger.debug("mouse entered unit %s" % [unit_state.unit_id])
+
+
+func _on_mouse_exited():
+	Logger.debug("mouse exited unit %s" % [unit_state.unit_id])
+
+
+func _ready():
+	collider.mouse_entered.connect(_on_mouse_entered)
+	collider.mouse_exited.connect(_on_mouse_exited)

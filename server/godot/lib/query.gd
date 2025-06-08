@@ -24,6 +24,7 @@ static func generate(filters: DFEnums.DataFilter) -> Dictionary:
 	if filters & DFEnums.DataFilter.FILTER_UNITS:
 		q[DFStateKeys.KDFState].merge({
 			DFStateKeys.KDFUnits: {
+				DFStateKeys.KDFUnitID: true,
 				DFStateKeys.KDFUnitType: true,
 				DFStateKeys.KDFUnitFaction: true,
 			}

@@ -22,6 +22,6 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 		if partial and not u.is_dirty:
 			continue
 		
-		data[u.unit_id] = u.to_dict(sid, partial, query)
+		data[u.unit_state.unit_id] = u.to_dict(sid, partial, query)
 	
 	return data
