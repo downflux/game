@@ -10,13 +10,13 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1o50a"]
 size = Vector2(12, 18)
 
-[node name="GI" type="Node" node_paths=PackedStringArray("unit_state", "directive", "ui", "collider")]
+[node name="GI" type="Node2D" node_paths=PackedStringArray("unit_state", "directive", "ui", "collider")]
+y_sort_enabled = true
 script = ExtResource("1_xy0ir")
 unit_state = NodePath("Unit")
 directive = NodePath("Directive")
 ui = NodePath("UI")
 collider = NodePath("UI/Collider")
-metadata/_custom_type_script = "uid://ceu8m84ifmmdk"
 
 [node name="Unit" parent="." instance=ExtResource("2_xy0ir")]
 

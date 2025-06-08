@@ -4,7 +4,7 @@ extends Node
 @export var host: String = "localhost"
 @export var port: int = 7777
 
-@onready var state: DFClientState = $Canvas/State
+@onready var state: DFClientState = $State
 
 var _messages: Array[Dictionary]
 var _m_messages: Mutex = Mutex.new()
