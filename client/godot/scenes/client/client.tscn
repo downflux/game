@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://r3kqx4cb7nt5"]
+[gd_scene load_steps=10 format=3 uid="uid://r3kqx4cb7nt5"]
 
 [ext_resource type="PackedScene" uid="uid://cfd40nkcpenqg" path="res://scenes/camera/camera.tscn" id="1_drkvg"]
 [ext_resource type="Script" uid="uid://btcscmedveits" path="res://scenes/client/client.gd" id="1_oismd"]
 [ext_resource type="Script" uid="uid://d3qjcr5nhjmji" path="res://scenes/client/state.gd" id="1_s2gpv"]
 [ext_resource type="Script" uid="uid://dlok7a0qu0xer" path="res://scenes/client/controller.gd" id="3_4a20m"]
 [ext_resource type="PackedScene" uid="uid://db254uquf0xb7" path="res://assets/maps/example.tscn" id="4_4a20m"]
+[ext_resource type="Script" uid="uid://b4v11yw45ykxm" path="res://scenes/client/selection_box.gd" id="4_16jvh"]
 [ext_resource type="Script" uid="uid://dpkukv8q7kayd" path="res://scenes/client/players.gd" id="4_icqby"]
 [ext_resource type="Script" uid="uid://b5fhfq1hq3b8m" path="res://scenes/client/units.gd" id="5_gmu12"]
 [ext_resource type="Script" uid="uid://8dytuthfjq46" path="res://scenes/client/mesh.gd" id="5_u3hyj"]
@@ -14,9 +15,14 @@ script = ExtResource("1_oismd")
 
 [node name="Camera" parent="." instance=ExtResource("1_drkvg")]
 
-[node name="Controller" type="Node2D" parent="." node_paths=PackedStringArray("units")]
+[node name="Controller" type="Node2D" parent="." node_paths=PackedStringArray("units", "selection_box")]
+z_index = 2
 script = ExtResource("3_4a20m")
 units = NodePath("../State/Units")
+selection_box = NodePath("SelectionBox")
+
+[node name="SelectionBox" type="Node2D" parent="Controller"]
+script = ExtResource("4_16jvh")
 
 [node name="State" type="Node2D" parent="."]
 script = ExtResource("1_s2gpv")

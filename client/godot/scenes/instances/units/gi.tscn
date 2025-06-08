@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://buj5nosgbox6b"]
+[gd_scene load_steps=9 format=3 uid="uid://buj5nosgbox6b"]
 
 [ext_resource type="Script" uid="uid://ceu8m84ifmmdk" path="res://lib/unit.gd" id="1_xy0ir"]
 [ext_resource type="PackedScene" uid="uid://uqgyi36eb4gt" path="res://addons/df_shared/instances/unit/unit.tscn" id="2_xy0ir"]
@@ -6,25 +6,26 @@
 [ext_resource type="Texture2D" uid="uid://jq65k8elik6x" path="res://assets/sprites/units/debug.png" id="3_bkn7i"]
 [ext_resource type="Script" uid="uid://bwl88aa2r6aym" path="res://lib/directive.gd" id="4_yl24q"]
 [ext_resource type="Texture2D" uid="uid://ccu1bojobw2h2" path="res://assets/sprites/units/debug_selection.png" id="5_0d18x"]
+[ext_resource type="Script" uid="uid://dho7kgica14ew" path="res://lib/collider.gd" id="6_8nby1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1o50a"]
 size = Vector2(12, 18)
 
-[node name="GI" type="Node2D" node_paths=PackedStringArray("unit_state", "directive", "ui", "collider")]
+[node name="GI" type="Node2D" node_paths=PackedStringArray("unit_state", "directive", "ui")]
 y_sort_enabled = true
 script = ExtResource("1_xy0ir")
 unit_state = NodePath("Unit")
 directive = NodePath("Directive")
 ui = NodePath("UI")
-collider = NodePath("UI/Collider")
 
 [node name="Unit" parent="." instance=ExtResource("2_xy0ir")]
 
-[node name="UI" type="Node2D" parent="." node_paths=PackedStringArray("sprite", "selector")]
+[node name="UI" type="Node2D" parent="." node_paths=PackedStringArray("sprite", "selector", "collider")]
 y_sort_enabled = true
 script = ExtResource("3_1o50a")
 sprite = NodePath("Sprite")
 selector = NodePath("Selector")
+collider = NodePath("Collider")
 metadata/_custom_type_script = "uid://bld34qlq2wv5u"
 
 [node name="Sprite" type="Sprite2D" parent="UI"]
@@ -38,6 +39,10 @@ position = Vector2(0, -6)
 texture = ExtResource("5_0d18x")
 
 [node name="Collider" type="Area2D" parent="UI"]
+monitoring = false
+monitorable = false
+script = ExtResource("6_8nby1")
+metadata/_custom_type_script = "uid://dho7kgica14ew"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="UI/Collider"]
 position = Vector2(0, -6)

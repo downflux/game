@@ -4,7 +4,6 @@ extends DFStateBase
 @export var unit_state: DFUnitBase
 @export var directive: DFUnitDirective
 @export var ui: DFUnitUIBase
-@export var collider: CollisionObject2D
 
 
 func _process(_delta):
@@ -23,6 +22,9 @@ func from_dict(
 		self.is_deleted = true
 		return
 	
+	if DFStateKeys.KDFUnitID in data and not partial:
+		ui.collider.unit_id = data[DFStateKeys.KDFUnitID]
+	
 	unit_state.from_dict(partial, data)
 
 
@@ -35,5 +37,5 @@ func _on_mouse_exited():
 
 
 func _ready():
-	collider.mouse_entered.connect(_on_mouse_entered)
-	collider.mouse_exited.connect(_on_mouse_exited)
+	ui.collider.mouse_entered.connect(_on_mouse_entered)
+	ui.collider.mouse_exited.connect(_on_mouse_exited)

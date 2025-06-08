@@ -35,10 +35,10 @@ func _on_unit_paths_received(paths: Dictionary):
 func add_unit(unit: DFClientUnitBase):
 	is_dirty = true
 	
-	unit.collider.mouse_entered.connect(
+	unit.ui.collider.mouse_entered.connect(
 		func(): unit_mouse_entered.emit(unit.unit_state.unit_id),
 	)
-	unit.collider.mouse_exited.connect(
+	unit.ui.collider.mouse_exited.connect(
 		func(): unit_mouse_exited.emit(unit.unit_state.unit_id),
 	)
 	
