@@ -5,13 +5,19 @@ extends DFStateBase
 ## Emits signal when the mouse has been detected to hover over a unit. This is
 ## a signal bus to be used by external classes.
 signal unit_mouse_entered(uid: int)
-
 signal unit_mouse_exited(uid: int)
 
 
 @onready var unit_scene_lookup: Dictionary[DFEnums.UnitType, PackedScene] = {
 	DFEnums.UnitType.UNIT_GI: preload("res://scenes/instances/units/gi.tscn"),
 }
+
+
+func select_units(uids: Array[int], state: bool):
+	for uid: int in uids:
+		var u: DFClientUnitBase = get_unit(uid)
+		if u != null:
+			u.ui.select(state)
 
 
 func _on_unit_paths_received(paths: Dictionary):

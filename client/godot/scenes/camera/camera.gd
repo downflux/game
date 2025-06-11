@@ -3,6 +3,7 @@ extends Camera2D
 var _pan: bool = false
 var _pan_origin: Vector2
 
+
 func _zoom(delta: Vector2):
 	var pos := get_global_mouse_position()
 	set_zoom((get_zoom() + delta).clamp(Vector2(1, 1), Vector2(10, 10)))
