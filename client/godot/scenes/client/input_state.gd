@@ -7,8 +7,9 @@ enum ClickState {
 	
 	CLICK_STATE_SELECTED,
 	CLICK_STATE_DRAG,
-	CLICK_STATE_DRAG_CONFIRMED,
+	CLICK_STATE_DRAG_CONFIRM,
 	CLICK_STATE_PAN,
+	CLICK_STATE_PAN_CANCEL,
 	CLICK_STATE_INTERACT,
 }
 
@@ -17,14 +18,21 @@ enum MouseInput {
 	MOUSE_INPUT_PRIMARY_UP,
 	MOUSE_INPUT_SECONDARY_DOWN,
 	MOUSE_INPUT_SECONDARY_UP,
+	MOUSE_INPUT_PAN,
 }
 
 var _mouseover_uid: int = -1
 var _selected_uids: Array[int] = []
-var _state_cache: ClickState = ClickState.CLICK_STATE_NONE
+var _state_cache: ClickState = ClickState.CLICK_STATE_NONE:
+	set(v):
+		Logger.debug("setting input state %s --> %s" % [
+			ClickState.keys()[_state_cache],
+			ClickState.keys()[v],
+		])
+		_state_cache = v
 
 @export var units: DFClientUnits
-@export var camera: Camera2D
+@export var camera: DFClientCamera
 @export var selection_box: DFSelectionBox
 
 
@@ -46,7 +54,7 @@ func get_target_state(
 	
 	if mouse_input == MouseInput.MOUSE_INPUT_SECONDARY_UP:
 		if _state_cache == ClickState.CLICK_STATE_PAN:
-			return ClickState.CLICK_STATE_NONE
+			return ClickState.CLICK_STATE_PAN_CANCEL
 	
 	if mouse_input == MouseInput.MOUSE_INPUT_PRIMARY_DOWN:
 		if _selected_uids:
@@ -58,7 +66,7 @@ func get_target_state(
 	
 	if mouse_input == MouseInput.MOUSE_INPUT_PRIMARY_UP:
 		if _state_cache == ClickState.CLICK_STATE_DRAG:
-			return ClickState.CLICK_STATE_DRAG_CONFIRMED
+			return ClickState.CLICK_STATE_DRAG_CONFIRM
 	
 	return _state_cache
 
@@ -83,31 +91,40 @@ func _ready():
 	units.unit_mouse_entered.connect(_on_unit_mouse_entered)
 	units.unit_mouse_exited.connect(_on_unit_mouse_exited)
 
+
 func handle_mouse_input(mouse_input: MouseInput):
-	var src = _state_cache
 	var dst = get_target_state(mouse_input)
+	if dst == _state_cache:
+		return
 	
 	_state_cache = dst
 	
-	if dst == ClickState.CLICK_STATE_NONE:
-		units.select_units(_selected_uids, false)
-		_selected_uids = []
-	if dst == ClickState.CLICK_STATE_DRAG:
-		selection_box.start = get_global_mouse_position()
-		selection_box.end = get_global_mouse_position()
-		selection_box.visible = true
-	if dst == ClickState.CLICK_STATE_SELECTED:
-		units.select_units(_selected_uids, false)
-		_selected_uids = [_mouseover_uid]
-		units.select_units(_selected_uids, true)
-	if dst == ClickState.CLICK_STATE_INTERACT:
-		var d = DFGeo.to_grid(get_global_mouse_position())
-		Server.s_issue_move.rpc_id(1, _selected_uids, d)
-	if dst == ClickState.CLICK_STATE_DRAG_CONFIRMED:
-		units.select_units(_selected_uids, false)
-		_selected_uids = _intersect_uids()
-		units.select_units(_selected_uids, true)
-		selection_box.visible = false
+	match dst:
+		ClickState.CLICK_STATE_NONE:
+			units.select_units(_selected_uids, false)
+			_selected_uids = []
+		ClickState.CLICK_STATE_DRAG:
+			selection_box.start = get_global_mouse_position()
+			selection_box.end = get_global_mouse_position()
+			selection_box.visible = true
+		ClickState.CLICK_STATE_SELECTED:
+			units.select_units(_selected_uids, false)
+			_selected_uids = [_mouseover_uid]
+			units.select_units(_selected_uids, true)
+		ClickState.CLICK_STATE_INTERACT:
+			var d = DFGeo.to_grid(get_global_mouse_position())
+			Server.s_issue_move.rpc_id(1, _selected_uids, d)
+		ClickState.CLICK_STATE_DRAG_CONFIRM:
+			units.select_units(_selected_uids, false)
+			_selected_uids = _intersect_uids()
+			units.select_units(_selected_uids, true)
+			selection_box.visible = false
+			_state_cache = ClickState.CLICK_STATE_NONE
+		ClickState.CLICK_STATE_PAN_CANCEL:
+			camera.set_pan(false)
+			_state_cache = ClickState.CLICK_STATE_NONE
+		ClickState.CLICK_STATE_PAN:
+			camera.set_pan(true)
 
 
 func _intersect_uids() -> Array[int]:
