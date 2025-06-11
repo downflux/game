@@ -4,6 +4,12 @@ extends DFStateBase
 @onready var player_scene: PackedScene = preload("res://scenes/instances/player/player.tscn")
 
 
+func get_self() -> DFClientPlayer:
+	for p: DFClientPlayer in get_children():
+		if p.is_self:
+			return p
+	return null
+
 
 func add_player(player: DFClientPlayer):
 	is_dirty = true

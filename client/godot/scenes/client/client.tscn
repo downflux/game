@@ -1,40 +1,21 @@
-[gd_scene load_steps=11 format=3 uid="uid://r3kqx4cb7nt5"]
+[gd_scene load_steps=9 format=3 uid="uid://r3kqx4cb7nt5"]
 
-[ext_resource type="PackedScene" uid="uid://cfd40nkcpenqg" path="res://scenes/camera/camera.tscn" id="1_drkvg"]
 [ext_resource type="Script" uid="uid://btcscmedveits" path="res://scenes/client/client.gd" id="1_oismd"]
 [ext_resource type="Script" uid="uid://d3qjcr5nhjmji" path="res://scenes/client/state.gd" id="1_s2gpv"]
-[ext_resource type="Script" uid="uid://bpiuduc8og5wu" path="res://scenes/client/input.gd" id="3_16jvh"]
+[ext_resource type="Script" uid="uid://b3oc03tnlimpd" path="res://lib/camera.gd" id="2_4a20m"]
 [ext_resource type="PackedScene" uid="uid://db254uquf0xb7" path="res://assets/maps/example.tscn" id="4_4a20m"]
-[ext_resource type="Script" uid="uid://b4v11yw45ykxm" path="res://scenes/client/selection_box.gd" id="4_16jvh"]
+[ext_resource type="Script" uid="uid://b4v11yw45ykxm" path="res://scenes/client/unit_selector.gd" id="4_16jvh"]
 [ext_resource type="Script" uid="uid://dpkukv8q7kayd" path="res://scenes/client/players.gd" id="4_icqby"]
-[ext_resource type="Script" uid="uid://dwnb1v8s8agqv" path="res://scenes/client/input_state.gd" id="4_xv7pp"]
 [ext_resource type="Script" uid="uid://b5fhfq1hq3b8m" path="res://scenes/client/units.gd" id="5_gmu12"]
 [ext_resource type="Script" uid="uid://8dytuthfjq46" path="res://scenes/client/mesh.gd" id="5_u3hyj"]
 
 [node name="Client" type="Node"]
 script = ExtResource("1_oismd")
 
-[node name="Camera" parent="." instance=ExtResource("1_drkvg")]
-
-[node name="UI" type="Node2D" parent="."]
-
-[node name="SelectionBox" type="Node2D" parent="UI"]
-z_index = 2
-script = ExtResource("4_16jvh")
-metadata/_custom_type_script = "uid://b4v11yw45ykxm"
-
-[node name="Input" type="Node" parent="."]
-script = ExtResource("3_16jvh")
-metadata/_custom_type_script = "uid://bpiuduc8og5wu"
-
-[node name="InputState" type="Node2D" parent="Input" node_paths=PackedStringArray("units", "camera", "selection_box")]
-z_index = 1
-y_sort_enabled = true
-script = ExtResource("4_xv7pp")
-units = NodePath("../../State/Units")
-camera = NodePath("../../Camera")
-selection_box = NodePath("../../UI/SelectionBox")
-metadata/_custom_type_script = "uid://dwnb1v8s8agqv"
+[node name="Camera" type="Camera2D" parent="."]
+zoom = Vector2(5, 5)
+script = ExtResource("2_4a20m")
+metadata/_custom_type_script = "uid://b3oc03tnlimpd"
 
 [node name="State" type="Node2D" parent="."]
 script = ExtResource("1_s2gpv")
@@ -51,7 +32,14 @@ map = NodePath("../Example")
 [node name="Players" type="Node2D" parent="State"]
 script = ExtResource("4_icqby")
 
-[node name="Units" type="Node2D" parent="State"]
+[node name="Units" type="Node2D" parent="State" node_paths=PackedStringArray("camera", "players")]
 z_index = 1
 y_sort_enabled = true
 script = ExtResource("5_gmu12")
+camera = NodePath("../../Camera")
+players = NodePath("../Players")
+
+[node name="Selector" type="Node2D" parent="State/Units"]
+z_index = 2
+script = ExtResource("4_16jvh")
+metadata/_custom_type_script = "uid://b4v11yw45ykxm"

@@ -6,8 +6,9 @@ extends Node2D
 @export var collider: DFUnitCollider
 
 
-func select(select: bool):
-	selector.visible = select
+func select(s: bool):
+	selector.visible = s
+
 
 func _ready():
 	selector.visible = false
