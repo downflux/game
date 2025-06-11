@@ -26,16 +26,3 @@ func from_dict(
 		ui.collider.unit_id = data[DFStateKeys.KDFUnitID]
 	
 	unit_state.from_dict(partial, data)
-
-
-func _on_mouse_entered():
-	Logger.debug("mouse entered unit %s" % [unit_state.unit_id])
-
-
-func _on_mouse_exited():
-	Logger.debug("mouse exited unit %s" % [unit_state.unit_id])
-
-
-func _ready():
-	ui.collider.mouse_entered.connect(_on_mouse_entered)
-	ui.collider.mouse_exited.connect(_on_mouse_exited)

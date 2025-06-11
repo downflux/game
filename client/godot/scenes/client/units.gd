@@ -97,7 +97,6 @@ func _input(event: InputEvent):
 	if event.is_action_pressed("interact_position"):
 		if _mouseover_uid == -1 and _selected_uids:
 			var d = DFGeo.to_grid(selector.get_global_mouse_position())
-			print("len selected uids: %d; len children: %d" % [len(_selected_uids), len(get_children()) - 1])
 			Server.s_issue_move.rpc_id(1, _selected_uids, d)
 		get_viewport().set_input_as_handled()
 	
