@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cte0p5b3o1o5j"]
-
-[ext_resource type="Script" uid="uid://c32c6q1nhgfjf" path="res://scenes/instances/components/walker.gd" id="1_7lmc8"]
-
-[node name="Walker" type="Node"]
-script = ExtResource("1_7lmc8")

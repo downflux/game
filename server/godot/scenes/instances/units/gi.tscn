@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ow0tqqowjx3a" path="res://lib/unit.gd" id="1_bkn7i"]
 [ext_resource type="PackedScene" uid="uid://uqgyi36eb4gt" path="res://addons/df_shared/instances/unit/unit.tscn" id="2_yl24q"]
-[ext_resource type="PackedScene" uid="uid://cte0p5b3o1o5j" path="res://scenes/instances/components/walker.tscn" id="3_1o50a"]
+[ext_resource type="Script" uid="uid://c32c6q1nhgfjf" path="res://lib/walker.gd" id="3_bkn7i"]
 
 [node name="GI" type="Node" node_paths=PackedStringArray("unit_state", "mover")]
 script = ExtResource("1_bkn7i")
@@ -19,10 +19,11 @@ default_value = 2
 [node name="Health" parent="Unit" index="2"]
 default_value = 100
 
-[node name="Walker" parent="." node_paths=PackedStringArray("position", "map_layer") instance=ExtResource("3_1o50a")]
-speed = 1.0
+[node name="Walker" type="Node" parent="." node_paths=PackedStringArray("position", "map_layer")]
+script = ExtResource("3_bkn7i")
+speed = 2.0
 position = NodePath("../Unit/Position")
 map_layer = NodePath("../Unit/MapLayer")
+metadata/_custom_type_script = "uid://c32c6q1nhgfjf"
 
 [editable path="Unit"]
-[editable path="Walker"]
