@@ -2,7 +2,12 @@ class_name DFClientCamera
 extends Camera2D
 
 var _maybe_pan: bool = false
-var _pan: bool = false
+var _pan: bool       = false
+var _pan_origin: Vector2
+var _pan_direction: Vector2
+var _velocity: float
+const _VELOCITY_SCALE: float = 0.05
+
 
 func get_pan() -> bool:
 	return _pan
@@ -15,11 +20,6 @@ func set_pan(v: bool):
 		_maybe_pan = false
 		_velocity = 0
 	_pan = v
-
-var _pan_origin: Vector2
-var _velocity: float
-var _pan_direction: Vector2
-const _VELOCITY_SCALE: float = 0.05
 
 
 func _zoom(delta: Vector2):
