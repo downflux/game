@@ -1,6 +1,14 @@
 class_name DFServerMoverBase
 extends Node
 
+signal tile_changed(src: Vector2i, dst: Vector2i)
+
+@warning_ignore_start("unused_parameter")
+func set_tiles(timestamp: int):
+	pass
+@warning_ignore_restore("unused_parameter")
+
+
 @warning_ignore_start("unused_parameter")
 ## Virtual method defining the interface of a movement component.
 ## [br][br]

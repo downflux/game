@@ -11,6 +11,10 @@ func _generate_unit_id() -> int:
 	return _uid
 
 
+func _on_tile_changed(src: Vector2i, dst: Vector2i):
+	Logger.debug("Unit moved from src to dst: %s --> %s" % [src, dst])
+
+
 func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:
 	var u: DFServerUnitBase = debug_unit_scene.instantiate()
 	
@@ -20,4 +24,7 @@ func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:
 	u.unit_state.unit_id = uid
 	
 	add_child(u, true)
+	
+	u.mover.tile_changed.connect(_on_tile_changed)
+	
 	return u

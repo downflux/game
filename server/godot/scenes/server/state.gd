@@ -69,7 +69,10 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 func _physics_process(_delta):
 	timestamp_msec = Time.get_ticks_msec()
 	is_dirty = false
-
+	
+	for u: DFServerUnitBase in units.get_children():
+		u.mover.set_tiles(timestamp_msec)
+	
 	m_commands.lock()
 	
 	for sid: int in user_commands:
