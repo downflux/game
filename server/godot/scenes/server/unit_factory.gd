@@ -2,6 +2,8 @@ class_name DFServerUnitFactory
 extends Node
 
 @onready var debug_unit_scene: PackedScene = preload("res://scenes/instances/units/gi.tscn")
+@onready var debug_occupied: TileMapLayer = $DebugOccupied
+@onready var debug_next: TileMapLayer = $DebugNext
 
 var _uid: int = 0
 
@@ -13,6 +15,10 @@ func _generate_unit_id() -> int:
 
 func _on_tile_changed(tile: Vector2i, occupied: bool):
 	Logger.debug("Unit moved from src to dst: %s --> %s" % [tile, occupied])
+	if occupied:
+		debug_occupied.set_cell(tile, 0, Vector2i(0, 0))
+	else:
+		debug_occupied.erase_cell(tile)
 
 
 func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:

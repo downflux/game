@@ -4,7 +4,7 @@ extends Node
 signal tile_changed(tile: Vector2i, occupied: bool)
 
 @warning_ignore_start("unused_parameter")
-func set_tiles(timestamp: int):
+func set_tiles(timestamp_msec: int, delta_msec: int):
 	pass
 @warning_ignore_restore("unused_parameter")
 

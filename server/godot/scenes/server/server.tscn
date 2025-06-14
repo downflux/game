@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dd6y01xi5hrbk"]
+[gd_scene load_steps=14 format=4 uid="uid://dd6y01xi5hrbk"]
 
 [ext_resource type="Script" uid="uid://dtyu4t60qoyae" path="res://scenes/server/server.gd" id="1_qgrco"]
 [ext_resource type="Script" uid="uid://8k00yh0o76w7" path="res://scenes/server/player_verification.gd" id="2_375b0"]
@@ -7,7 +7,23 @@
 [ext_resource type="Script" uid="uid://bfcroglyr16vp" path="res://scenes/server/players.gd" id="4_jqkn5"]
 [ext_resource type="PackedScene" uid="uid://kltb0o2v28xq" path="res://scenes/map/map.tscn" id="5_hkcox"]
 [ext_resource type="PackedScene" uid="uid://qkh8hu8njn0s" path="res://assets/maps/example.tscn" id="5_kr8px"]
+[ext_resource type="Texture2D" uid="uid://vjo1mx8knlrp" path="res://assets/tilesets/debug.png" id="5_q1xj5"]
 [ext_resource type="Script" uid="uid://dehch5lt1tp7p" path="res://scenes/server/units.gd" id="7_rqijc"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q1xj5"]
+texture = ExtResource("5_q1xj5")
+
+[sub_resource type="TileSet" id="TileSet_evhxi"]
+sources/0 = SubResource("TileSetAtlasSource_q1xj5")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_evhxi"]
+texture = ExtResource("5_q1xj5")
+texture_region_size = Vector2i(8, 8)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_wscb7"]
+tile_size = Vector2i(8, 8)
+sources/0 = SubResource("TileSetAtlasSource_evhxi")
 
 [node name="Server" type="Node"]
 script = ExtResource("1_qgrco")
@@ -18,6 +34,16 @@ script = ExtResource("2_375b0")
 
 [node name="UnitFactory" type="Node" parent="."]
 script = ExtResource("3_3e01g")
+
+[node name="Camera2D" type="Camera2D" parent="UnitFactory"]
+zoom = Vector2(5, 5)
+
+[node name="DebugNext" type="TileMapLayer" parent="UnitFactory"]
+tile_set = SubResource("TileSet_evhxi")
+
+[node name="DebugOccupied" type="TileMapLayer" parent="UnitFactory"]
+tile_map_data = PackedByteArray("AAD7//3/AAAAAAAAAAD7//7/AAAAAAAAAAD7////AAAAAAAAAAD7/wAAAAAAAAAAAAD7/wEAAAAAAAAAAAD7/wIAAAAAAAAAAAD7/wMAAAAAAAAAAAACAP3/AAAAAAAAAAD8//3/AAAAAAAAAAD9//3/AAAAAAAAAAD///3/AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAD+//3/AAAAAAAAAAADAP3/AAAAAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAD7/wQAAAAAAAAAAAD8/wQAAAAAAAAAAAD9/wQAAAAAAAAAAAD+/wQAAAAAAAAAAAD//wQAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAAAP//AAAAAAAAAAABAP//AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAD+/wIAAAAAAAAAAAAAAAIAAAAAAAAAAAD9/wMAAAAAAAAAAAD+/wMAAAAAAAAAAAD//wMAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wAAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_wscb7")
 
 [node name="State" type="Node" parent="."]
 script = ExtResource("3_2t17j")

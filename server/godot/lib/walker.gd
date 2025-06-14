@@ -18,18 +18,19 @@ var _next: Vector2i:
 		_next = v
 
 
-func set_tiles(timestamp: int):
-	var t: Vector2  = position.get_value(timestamp)
-	var dt: Vector2 = Vector2(round(t) - floor(t))
-	var c: Vector2i = floor(t)
-	var n: Vector2i = ceil(t)
-	if abs(dt.length_squared()) > 0.01:
-		n = Vector2(c) + dt / dt.length()
+func set_tiles(timestamp_msec: int, delta_msec: int):
+	var c: Vector2i  = position.get_value(timestamp_msec).snapped(Vector2i(1, 1))
+	var dp: Vector2 = (
+		position.get_value(timestamp_msec + delta_msec)
+	) - (
+		position.get_value(timestamp_msec)
+	)
+	var n: Vector2i  = _next
+	if abs(dp.length_squared()) > 0.01:
+		n = c + Vector2i(dp / dp.length())
 	if c != _curr:
-		print("setting curr: %s --> %s" % [_curr, c])
 		_curr = c
 	if n != _next:
-		print("setting next: %s --> %s" % [_next, n])
 		_next = n
 
 
