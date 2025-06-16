@@ -13,13 +13,20 @@ func _generate_unit_id() -> int:
 	return _uid
 
 
-func _on_tile_changed(tile: Vector2i, occupied: bool):
-	Logger.debug("Unit moved from src to dst: %s --> %s" % [tile, occupied])
-	if occupied:
-		debug_occupied.set_cell(tile, 0, Vector2i(0, 0))
-	else:
-		debug_occupied.erase_cell(tile)
+func _on_curr_tile_changed(src: Vector2i, dst: Vector2i):
+	Logger.debug("Unit moved from src to dst: %s --> %s" % [src, dst])
+	if src != Vector2i.MAX:
+		debug_occupied.erase_cell(src)
+	if dst != Vector2i.MAX:
+		debug_occupied.set_cell(dst, 0, Vector2i(0, 0))
 
+
+func _on_next_tile_changed(src: Vector2i, dst: Vector2i):
+	Logger.debug("Unit moved from src to dst: %s --> %s" % [src, dst])
+	if src != Vector2i.MAX:
+		debug_next.erase_cell(src)
+	if dst != Vector2i.MAX:
+		debug_next.set_cell(dst, 0, Vector2i(0, 0))
 
 func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:
 	var u: DFServerUnitBase = debug_unit_scene.instantiate()
@@ -31,6 +38,7 @@ func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:
 	
 	add_child(u, true)
 	
-	u.mover.tile_changed.connect(_on_tile_changed)
+	u.mover.curr_tile_changed.connect(_on_curr_tile_changed)
+	u.mover.next_tile_changed.connect(_on_next_tile_changed)
 	
 	return u

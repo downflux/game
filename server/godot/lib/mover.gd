@@ -1,7 +1,20 @@
 class_name DFServerMoverBase
 extends Node
 
-signal tile_changed(tile: Vector2i, occupied: bool)
+@warning_ignore_start("unused_signal")
+## The unit's characteristic tile has moved and is now occupying a new cell.
+## both [param src] and [param dst] may be Vector2.MAX to indicate e.g. the
+## unit has just spawned.
+signal curr_tile_changed(src: Vector2i, dst: Vector2i)
+@warning_ignore_restore("unused_signal")
+
+@warning_ignore_start("unused_signal")
+## The unit's pathing has changed such that the horizon is now in a new cell.
+## This horizon is checked against a list of occupied cells (i.e. monitored by
+## a curr_tile_changed handler) to see if a unit may move into that cell.
+signal next_tile_changed(src: Vector2i, dst: Vector2i)
+@warning_ignore_restore("unused_signal")
+
 
 @warning_ignore_start("unused_parameter")
 func set_tiles(timestamp_msec: int, delta_msec: int):

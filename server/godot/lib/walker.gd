@@ -8,13 +8,11 @@ extends DFServerMoverBase
 
 var _curr: Vector2i:
 	set(v):
-		tile_changed.emit(_curr, false)
-		tile_changed.emit(v, true)
+		curr_tile_changed.emit(_curr, v)
 		_curr = v
 var _next: Vector2i:
 	set(v):
-		tile_changed.emit(_next, false)
-		tile_changed.emit(v, true)
+		next_tile_changed.emit(_next, v)
 		_next = v
 
 
