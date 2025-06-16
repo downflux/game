@@ -6,14 +6,18 @@ extends DFServerMoverBase
 @export var map_layer: DFCurveMapLayer
 
 
-var _curr: Vector2i:
+var _curr: Vector2i = Vector2i.MAX:
 	set(v):
 		curr_tile_changed.emit(_curr, v)
 		_curr = v
-var _next: Vector2i:
+var _next: Vector2i = Vector2i.MAX:
 	set(v):
 		next_tile_changed.emit(_next, v)
 		_next = v
+
+
+func _ready():
+	_curr = position.get_value(0)
 
 
 func set_tiles(timestamp_msec: int, delta_msec: int):
@@ -24,8 +28,23 @@ func set_tiles(timestamp_msec: int, delta_msec: int):
 		position.get_value(timestamp_msec)
 	)
 	var n: Vector2i  = _next
+	# Signal if the upcoming movement increment will cross the current tile
+	# boundary; after this move has occurred, clear destination node.
 	if abs(dp.length_squared()) > 0.01:
-		n = c + Vector2i(dp / dp.length())
+		n = c + Vector2i((dp / dp.length()).snapped(Vector2i(1, 1)))
+	else:
+		n = Vector2i.MAX
+	
+	# Only update the next tile if the unit is moving away from the current tile.
+	# If the unit is moving towards the current tile, it may stop immediately and
+	# does not need to reserve the next tile in its estimated trajectory.
+	if (
+		(position.get_value(timestamp_msec) - Vector2(n)).length_squared()
+	) > (
+		(c - n).length_squared()
+	):
+		n = Vector2i.MAX
+	
 	if c != _curr:
 		_curr = c
 	if n != _next:

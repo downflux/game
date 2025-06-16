@@ -14,7 +14,7 @@ func _generate_unit_id() -> int:
 
 
 func _on_curr_tile_changed(src: Vector2i, dst: Vector2i):
-	Logger.debug("Unit moved from src to dst: %s --> %s" % [src, dst])
+	Logger.debug("CURR moved from src to dst: %s --> %s" % [src, dst])
 	if src != Vector2i.MAX:
 		debug_occupied.erase_cell(src)
 	if dst != Vector2i.MAX:
@@ -22,7 +22,7 @@ func _on_curr_tile_changed(src: Vector2i, dst: Vector2i):
 
 
 func _on_next_tile_changed(src: Vector2i, dst: Vector2i):
-	Logger.debug("Unit moved from src to dst: %s --> %s" % [src, dst])
+	Logger.debug("NEXT moved from src to dst: %s --> %s" % [src, dst])
 	if src != Vector2i.MAX:
 		debug_next.erase_cell(src)
 	if dst != Vector2i.MAX:
@@ -36,9 +36,9 @@ func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:
 	u.unit_state.faction = faction
 	u.unit_state.unit_id = uid
 	
-	add_child(u, true)
-	
 	u.mover.curr_tile_changed.connect(_on_curr_tile_changed)
 	u.mover.next_tile_changed.connect(_on_next_tile_changed)
+	
+	add_child(u, true)
 	
 	return u
