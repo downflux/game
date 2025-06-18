@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://p5hfbiaqoaxg"]
+
+[ext_resource type="Script" uid="uid://7yoqjom001tr" path="res://addons/df_shared/lib/curve_base_drawer.gd" id="1_43co4"]
+[ext_resource type="Script" uid="uid://dxyeod1rhmbom" path="res://addons/df_shared/lib/curve/curve_float.gd" id="2_54665"]
+
+[node name="CurveBaseDrawerTest" type="Node"]
+
+[node name="DFCurveBaseDrawerLinear" type="Node2D" parent="." node_paths=PackedStringArray("curve")]
+position = Vector2(0, 100)
+script = ExtResource("1_43co4")
+curve = NodePath("DFCurveFloatLinear")
+dimension = Rect2i(0, 0, 100, 100)
+metadata/_custom_type_script = "uid://7yoqjom001tr"
+
+[node name="DFCurveFloatLinear" type="Node" parent="DFCurveBaseDrawerLinear"]
+script = ExtResource("2_54665")
+data = Dictionary[int, float]({
+100: 100.0,
+150: 150.0
+})
+timestamps_msec = Array[int]([100, 150])
+metadata/_custom_type_script = "uid://dxyeod1rhmbom"
+
+[node name="DFCurveBaseDrawerStep" type="Node2D" parent="." node_paths=PackedStringArray("curve")]
+position = Vector2(100, 100)
+script = ExtResource("1_43co4")
+curve = NodePath("DFCurveFloatStep")
+dimension = Rect2i(0, 0, 100, 100)
+metadata/_custom_type_script = "uid://7yoqjom001tr"
+
+[node name="DFCurveFloatStep" type="Node" parent="DFCurveBaseDrawerStep"]
+script = ExtResource("2_54665")
+data = Dictionary[int, float]({
+100: 50.0,
+110: 110.0,
+150: 70.0
+})
+curve_type = 1
+timestamps_msec = Array[int]([100, 110, 150])
+metadata/_custom_type_script = "uid://dxyeod1rhmbom"

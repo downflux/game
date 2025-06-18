@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://dlxcybhfkv7gj"]
+[gd_scene load_steps=5 format=3 uid="uid://dlxcybhfkv7gj"]
 
 [ext_resource type="Script" uid="uid://ow0tqqowjx3a" path="res://lib/unit.gd" id="1_bkn7i"]
+[ext_resource type="Script" uid="uid://7yoqjom001tr" path="res://addons/df_shared/lib/curve_base_drawer.gd" id="2_1o50a"]
 [ext_resource type="PackedScene" uid="uid://uqgyi36eb4gt" path="res://addons/df_shared/instances/unit/unit.tscn" id="2_yl24q"]
 [ext_resource type="Script" uid="uid://c32c6q1nhgfjf" path="res://lib/walker.gd" id="3_bkn7i"]
 
@@ -9,6 +10,13 @@ script = ExtResource("1_bkn7i")
 unit_state = NodePath("Unit")
 mover = NodePath("Walker")
 metadata/_custom_type_script = "uid://ow0tqqowjx3a"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DFCurveBaseDrawer" type="Node2D" parent="CanvasLayer" node_paths=PackedStringArray("curve")]
+script = ExtResource("2_1o50a")
+curve = NodePath("../../Unit/Position")
+dimension = Rect2i(100, 50, 500, 200)
 
 [node name="Unit" parent="." instance=ExtResource("2_yl24q")]
 unit_type = 1
