@@ -15,6 +15,8 @@ metadata/_custom_type_script = "uid://ow0tqqowjx3a"
 
 [node name="DFCurveBaseDrawer" type="Node2D" parent="CanvasLayer" node_paths=PackedStringArray("curve")]
 script = ExtResource("2_1o50a")
+is_realtime = true
+max_timestamp_msec_window = 10000
 curve = NodePath("../../Unit/Position")
 dimension = Rect2i(100, 50, 500, 200)
 

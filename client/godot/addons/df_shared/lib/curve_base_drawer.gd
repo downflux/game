@@ -3,12 +3,19 @@
 class_name DFCurveBaseDrawer
 extends Node2D
 
+@export var is_realtime: bool
+@export var max_timestamp_msec_window: int
 @export var curve: DFCurveBase
 @export var dimension: Rect2i:
 	set(v):
 		if Engine.is_editor_hint():
 			queue_redraw()
 		dimension = v
+
+
+func _process(_delta):
+	if is_realtime and not Engine.is_editor_hint():
+		queue_redraw()
 
 
 func _draw_step():
@@ -20,14 +27,21 @@ func _draw_step():
 		vmax = max(vmax, v)
 		vmin = min(vmin, v)
 	
-	var tmin: float = curve.timestamps_msec[0]
-	var tmax: float = curve.timestamps_msec[-1]
+	var tmin: float = curve.timestamps_msec[0] if not is_realtime else (
+		max(Time.get_ticks_msec() - max_timestamp_msec_window, 0) if max_timestamp_msec_window > 0 else 0
+	)
+	var tmax: float = curve.timestamps_msec[-1] if not is_realtime else Time.get_ticks_msec()
 	var w: float = float(dimension.size.x) / (tmax - tmin)
 	var h: float = float(dimension.size.y) / (vmax - vmin)
 	
 	for i: int in len(curve.timestamps_msec) - 1:
 		var t1 = curve.timestamps_msec[i]
 		var t2 = curve.timestamps_msec[i + 1]
+		
+		if is_realtime:
+			t1 = clamp(t1, tmin, tmax)
+			t2 = clamp(t2, tmin, tmax)
+		
 		var v1 = curve.flatten(curve.get_value(t1))
 		var v2 = curve.flatten(curve.get_value(t2))
 		
@@ -45,7 +59,6 @@ func _draw_step():
 		draw_line(_to_canvas(p2), _to_canvas(p3), Color.GREEN, 1)
 
 
-
 func _draw_linear():
 	var vmax: float = curve.flatten(curve.default_value)
 	var vmin: float = vmax
@@ -55,15 +68,21 @@ func _draw_linear():
 		vmax = max(vmax, v)
 		vmin = min(vmin, v)
 	
-	var tmin: float = curve.timestamps_msec[0]
-	var tmax: float = curve.timestamps_msec[-1]
-	
+	var tmin: float = curve.timestamps_msec[0] if not is_realtime else (
+		max(Time.get_ticks_msec() - max_timestamp_msec_window, 0) if max_timestamp_msec_window > 0 else 0
+	)
+	var tmax: float = curve.timestamps_msec[-1] if not is_realtime else Time.get_ticks_msec()
 	var w: float = float(dimension.size.x) / (tmax - tmin)
 	var h: float = float(dimension.size.y) / (vmax - vmin)
 	
 	for i: int in len(curve.timestamps_msec) - 1:
 		var t1 = curve.timestamps_msec[i]
 		var t2 = curve.timestamps_msec[i + 1]
+		
+		if is_realtime:
+			t1 = clamp(t1, tmin, tmax)
+			t2 = clamp(t2, tmin, tmax)
+		
 		var v1 = curve.flatten(curve.get_value(t1))
 		var v2 = curve.flatten(curve.get_value(t2))
 		
