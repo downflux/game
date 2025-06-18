@@ -24,7 +24,9 @@ enum Type {
 	TYPE_STEP,
 }
 
-@export var _history_limit: int        = DFSettings.CURVE_HISTORY_LIMIT
+signal modified()
+
+@export var _history_limit: int = DFSettings.CURVE_HISTORY_LIMIT
 
 ## The type of interpolation for this curve.
 @export var curve_type: Type
@@ -41,8 +43,18 @@ var _earliest_modified_timestamp_msec: float = INF
 
 
 func _on_set_is_dirty(v: bool):
+	if v:
+		modified.emit()
 	if not v:
 		_earliest_modified_timestamp_msec = INF
+
+
+## Flatten a potentially n-dimensional value into a single heuristc for
+## visualization.
+func flatten(v) -> float:
+	Logger.error("flatten not implemented")
+	
+	return 0
 
 
 ## Remove the keyframe at time [param t]. 
@@ -88,12 +100,10 @@ func trim_keyframes(t: int, before: bool):
 func shift(t: int, delay: int) -> void:
 	is_dirty = true
 	_earliest_modified_timestamp_msec = min(_earliest_modified_timestamp_msec, t)
-	Logger.debug("before: t: %d; timestamps_msec: %s" % [t, timestamps_msec])
 	for i in range(len(timestamps_msec) - 1, timestamps_msec.bsearch(t) - 1, -1):
 		self.data[timestamps_msec[i] + delay] = self.data[timestamps_msec[i]]
 		self.data.erase(timestamps_msec[i])
 		timestamps_msec[i] += delay
-	Logger.debug("after t: %d; timestamps_msec: %s" % [t, timestamps_msec])
 
 
 ## Add keyframe at timestamp [param t]. 

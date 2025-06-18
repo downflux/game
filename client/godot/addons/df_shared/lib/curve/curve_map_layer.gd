@@ -7,3 +7,7 @@ extends DFCurveBase
 
 func get_value(timestamp: int) -> DFEnums.MapLayer:
 	return super.get_value(timestamp)
+
+
+func flatten(v: DFEnums.MapLayer) -> float:
+	return v

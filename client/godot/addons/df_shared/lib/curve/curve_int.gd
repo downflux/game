@@ -7,3 +7,7 @@ extends DFCurveBase
 
 func get_value(timestamp: int) -> int:
 	return super.get_value(timestamp)
+
+
+func flatten(v: int) -> float:
+	return v
