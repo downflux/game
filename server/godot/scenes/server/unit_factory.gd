@@ -8,13 +8,16 @@ extends Node
 var _uid: int = 0
 
 
+signal bus_curr_tile_changed(uid: int, src: Vector2i, dst: Vector2i)
+signal bus_next_tile_changed(uid: int, src: Vector2i, dst: Vector2i)
+
+
 func _generate_unit_id() -> int:
 	_uid += 1
 	return _uid
 
 
 func _on_curr_tile_changed(src: Vector2i, dst: Vector2i):
-	Logger.debug("CURR moved from src to dst: %s --> %s" % [src, dst])
 	if src != Vector2i.MAX:
 		debug_occupied.erase_cell(src)
 	if dst != Vector2i.MAX:
@@ -22,11 +25,11 @@ func _on_curr_tile_changed(src: Vector2i, dst: Vector2i):
 
 
 func _on_next_tile_changed(src: Vector2i, dst: Vector2i):
-	Logger.debug("NEXT moved from src to dst: %s --> %s" % [src, dst])
 	if src != Vector2i.MAX:
 		debug_next.erase_cell(src)
 	if dst != Vector2i.MAX:
 		debug_next.set_cell(dst, 0, Vector2i(0, 0))
+
 
 func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:
 	var u: DFServerUnitBase = debug_unit_scene.instantiate()
@@ -38,7 +41,12 @@ func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:
 	
 	u.mover.curr_tile_changed.connect(_on_curr_tile_changed)
 	u.mover.next_tile_changed.connect(_on_next_tile_changed)
-	
+	u.mover.curr_tile_changed.connect(
+		func(src: Vector2i, dst: Vector2i): bus_curr_tile_changed.emit(uid, src, dst)
+	)
+	u.mover.next_tile_changed.connect(
+		func(src: Vector2i, dst: Vector2i): bus_next_tile_changed.emit(uid, src, dst)
+	)	
 	add_child(u, true)
 	
 	return u

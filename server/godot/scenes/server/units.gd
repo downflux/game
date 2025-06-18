@@ -18,8 +18,12 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	
 	var data = {}
 	
-	for u: DFServerUnitBase in get_children():
-		if partial and not u.is_dirty:
+	for u: Node in get_children():
+		if (
+			u is not DFServerUnitBase
+		) or (
+			partial and not u.is_dirty
+		):
 			continue
 		
 		data[u.unit_state.unit_id] = u.to_dict(sid, partial, query)

@@ -30,3 +30,7 @@ func set_tiles(timestamp_msec: int, delta_msec: int):
 func set_vector_path(timestamp: int, path: Array[Vector2i]):
 	pass
 @warning_ignore_restore("unused_parameter")
+
+
+func delay(timestamp: int) -> void:
+	pass

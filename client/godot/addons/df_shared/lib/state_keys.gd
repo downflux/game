@@ -25,7 +25,7 @@ const KDFPlayerMoney    = "money"
 const KDFPlayerFaction  = "faction"
 
 # Units
-const KDFUnitID       = "unid_id"
+const KDFUnitID       = "unit_id"
 const KDFUnitType     = "unit_type"
 const KDFUnitMapLayer = "map_layer"
 const KDFUnitPosition = "position"

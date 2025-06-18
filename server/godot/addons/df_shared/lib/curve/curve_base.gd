@@ -83,6 +83,19 @@ func trim_keyframes(t: int, before: bool):
 			timestamps_msec.resize(i)
 
 
+## Shifts a curve by pushing back all keyframes after [param t] by a positive
+## integer [param delay].
+func shift(t: int, delay: int) -> void:
+	is_dirty = true
+	_earliest_modified_timestamp_msec = min(_earliest_modified_timestamp_msec, t)
+	Logger.debug("before: t: %d; timestamps_msec: %s" % [t, timestamps_msec])
+	for i in range(len(timestamps_msec) - 1, timestamps_msec.bsearch(t) - 1, -1):
+		self.data[timestamps_msec[i] + delay] = self.data[timestamps_msec[i]]
+		self.data.erase(timestamps_msec[i])
+		timestamps_msec[i] += delay
+	Logger.debug("after t: %d; timestamps_msec: %s" % [t, timestamps_msec])
+
+
 ## Add keyframe at timestamp [param t]. 
 func add_keyframe(t: int, v: Variant) -> void:
 	is_dirty = true

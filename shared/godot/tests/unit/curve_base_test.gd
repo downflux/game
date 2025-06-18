@@ -518,3 +518,56 @@ func test_from_dict_partial():
 	assert_dict(d.data).is_equal({
 		120: 12.0,
 	})
+
+
+func test_shift_empty():
+	var c: DFCurveFloat = _create_float_curve(
+		{},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	c.shift(10000, 10)
+	assert_array(c.timestamps_msec).is_equal([])
+	assert_dict(c.data).is_equal({})
+
+
+func test_shift_after():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			110: 11,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	c.shift(10000, 10)
+	assert_array(c.timestamps_msec).is_equal([
+		110,
+	])
+	assert_dict(c.data).is_equal({
+		110: 11.0,
+	})
+
+
+func test_shift():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			110: 11,
+			120: 12,
+			130: 13,
+			200: 20,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	c.shift(120, 10)
+	
+	assert_array(c.timestamps_msec).is_equal([
+		110, 130, 140, 210
+	])
+	assert_dict(c.data).is_equal({
+		110: 11.0,
+		130: 12.0,
+		140: 13.0,
+		210: 20.0,
+	})
+	assert_float(c._earliest_modified_timestamp_msec).is_equal(120.0)

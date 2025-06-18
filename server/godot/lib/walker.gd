@@ -70,3 +70,15 @@ func set_vector_path(timestamp: int, path: Array[Vector2i]):
 			map_layer.add_keyframe(t, DFEnums.MapLayer.LAYER_GROUND)
 		
 		v = p
+
+
+func delay(timestamp: int):
+	var t: int = position.get_window_start_timestamp(timestamp)
+	if t == -1:
+		t == timestamp
+	var p: Vector2 = position.get_value(t)
+	var l: DFEnums.MapLayer = map_layer.get_value(t)
+	position.shift(timestamp, int(10000.0 * (1 / speed)))
+	map_layer.shift(timestamp, int(10000.0 * (1 / speed)))
+	position.add_keyframe(t, p)
+	map_layer.add_keyframe(t, l)

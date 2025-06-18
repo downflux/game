@@ -15,7 +15,7 @@ const _PHYSICS_TICKS_PER_SECOND: int = 10
 # Convenience lookup modules
 @onready var player_verification: DFPlayerVerification = $PlayerVerification
 @onready var state: DFServerState = $State
-@onready var unit_factory: DFServerUnitFactory = $UnitFactory
+@onready var unit_factory: DFServerUnitFactory = $State/UnitFactory
 
 
 func _on_peer_connected(sid: int):

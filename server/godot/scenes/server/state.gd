@@ -2,9 +2,11 @@ class_name DFServerState
 extends DFStateBase
 
 # Convenience lookup modules
-@onready var players: DFServerPlayers = $Players
-@onready var units: DFServerUnits     = $Units
-@onready var map: DFServerMap         = $Map
+@onready var players: DFServerPlayers          = $Players
+@onready var units: DFServerUnits              = $Units
+@onready var map: DFServerMap                  = $Map
+@onready var unit_collider: DFUnitCollider     = $UnitCollider
+@onready var unit_factory: DFServerUnitFactory = $UnitFactory
 
 ## The number of milliseconds since the server started.
 var timestamp_msec: int
@@ -83,3 +85,8 @@ func _physics_process(delta):
 	commands = []
 	
 	m_commands.unlock()
+
+
+func _ready():
+	unit_factory.bus_curr_tile_changed.connect(unit_collider.on_bus_curr_tile_changed)
+	unit_factory.bus_next_tile_changed.connect(unit_collider.on_bus_next_tile_changed)
