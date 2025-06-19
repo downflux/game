@@ -7,12 +7,6 @@ extends DFStateBase
 
 @export var mover: DFServerMoverBase
 
-# Server-populated vars.
-#
-# These are not visible to other players and therefore not tracked by is_dirty.
-
-# var unit_id: int
-
 
 func _ready():
 	if mover == null:
