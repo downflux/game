@@ -50,10 +50,10 @@ func _draw():
 	var h: float = float(dimension.size.y) / (vmax - vmin)
 	
 	var timestamps_msec: Array[float]
-	if is_realtime:
-		timestamps_msec = [tmin]
+	if is_realtime and curve.timestamps_msec[0] > tmin:
+		timestamps_msec.append(tmin)
 	timestamps_msec.append_array(curve.timestamps_msec)
-	if is_realtime:
+	if is_realtime and curve.timestamps_msec[-1] < tmax:
 		timestamps_msec.append(tmax)
 	
 	for i: int in len(timestamps_msec) - 1:
