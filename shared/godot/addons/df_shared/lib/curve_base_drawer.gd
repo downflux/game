@@ -82,25 +82,9 @@ func _draw():
 				draw_line(_to_canvas(p1), _to_canvas(p2), Color.GREEN, 1)
 				draw_line(_to_canvas(p2), _to_canvas(p3), Color.GREEN, 1)
 				if t1 > tmin and t1 < tmax:
-					draw_polygon(
-						PackedVector2Array([
-							_to_canvas(p1) - Vector2(-1, -1),
-							_to_canvas(p1) - Vector2(1, -1),
-							_to_canvas(p1) - Vector2(1, 1),
-							_to_canvas(p1) - Vector2(-1, 1),
-						]),
-						[ Color.GREEN ],
-					)
-				if t2 < tmax:
-					draw_polygon(
-						PackedVector2Array([
-							_to_canvas(p3) - Vector2(-1, -1),
-							_to_canvas(p3) - Vector2(1, -1),
-							_to_canvas(p3) - Vector2(1, 1),
-							_to_canvas(p3) - Vector2(-1, 1),
-						]),
-						[ Color.RED ],
-					)
+					_draw_indicator_line(_to_canvas(p1))
+				if t2 > tmin and t2 < tmax:
+					_draw_indicator_line(_to_canvas(p3))
 			DFCurveBase.Type.TYPE_LINEAR:
 				var start: Vector2 = Vector2(
 					(t1 - tmin) * w,
@@ -112,25 +96,30 @@ func _draw():
 				)
 				draw_line(_to_canvas(start), _to_canvas(end), Color.GREEN, 1)
 				if t1 > tmin and t1 < tmax:
-					draw_polygon(
-						PackedVector2Array([
-							_to_canvas(start) - Vector2(-1, -1),
-							_to_canvas(start) - Vector2(1, -1),
-							_to_canvas(start) - Vector2(1, 1),
-							_to_canvas(start) - Vector2(-1, 1),
-						]),
-						[ Color.RED ],
-					)
-				if t2 < tmax:
-					draw_polygon(
-						PackedVector2Array([
-							_to_canvas(end) - Vector2(-1, -1),
-							_to_canvas(end) - Vector2(1, -1),
-							_to_canvas(end) - Vector2(1, 1),
-							_to_canvas(end) - Vector2(-1, 1),
-						]),
-						[ Color.RED ],
-					)
+					_draw_indicator_line(_to_canvas(start))
+				if t2 > tmin and t2 < tmax:
+					_draw_indicator_line(_to_canvas(end))
+
+func _draw_indicator_line(v: Vector2):
+	draw_line(
+			Vector2(
+				v.x,
+				clamp(
+					v.y - 5,
+					dimension.position.y,
+					dimension.position.y + dimension.size.y,
+				),
+			),
+			Vector2(
+				v.x,
+				clamp(
+					v.y + 5,
+					dimension.position.y,
+					dimension.position.y + dimension.size.y,
+				),
+			),
+			Color.RED,
+	)
 
 
 func _ready():

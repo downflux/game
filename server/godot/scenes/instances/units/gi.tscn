@@ -31,7 +31,7 @@ default_value = 100
 
 [node name="Walker" type="Node" parent="." node_paths=PackedStringArray("position", "map_layer")]
 script = ExtResource("3_bkn7i")
-speed = 2.0
+speed = 0.5
 position = NodePath("../Unit/Position")
 map_layer = NodePath("../Unit/MapLayer")
 metadata/_custom_type_script = "uid://c32c6q1nhgfjf"
