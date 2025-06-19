@@ -78,7 +78,25 @@ func delay(timestamp: int):
 		t == timestamp
 	var p: Vector2 = position.get_value(t)
 	var l: DFEnums.MapLayer = map_layer.get_value(t)
-	position.shift(timestamp, int(10000.0 * (1 / speed)))
-	map_layer.shift(timestamp, int(10000.0 * (1 / speed)))
-	position.add_keyframe(t, p)
-	map_layer.add_keyframe(t, l)
+	Logger.debug(
+		JSON.stringify({
+			"label": "before shift",
+			"timestamps_msec": position.timestamps_msec,
+			"data": position.data,
+		},
+		"  ",
+		)
+	)
+	position.shift(timestamp, int(2000.0 * (1 / speed)))
+	map_layer.shift(timestamp, int(2000.0 * (1 / speed)))
+	position.add_keyframe(timestamp + 1000.0 * (1 / speed), p)
+	map_layer.add_keyframe(timestamp + 1000.0 * (1 / speed), l)
+	Logger.debug(
+		JSON.stringify({
+			"label": "after add_keyframe",
+			"timestamps_msec": position.timestamps_msec,
+			"data": position.data,
+		},
+		"  ",
+		)
+	)

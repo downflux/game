@@ -80,15 +80,3 @@ data = Dictionary[int, float]({
 })
 timestamps_msec = Array[int]([2000, 4000, 8000])
 metadata/_custom_type_script = "uid://dxyeod1rhmbom"
-
-[node name="DFCurveBaseDrawerRealtimeNoData" type="Node2D" parent="." node_paths=PackedStringArray("curve")]
-position = Vector2(100, 400)
-script = ExtResource("1_43co4")
-is_realtime = true
-curve = NodePath("DFCurveFloat")
-dimension = Rect2i(0, 0, 100, 100)
-metadata/_custom_type_script = "uid://7yoqjom001tr"
-
-[node name="DFCurveFloat" type="Node" parent="DFCurveBaseDrawerRealtimeNoData"]
-script = ExtResource("2_54665")
-metadata/_custom_type_script = "uid://dxyeod1rhmbom"
