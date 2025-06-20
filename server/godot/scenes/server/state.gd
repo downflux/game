@@ -8,10 +8,6 @@ extends DFStateBase
 @onready var unit_collider: DFUnitCollider     = $UnitCollider
 @onready var unit_factory: DFServerUnitFactory = $UnitFactory
 
-## The number of milliseconds since the server started.
-var timestamp_msec: int
-
-
 var user_commands: Dictionary[int, Callable] = {}
 var commands: Array[Callable]
 var m_commands: Mutex = Mutex.new()
@@ -28,9 +24,11 @@ func get_vector_path(uid: int, dst: Vector2i) -> Array[Vector2i]:
 	if u == null:
 		return []
 	
-	var t: int = u.unit_state.position.get_window_end_timestamp(timestamp_msec)
+	var t: int = u.unit_state.position.get_window_end_timestamp(
+		T.get_timestamp_msec(),
+	)
 	if t == -1:
-		t = timestamp_msec
+		t = T.get_timestamp_msec()
 	
 	return map.get_vector_path(
 		u.unit_state.position.get_value(t),
@@ -44,12 +42,12 @@ func set_vector_path(uid: int, path: Array[Vector2i]):
 	if u == null:
 		return
 	
-	u.mover.set_vector_path(timestamp_msec, path)
+	u.mover.set_vector_path(T.get_timestamp_msec(), path)
 
 
 func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	var data = {
-		DFStateKeys.KDFTimestampMSec: timestamp_msec,
+		DFStateKeys.KDFTimestampMSec: T.get_timestamp_msec(),
 	}
 	
 	if partial and not is_dirty:
@@ -69,11 +67,10 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 
 
 func _physics_process(delta):
-	timestamp_msec = Time.get_ticks_msec()
 	is_dirty = false
 	
 	for u: DFServerUnitBase in units.get_children():
-		u.mover.set_tiles(timestamp_msec, int(delta * 1000))
+		u.mover.set_tiles(T.get_timestamp_msec(), int(delta * 1000))
 	
 	m_commands.lock()
 	

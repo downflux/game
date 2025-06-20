@@ -2,8 +2,6 @@ class_name DFUnitCollider
 extends Node
 
 @export var units: DFServerUnits
-@export var debug_state: DFServerState
-
 
 var _curr_tiles: Dictionary[Vector2i, int] = {}
 var _next_tiles: Dictionary[int, Vector2i] = {}
@@ -30,4 +28,4 @@ func _physics_process(_delta):
 		) and (
 			_next_tiles[u.unit_state.unit_id] in _curr_tiles
 		):
-			u.mover.delay(debug_state.timestamp_msec)
+			u.mover.delay(T.get_timestamp_msec())

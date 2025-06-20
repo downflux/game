@@ -30,7 +30,7 @@ func _on_peer_connected(sid: int):
 			),
 		)
 	
-	c_receive_server_start_timestamp_msec.rpc_id(sid, state.timestamp_msec)
+	c_receive_server_start_timestamp_msec.rpc_id(sid, T.get_timestamp_msec())
 
 
 func _on_peer_disconnected(sid: int):

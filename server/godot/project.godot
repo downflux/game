@@ -16,6 +16,7 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 
 [autoload]
 
+T="*res://singletons/timer.gd"
 Logger="*res://addons/df_shared/singletons/logger/logger.tscn"
 
 [rendering]

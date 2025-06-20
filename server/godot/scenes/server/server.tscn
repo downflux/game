@@ -45,10 +45,9 @@ player_map = ExtResource("5_kr8px")
 [node name="Players" type="Node" parent="State"]
 script = ExtResource("4_jqkn5")
 
-[node name="UnitCollider" type="Node" parent="State" node_paths=PackedStringArray("units", "debug_state")]
+[node name="UnitCollider" type="Node" parent="State" node_paths=PackedStringArray("units")]
 script = ExtResource("4_evhxi")
 units = NodePath("../Units")
-debug_state = NodePath("..")
 metadata/_custom_type_script = "uid://d1n7wblu14q2d"
 
 [node name="UnitFactory" type="Node" parent="State"]
