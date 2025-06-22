@@ -33,35 +33,39 @@ sources/0 = SubResource("TileSetAtlasSource_evhxi")
 script = ExtResource("1_qgrco")
 logger_message_type = 4
 
-[node name="PlayerVerification" type="Node" parent="."]
+[node name="Components" type="Node" parent="."]
+
+[node name="PlayerVerification" type="Node" parent="Components"]
 script = ExtResource("2_375b0")
 
-[node name="State" type="Node" parent="."]
+[node name="UnitCollider" type="Node" parent="Components" node_paths=PackedStringArray("units")]
+script = ExtResource("4_evhxi")
+units = NodePath("../../State/Units")
+metadata/_custom_type_script = "uid://d1n7wblu14q2d"
+
+[node name="UnitFactory" type="Node" parent="Components"]
+script = ExtResource("3_3e01g")
+
+[node name="Camera2D" type="Camera2D" parent="Components/UnitFactory"]
+zoom = Vector2(5, 5)
+
+[node name="DebugNext" type="TileMapLayer" parent="Components/UnitFactory"]
+tile_set = SubResource("TileSet_evhxi")
+
+[node name="DebugOccupied" type="TileMapLayer" parent="Components/UnitFactory"]
+tile_map_data = PackedByteArray("AAD7//3/AAAAAAAAAAD7//7/AAAAAAAAAAD7////AAAAAAAAAAD7/wAAAAAAAAAAAAD7/wEAAAAAAAAAAAD7/wIAAAAAAAAAAAD7/wMAAAAAAAAAAAACAP3/AAAAAAAAAAD8//3/AAAAAAAAAAD9//3/AAAAAAAAAAD///3/AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAD+//3/AAAAAAAAAAADAP3/AAAAAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAD7/wQAAAAAAAAAAAD8/wQAAAAAAAAAAAD9/wQAAAAAAAAAAAD+/wQAAAAAAAAAAAD//wQAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAAAP//AAAAAAAAAAABAP//AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAD+/wIAAAAAAAAAAAAAAAIAAAAAAAAAAAD9/wMAAAAAAAAAAAD+/wMAAAAAAAAAAAD//wMAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wAAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_wscb7")
+
+[node name="State" type="Node" parent="." node_paths=PackedStringArray("unit_collider", "unit_factory")]
 script = ExtResource("3_2t17j")
+unit_collider = NodePath("../Components/UnitCollider")
+unit_factory = NodePath("../Components/UnitFactory")
 
 [node name="Map" parent="State" instance=ExtResource("5_hkcox")]
 player_map = ExtResource("5_kr8px")
 
 [node name="Players" type="Node" parent="State"]
 script = ExtResource("4_jqkn5")
-
-[node name="UnitCollider" type="Node" parent="State" node_paths=PackedStringArray("units")]
-script = ExtResource("4_evhxi")
-units = NodePath("../Units")
-metadata/_custom_type_script = "uid://d1n7wblu14q2d"
-
-[node name="UnitFactory" type="Node" parent="State"]
-script = ExtResource("3_3e01g")
-
-[node name="Camera2D" type="Camera2D" parent="State/UnitFactory"]
-zoom = Vector2(5, 5)
-
-[node name="DebugNext" type="TileMapLayer" parent="State/UnitFactory"]
-tile_set = SubResource("TileSet_evhxi")
-
-[node name="DebugOccupied" type="TileMapLayer" parent="State/UnitFactory"]
-tile_map_data = PackedByteArray("AAD7//3/AAAAAAAAAAD7//7/AAAAAAAAAAD7////AAAAAAAAAAD7/wAAAAAAAAAAAAD7/wEAAAAAAAAAAAD7/wIAAAAAAAAAAAD7/wMAAAAAAAAAAAACAP3/AAAAAAAAAAD8//3/AAAAAAAAAAD9//3/AAAAAAAAAAD///3/AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAD+//3/AAAAAAAAAAADAP3/AAAAAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAD7/wQAAAAAAAAAAAD8/wQAAAAAAAAAAAD9/wQAAAAAAAAAAAD+/wQAAAAAAAAAAAD//wQAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAAAP//AAAAAAAAAAABAP//AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAD+/wIAAAAAAAAAAAAAAAIAAAAAAAAAAAD9/wMAAAAAAAAAAAD+/wMAAAAAAAAAAAD//wMAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wAAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_wscb7")
 
 [node name="Units" type="Node" parent="State"]
 script = ExtResource("7_rqijc")

@@ -1,6 +1,9 @@
 class_name DFTimer
 extends Node
 
+const PHYSICS_TICKS_PER_SECOND: int = 10
+const DELTA_MSEC: int = int(float(1000) / PHYSICS_TICKS_PER_SECOND)
+
 ## Used as server source of truth on the current process time.
 ##
 ## Singletons are processed first before other nodes in the scene. This allows
@@ -10,7 +13,8 @@ var _timestamp_msec: int
 
 
 func _process(_delta):
-	_timestamp_msec = Time.get_ticks_msec()
+	var t: int = Time.get_ticks_msec()
+	_timestamp_msec = t
 
 
 func get_timestamp_msec() -> int:

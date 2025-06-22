@@ -5,8 +5,10 @@ extends DFStateBase
 @onready var players: DFServerPlayers          = $Players
 @onready var units: DFServerUnits              = $Units
 @onready var map: DFServerMap                  = $Map
-@onready var unit_collider: DFUnitCollider     = $UnitCollider
-@onready var unit_factory: DFServerUnitFactory = $UnitFactory
+
+# Components
+@export var unit_collider: DFUnitCollider
+@export var unit_factory: DFServerUnitFactory
 
 var user_commands: Dictionary[int, Callable] = {}
 var commands: Array[Callable]
@@ -66,11 +68,11 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 	return data
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	is_dirty = false
 	
 	for u: DFServerUnitBase in units.get_children():
-		u.mover.set_tiles(T.get_timestamp_msec(), int(delta * 1000))
+		u.mover.set_tiles(T.get_timestamp_msec(), T.DELTA_MSEC)
 	
 	m_commands.lock()
 	

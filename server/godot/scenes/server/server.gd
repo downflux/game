@@ -1,8 +1,6 @@
 class_name DFServer
 extends Node
 
-const _PHYSICS_TICKS_PER_SECOND: int = 10
-
 ## Server listening port.
 @export var port: int = 7777
 
@@ -13,9 +11,9 @@ const _PHYSICS_TICKS_PER_SECOND: int = 10
 @export var logger_message_type: Logger.MessageType = Logger.MessageType.TYPE_NATIVE
 
 # Convenience lookup modules
-@onready var player_verification: DFPlayerVerification = $PlayerVerification
-@onready var state: DFServerState = $State
-@onready var unit_factory: DFServerUnitFactory = $State/UnitFactory
+@onready var player_verification: DFPlayerVerification = $Components/PlayerVerification
+@onready var state: DFServerState                      = $State
+@onready var unit_factory: DFServerUnitFactory         = $Components/UnitFactory
 
 
 func _on_peer_connected(sid: int):
@@ -45,7 +43,7 @@ func _on_peer_disconnected(sid: int):
 func _ready():
 	# Setting the physics FPS as a project setting seems to impact the Godot
 	# editor itself.
-	Engine.set_physics_ticks_per_second(_PHYSICS_TICKS_PER_SECOND)
+	Engine.set_physics_ticks_per_second(T.PHYSICS_TICKS_PER_SECOND)
 	
 	Logger.verbosity = logger_verbosity
 	Logger.message_type = logger_message_type

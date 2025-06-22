@@ -32,5 +32,7 @@ func set_vector_path(timestamp: int, path: Array[Vector2i]):
 @warning_ignore_restore("unused_parameter")
 
 
+@warning_ignore_start("unused_parameter")
 func delay(timestamp: int) -> void:
-	pass
+	Logger.error("delay not implemented")
+@warning_ignore_restore("unused_parameter")

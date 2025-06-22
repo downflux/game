@@ -14,7 +14,7 @@ func on_bus_curr_tile_changed(uid: int, src: Vector2i, dst: Vector2i):
 		_curr_tiles[dst] = uid
 
 
-func on_bus_next_tile_changed(uid: int, src: Vector2i, dst: Vector2i):
+func on_bus_next_tile_changed(uid: int, _src: Vector2i, dst: Vector2i):
 	if uid in _next_tiles:
 		_next_tiles.erase(uid)
 	if dst != Vector2i.MAX:
