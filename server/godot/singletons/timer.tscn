@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8rhq8n87qqsm"]
+
+[ext_resource type="Script" uid="uid://6kj2k8esb17v" path="res://singletons/timer.gd" id="1_u7urn"]
+
+[node name="Timer" type="Node"]
+script = ExtResource("1_u7urn")
+metadata/_custom_type_script = "uid://6kj2k8esb17v"

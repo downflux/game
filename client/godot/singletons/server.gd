@@ -1,4 +1,4 @@
-extends Node
+extends DFTimerBase
 
 signal state_received(state: Dictionary)
 signal unit_paths_received(paths: Dictionary)
@@ -8,15 +8,14 @@ var _host: String
 var _port: int
 
 
-var server_start_timestamp_msec: int
 var frame_delay_msec: int = 100
 
 
-func get_server_timestamp_msec() -> int:
+func get_timestamp_msec() -> int:
 	return (
 		int(Time.get_unix_time_from_system() * 1000)
 	) - (
-		server_start_timestamp_msec
+		_timestamp_msec
 	) - frame_delay_msec
 
 
@@ -48,7 +47,7 @@ func connect_to_server(host: String, port: int):
 
 @rpc("authority", "call_local", "reliable")
 func c_receive_server_start_timestamp_msec(timestamp_msec: int):
-	server_start_timestamp_msec = (
+	_timestamp_msec = (
 		int(Time.get_unix_time_from_system() * 1000)
 	) - (
 		timestamp_msec

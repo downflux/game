@@ -1,7 +1,7 @@
 class_name DFServerUnitFactory
 extends Node
 
-@onready var debug_unit_scene: PackedScene = preload("res://scenes/instances/units/gi.tscn")
+@onready var debug_unit_scene: PackedScene = preload("res://scenes/instances/units/gi/gi.tscn")
 @onready var debug_occupied: TileMapLayer = $DebugOccupied
 @onready var debug_next: TileMapLayer = $DebugNext
 
@@ -39,6 +39,8 @@ func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:
 	u.unit_state.faction = faction
 	u.unit_state.unit_id = uid
 	
+	add_child(u, true)
+	
 	u.mover.curr_tile_changed.connect(_on_curr_tile_changed)
 	u.mover.next_tile_changed.connect(_on_next_tile_changed)
 	u.mover.curr_tile_changed.connect(
@@ -46,7 +48,6 @@ func create_unit(faction: DFEnums.Faction) -> DFServerUnitBase:
 	)
 	u.mover.next_tile_changed.connect(
 		func(src: Vector2i, dst: Vector2i): bus_next_tile_changed.emit(uid, src, dst)
-	)	
-	add_child(u, true)
+	)
 	
 	return u

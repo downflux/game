@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dlxcybhfkv7gj"]
+[gd_scene load_steps=6 format=3 uid="uid://dlxcybhfkv7gj"]
 
 [ext_resource type="Script" uid="uid://ow0tqqowjx3a" path="res://lib/unit.gd" id="1_bkn7i"]
+[ext_resource type="Script" uid="uid://dl23oqc73spn2" path="res://scenes/instances/units/gi/debug_ui.gd" id="2_0d18x"]
 [ext_resource type="Script" uid="uid://7yoqjom001tr" path="res://addons/df_shared/lib/curve_base_drawer.gd" id="2_1o50a"]
 [ext_resource type="PackedScene" uid="uid://uqgyi36eb4gt" path="res://addons/df_shared/instances/unit/unit.tscn" id="2_yl24q"]
 [ext_resource type="Script" uid="uid://c32c6q1nhgfjf" path="res://lib/walker.gd" id="3_bkn7i"]
@@ -11,14 +12,16 @@ unit_state = NodePath("Unit")
 mover = NodePath("Walker")
 metadata/_custom_type_script = "uid://ow0tqqowjx3a"
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="DebugUI" type="CanvasLayer" parent="."]
+script = ExtResource("2_0d18x")
 
-[node name="DFCurveBaseDrawer" type="Node2D" parent="CanvasLayer" node_paths=PackedStringArray("curve")]
+[node name="PositionVisualizer" type="Node2D" parent="DebugUI" node_paths=PackedStringArray("curve")]
 script = ExtResource("2_1o50a")
 is_realtime = true
 max_timestamp_msec_window = 10000
 curve = NodePath("../../Unit/Position")
 dimension = Rect2i(100, 50, 500, 200)
+metadata/_custom_type_script = "uid://7yoqjom001tr"
 
 [node name="Unit" parent="." instance=ExtResource("2_yl24q")]
 unit_type = 1

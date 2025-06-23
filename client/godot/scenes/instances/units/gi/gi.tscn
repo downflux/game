@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://buj5nosgbox6b"]
+[gd_scene load_steps=11 format=3 uid="uid://buj5nosgbox6b"]
 
 [ext_resource type="Script" uid="uid://ceu8m84ifmmdk" path="res://lib/unit.gd" id="1_xy0ir"]
 [ext_resource type="PackedScene" uid="uid://uqgyi36eb4gt" path="res://addons/df_shared/instances/unit/unit.tscn" id="2_xy0ir"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://bwl88aa2r6aym" path="res://lib/directive.gd" id="4_yl24q"]
 [ext_resource type="Texture2D" uid="uid://ccu1bojobw2h2" path="res://assets/sprites/units/debug_selection.png" id="5_0d18x"]
 [ext_resource type="Script" uid="uid://dho7kgica14ew" path="res://lib/collider.gd" id="6_8nby1"]
+[ext_resource type="Script" uid="uid://ld6jncrjt86j" path="res://scenes/instances/units/gi/debug_ui.gd" id="8_mscny"]
+[ext_resource type="Script" uid="uid://7yoqjom001tr" path="res://addons/df_shared/lib/curve_base_drawer.gd" id="8_wrmtf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1o50a"]
 size = Vector2(12, 18)
@@ -53,3 +55,16 @@ shape = SubResource("RectangleShape2D_1o50a")
 y_sort_enabled = true
 script = ExtResource("4_yl24q")
 metadata/_custom_type_script = "uid://bwl88aa2r6aym"
+
+[node name="DebugUI" type="CanvasLayer" parent="."]
+script = ExtResource("8_mscny")
+
+[node name="PositionVisualizer" type="Node2D" parent="DebugUI" node_paths=PackedStringArray("curve")]
+script = ExtResource("8_wrmtf")
+is_realtime = true
+max_timestamp_msec_window = 10000
+curve = NodePath("../../Unit/Position")
+dimension = Rect2i(100, 50, 500, 200)
+metadata/_custom_type_script = "uid://7yoqjom001tr"
+
+[editable path="Unit"]

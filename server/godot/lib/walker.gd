@@ -16,8 +16,8 @@ var _next: Vector2i = Vector2i.MAX:
 		_next = v
 
 
-func _ready():
-	_curr = position.get_value(0)
+func _process(_delta):
+	set_tiles(T.get_timestamp_msec(), T.DELTA_MSEC)
 
 
 func set_tiles(timestamp_msec: int, delta_msec: int):
@@ -52,14 +52,20 @@ func set_tiles(timestamp_msec: int, delta_msec: int):
 
 
 func set_vector_path(timestamp: int, path: Array[Vector2i]):
+	if not path:
+		return
+	
+	dst = path[-1]
+	dst_layer = DFEnums.MapLayer.LAYER_GROUND
+	
 	var t: int = position.get_window_end_timestamp(timestamp)
 	if t == -1:
 		t = timestamp
 	
 	var v: Vector2 = position.get_value(t)
 	
-	position.trim_keyframes(t, false)
-	map_layer.trim_keyframes(t, false)
+	position.trim_keyframes(t, false, true)
+	map_layer.trim_keyframes(t, false, true)
 	
 	for i in range(len(path)):
 		var p = path[i]
@@ -76,6 +82,10 @@ func delay(timestamp: int):
 	var t: int = position.get_window_start_timestamp(timestamp)
 	if t == -1:
 		t = timestamp
+	
+	position.trim_keyframes(timestamp, false, true)
+	map_layer.trim_keyframes(timestamp, false, true)
+	
 	var p: Vector2 = position.get_value(t)
 	var l: DFEnums.MapLayer = map_layer.get_value(t)
 	Logger.debug(

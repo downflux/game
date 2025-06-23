@@ -4,7 +4,7 @@ extends DFStateBase
 signal unit_added(u: DFClientUnitBase)
 
 @onready var unit_scene_lookup: Dictionary[DFEnums.UnitType, PackedScene] = {
-	DFEnums.UnitType.UNIT_GI: preload("res://scenes/instances/units/gi.tscn"),
+	DFEnums.UnitType.UNIT_GI: preload("res://scenes/instances/units/gi/gi.tscn"),
 }
 
 

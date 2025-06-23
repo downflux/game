@@ -3,6 +3,7 @@
 class_name DFCurveBaseDrawer
 extends Node2D
 
+@export var timer: DFTimerBase
 @export var is_realtime: bool
 @export var max_timestamp_msec_window: int
 @export var curve: DFCurveBase
@@ -43,9 +44,9 @@ func _draw():
 		vmin = min(vmin, v)
 	
 	var tmin: float = curve.timestamps_msec[0] if not is_realtime else (
-		max(Time.get_ticks_msec() - max_timestamp_msec_window, 0) if max_timestamp_msec_window > 0 else 0
+		max(timer.get_timestamp_msec() - max_timestamp_msec_window, 0) if max_timestamp_msec_window > 0 else 0
 	)
-	var tmax: float = curve.timestamps_msec[-1] if not is_realtime else Time.get_ticks_msec()
+	var tmax: float = curve.timestamps_msec[-1] if not is_realtime else timer.get_timestamp_msec()
 	var w: float = float(dimension.size.x) / (tmax - tmin)
 	var h: float = float(dimension.size.y) / (vmax - vmin)
 	

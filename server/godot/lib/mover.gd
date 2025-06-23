@@ -1,6 +1,11 @@
 class_name DFServerMoverBase
 extends Node
 
+## The unit's intended destination.
+var dst: Vector2i
+var dst_layer: DFEnums.MapLayer
+
+
 @warning_ignore_start("unused_signal")
 ## The unit's characteristic tile has moved and is now occupying a new cell.
 ## both [param src] and [param dst] may be Vector2.MAX to indicate e.g. the

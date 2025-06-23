@@ -70,7 +70,8 @@ func erase_keyframe(t: int) -> void:
 
 
 ## Truncates all keyframes before or after the window containing [param t].
-func trim_keyframes(t: int, before: bool):
+func trim_keyframes(t: int, before: bool, force_refresh: bool):
+	is_dirty = is_dirty and force_refresh
 	if before:
 		var i = _get_window_start_timestamp_index(t)
 		if i > -1:
@@ -258,7 +259,7 @@ func from_dict(partial: bool, data: Dictionary):
 			var ts = data[DFStateKeys.KDFCurveTimestampMSec]
 			if ts:
 				# Truncate all future points in local state.
-				trim_keyframes(get_window_start_timestamp(ts[0]), false)
+				trim_keyframes(get_window_start_timestamp(ts[0]), false, false)
 				
 				timestamps_msec.append_array(ts)
 		else:

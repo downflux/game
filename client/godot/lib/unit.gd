@@ -8,7 +8,7 @@ extends DFStateBase
 
 func _process(_delta):
 	var p = DFGeo.to_local(
-		unit_state.position.get_value(Server.get_server_timestamp_msec()),
+		unit_state.position.get_value(Server.get_timestamp_msec()),
 	)
 	ui.position = p
 	directive.src = p

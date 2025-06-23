@@ -10,6 +10,7 @@ extends DFStateBase
 @export var unit_collider: DFUnitCollider
 @export var unit_factory: DFServerUnitFactory
 
+var engine_commands: Array[Callable] = []
 var user_commands: Dictionary[int, Callable] = {}
 var commands: Array[Callable]
 var m_commands: Mutex = Mutex.new()
@@ -70,9 +71,6 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 
 func _physics_process(_delta):
 	is_dirty = false
-	
-	for u: DFServerUnitBase in units.get_children():
-		u.mover.set_tiles(T.get_timestamp_msec(), T.DELTA_MSEC)
 	
 	m_commands.lock()
 	

@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://p5hfbiaqoaxg"]
+[gd_scene load_steps=4 format=3 uid="uid://p5hfbiaqoaxg"]
 
 [ext_resource type="Script" uid="uid://7yoqjom001tr" path="res://addons/df_shared/lib/curve_base_drawer.gd" id="1_43co4"]
 [ext_resource type="Script" uid="uid://dxyeod1rhmbom" path="res://addons/df_shared/lib/curve/curve_float.gd" id="2_54665"]
+[ext_resource type="Script" uid="uid://bvn6jl0dxhead" path="res://tests/scenes/df_timer.gd" id="3_54665"]
 
 [node name="CurveBaseDrawerTest" type="Node"]
 
-[node name="DFCurveBaseDrawerLinear" type="Node2D" parent="." node_paths=PackedStringArray("curve")]
+[node name="DFCurveBaseDrawerLinear" type="Node2D" parent="." node_paths=PackedStringArray("timer", "curve")]
 position = Vector2(100, 100)
 script = ExtResource("1_43co4")
-is_realtime = null
-max_timestamp_msec_window = null
+timer = NodePath("../Timer")
 curve = NodePath("DFCurveFloatLinear")
 dimension = Rect2i(0, 0, 100, 100)
 metadata/_custom_type_script = "uid://7yoqjom001tr"
@@ -23,11 +23,10 @@ data = Dictionary[int, float]({
 timestamps_msec = Array[int]([100, 150])
 metadata/_custom_type_script = "uid://dxyeod1rhmbom"
 
-[node name="DFCurveBaseDrawerStep" type="Node2D" parent="." node_paths=PackedStringArray("curve")]
+[node name="DFCurveBaseDrawerStep" type="Node2D" parent="." node_paths=PackedStringArray("timer", "curve")]
 position = Vector2(200, 100)
 script = ExtResource("1_43co4")
-is_realtime = null
-max_timestamp_msec_window = null
+timer = NodePath("../Timer")
 curve = NodePath("DFCurveFloatStep")
 dimension = Rect2i(0, 0, 100, 100)
 metadata/_custom_type_script = "uid://7yoqjom001tr"
@@ -43,11 +42,11 @@ curve_type = 1
 timestamps_msec = Array[int]([100, 110, 150])
 metadata/_custom_type_script = "uid://dxyeod1rhmbom"
 
-[node name="DFCurveBaseDrawerRealtime" type="Node2D" parent="." node_paths=PackedStringArray("curve")]
+[node name="DFCurveBaseDrawerRealtime" type="Node2D" parent="." node_paths=PackedStringArray("timer", "curve")]
 position = Vector2(100, 200)
 script = ExtResource("1_43co4")
+timer = NodePath("../Timer")
 is_realtime = true
-max_timestamp_msec_window = null
 curve = NodePath("DFCurveFloat")
 dimension = Rect2i(0, 0, 200, 100)
 metadata/_custom_type_script = "uid://7yoqjom001tr"
@@ -62,9 +61,10 @@ data = Dictionary[int, float]({
 timestamps_msec = Array[int]([2000, 4000, 8000])
 metadata/_custom_type_script = "uid://dxyeod1rhmbom"
 
-[node name="DFCurveBaseDrawerRealtimeWindow" type="Node2D" parent="." node_paths=PackedStringArray("curve")]
+[node name="DFCurveBaseDrawerRealtimeWindow" type="Node2D" parent="." node_paths=PackedStringArray("timer", "curve")]
 position = Vector2(100, 300)
 script = ExtResource("1_43co4")
+timer = NodePath("../Timer")
 is_realtime = true
 max_timestamp_msec_window = 10000
 curve = NodePath("DFCurveFloat")
@@ -80,3 +80,7 @@ data = Dictionary[int, float]({
 })
 timestamps_msec = Array[int]([2000, 4000, 8000])
 metadata/_custom_type_script = "uid://dxyeod1rhmbom"
+
+[node name="Timer" type="Node" parent="."]
+script = ExtResource("3_54665")
+metadata/_custom_type_script = "uid://dv21uep8dwjvx"
