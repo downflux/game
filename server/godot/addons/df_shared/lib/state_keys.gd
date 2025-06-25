@@ -34,7 +34,8 @@ const KDFUnitHealth   = "health"
 const KDFUnitFaction  = "faction"
 
 # Curves
-const KDFCurveType          = "curve_type"
-const KDFCurveTimestampMSec = "timestamps_msec"
-const KDFCurveData          = "data"
-const KDFCurveDefaultValue  = "default_value"
+const KDFCurveType                          = "curve_type"
+const KDFCurveTimestampMSec                 = "timestamps_msec"
+const KDFCurveEarliestModifiedTimestampMSec = "earliest_modified_timestamp_msec"
+const KDFCurveData                          = "data"
+const KDFCurveDefaultValue                  = "default_value"

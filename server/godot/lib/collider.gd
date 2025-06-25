@@ -55,7 +55,7 @@ func _physics_process(_delta):
 		if (
 			t in _curr_tiles
 		) and (
-			_curr_tiles_reverse_lookup[u.unit_state.unit_id] != t
+			_curr_tiles_reverse_lookup.get(u.unit_state.unit_id, null) != t
 		):
 			u.mover.delay(T.get_timestamp_msec())
 			

@@ -181,8 +181,8 @@ func test_trim_keyframes_noop():
 		0,
 	)
 	
-	c.trim_keyframes(100, true)
-	c.trim_keyframes(120, false)
+	c.trim_keyframes(100, true, false)
+	c.trim_keyframes(120, false, false)
 	
 	assert_array(c.timestamps_msec).is_equal([100, 110, 120])
 	assert_dict(c.data).is_equal({
@@ -203,7 +203,7 @@ func test_trim_keyframes_before():
 		0,
 	)
 	
-	c.trim_keyframes(110, true)
+	c.trim_keyframes(110, true, false)
 	
 	assert_array(c.timestamps_msec).is_equal([110, 120])
 	assert_dict(c.data).is_equal({
@@ -223,7 +223,7 @@ func test_trim_keyframes_before_no_exact_match():
 		0,
 	)
 	
-	c.trim_keyframes(109, true)
+	c.trim_keyframes(109, true, false)
 	
 	assert_array(c.timestamps_msec).is_equal([110, 120])
 	assert_dict(c.data).is_equal({
@@ -243,7 +243,7 @@ func test_trim_keyframes_before_first():
 		0,
 	)
 	
-	c.trim_keyframes(121, true)
+	c.trim_keyframes(121, true, false)
 	
 	assert_array(c.timestamps_msec).is_equal([])
 	assert_dict(c.data).is_equal({})
@@ -260,7 +260,7 @@ func test_trim_keyframes_after():
 		0,
 	)
 	
-	c.trim_keyframes(110, false)
+	c.trim_keyframes(110, false, false)
 	
 	assert_array(c.timestamps_msec).is_equal([100, 110])
 	assert_dict(c.data).is_equal({
@@ -280,7 +280,7 @@ func test_trim_keyframes_after_no_exact_match():
 		0,
 	)
 	
-	c.trim_keyframes(111, false)
+	c.trim_keyframes(111, false, false)
 	
 	assert_array(c.timestamps_msec).is_equal([100, 110])
 	assert_dict(c.data).is_equal({
@@ -300,7 +300,7 @@ func test_trim_keyframes_after_last():
 		0,
 	)
 	
-	c.trim_keyframes(0, false)
+	c.trim_keyframes(0, false, false)
 	
 	assert_array(c.timestamps_msec).is_equal([])
 	assert_dict(c.data).is_equal({})
@@ -321,6 +321,7 @@ func test_from_dict_patch_no_exact_match():
 		DFStateKeys.KDFCurveTimestampMSec: [
 			101, 115,
 		],
+		DFStateKeys.KDFCurveEarliestModifiedTimestampMSec: 101,
 	})
 	
 	assert_array(c.timestamps_msec).is_equal([
@@ -343,6 +344,7 @@ func test_from_dict_patch_before_first():
 		DFStateKeys.KDFCurveTimestampMSec: [
 			99, 101, 115,
 		],
+		DFStateKeys.KDFCurveEarliestModifiedTimestampMSec: 0,
 	})
 	
 	assert_array(c.timestamps_msec).is_equal([
@@ -365,6 +367,7 @@ func test_from_dict_patch_after_last():
 		DFStateKeys.KDFCurveTimestampMSec: [
 			130, 150,
 		],
+		DFStateKeys.KDFCurveEarliestModifiedTimestampMSec: 130,
 	})
 	
 	assert_array(c.timestamps_msec).is_equal([
@@ -387,11 +390,21 @@ func test_from_dict_patch():
 		DFStateKeys.KDFCurveTimestampMSec: [
 			110, 150,
 		],
+		DFStateKeys.KDFCurveData: {
+			110: 11.1,
+			150: 15.0,
+		},
+		DFStateKeys.KDFCurveEarliestModifiedTimestampMSec: 110,
 	})
 	
 	assert_array(c.timestamps_msec).is_equal([
 		100, 110, 150,
 	])
+	assert_dict(c.data).is_equal({
+		100: 10.0,
+		110: 11.1,
+		150: 15.0
+	})
 
 
 func test_gc():
@@ -426,13 +439,13 @@ func test_clear_is_dirty():
 		DFCurveBase.Type.TYPE_LINEAR,
 		0,
 	)
-	assert_float(c._earliest_modified_timestamp_msec).is_equal(INF)
+	assert_float(c.earliest_modified_timestamp_msec).is_equal(INF)
 
 	c.add_keyframe(101, 10.1)
-	assert_float(c._earliest_modified_timestamp_msec).is_equal(101.0)
+	assert_float(c.earliest_modified_timestamp_msec).is_equal(101.0)
 	
 	c.is_dirty = false
-	assert_float(c._earliest_modified_timestamp_msec).is_equal(INF)
+	assert_float(c.earliest_modified_timestamp_msec).is_equal(INF)
 
 
 func test_to_dict_earliest_modified_timestamp_msec():
@@ -445,7 +458,7 @@ func test_to_dict_earliest_modified_timestamp_msec():
 		0,
 	)
 	c.add_keyframe(100, 10)
-	assert_float(c._earliest_modified_timestamp_msec).is_equal(100.0)
+	assert_float(c.earliest_modified_timestamp_msec).is_equal(100.0)
 	
 	var data = c.to_dict(0, true, {
 		DFStateKeys.KDFCurveTimestampMSec: true,
@@ -570,4 +583,4 @@ func test_shift():
 		140: 13.0,
 		210: 20.0,
 	})
-	assert_float(c._earliest_modified_timestamp_msec).is_equal(120.0)
+	assert_float(c.earliest_modified_timestamp_msec).is_equal(120.0)

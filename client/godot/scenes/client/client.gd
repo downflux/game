@@ -27,7 +27,6 @@ func _process(_delta):
 	_m_messages.lock()
 	
 	for m in _messages:
-		print(m)
 		state.from_dict(
 			m.get(DFStateKeys.KDFPartial, false),
 			m.get(DFStateKeys.KDFState, {}),

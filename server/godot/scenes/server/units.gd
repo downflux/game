@@ -27,5 +27,4 @@ func to_dict(sid: int, partial: bool, query: Dictionary) -> Dictionary:
 			continue
 		
 		data[u.unit_state.unit_id] = u.to_dict(sid, partial, query)
-	
 	return data

@@ -39,14 +39,14 @@ signal modified()
 # keyframes at and after this timestamp.
 #
 # int(INF) is unreliable. See https://github.com/godotengine/godot/issues/33017.
-var _earliest_modified_timestamp_msec: float = INF
+var earliest_modified_timestamp_msec: float = INF
 
 
 func _on_set_is_dirty(v: bool):
 	if v:
 		modified.emit()
 	if not v:
-		_earliest_modified_timestamp_msec = INF
+		earliest_modified_timestamp_msec = INF
 
 
 ## Flatten a potentially n-dimensional value into a single heuristc for
@@ -64,19 +64,20 @@ func erase_keyframe(t: int) -> void:
 	
 	is_dirty = true
 	var i = timestamps_msec.bsearch(t)
-	_earliest_modified_timestamp_msec = min(_earliest_modified_timestamp_msec, t)
+	earliest_modified_timestamp_msec = min(earliest_modified_timestamp_msec, t)
 	timestamps_msec.remove_at(i)
 	self.data.erase(t)
 
 
-## Truncates all keyframes before or after the window containing [param t].
+## Truncates all keyframes before or after the open interval bounded by
+## [param t].
 func trim_keyframes(t: int, before: bool, force_refresh: bool):
 	is_dirty = is_dirty and force_refresh
 	if before:
 		var i = _get_window_start_timestamp_index(t)
 		if i > -1:
 			is_dirty = true
-			_earliest_modified_timestamp_msec = timestamps_msec[0]
+			earliest_modified_timestamp_msec = timestamps_msec[0]
 			for j in range(0, i + 1):
 				self.data.erase(timestamps_msec[j])
 			timestamps_msec.reverse()
@@ -90,7 +91,7 @@ func trim_keyframes(t: int, before: bool, force_refresh: bool):
 			i = -1
 		if i > -1:
 			is_dirty = true
-			_earliest_modified_timestamp_msec = min(_earliest_modified_timestamp_msec, t)
+			earliest_modified_timestamp_msec = min(earliest_modified_timestamp_msec, t)
 			for j in range(i, len(timestamps_msec)):
 				self.data.erase(timestamps_msec[j])
 			timestamps_msec.resize(i)
@@ -100,7 +101,7 @@ func trim_keyframes(t: int, before: bool, force_refresh: bool):
 ## integer [param delay].
 func shift(t: int, delay: int) -> void:
 	is_dirty = true
-	_earliest_modified_timestamp_msec = min(_earliest_modified_timestamp_msec, t)
+	earliest_modified_timestamp_msec = min(earliest_modified_timestamp_msec, t)
 	for i in range(len(timestamps_msec) - 1, timestamps_msec.bsearch(t) - 1, -1):
 		self.data[timestamps_msec[i] + delay] = self.data[timestamps_msec[i]]
 		self.data.erase(timestamps_msec[i])
@@ -110,7 +111,7 @@ func shift(t: int, delay: int) -> void:
 ## Add keyframe at timestamp [param t]. 
 func add_keyframe(t: int, v: Variant) -> void:
 	is_dirty = true
-	_earliest_modified_timestamp_msec = min(_earliest_modified_timestamp_msec, t)
+	earliest_modified_timestamp_msec = min(earliest_modified_timestamp_msec, t)
 	
 	if t not in self.data:
 		var i = timestamps_msec.bsearch(t)
@@ -232,8 +233,9 @@ func to_dict(
 	# cleared).
 	if partial:
 		var i: int = len(timestamps_msec)
-		if _earliest_modified_timestamp_msec < INF:
-			i = timestamps_msec.bsearch(int(_earliest_modified_timestamp_msec))
+		if earliest_modified_timestamp_msec < INF:
+			data[DFStateKeys.KDFCurveEarliestModifiedTimestampMSec] = earliest_modified_timestamp_msec
+			i = timestamps_msec.bsearch(int(earliest_modified_timestamp_msec))
 		ks = timestamps_msec.slice(i)
 		for t in ks:
 			vs[t] = self.data[t]
@@ -255,15 +257,22 @@ func from_dict(partial: bool, data: Dictionary):
 	# When merging timestamps, we replace the tail of the current keyframes
 	# with incoming data.
 	if DFStateKeys.KDFCurveTimestampMSec in data:
+		var ts = data.get(DFStateKeys.KDFCurveTimestampMSec, [])
 		if partial:
-			var ts = data[DFStateKeys.KDFCurveTimestampMSec]
-			if ts:
+			if DFStateKeys.KDFCurveEarliestModifiedTimestampMSec in data:
 				# Truncate all future points in local state.
-				trim_keyframes(get_window_start_timestamp(ts[0]), false, false)
-				
-				timestamps_msec.append_array(ts)
+				var t: int = data[DFStateKeys.KDFCurveEarliestModifiedTimestampMSec]
+				var i = _get_window_end_timestamp_index(t)
+				if i == len(timestamps_msec):
+					i = -1
+				if i > -1:
+					for j in range(i, len(timestamps_msec)):
+						self.data.erase(timestamps_msec[j])
+					timestamps_msec.resize(i)
+			
+			timestamps_msec.append_array(ts)
 		else:
-			timestamps_msec = data.get(DFStateKeys.KDFCurveTimestampMSec, [])
+			timestamps_msec = ts
 	
 	if DFStateKeys.KDFCurveData in data:
 		if partial:

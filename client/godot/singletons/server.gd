@@ -8,14 +8,15 @@ var _host: String
 var _port: int
 
 
+var _server_start_timestamp_msec: int
 var frame_delay_msec: int = 100
 
 
-func get_timestamp_msec() -> int:
-	return (
+func _process(_delta):
+	_timestamp_msec = (
 		int(Time.get_unix_time_from_system() * 1000)
 	) - (
-		_timestamp_msec
+		_server_start_timestamp_msec
 	) - frame_delay_msec
 
 
@@ -47,7 +48,7 @@ func connect_to_server(host: String, port: int):
 
 @rpc("authority", "call_local", "reliable")
 func c_receive_server_start_timestamp_msec(timestamp_msec: int):
-	_timestamp_msec = (
+	_server_start_timestamp_msec = (
 		int(Time.get_unix_time_from_system() * 1000)
 	) - (
 		timestamp_msec

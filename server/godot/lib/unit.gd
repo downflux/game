@@ -21,5 +21,4 @@ func to_dict(
 ) -> Dictionary:
 	if partial and not is_dirty:
 		return {}
-	
 	return unit_state.to_dict(sid, partial, query)
