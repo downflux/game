@@ -8,16 +8,40 @@ extends DFServerMoverBase
 
 var _curr: Vector2i = Vector2i.MAX:
 	set(v):
-		curr_tile_changed.emit(_curr, v)
-		_curr = v
+		if _curr != v:
+			curr_tile_changed.emit(_curr, v)
+			print("curr changed: %s --> %s" % [_curr, v])
+			_curr = v
 var _next: Vector2i = Vector2i.MAX:
 	set(v):
-		next_tile_changed.emit(_next, v)
-		_next = v
+		if _next != v:
+			next_tile_changed.emit(_next, v)
+			print("next changed: %s --> %s" % [_next, v])
+			_next = v
 
 
 func _process(_delta):
-	set_tiles(T.get_timestamp_msec(), T.DELTA_MSEC)
+	set_tiles_v2(T.get_timestamp_msec(), T.DELTA_MSEC)
+	# set_tiles(T.get_timestamp_msec(), T.DELTA_MSEC)
+
+
+func set_tiles_v2(timestamp_msec: int, delta_msec: int):
+	var timestamps_msec: Array[int] = [timestamp_msec]
+	timestamps_msec.append_array(
+		position.filter(
+			timestamp_msec, timestamp_msec + delta_msec,
+		),
+	)
+	
+	for t: int in timestamps_msec:
+		var u: int = position.get_next_timestamp(t)
+		if u == -1:
+			return
+		
+		_curr = position.get_value(t).snapped(Vector2i(1, 1))
+		_next = position.get_value(u).snapped(Vector2i(1, 1))
+		
+		return
 
 
 func set_tiles(timestamp_msec: int, delta_msec: int):

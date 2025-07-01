@@ -584,3 +584,28 @@ func test_shift():
 		210: 20.0,
 	})
 	assert_float(c.earliest_modified_timestamp_msec).is_equal(120.0)
+
+
+func test_filter_no_results():
+	var c: DFCurveFloat = _create_float_curve(
+		{
+			110: 11,
+			120: 12,
+			130: 13,
+			200: 20,
+		},
+		DFCurveBase.Type.TYPE_LINEAR,
+		0,
+	)
+	
+	assert_array(c.filter(0, 10)).is_empty()     # no-op
+	assert_array(c.filter(210, 220)).is_empty()  # no-op
+	
+	assert_array(c.filter(0, 110)).is_equal([110])    # before first
+	assert_array(c.filter(200, 210)).is_equal([200])  # after last
+	
+	assert_array(c.filter(0, 210)).is_equal([110, 120, 130, 200])  # all
+	
+	assert_array(c.filter(119, 131)).is_equal([120, 130])  # normal case
+	
+	assert_array(c.filter(110, 110)).is_equal([110])  # zero-width window

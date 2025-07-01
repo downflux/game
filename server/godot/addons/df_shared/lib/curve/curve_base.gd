@@ -97,6 +97,23 @@ func trim_keyframes(t: int, before: bool, force_refresh: bool):
 			timestamps_msec.resize(i)
 
 
+## Returns all timestamps in the closed interval [code][start, end][/code].
+func filter(start: int, end: int) -> Array[int]:
+	if end < start:
+		return []
+	
+	var i: int = timestamps_msec.bsearch(start, true)
+	var j: int = timestamps_msec.bsearch(end, false)
+	
+	if i == len(timestamps_msec) or j == -1:
+		return []
+	
+	return timestamps_msec.slice(
+		clamp(i, 0, len(timestamps_msec)),
+		clamp(j, 0, len(timestamps_msec)),
+	)
+
+
 ## Shifts a curve by pushing back all keyframes after [param t] by a positive
 ## integer [param delay].
 func shift(t: int, delay: int) -> void:
