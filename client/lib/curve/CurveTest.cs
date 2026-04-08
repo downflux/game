@@ -1,7 +1,7 @@
 using GdUnit4;
 using static GdUnit4.Assertions;
 
-namespace GdUnit4.Tests;
+namespace Downflux.Tests;
 
 [TestSuite]
 public class CurveTest {

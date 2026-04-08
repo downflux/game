@@ -17,7 +17,6 @@ public partial class CurveNode<T> : Node where T : struct {
 }
 
 public record struct Snapshot<T>(ulong Timestamp, T Value) where T : struct;
-public record struct Interval<T>(Snapshot<T>? Lo, Snapshot<T>? Hi) where T : struct;
 
 public class Curve<T> where T : struct {
 	private SortedList<ulong, T> schedule = new();
