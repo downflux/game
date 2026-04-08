@@ -103,51 +103,39 @@ public class Curve<T> where T : struct {
 	
 	public void Schedule(ulong t, ulong? s, T v) => this.schedule_cache.Add((t, s, v));
 	
+	public Snapshot<U> _GetLinear<U>(Snapshot<U> lo, Snapshot<U> hi, ulong t, float dt) where U : struct {
+		throw new ArgumentException($"Unsupported Linear interpolation data type {typeof(U)}");
+	}
+	
+	public Snapshot<float> _GetLinear(Snapshot<float> lo, Snapshot<float> hi, ulong t, float dt) {
+		return new Snapshot<float>(t, lo.Value + (hi.Value - lo.Value) * dt);
+	}
+	
+	public Snapshot<ulong> _GetLinear(Snapshot<ulong> lo, Snapshot<ulong> hi, ulong t, float dt) {
+		return new Snapshot<ulong>(t, (ulong) System.Math.Round(lo.Value + (hi.Value - lo.Value) * dt));
+	}
+	
+	public Snapshot<int> _GetLinear(Snapshot<int> lo, Snapshot<int> hi, ulong t, float dt) {
+		return new Snapshot<int>(t, (int) System.Math.Round(lo.Value + (hi.Value - lo.Value) * dt));
+	}
+	
 	public Snapshot<T>? Get(ulong t) {
 		var (lo, hi) = (this.LowerBound(t), this.UpperBound(t));
 		if (lo.HasValue) {
 			if (!hi.HasValue) {
 				return new Snapshot<T>(t, lo.Value.Value);
 			} else {
-				float scale_factor = ((float) (t - lo.Value.Timestamp)) / ((float) (hi.Value.Timestamp - lo.Value.Timestamp));
 				switch (this.interpolation_type) {
 					case InterpolationType.Linear:
-						switch (typeof(T)) {
-							case Type type when (type == typeof(ulong)):
-								(ulong? v_hi_ulong, ulong? v_lo_ulong) = (hi.Value.Value as ulong?, lo.Value.Value as ulong?);
-								if (!v_hi_ulong.HasValue || !v_lo_ulong.HasValue) {
-									return null;
-								}
-								T? val_ulong = (ulong) System.Math.Round(
-									(float) v_lo_ulong.Value + (((float) v_hi_ulong.Value - (float) v_lo_ulong.Value) * scale_factor)) as T?;
-								if (!val_ulong.HasValue) {
-									return null;
-								}
-								return new Snapshot<T>(t, val_ulong.Value);
-							case Type type when (type == typeof(int)):
-								(int? v_hi_int, int? v_lo_int) = (hi.Value.Value as int?, lo.Value.Value as int?);
-								if (!v_hi_int.HasValue || !v_lo_int.HasValue) {
-									return null;
-								}
-								T? val_int = (int) System.Math.Round(
-									(float) v_lo_int.Value + (((float) v_hi_int.Value - (float) v_lo_int.Value) * scale_factor)) as T?;
-								if (!val_int.HasValue) {
-									return null;
-								}
-								return new Snapshot<T>(t, val_int.Value);
-							case Type type when (type == typeof(float)):
-								(float? v_hi_float, float? v_lo_float) = (hi.Value.Value as float?, lo.Value.Value as float?);
-								if (!v_hi_float.HasValue || !v_lo_float.HasValue) {
-									return null;
-								}
-								T? val_float = (v_lo_float.Value + ((v_hi_float.Value - v_lo_float.Value) * scale_factor)) as T?;
-								if (!val_float.HasValue) {
-									return null;
-								}
-								return new Snapshot<T>(t, val_float.Value);
-							default:
-								return null;
-						}
+						// Using (dynamic) is necessary to break out into the correct generic types, but is
+						// slow. If performance becomes an issue, consider reusing the inline method in
+						// https://github.com/downflux/game/commit/a480ef085f56573781dadc1023c5ae69786a4a27.
+						//
+						// See https://stackoverflow.com/a/3678769 for more information.
+						float dt = (
+							(float) (t - lo.Value.Timestamp)) / (
+							(float) (hi.Value.Timestamp - lo.Value.Timestamp));
+						return this._GetLinear((dynamic) lo.Value, (dynamic) hi.Value, t, dt);
 					case InterpolationType.Step:
 						return new Snapshot<T>(t, lo.Value.Value);
 					default:
