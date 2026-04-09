@@ -129,6 +129,31 @@ public class Curve<T> where T : struct {
 		throw new ArgumentException($"Unsupported Linear interpolation data type {typeof(U)}");
 	}
 	
+	private Snapshot<Godot.Vector2> _GetLinear(
+		Snapshot<Godot.Vector2> lo,
+		Snapshot<Godot.Vector2> hi,
+		ulong t,
+		float dt) {
+		return new Snapshot<Godot.Vector2>(
+			t,
+			new(
+				lo.Value.X + (hi.Value.X - lo.Value.X) * dt,
+				lo.Value.Y + (hi.Value.Y - lo.Value.Y) * dt));
+	}
+	
+	private Snapshot<Godot.Vector3> _GetLinear(
+		Snapshot<Godot.Vector3> lo,
+		Snapshot<Godot.Vector3> hi,
+		ulong t,
+		float dt) {
+		return new Snapshot<Godot.Vector3>(
+			t,
+			new(
+				lo.Value.X + (hi.Value.X - lo.Value.X) * dt,
+				lo.Value.Y + (hi.Value.Y - lo.Value.Y) * dt,
+				lo.Value.Z + (hi.Value.Z - lo.Value.Z) * dt));
+	}
+	
 	private Snapshot<float> _GetLinear(Snapshot<float> lo, Snapshot<float> hi, ulong t, float dt) {
 		return new Snapshot<float>(t, lo.Value + (hi.Value - lo.Value) * dt);
 	}
