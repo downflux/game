@@ -103,7 +103,7 @@ public class CurveTest {
 		
 		[TestCase]
 		public void TestTrim() {
-			Downflux.Lib.Curve<float> x = new();
+			var x = new Downflux.Lib.Curve<float>();
 			x.Schedule(10, 110);
 			x.Schedule(20, 120);
 			x.Schedule(30, 130);
@@ -124,7 +124,12 @@ public class CurveTest {
 			x.Schedule(30, 130);
 			x.Process(1);
 			
-			x.Merge(25, new System.Collections.Generic.List<(ulong, float)>{(30, 140), (40, 150)});
+			x.Merge(
+				25,
+				new System.Collections.Generic.List<Downflux.Lib.Snapshot<float>>{
+					new (30, 140),
+					new (40, 150),
+				});
 			x.Process(1);
 			
 			AssertThat(x.Get(0)).IsNull();
@@ -132,6 +137,43 @@ public class CurveTest {
 			AssertThat(x.Get(25)).IsEqual(((Downflux.Lib.Snapshot<float>) new (25, 120)));
 			AssertThat(x.Get(28)).IsEqual(((Downflux.Lib.Snapshot<float>) new (28, 132)));
 			AssertThat(x.Get(40)).IsEqual(((Downflux.Lib.Snapshot<float>) new (40, 150)));
+		}
+		
+		[TestCase]
+		public void TestGetSlice() {
+			Downflux.Lib.Curve<float> x = new();
+			x.Schedule(10, 110);
+			x.Schedule(20, 120);
+			x.Schedule(30, 130);
+			x.Process(1);
+			
+			AssertThat(x.GetSlice((0, 1))).IsEqual(null);
+			AssertThat(x.GetSlice((0, 10))).IsEqual(
+				new System.Collections.Generic.List<Downflux.Lib.Snapshot<float>>{
+					new (10, 110),
+				});
+			AssertThat(x.GetSlice((10, 10))).IsEqual(
+				new System.Collections.Generic.List<Downflux.Lib.Snapshot<float>>{
+					new (10, 110),
+				});
+			AssertThat(x.GetSlice((0, 11))).IsEqual(
+				new System.Collections.Generic.List<Downflux.Lib.Snapshot<float>>{
+					new (10, 110),
+					new (11, 111),
+				});
+			AssertThat(x.GetSlice((10, 21))).IsEqual(
+				new System.Collections.Generic.List<Downflux.Lib.Snapshot<float>>{
+					new (10, 110),
+					new (20, 120),
+					new (21, 121),
+				});
+			AssertThat(x.GetSlice((10, 30))).IsEqual(
+				new System.Collections.Generic.List<Downflux.Lib.Snapshot<float>>{
+					new (10, 110),
+					new (20, 120),
+					new (30, 130),
+				});
+			AssertThat(x.GetSlice((31, 32))).IsEqual(null);
 		}
 		
 		[TestCase]

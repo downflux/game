@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Downflux.Lib;
 
-enum InterpolationType {
+public enum InterpolationType {
 	Linear,
 	Step,
 	Pulse,
@@ -21,9 +21,14 @@ public record struct Snapshot<T>(ulong Timestamp, T Value) where T : struct;
 public class Curve<T> where T : struct {
 	private SortedList<ulong, T> schedule = new();
 	private List<(ulong Timestamp, T? Value)> schedule_cache = new();
-	
 	private InterpolationType interpolation_type = InterpolationType.Linear;
 	
+	public Curve(InterpolationType t = InterpolationType.Linear) {
+		this.interpolation_type = t;
+	}
+	
+	// Returns (K, V) tuple at the given index. This index must exist in the
+	// schedule.
 	private Snapshot<T> GetSnapshot(int index) => new (
 		this.schedule.GetKeyAtIndex(index),
 		this.schedule.GetValueAtIndex(index));
@@ -103,10 +108,10 @@ public class Curve<T> where T : struct {
 	}
 	
 	/// <summary>
-	/// Merges data after some time t. Assumes data at t is value, but all values
-	/// after t is invalid.
+	/// Merges data strictly after some time t. Assumes data at t is valid, but
+	/// all values after t is invalid.
 	/// </summary>
-	public void Merge(ulong t, List<(ulong Timestamp, T Value)> data) {
+	public void Merge(ulong t, List<Snapshot<T>> data) {
 		var lower = this.LowerBound(t);
 		if (lower.HasValue) {
 			this.schedule_cache.Add((t, lower.Value.Value));
@@ -119,22 +124,26 @@ public class Curve<T> where T : struct {
 	
 	public void Schedule(ulong t, T? v) => this.schedule_cache.Add((t, v));
 	
-	public Snapshot<U> _GetLinear<U>(Snapshot<U> lo, Snapshot<U> hi, ulong t, float dt) where U : struct {
+	private Snapshot<U> _GetLinear<U>(Snapshot<U> lo, Snapshot<U> hi, ulong t, float dt) where U : struct {
 		throw new ArgumentException($"Unsupported Linear interpolation data type {typeof(U)}");
 	}
 	
-	public Snapshot<float> _GetLinear(Snapshot<float> lo, Snapshot<float> hi, ulong t, float dt) {
+	private Snapshot<float> _GetLinear(Snapshot<float> lo, Snapshot<float> hi, ulong t, float dt) {
 		return new Snapshot<float>(t, lo.Value + (hi.Value - lo.Value) * dt);
 	}
 	
-	public Snapshot<ulong> _GetLinear(Snapshot<ulong> lo, Snapshot<ulong> hi, ulong t, float dt) {
+	private Snapshot<ulong> _GetLinear(Snapshot<ulong> lo, Snapshot<ulong> hi, ulong t, float dt) {
 		return new Snapshot<ulong>(t, (ulong) System.Math.Round(lo.Value + (hi.Value - lo.Value) * dt));
 	}
 	
-	public Snapshot<int> _GetLinear(Snapshot<int> lo, Snapshot<int> hi, ulong t, float dt) {
+	private Snapshot<int> _GetLinear(Snapshot<int> lo, Snapshot<int> hi, ulong t, float dt) {
 		return new Snapshot<int>(t, (int) System.Math.Round(lo.Value + (hi.Value - lo.Value) * dt));
 	}
 	
+	/// <summary>
+	/// Returns the interpolated value at the given timestamp. Returns null if the
+	/// timestamp is before the first defined point.
+	/// </summary>
 	public Snapshot<T>? Get(ulong t) {
 		var (lo, hi) = (this.LowerBound(t), this.UpperBound(t));
 		if (lo.HasValue) {
@@ -188,5 +197,46 @@ public class Curve<T> where T : struct {
 		}
 		
 		this.schedule_cache.Clear();
+	}
+	
+	public List<Snapshot<T>>? GetSlice((ulong? Lo, ulong? Hi) interval) {
+		if (!this.schedule.Any()) {
+			return null;
+		}
+		
+		var lo = this.UpperBound(
+			interval.Lo.HasValue ? interval.Lo.Value : this.schedule.GetKeyAtIndex(0));
+		var hi = this.LowerBound(
+			interval.Hi.HasValue ? interval.Hi.Value : this.schedule.GetKeyAtIndex(this.schedule.Count - 1));
+		
+		if (!lo.HasValue || !hi.HasValue) { return null; }  // Should not happen.
+		
+		var res = new List<Snapshot<T>>();
+		
+		if (interval.Lo.HasValue && interval.Lo.Value != lo.Value.Timestamp) {
+			var s = this.Get(interval.Lo.Value);
+			if (s.HasValue) {
+				res.Add(s.Value);
+			}
+		}
+		
+		for(var i = this.schedule.IndexOfKey(lo.Value.Timestamp); i <= this.schedule.IndexOfKey(hi.Value.Timestamp); i++) {
+			res.Add(this.GetSnapshot(i));
+		}
+		
+		if (interval.Hi.HasValue && interval.Hi.Value != hi.Value.Timestamp) {
+			var s = this.Get(interval.Hi.Value);
+			if (s.HasValue) {
+				res.Add(s.Value);
+			}
+		}
+		
+		return res;
+	}
+	
+	public void Clear() {
+		foreach(var (k, v) in this.schedule) {
+			this.schedule_cache.Add((k, null));
+		}
 	}
 }
