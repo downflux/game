@@ -20,7 +20,7 @@ public record struct Snapshot<T>(ulong Timestamp, T Value) where T : struct;
 
 public class Curve<T> where T : struct {
 	private SortedList<ulong, T> schedule = new();
-	private List<(ulong Target, ulong? Source, T Value)> schedule_cache = new();
+	private List<(ulong Timestamp, T? Value)> schedule_cache = new();
 	
 	private InterpolationType interpolation_type = InterpolationType.Linear;
 	
@@ -29,7 +29,8 @@ public class Curve<T> where T : struct {
 		this.schedule.GetValueAtIndex(index));
 	
 	/// <summary>
-	/// Get a timestamp which is guaranteed to have an associated value.
+	/// Get a timestamp which is guaranteed to have an associated value lower than
+	/// or equal to the input timestamp.
 	/// </summary>
 	/// <summary>
 	/// The input timestamp may lie in between tween points. If this is the case,
@@ -63,7 +64,7 @@ public class Curve<T> where T : struct {
 			}
 		}
 		
-		if (hi <= 0) {  // mid = -1
+		if (hi < 0) {  // mid = -1
 			return null;
 		}
 		
@@ -90,17 +91,33 @@ public class Curve<T> where T : struct {
 		return null;
 	}
 	
-	/*
-	public void Halt() => this.Truncate(this.timer(), false);
-	public void Truncate(ulong t, bool keep) {
-		int i = this.schedule.
-		if keep {
-			
+	/// <summary>
+	/// Remove all data strictly after the input timestamp.
+	/// </summary>
+	public void Trim(ulong t) {
+		var lower = this.LowerBound(t);
+		var index = lower.HasValue ? this.schedule.IndexOfKey(lower.Value.Timestamp) : -1;
+		for (var i = index + 1; i <= this.schedule.Count - 1; i++) {
+			this.schedule_cache.Add((this.schedule.GetKeyAtIndex(i), null));
 		}
 	}
-	 */
 	
-	public void Schedule(ulong t, ulong? s, T v) => this.schedule_cache.Add((t, s, v));
+	/// <summary>
+	/// Merges data after some time t. Assumes data at t is value, but all values
+	/// after t is invalid.
+	/// </summary>
+	public void Merge(ulong t, List<(ulong Timestamp, T Value)> data) {
+		var lower = this.LowerBound(t);
+		if (lower.HasValue) {
+			this.schedule_cache.Add((t, lower.Value.Value));
+		}
+		this.Trim(t);
+		foreach (var x in data.Where(x => x.Timestamp > t)) {  // Only update data after the input timestamp.
+			this.schedule_cache.Add((x.Timestamp, x.Value));
+		}
+	}
+	
+	public void Schedule(ulong t, T? v) => this.schedule_cache.Add((t, v));
 	
 	public Snapshot<U> _GetLinear<U>(Snapshot<U> lo, Snapshot<U> hi, ulong t, float dt) where U : struct {
 		throw new ArgumentException($"Unsupported Linear interpolation data type {typeof(U)}");
@@ -126,8 +143,12 @@ public class Curve<T> where T : struct {
 			} else {
 				switch (this.interpolation_type) {
 					case InterpolationType.Linear:
-						// Using (dynamic) is necessary to break out into the correct generic types, but is
-						// slow. If performance becomes an issue, consider reusing the inline method in
+						if (hi.Value.Timestamp == lo.Value.Timestamp) {
+							return lo.Value;
+						}
+						// Using (dynamic) is necessary to break out into the correct
+						// generic types, but is slow. If performance becomes an issue,
+						// consider reusing the inline method in
 						// https://github.com/downflux/game/commit/a480ef085f56573781dadc1023c5ae69786a4a27.
 						//
 						// See https://stackoverflow.com/a/3678769 for more information.
@@ -145,24 +166,24 @@ public class Curve<T> where T : struct {
 		return null;
 	}
 	
-	// Update the Curve schedule.
+	/// <summary>
+	/// Flush the Curve schedule_cache and commit to the schedule.
+	/// </summary>
 	public void Process(double delta) {
 		if (!this.schedule_cache.Any()) {  // is_dirty = False
 			return;
 		}
 		
 		foreach(var e in this.schedule_cache) {
-			// If this value is a move op, update the key.
-			if (e.Source.HasValue && this.schedule.ContainsKey(e.Source.Value)) {
-				this.schedule.Remove(e.Source.Value);
-			}
-			
-			// If a value already exists at the target timestamp, overwrite with new
-			// value.
-			if (this.schedule.ContainsKey(e.Target)) {
-				this.schedule.SetValueAtIndex(this.schedule.IndexOfKey(e.Target), e.Value);
-			} else {
-				this.schedule.Add(e.Target, e.Value);
+			if (this.schedule.ContainsKey(e.Timestamp)) {
+				// If a value already exists at the target timestamp, overwrite with new value.
+				if (e.Value.HasValue) {
+					this.schedule.SetValueAtIndex(this.schedule.IndexOfKey(e.Timestamp), e.Value.Value);
+				} else {
+					this.schedule.Remove(e.Timestamp);
+				}
+			} else if (e.Value.HasValue) {
+				this.schedule.Add(e.Timestamp, e.Value.Value);
 			}
 		}
 		

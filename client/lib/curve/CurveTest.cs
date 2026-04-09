@@ -5,7 +5,7 @@ namespace Downflux.Tests;
 
 [TestSuite]
 public class CurveTest {
-		[TestCase]
+		[TestCase(Iterations = 10)]
 		public void BenchmarkGet() {
 			Downflux.Lib.Curve<float> x = new();
 			
@@ -15,7 +15,7 @@ public class CurveTest {
 			ulong granularity = 1000;
 			
 			for (ulong i = 0; i < n_points; i++) {
-				x.Schedule((ulong) i * granularity, null, i);
+				x.Schedule((ulong) i * granularity, i);
 			}
 			x.Process(1);
 			
@@ -34,12 +34,13 @@ public class CurveTest {
 		[TestCase]
 		public void TestGetUlong() {
 			Downflux.Lib.Curve<ulong> x = new();
-			x.Schedule(10, null, 110);
-			x.Schedule(20, null, 120);
-			x.Schedule(30, null, 130);
+			x.Schedule(10, 110);
+			x.Schedule(20, 120);
+			x.Schedule(30, 130);
 			x.Process(1);
 			
 			AssertThat(x.Get(0)).IsNull();
+			AssertThat(x.Get(10)).IsEqual(((Downflux.Lib.Snapshot<ulong>) new (10, 110)));
 			AssertThat(x.Get(15)).IsEqual(((Downflux.Lib.Snapshot<ulong>) new (15, 115)));
 			AssertThat(x.Get(35)).IsEqual(((Downflux.Lib.Snapshot<ulong>) new (35, 130)));
 		}
@@ -47,12 +48,13 @@ public class CurveTest {
 		[TestCase]
 		public void TestGetInt() {
 			Downflux.Lib.Curve<int> x = new();
-			x.Schedule(10, null, 110);
-			x.Schedule(20, null, 120);
-			x.Schedule(30, null, 130);
+			x.Schedule(10, 110);
+			x.Schedule(20, 120);
+			x.Schedule(30, 130);
 			x.Process(1);
 			
 			AssertThat(x.Get(0)).IsNull();
+			AssertThat(x.Get(10)).IsEqual(((Downflux.Lib.Snapshot<int>) new (10, 110)));
 			AssertThat(x.Get(15)).IsEqual(((Downflux.Lib.Snapshot<int>) new (15, 115)));
 			AssertThat(x.Get(35)).IsEqual(((Downflux.Lib.Snapshot<int>) new (35, 130)));
 		}
@@ -60,12 +62,13 @@ public class CurveTest {
 		[TestCase]
 		public void TestGetFloat() {
 			Downflux.Lib.Curve<float> x = new();
-			x.Schedule(10, null, 110);
-			x.Schedule(20, null, 120);
-			x.Schedule(30, null, 130);
+			x.Schedule(10, 110);
+			x.Schedule(20, 120);
+			x.Schedule(30, 130);
 			x.Process(1);
 			
 			AssertThat(x.Get(0)).IsNull();
+			AssertThat(x.Get(10)).IsEqual(((Downflux.Lib.Snapshot<float>) new (10, 110)));
 			AssertThat(x.Get(15)).IsEqual(((Downflux.Lib.Snapshot<float>) new (15, 115)));
 			AssertThat(x.Get(35)).IsEqual(((Downflux.Lib.Snapshot<float>) new (35, 130)));
 		}
@@ -73,9 +76,9 @@ public class CurveTest {
 		[TestCase]
 		public void TestLowerBound() {
 			Downflux.Lib.Curve<int> x = new();
-			x.Schedule(10, null, 110);
-			x.Schedule(20, null, 120);
-			x.Schedule(30, null, 130);
+			x.Schedule(10, 110);
+			x.Schedule(20, 120);
+			x.Schedule(30, 130);
 			x.Process(1);
 			
 			AssertThat(x.LowerBound(0)).IsNull();
@@ -87,15 +90,48 @@ public class CurveTest {
 		[TestCase]
 		public void TestUpperBound() {
 			Downflux.Lib.Curve<int> x = new();
-			x.Schedule(10, null, 110);
-			x.Schedule(20, null, 120);
-			x.Schedule(30, null, 130);
+			x.Schedule(10, 110);
+			x.Schedule(20, 120);
+			x.Schedule(30, 130);
 			x.Process(1);
 			
 			AssertThat(x.UpperBound(0)).IsEqual(((Downflux.Lib.Snapshot<int>) new (10, 110)));
 			AssertThat(x.UpperBound(10)).IsEqual(((Downflux.Lib.Snapshot<int>) new (10, 110)));
 			AssertThat(x.UpperBound(15)).IsEqual(((Downflux.Lib.Snapshot<int>) new (20, 120)));
 			AssertThat(x.UpperBound(35)).IsNull();
+		}
+		
+		[TestCase]
+		public void TestTrim() {
+			Downflux.Lib.Curve<float> x = new();
+			x.Schedule(10, 110);
+			x.Schedule(20, 120);
+			x.Schedule(30, 130);
+			x.Process(1);
+			
+			x.Trim(10);
+			x.Process(1);
+			
+			AssertThat(x.Get(0)).IsNull();
+			AssertThat(x.Get(15)).IsEqual(((Downflux.Lib.Snapshot<float>) new (15, 110)));
+		}
+		
+		[TestCase]
+		public void TestMerge() {
+			Downflux.Lib.Curve<float> x = new();
+			x.Schedule(10, 110);
+			x.Schedule(20, 120);
+			x.Schedule(30, 130);
+			x.Process(1);
+			
+			x.Merge(25, new System.Collections.Generic.List<(ulong, float)>{(30, 140), (40, 150)});
+			x.Process(1);
+			
+			AssertThat(x.Get(0)).IsNull();
+			AssertThat(x.Get(15)).IsEqual(((Downflux.Lib.Snapshot<float>) new (15, 115)));
+			AssertThat(x.Get(25)).IsEqual(((Downflux.Lib.Snapshot<float>) new (25, 120)));
+			AssertThat(x.Get(28)).IsEqual(((Downflux.Lib.Snapshot<float>) new (28, 132)));
+			AssertThat(x.Get(40)).IsEqual(((Downflux.Lib.Snapshot<float>) new (40, 150)));
 		}
 		
 		[TestCase]
