@@ -17,7 +17,7 @@ public class CurveTest {
 			for (ulong i = 0; i < n_points; i++) {
 				x.Schedule((ulong) i * granularity, i);
 			}
-			x.Process(1);
+			x.Flush();
 			
 			System.Random seed = new System.Random();
 			
@@ -37,7 +37,7 @@ public class CurveTest {
 			x.Schedule(10, 110);
 			x.Schedule(20, 120);
 			x.Schedule(30, 130);
-			x.Process(1);
+			x.Flush();
 			
 			AssertThat(x.Get(0)).IsNull();
 			AssertThat(x.Get(10)).IsEqual(((Downflux.Lib.Snapshot<ulong>) new (10, 110)));
@@ -51,7 +51,7 @@ public class CurveTest {
 			x.Schedule(10, 110);
 			x.Schedule(20, 120);
 			x.Schedule(30, 130);
-			x.Process(1);
+			x.Flush();
 			
 			AssertThat(x.Get(0)).IsNull();
 			AssertThat(x.Get(10)).IsEqual(((Downflux.Lib.Snapshot<int>) new (10, 110)));
@@ -65,7 +65,7 @@ public class CurveTest {
 			x.Schedule(10, 110);
 			x.Schedule(20, 120);
 			x.Schedule(30, 130);
-			x.Process(1);
+			x.Flush();
 			
 			AssertThat(x.Get(0)).IsNull();
 			AssertThat(x.Get(10)).IsEqual(((Downflux.Lib.Snapshot<float>) new (10, 110)));
@@ -79,7 +79,7 @@ public class CurveTest {
 			x.Schedule(10, 110);
 			x.Schedule(20, 120);
 			x.Schedule(30, 130);
-			x.Process(1);
+			x.Flush();
 			
 			AssertThat(x.LowerBound(0)).IsNull();
 			AssertThat(x.LowerBound(10)).IsEqual(((Downflux.Lib.Snapshot<int>) new (10, 110)));
@@ -93,7 +93,7 @@ public class CurveTest {
 			x.Schedule(10, 110);
 			x.Schedule(20, 120);
 			x.Schedule(30, 130);
-			x.Process(1);
+			x.Flush();
 			
 			AssertThat(x.UpperBound(0)).IsEqual(((Downflux.Lib.Snapshot<int>) new (10, 110)));
 			AssertThat(x.UpperBound(10)).IsEqual(((Downflux.Lib.Snapshot<int>) new (10, 110)));
@@ -107,10 +107,10 @@ public class CurveTest {
 			x.Schedule(10, 110);
 			x.Schedule(20, 120);
 			x.Schedule(30, 130);
-			x.Process(1);
+			x.Flush();
 			
 			x.Trim(10);
-			x.Process(1);
+			x.Flush();
 			
 			AssertThat(x.Get(0)).IsNull();
 			AssertThat(x.Get(15)).IsEqual(((Downflux.Lib.Snapshot<float>) new (15, 110)));
@@ -122,7 +122,7 @@ public class CurveTest {
 			x.Schedule(10, 110);
 			x.Schedule(20, 120);
 			x.Schedule(30, 130);
-			x.Process(1);
+			x.Flush();
 			
 			x.Merge(
 				25,
@@ -130,7 +130,7 @@ public class CurveTest {
 					new (30, 140),
 					new (40, 150),
 				});
-			x.Process(1);
+			x.Flush();
 			
 			AssertThat(x.Get(0)).IsNull();
 			AssertThat(x.Get(15)).IsEqual(((Downflux.Lib.Snapshot<float>) new (15, 115)));
@@ -145,7 +145,7 @@ public class CurveTest {
 			x.Schedule(10, 110);
 			x.Schedule(20, 120);
 			x.Schedule(30, 130);
-			x.Process(1);
+			x.Flush();
 			
 			AssertThat(x.GetSlice((0, 1))).IsEqual(null);
 			AssertThat(x.GetSlice((0, 10))).IsEqual(

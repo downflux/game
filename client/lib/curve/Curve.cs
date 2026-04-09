@@ -9,7 +9,8 @@ namespace Downflux.Lib;
 public enum InterpolationType {
 	Linear,
 	Step,
-	Pulse,
+	// TODO(minkezhang): Implement Pulse type.
+	// Pulse,
 }
 
 public partial class CurveNode<T> : Node where T : struct {
@@ -178,7 +179,7 @@ public class Curve<T> where T : struct {
 	/// <summary>
 	/// Flush the Curve schedule_cache and commit to the schedule.
 	/// </summary>
-	public void Process(double delta) {
+	public void Flush() {
 		if (!this.schedule_cache.Any()) {  // is_dirty = False
 			return;
 		}
