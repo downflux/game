@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 
-namespace Downflux.Lib;
+namespace DF.Lib;
 
 public enum InterpolationType {
 	Linear,
@@ -110,15 +110,24 @@ public class Curve<T> where T : struct {
 	
 	/// <summary>
 	/// Merges data strictly after some time t. Assumes data at t is valid, but
-	/// all values after t is invalid.
+	/// all values after t is invalid. If a timestamp is not provided, replace the
+	/// schedule with the input.
 	/// </summary>
-	public void Merge(ulong t, List<Snapshot<T>> data) {
-		var lower = this.LowerBound(t);
-		if (lower.HasValue) {
-			this.schedule_cache.Add((t, lower.Value.Value));
+	public void Merge(ulong? t, List<Snapshot<T>> data) {
+		// Trim data if t is present.
+		if (t.HasValue) {
+			var lower = this.LowerBound(t.Value);
+			if (lower.HasValue) {
+				this.schedule_cache.Add((t.Value, lower.Value.Value));
+			}
+			this.Trim(t.Value);
+		} else {
+			// Reset the schedule if no timestamp is provided.
+			foreach (var x in this.schedule) {
+				this.schedule_cache.Add((x.Key, null));
+			}
 		}
-		this.Trim(t);
-		foreach (var x in data.Where(x => x.Timestamp > t)) {  // Only update data after the input timestamp.
+		foreach (var x in data.Where(x => (t.HasValue && x.Timestamp > t) || (!t.HasValue))) {  // Only update data after the input timestamp.
 			this.schedule_cache.Add((x.Timestamp, x.Value));
 		}
 	}
