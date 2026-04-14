@@ -168,9 +168,14 @@ public class Tween<U, W>
 		float dt) => lo + (hi - lo) * dt;
 	
 	/// <summary>
-	/// Schedules adding <i>or updating</i> a frame to the tween.
+	/// Schedules adding <i>or updating</i> frames to the tween.
 	/// </summary>
 	public void Add(List<Frame<U, W>> fs) => fs.ForEach(f => this._buf.Add((f.T, f)));
+	
+	/// <summary>
+	/// Schedules removing frames from the tween.
+	/// </summary>
+	public void Remove(List<Frame<U, W>> fs) => fs.ForEach(f => this._buf.Add((f.T, null)));
 	
 	/// <summary>
 	/// Returns the interpolated tween frame at the given timestamp. Returns null
@@ -230,9 +235,10 @@ public class Tween<U, W>
 	/// Get a list of frames in this tween.
 	/// </summary>
 	/// <remarks>
-	/// Returns all frames in between <c>lo <= t <= hi</c>. If the interval bounds
-	/// <c>lo</c> and <c>hi</c> are not a keyframe, return the interpolated frame
-	/// at the given bounds as well.
+	/// Returns all frames in the closed interval <c>[lo, hi]</c>. If the interval
+	/// bounds <c>lo</c> and <c>hi</c> are not a keyframe, include the
+	/// interpolated frame at the given bounds. If <c>lo</c> or <c>hi</c> are set
+	/// to <c>null</c>, return the open interval <c>(-inf, inf)</c> instead.
 	/// </remarks>
 	public List<Frame<U, W>> Slice(ulong? lo, ulong? hi)
 	{
@@ -283,7 +289,40 @@ public class Tween<U, W>
 		return slice;
 	}
 	
-	public void Merge() {}
+	/// <summary>
+	/// Remove all keyframes in the half-open interval <c>[t, inf)</c>.
+	/// </summary>
+	public void Cut(ulong t)
+	{
+		Frame<U, W>? lb = this.UpperBound(t);
+		var frames = new System.Collections.Generic.List<Frame<U, W>>();
+		for (
+			int i = lb.HasValue ? this._keyframes.IndexOfKey(lb.Value.T) : 0;
+			i < this._keyframes.Count;
+			i++) {
+				frames.Add(this._keyframes.GetValueAtIndex(i));
+		}
+		this.Remove(frames);
+	}
+	
+	/// <summary>
+	/// Replace all keyframes in the open interval <c>(t, inf)</c>.
+	/// </summary>
+	/// <remarks>
+	/// Ensures the value of the tween at <c>t</c> is preserved, including any
+	/// metadata associated with a keyframe.
+	/// </remarks>
+	public void Merge(ulong t, List<Frame<U, W>> fs)
+	{
+		Frame<U, W>? f = this.Get(t);
+		this.Cut(t);
+		if (f.HasValue)
+		{
+			this.Add(new List<Frame<U, W>>{f.Value});
+		}
+		
+		this.Add(fs);
+	}
 	
 	/// <summary>
 	/// Commits all writes to <see cref="Tween._buf"> to the internal
@@ -310,5 +349,5 @@ public class Tween<U, W>
 	/// <summary>
 	/// Schedules all keyframes in the tween for deletion.
 	/// </summary>
-	public void Clear() {}
+	public void Clear() => this.Remove(this._keyframes.Values.ToList());
 }

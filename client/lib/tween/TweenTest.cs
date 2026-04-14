@@ -105,4 +105,44 @@ public class TweenTest
 					new(10, 110, true),
 					new(20, 120, null)});
 		}
+		
+		[TestCase((ulong)0)]
+		[TestCase((ulong)10)]
+		public void TestCutAll(ulong t)
+		{
+			this._t.Cut(t);
+			this._t.Flush();
+			
+			AssertThat(this._t.Slice(null, null)).IsEmpty();
+		}
+		
+		public void TestCut()
+		{
+			this._t.Cut(11);
+			this._t.Flush();
+			
+			AssertThat(this._t.Slice(null, null)).IsEqual(
+				new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool>>{
+					new(10, 110, true)});
+		}
+		
+		[TestCase]
+		public void TestMerge()
+		{
+			this._t.Merge(
+				25,
+				new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool>>{
+					new(30, 140, null),
+					new(40, 150, null),
+				});
+			this._t.Flush();
+			
+			AssertThat(this._t.Slice(null, null)).IsEqual(
+				new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool>>{
+					new(10, 110, true),
+					new(20, 120, null),
+					new(25, 125, null),
+					new(30, 140, null),
+					new(40, 150, null)});
+		}
 }
