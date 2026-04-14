@@ -1,4 +1,3 @@
-using Godot;
 using System;
 using System.Collections.Generic;
 using System.Collections;
@@ -13,10 +12,6 @@ public enum InterpolationType {
 	// Pulse,
 }
 
-public partial class CurveNode<T> : Node where T : struct {
-	private Curve<T> curve = new();
-}
-
 public record struct Snapshot<T>(ulong Timestamp, T Value) where T : struct;
 
 public class Curve<T> where T : struct {
@@ -24,9 +19,7 @@ public class Curve<T> where T : struct {
 	private List<(ulong Timestamp, T? Value)> schedule_cache = new();
 	private InterpolationType interpolation_type = InterpolationType.Linear;
 	
-	public Curve(InterpolationType t = InterpolationType.Linear) {
-		this.interpolation_type = t;
-	}
+	public Curve(InterpolationType t = InterpolationType.Linear) => this.interpolation_type = t;
 	
 	// Returns (K, V) tuple at the given index. This index must exist in the
 	// schedule.
@@ -269,9 +262,5 @@ public class Curve<T> where T : struct {
 		return res;
 	}
 	
-	public void Clear() {
-		foreach(var (k, v) in this.schedule) {
-			this.schedule_cache.Add((k, null));
-		}
-	}
+	public void Clear() => this.Merge(null, new List<Snapshot<T>>{});
 }
