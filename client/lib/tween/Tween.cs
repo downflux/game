@@ -29,17 +29,39 @@ public enum InterpolationType {
 /// <c><see cref="Godot.Vector2" /></c>.
 /// </param>
 /// <param name="D">Additional metadata, e.g. delegates.</param>
-public record struct Frame<U, W>(
-	ulong T,  // Timestamp
-	U V,      // Value
-	W? D      // Data
-)
-	where U : struct
-	where W : struct;
+/// <param name="K">
+/// Represents if this object is a keyframe (i.e. stored explicitly in the
+/// tween) or an interpolated value.
+/// </param>
+public readonly record struct Frame<U, W> where U : struct
+{
+		public ulong T { get; }  // Timestamp
+		public U V { get; }      // Value
+		public W? D { get; }     // Data
+		public bool K { get; }   // IsKeyframe
+		
+		public Frame(ulong t, U v, W? d) : this(t, v, d, true)
+		{
+		}
+		
+		/// <summary>
+		/// Namespace and test-level constructor for this object.
+		/// </summary>
+		/// <remarks>
+		/// Calls from Godot-related namespaces <b>must</b> use the <c>public</c>
+		/// constructor.
+		/// </remarks>
+		internal Frame(ulong t, U v, W? d, bool k)
+		{
+			this.T = t;
+			this.V = v;
+			this.D = d;
+			this.K = k;
+		}
+}
 
 public class Tween<U, W>
 	where U : struct
-	where W : struct
 {
 	/// <summary>
 	/// The internal list of tween keyframes which is used to interpolate data at
@@ -194,7 +216,7 @@ public class Tween<U, W>
 			// pause at the last known value.
 			else if (!ub.HasValue)
 			{
-				return new Frame<U, W>(t, lb.Value.V, null);
+				return new Frame<U, W>(t, lb.Value.V, default(W), false);
 			}
 			else
 			{
@@ -220,9 +242,10 @@ public class Tween<U, W>
 								(dynamic) lb.Value.V,
 								(dynamic) ub.Value.V,
 								dt),
-							null);
+							default(W),
+							false);
 					case InterpolationType.Step:
-						return new Frame<U, W>(t, lb.Value.V, null);
+						return new Frame<U, W>(t, lb.Value.V, default(W), false);
 					default:
 						break;
 				}
@@ -245,6 +268,11 @@ public class Tween<U, W>
 		var slice = new List<Frame<U, W>>();
 		
 		if (!this._keyframes.Any())
+		{
+			return slice;
+		}
+		
+		if (lo.HasValue && hi.HasValue && hi.Value < lo.Value)  // Invalid input.
 		{
 			return slice;
 		}
@@ -318,7 +346,12 @@ public class Tween<U, W>
 		this.Cut(t);
 		if (f.HasValue)
 		{
-			this.Add(new List<Frame<U, W>>{f.Value});
+			this.Add(new List<Frame<U, W>>{
+				new Frame<U, W>(
+					f.Value.T,
+					f.Value.V,
+					f.Value.D,
+					true)});
 		}
 		
 		this.Add(fs);
