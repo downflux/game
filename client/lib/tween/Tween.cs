@@ -4,7 +4,8 @@ using System.Linq;
 
 namespace DF.Lib.Tween;
 
-public enum InterpolationType {
+public enum InterpolationType
+{
 	Linear,
 	Step,
 	// TODO(minkezhang): Implement Pulse type.
@@ -77,9 +78,9 @@ public class Tween<U, W>
 	/// </summary>
 	private List<(ulong T, Frame<U, W>? F)> _buf = new();
 	
-	private InterpolationType _interpolation_type;
+	public InterpolationType InterpolationType { get; }
 	
-	public Tween(InterpolationType t) => this._interpolation_type = t;
+	public Tween(InterpolationType t) => this.InterpolationType = t;
 	
 	/// <summary>
 	/// Get an explicit keyframe stored in the tween which is guaranteed to have
@@ -220,7 +221,7 @@ public class Tween<U, W>
 			}
 			else
 			{
-				switch (this._interpolation_type)
+				switch (this.InterpolationType)
 				{
 					case InterpolationType.Linear:
 						if (ub.Value.T == lb.Value.T)

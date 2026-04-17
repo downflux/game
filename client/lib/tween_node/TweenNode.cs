@@ -1,13 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DF.Lib.Tween;
-
-public partial class FloatNode : TweenNode<float>
-{
-	[Godot.Export]
-	required public Godot.Collections.Array<float> WatchPoints;
-}
+namespace DF.Lib.TweenNode;
 
 public delegate void FrameTriggerEventHandler<T>(object sender, FrameTriggerEventArgs<T> e) where T : struct;
 
@@ -39,15 +33,16 @@ public partial class TweenNode<T> : Godot.Node where T : struct
 	[Godot.Export]
 	required public DF.Lib.Tween.InterpolationType InterpolationType;
 	
-	protected List<ValueTriggerComparater<T>> _value_triggers = new();
-	
 	/// <summary>
 	/// Internal data model for this node, comprised of a list of
 	/// { timestamp : data } tuples.
 	/// </summary>
-	private DF.Lib.Tween.Tween<T, FrameTriggerEventHandler<T>> _tween;
+	internal DF.Lib.Tween.Tween<T, FrameTriggerEventHandler<T>> _tween;
 	
-	private ulong? _last_tick_ms = null;
+	/// <summary>
+	/// Last time that _Process() was invoked.
+	/// </summary>
+	private ulong _last_tick_ms = 0;
 	
 	public TweenNode()
 	{
@@ -86,11 +81,14 @@ public partial class TweenNode<T> : Godot.Node where T : struct
 	/// </remarks>
 	public override void _Process(double dt)
 	{
-		(ulong? lo, ulong? hi) = (
-			!this._last_tick_ms.HasValue ? null : this._last_tick_ms.Value + 1,
-			Godot.Time.GetTicksMsec());
+		// _Process() is in pre-order traversal. See
+		// https://docs.godotengine.org/en/stable/tutorials/scripting/scene_tree.html#tree-order
+		// for more information.
+		this._tween.Flush();
+	
+		var tick_ms = Godot.Time.GetTicksMsec();
 		
-		List<DF.Lib.Tween.Frame<T, FrameTriggerEventHandler<T>>> slice = this._tween.Slice(lo, hi);
+		List<DF.Lib.Tween.Frame<T, FrameTriggerEventHandler<T>>> slice = this._tween.Slice(this._last_tick_ms, tick_ms);
 		
 		foreach (var f in slice)
 		{
@@ -103,47 +101,6 @@ public partial class TweenNode<T> : Godot.Node where T : struct
 			}
 		}
 		
-		// The value at the end of the last interval. This is used to check if any
-		// values have crossed a threshold between then and the first tick of the
-		// current interval.
-		DF.Lib.Tween.Frame<T, FrameTriggerEventHandler<T>>? pf = (
-			!this._last_tick_ms.HasValue ? null : this._tween.Get(
-				_last_tick_ms.Value));
-		
-		foreach (var t in this._value_triggers)
-		{
-			(bool? before, bool? after) = (null, null);
-			
-			for (var i = 0; i < slice.Count; i++)
-			{
-				var f = slice[i];
-				
-				if (i == 0) {
-					before = (pf.HasValue) ? t?.Invoke(pf.Value.V) : null;
-				}
-				else
-				{
-					before = after;
-				}
-				
-				after = t?.Invoke(f.V);
-				
-				// A threshold has been triggered.
-				if (
-					(
-						before.HasValue && !before.Value) && (
-						after.HasValue && after.Value))
-				{
-					f.D?.Invoke(this, new FrameTriggerEventArgs<T>(f));
-				}
-				
-				before = after;
-			}
-		}
-		
-		// _Process() is in pre-order traversal. See
-		// https://docs.godotengine.org/en/stable/tutorials/scripting/scene_tree.html#tree-order
-		// for more information.
-		this._tween.Flush();
+		this._last_tick_ms = Godot.Time.GetTicksMsec();
 	}
 }
