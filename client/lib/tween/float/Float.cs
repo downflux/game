@@ -8,7 +8,7 @@ public enum EdgeType
 	RisingEdge,
 }
 
-public class Float<W> : Tween<float, W>
+public class Float<W> : Base<float, W>
 {
 	public Float(InterpolationType t) : base(t)
 	{

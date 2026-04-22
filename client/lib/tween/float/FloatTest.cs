@@ -1,7 +1,7 @@
 using GdUnit4;
 using static GdUnit4.Assertions;
 
-namespace DF.Tests.Tween;
+namespace DF.Tests.Lib.Tween;
 
 [TestSuite]
 public class FloatTest
