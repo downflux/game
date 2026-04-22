@@ -37,7 +37,7 @@ public partial class TweenNode<T> : Godot.Node where T : struct
 	/// Internal data model for this node, comprised of a list of
 	/// { timestamp : data } tuples.
 	/// </summary>
-	internal DF.Lib.Tween.Tween<T, FrameTriggerEventHandler<T>> _tween;
+	internal DF.Lib.Tween.ITween<T, FrameTriggerEventHandler<T>> _tween;
 	
 	/// <summary>
 	/// Last time that _Process() was invoked.
@@ -92,7 +92,8 @@ public partial class TweenNode<T> : Godot.Node where T : struct
 		
 		foreach (var f in slice)
 		{
-			if (f.K) {
+			if (f.K)
+			{
 				// Emit the default keyframe trigger event.
 				this.KeyFrameTriggerEvent?.Invoke(this, new FrameTriggerEventArgs<T>(f));
 				

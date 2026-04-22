@@ -4,6 +4,18 @@ using System.Linq;
 
 namespace DF.Lib.Tween;
 
+public interface ITween<U, W> where U : struct
+{
+	public void Add(List<Frame<U, W>> fs);
+	public void Remove(List<Frame<U, W>> fs);
+	public Frame<U, W>? Get(ulong t);
+	public List<Frame<U, W>> Slice(ulong? lo, ulong? hi);
+	public void Cut(ulong t);
+	public void Merge(ulong t, List<Frame<U, W>> fs);
+	public void Flush();
+	public void Clear();
+}
+
 public enum InterpolationType
 {
 	Linear,
@@ -61,7 +73,7 @@ public readonly record struct Frame<U, W> where U : struct
 		}
 }
 
-public class Tween<U, W>
+public class Tween<U, W> : ITween<U, W>
 	where U : struct
 {
 	/// <summary>

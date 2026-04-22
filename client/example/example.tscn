@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://c33138h25f7e5"]
 
 [ext_resource type="Script" uid="uid://b3vln0ld81cvg" path="res://example/Example.cs" id="1_fdt2r"]
-[ext_resource type="Script" uid="uid://ba20qngauj5gx" path="res://lib/tween/float/FloatNode.cs" id="2_pjyox"]
+[ext_resource type="Script" uid="uid://ba20qngauj5gx" path="res://lib/tween_node/float/FloatNode.cs" id="2_pjyox"]
 
 [node name="Example" type="Node2D" unique_id=2067538211]
 script = ExtResource("1_fdt2r")
 
-[node name="Node" type="Node" parent="." unique_id=1052569396]
+[node name="HPBar" type="Node" parent="." unique_id=1052569396]
 script = ExtResource("2_pjyox")
-WatchPoints = Array[float]([100.0])
+WatchPoints = Dictionary[float, int]({})
 InterpolationType = 1
