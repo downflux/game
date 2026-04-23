@@ -93,6 +93,20 @@ public class FloatTest
 				new (200, (float)60, true),
 				40,
 				DF.Lib.Tween.EdgeType.FallingEdge)).IsNull();
+		
+		AssertThat(  // t = lb, for the half-open interval (lb, ub]
+			this._t.Intercept(
+				new (10, 110, true),
+				new (20, 120, true),
+				110,
+				DF.Lib.Tween.EdgeType.RisingEdge)).IsNull();
+		AssertThat(  // t = ub, for the half-open interval (lb, ub]
+			this._t.Intercept(
+				new (10, 110, true),
+				new (20, 120, true),
+				120,
+				DF.Lib.Tween.EdgeType.RisingEdge)).IsEqual(
+			new DF.Lib.Tween.Frame<float, bool?>(20, 120, null, true));
 	}
 	
 	[TestCase]

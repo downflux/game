@@ -56,7 +56,7 @@ public class Float<W> : Base<float, W>
 		}
 		
 		float t = ub.Value.T - (ub.Value.V - v) * dt / dv;
-		if (t < (float)lb.Value.T || t > (float)ub.Value.T)
+		if (t <= (float)lb.Value.T || t > (float)ub.Value.T)
 		{
 			return null;
 		}

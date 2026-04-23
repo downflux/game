@@ -29,14 +29,6 @@ public partial class Float : Base<float>
 			List<DF.Lib.Tween.Frame<float, FrameTriggerEventHandler<float>>> fs = (
 				(DF.Lib.Tween.Float<FrameTriggerEventHandler<float>>)(this._tween)).Find(
 					this._last_tick_ms, tick_ms, v, et);
-			foreach (var f in this._tween.Slice(this._last_tick_ms, tick_ms))
-			{
-				Godot.GD.Print($"F: (T = {f.T}, V = {f.V})");
-			}
-			foreach (var f in fs)
-			{
-				Godot.GD.Print($"Intercept: (T = {f.T}, V = {f.V}) for v = {v}, et = {et}");
-			}
 			foreach (var f in fs)
 			{
 				this.ValueTriggerEvent?.Invoke(this, new FrameTriggerEventArgs<float>(f));
