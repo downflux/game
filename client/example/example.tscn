@@ -9,6 +9,5 @@ script = ExtResource("1_fdt2r")
 [node name="HPBar" type="Node" parent="." unique_id=1052569396]
 script = ExtResource("2_pjyox")
 WatchPoints = Dictionary[float, int]({
-50.0: 0
+0.0: 0
 })
-InterpolationType = 1

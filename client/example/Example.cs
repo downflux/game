@@ -12,7 +12,7 @@ public partial class Example : Node2D
 		hp._tween.Flush();
 		hp.ValueTriggerEvent += (t, e) =>
 			{
-				GD.Print($"HP DIED: {e}");
+				GD.Print($"DEBUG(Example.cs): HP has reached 0.");
 			};
 	}
 	
@@ -20,9 +20,5 @@ public partial class Example : Node2D
 	{
 		DF.Instances.Tween.Float hp = GetNode<DF.Instances.Tween.Float>("HPBar");
 		DF.Lib.Tween.Frame<float, DF.Instances.Tween.FrameTriggerEventHandler<float>>? cur_hp = hp._tween.Get(Godot.Time.GetTicksMsec());
-		if (cur_hp.HasValue)
-		{
-			// GD.Print($"{cur_hp.Value.V}");
-		}
 	}
 }

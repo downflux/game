@@ -14,8 +14,22 @@ public class Float<W> : Base<float, W>
 	{
 	}
 	
+	/// <summary>
+	/// Find the linear intercept point in the half-open interval <c>(lb, ub]</c>.
+	/// </summary>
+	/// <remarks>
+	/// This function assumes a smooth linear function in between the two
+	/// endpoints. Therefore, if there is a <c>null</c> value as an endpoint,
+	/// there is no data to interpolate, and therefore, this function will return
+	/// a null result.
+	/// </remarks>
 	internal Frame<float, W>? Intercept(Frame<float, W>? lb, Frame<float, W>? ub, float v, EdgeType et)
 	{
+		if (this.InterpolationType == InterpolationType.Step)
+		{
+			return null;
+		}
+		
 		if (lb.HasValue && ub.HasValue && lb.Value.T > ub.Value.T)
 		{
 			return null;
@@ -23,14 +37,6 @@ public class Float<W> : Base<float, W>
 		
 		if (!lb.HasValue || !ub.HasValue)
 		{
-			if (!lb.HasValue && ub.HasValue)
-			{
-				return v == ub.Value.T ? ub : null;
-			}
-			if (!ub.HasValue && lb.HasValue)
-			{
-				return v == lb.Value.T ? lb : null;
-			}
 			return null;
 		}
 		
@@ -39,46 +45,33 @@ public class Float<W> : Base<float, W>
 			return null;
 		}
 		
-		switch (this.InterpolationType)
+		// (ub.V - lb.V) / (ub.T - lb.T) = (ub.V - v) / (ub.T - t)
+		//   => t = ub.T - dt / dv (ub.V - v)
+		float dt = ub.Value.T - lb.Value.T;
+		float dv = ub.Value.V - lb.Value.V;
+		
+		if (dt == 0 && v != ub.Value.V)
 		{
-			case InterpolationType.Linear:
-				// (v - lb.V) = m * (t - lb.T), where m = dt / dv
-				//   => t = (v - lb.V) * dv / dt + lb.T
-				float dt = ub.Value.T - lb.Value.T;
-				float dv = ub.Value.V - lb.Value.V;
-				
-				if (dt == 0 && v != ub.Value.V)
-				{
-					return null;
-				}
-				
-				float t = (v - lb.Value.V) * dv / dt + lb.Value.T;
-				if (t < (float)lb.Value.T || t > (float)ub.Value.T)
-				{
-					return null;
-				}
-				
-				if (
-					(
-						lb.Value.V < ub.Value.V && et == EdgeType.RisingEdge) || (
-						lb.Value.V > ub.Value.V && et == EdgeType.FallingEdge))
-				{
-					return this.Get((ulong)Math.Round(t));
-				}
-				
-				return null;
-			case InterpolationType.Step:
-				if (v == lb.Value.T)
-				{
-					return lb;
-				}
-				if (v == ub.Value.T)
-				{
-					return ub;
-				}
-				
-				return null;
+			return null;
 		}
+		
+		float t = ub.Value.T - (ub.Value.V - v) * dt / dv;
+		if (t < (float)lb.Value.T || t > (float)ub.Value.T)
+		{
+			return null;
+		}
+		
+		if (
+			(
+				lb.Value.V < ub.Value.V && et == EdgeType.RisingEdge) || (
+				lb.Value.V > ub.Value.V && et == EdgeType.FallingEdge))
+		{
+			if ((ulong)Math.Round(t) > lb.Value.T)
+			{
+				return this.Get((ulong)Math.Round(t));
+			}
+		}
+		
 		return null;
 	}
 	
@@ -90,10 +83,6 @@ public class Float<W> : Base<float, W>
 	/// <see cref="DF.Lib.Tween.EdgeType" /> of <c>v</c>. If <c>EdgeType</c> is
 	/// <c>FallingEdge</c>, return only if <c>lo.V &gt; v &gt; hi.V</c>.
 	/// </param>
-	/// <remarks>
-	/// We are assuming lb and ub are adjacent frames with no intermediate
-	/// keyframes in between.
-	/// </remarks>
 	public System.Collections.Generic.List<Frame<float, W>> Find(ulong? lo, ulong? hi, float v, EdgeType et)
 	{
 		System.Collections.Generic.List<Frame<float, W>> slice = this.Slice(lo, hi);

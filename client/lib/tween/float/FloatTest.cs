@@ -19,6 +19,8 @@ public class FloatTest
 				new(10, 110, true),
 				new(20, 120, null),
 				new(30, 130, null),
+				new(40, 120, null),
+				new(50, 130, null),
 			});
 		this._t.Flush();
 	}
@@ -84,5 +86,46 @@ public class FloatTest
 				120,
 				DF.Lib.Tween.EdgeType.RisingEdge)).IsEqual(
 			new DF.Lib.Tween.Frame<float, bool?>(20, 120, null, true));
+		
+		AssertThat(  // OOB
+			this._t.Intercept(
+				new (100, (float)80, true),
+				new (200, (float)60, true),
+				40,
+				DF.Lib.Tween.EdgeType.FallingEdge)).IsNull();
+	}
+	
+	[TestCase]
+	public void TestFind()
+	{
+		AssertThat(  // OOB
+			this._t.Find(null, null, 100, DF.Lib.Tween.EdgeType.RisingEdge)).IsEmpty();
+		AssertThat(  // OOB
+			this._t.Find(null, 9, 100, DF.Lib.Tween.EdgeType.RisingEdge)).IsEmpty();
+		AssertThat(  // OOB
+			this._t.Find(51, null, 100, DF.Lib.Tween.EdgeType.RisingEdge)).IsEmpty();
+		
+		AssertThat(
+			this._t.Find(10, 15, 111, DF.Lib.Tween.EdgeType.FallingEdge)).IsEmpty();
+		AssertThat(
+			this._t.Find(10, 15, 111, DF.Lib.Tween.EdgeType.RisingEdge)).IsEqual(
+				new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>> {
+					new (11, 111, null, false)
+				});
+		AssertThat(  // Multiple intercepts.
+			this._t.Find(20, 50, 121, DF.Lib.Tween.EdgeType.RisingEdge)).IsEqual(
+				new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>> {
+					new (21, 121, null, false),
+					new (41, 121, null, false)
+				});
+		
+		
+		AssertThat(
+			this._t.Find(30, 40, 129, DF.Lib.Tween.EdgeType.RisingEdge)).IsEmpty();
+		AssertThat(
+			this._t.Find(30, 40, 129, DF.Lib.Tween.EdgeType.FallingEdge)).IsEqual(
+				new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>> {
+					new (31, 129, null, false)
+				});
 	}
 }
