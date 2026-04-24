@@ -5,9 +5,9 @@ namespace DF.Tests.Instances.Tween;
 
 [TestSuite]
 [RequireGodotRuntime]
-public class FloatNodeTest
+public class FloatTest
 {
-	private DF.Instances.Tween.Float _n = new DF.Instances.Tween.Float() {
+	private DF.Instances.Tween.Float<bool> _n = new DF.Instances.Tween.Float<bool>() {
 		WatchPoints = new Godot.Collections.Dictionary<float, DF.Lib.Tween.EdgeType>
 		{
 			{ 50, DF.Lib.Tween.EdgeType.RisingEdge },
@@ -17,7 +17,7 @@ public class FloatNodeTest
 	[BeforeTest]
 	public void SetUp()
 	{
-		this._n = new DF.Instances.Tween.Float() {
+		this._n = new DF.Instances.Tween.Float<bool>() {
 			WatchPoints = new Godot.Collections.Dictionary<float, DF.Lib.Tween.EdgeType>
 			{
 				{ 50, DF.Lib.Tween.EdgeType.FallingEdge },
@@ -25,15 +25,10 @@ public class FloatNodeTest
 		};
 		
 		this._n._tween.Add(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, DF.Instances.Tween.FrameTriggerEventHandler<float>>>{
-				new(0, 100, null),
-				new(100, 0, null),
+			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool>>{
+				new(0, 100, false),
+				new(100, 0, false),
 			});
 		this._n._tween.Flush();
-	}
-	
-	[TestCase]
-	public void TestTrigger()
-	{
 	}
 }

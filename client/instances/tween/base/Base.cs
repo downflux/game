@@ -3,42 +3,45 @@ using System.Collections.Generic;
 
 namespace DF.Instances.Tween;
 
-public delegate void FrameTriggerEventHandler<T>(object sender, FrameTriggerEventArgs<T> e) where T : struct;
+public delegate void TriggerEventHandler<U, W>(
+	object sender,
+	TriggerEventHandlerArgs<U, W> e)
+where U : struct;
 
-public delegate bool ValueTriggerComparater<T>(T v) where T : struct;
-
-public class FrameTriggerEventArgs<T> : EventArgs where T : struct
+public class TriggerEventHandlerArgs<U, W> : EventArgs
+	where U : struct
 {
-	public DF.Lib.Tween.Frame<T, FrameTriggerEventHandler<T>> F { get; }
+	public DF.Lib.Tween.Frame<U, W> F { get; }
 	
-	public FrameTriggerEventArgs(DF.Lib.Tween.Frame<T, FrameTriggerEventHandler<T>> f) => this.F = f;
+	public TriggerEventHandlerArgs(DF.Lib.Tween.Frame<U, W> f) => this.F = f;
 }
 
 /// <summary>
-/// Logic encapsulating the <see cref="DF.Lib.Tween.Base{T}" /> object within a
+/// Logic encapsulating the <see cref="DF.Lib.Tween.Base{U, W}" /> object within a
 /// <see cref="Godot.Node" /> object.
 /// </summary>
-public partial class Base<T> : Godot.Node where T : struct
+public partial class Base<U, W> : Godot.Node
+	where U : struct
 {
 	public string ID { get; }
 	
 	/// <summary>
 	/// Emitted whenever a keyframe occurs.
 	/// </summary>
-	public event FrameTriggerEventHandler<T>? KeyFrameTriggerEvent;
+	public event TriggerEventHandler<U, W>? KeyFrameTriggerEvent;
 	
 	/// <summary>
 	/// Internal data model for this node, comprised of a list of
 	/// { timestamp : data } tuples.
 	/// </summary>
-	internal DF.Lib.Tween.ITween<T, FrameTriggerEventHandler<T>> _tween;
+	internal DF.Lib.Tween.ITween<U, W> _tween;
 	
 	/// <summary>
 	/// Last time that _Process() was invoked.
 	/// </summary>
 	private ulong _last_tick_ms = 0;
 	
-	public Base(DF.Lib.Tween.ITween<T, FrameTriggerEventHandler<T>> tween)
+	public Base(DF.Lib.Tween.ITween<U, W> tween)
 	{
 		this._tween = tween;
 		this.ID = System.Guid.NewGuid().ToString("D");
@@ -52,7 +55,7 @@ public partial class Base<T> : Godot.Node where T : struct
 	/// <list type="number">
 	///   <item>
 	///     <description>
-	///       The default <see cref="TweenNode{T}.KeyFrameTriggerEvent" /> in the
+	///       The default <see cref="Tween{U}.KeyFrameTriggerEvent" /> in the
 	///       interval
 	///     </description>
 	///   </item>
@@ -77,17 +80,14 @@ public partial class Base<T> : Godot.Node where T : struct
 	
 		var tick_ms = Godot.Time.GetTicksMsec();
 		
-		List<DF.Lib.Tween.Frame<T, FrameTriggerEventHandler<T>>> slice = this._tween.Slice(this._last_tick_ms, tick_ms);
+		List<DF.Lib.Tween.Frame<U, W>> slice = this._tween.Slice(this._last_tick_ms, tick_ms);
 		
 		foreach (var f in slice)
 		{
 			if (f.K)
 			{
 				// Emit the default keyframe trigger event.
-				this.KeyFrameTriggerEvent?.Invoke(this, new FrameTriggerEventArgs<T>(f));
-				
-				// Emit user-defined custom events.
-				f.D?.Invoke(this, new FrameTriggerEventArgs<T>(f));
+				this.KeyFrameTriggerEvent?.Invoke(this, new TriggerEventHandlerArgs<U, W>(f));
 			}
 		}
 		
