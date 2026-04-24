@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 namespace DF.Instances.Tween;
 
-
-
 public partial class Float<W> : Base<float, W>
 {
 	[Godot.Export]
