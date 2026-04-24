@@ -12,7 +12,7 @@ public class TriggerEventHandlerArgs<U, W> : EventArgs
 	where U : struct
 {
 	public DF.Lib.Tween.Frame<U, W> F { get; }
-	
+
 	public TriggerEventHandlerArgs(DF.Lib.Tween.Frame<U, W> f) => this.F = f;
 }
 
@@ -24,29 +24,29 @@ public partial class Base<U, W> : Godot.Node
 	where U : struct
 {
 	public string ID { get; }
-	
+
 	/// <summary>
 	/// Emitted whenever a keyframe occurs.
 	/// </summary>
 	public event TriggerEventHandler<U, W>? KeyFrameTriggerEvent;
-	
+
 	/// <summary>
 	/// Internal data model for this node, comprised of a list of
 	/// { timestamp : data } tuples.
 	/// </summary>
 	internal DF.Lib.Tween.ITween<U, W> _tween;
-	
+
 	/// <summary>
 	/// Last time that _Process() was invoked.
 	/// </summary>
 	private ulong _last_tick_ms = 0;
-	
+
 	public Base(DF.Lib.Tween.ITween<U, W> tween)
 	{
 		this._tween = tween;
 		this.ID = System.Guid.NewGuid().ToString("D");
 	}
-	
+
 	/// <remarks>
 	/// Supposing <c>_Process()</c> is executed at <c>t1 > t0</c> the time at
 	/// which the last time <c>_Process()</c> was called, control which events
@@ -77,11 +77,11 @@ public partial class Base<U, W> : Godot.Node
 		// https://docs.godotengine.org/en/stable/tutorials/scripting/scene_tree.html#tree-order
 		// for more information.
 		this._tween.Flush();
-	
+
 		var tick_ms = Godot.Time.GetTicksMsec();
-		
+
 		List<DF.Lib.Tween.Frame<U, W>> slice = this._tween.Slice(this._last_tick_ms, tick_ms);
-		
+
 		foreach (var f in slice)
 		{
 			if (f.K)
@@ -90,7 +90,7 @@ public partial class Base<U, W> : Godot.Node
 				this.KeyFrameTriggerEvent?.Invoke(this, new TriggerEventHandlerArgs<U, W>(f));
 			}
 		}
-		
+
 		this._last_tick_ms = Godot.Time.GetTicksMsec();
 	}
 }

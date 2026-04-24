@@ -13,7 +13,7 @@ public class Float<W> : Base<float, W>
 	public Float(InterpolationType t) : base(t)
 	{
 	}
-	
+
 	/// <summary>
 	/// Find the linear intercept point in the half-open interval <c>(lb, ub]</c>.
 	/// </summary>
@@ -29,38 +29,38 @@ public class Float<W> : Base<float, W>
 		{
 			return null;
 		}
-		
+
 		if (lb.HasValue && ub.HasValue && lb.Value.T > ub.Value.T)
 		{
 			return null;
 		}
-		
+
 		if (!lb.HasValue || !ub.HasValue)
 		{
 			return null;
 		}
-		
+
 		if (lb.Value.T > ub.Value.T)
 		{
 			return null;
 		}
-		
+
 		// (ub.V - lb.V) / (ub.T - lb.T) = (ub.V - v) / (ub.T - t)
 		//   => t = ub.T - dt / dv (ub.V - v)
 		float dt = ub.Value.T - lb.Value.T;
 		float dv = ub.Value.V - lb.Value.V;
-		
+
 		if (dt == 0 && v != ub.Value.V)
 		{
 			return null;
 		}
-		
+
 		float t = ub.Value.T - (ub.Value.V - v) * dt / dv;
 		if (t <= (float)lb.Value.T || t > (float)ub.Value.T)
 		{
 			return null;
 		}
-		
+
 		if (
 			(
 				lb.Value.V < ub.Value.V && et == EdgeType.RisingEdge) || (
@@ -71,10 +71,10 @@ public class Float<W> : Base<float, W>
 				return this.Get((ulong)Math.Round(t));
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/// <summary>
 	/// Get all intersecting frames for the tween in the closed interval
 	/// <c>[lo, hi]</c> given the value <c>v</c>.
@@ -86,9 +86,9 @@ public class Float<W> : Base<float, W>
 	public System.Collections.Generic.List<Frame<float, W>> Find(ulong? lo, ulong? hi, float v, EdgeType et)
 	{
 		System.Collections.Generic.List<Frame<float, W>> slice = this.Slice(lo, hi);
-		
+
 		var results = new System.Collections.Generic.List<Frame<float, W>>();
-		
+
 		for (var i = 0; i < slice.Count; i++)
 		{
 			Frame<float, W>? f = this.Intercept(
@@ -101,7 +101,7 @@ public class Float<W> : Base<float, W>
 				results.Add(f.Value);
 			}
 		}
-		
+
 		return results;
 	}
 }

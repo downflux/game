@@ -48,29 +48,29 @@ public enum InterpolationType
 /// </param>
 public readonly record struct Frame<U, W> where U : struct
 {
-		public ulong T { get; }  // Timestamp
-		public U V { get; }      // Value
-		public W? D { get; }     // Data
-		public bool K { get; }   // IsKeyframe
-		
-		public Frame(ulong t, U v, W? d) : this(t, v, d, true)
-		{
-		}
-		
-		/// <summary>
-		/// Namespace and test-level constructor for this object.
-		/// </summary>
-		/// <remarks>
-		/// Calls from Godot-related namespaces <b>must</b> use the <c>public</c>
-		/// constructor.
-		/// </remarks>
-		internal Frame(ulong t, U v, W? d, bool k)
-		{
-			this.T = t;
-			this.V = v;
-			this.D = d;
-			this.K = k;
-		}
+	public ulong T { get; }  // Timestamp
+	public U V { get; }      // Value
+	public W? D { get; }     // Data
+	public bool K { get; }   // IsKeyframe
+
+	public Frame(ulong t, U v, W? d) : this(t, v, d, true)
+	{
+	}
+
+	/// <summary>
+	/// Namespace and test-level constructor for this object.
+	/// </summary>
+	/// <remarks>
+	/// Calls from Godot-related namespaces <b>must</b> use the <c>public</c>
+	/// constructor.
+	/// </remarks>
+	internal Frame(ulong t, U v, W? d, bool k)
+	{
+		this.T = t;
+		this.V = v;
+		this.D = d;
+		this.K = k;
+	}
 }
 
 public class Base<U, W> : ITween<U, W>
@@ -83,17 +83,17 @@ public class Base<U, W> : ITween<U, W>
 	/// <see cref="Tween{U, W}.Flush"> list.
 	/// </summary>
 	private SortedList<ulong, Frame<U, W>> _keyframes = new();
-	
+
 	/// <summary>
 	/// The set of keyframe buffers which needs to be written to the internal
 	/// <see cref="Tween{U, W}._keyframes"> list.
 	/// </summary>
 	private List<(ulong T, Frame<U, W>? F)> _buf = new();
-	
+
 	public InterpolationType InterpolationType { get; }
-	
+
 	public Base(InterpolationType t) => this.InterpolationType = t;
-	
+
 	/// <summary>
 	/// Get an explicit keyframe stored in the tween which is guaranteed to have
 	/// occurred at or before the input timestamp.
@@ -109,7 +109,7 @@ public class Base<U, W> : ITween<U, W>
 		{
 			return null;
 		}
-		
+
 		(int lo, int hi) = (0, this._keyframes.Count - 1);
 		while (lo <= hi)
 		{
@@ -135,16 +135,16 @@ public class Base<U, W> : ITween<U, W>
 				lo = mid + 1;
 			}
 		}
-		
+
 		// mid = -1
 		if (hi < 0)
-		{ 
+		{
 			return null;
 		}
-		
+
 		return this._keyframes.GetValueAtIndex(hi);  // mid = this._keyframes.Count - 1
 	}
-	
+
 	/// <summary>
 	/// Get an explicit keyframe stored in the tween which is guaranteed to have
 	/// occurred at or after the input timestamp. c.f.
@@ -156,12 +156,13 @@ public class Base<U, W> : ITween<U, W>
 		{
 			return null;
 		}
-		
+
 		var lb = this.LowerBound(t);
-		if (!lb.HasValue) {
+		if (!lb.HasValue)
+		{
 			return this._keyframes.GetValueAtIndex(0);
 		}
-		else if(lb.Value.T == t)
+		else if (lb.Value.T == t)
 		{
 			return lb;
 		}
@@ -173,22 +174,22 @@ public class Base<U, W> : ITween<U, W>
 				return this._keyframes.GetValueAtIndex(index + 1);
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	private U InterpolateLinear(U lo, U hi, float dt)
 	{
 		throw new ArgumentException($"Unsupported Linear interpolation data type {typeof(U)}");
 	}
-	
+
 	private Godot.Vector2 InterpolateLinear(
 		Godot.Vector2 lo,
 		Godot.Vector2 hi,
 		float dt) => new(
 			lo.X + (hi.X - lo.X) * dt,
 			lo.Y + (hi.Y - lo.Y) * dt);
-	
+
 	private Godot.Vector3 InterpolateLinear(
 		Godot.Vector3 lo,
 		Godot.Vector3 hi,
@@ -196,22 +197,22 @@ public class Base<U, W> : ITween<U, W>
 			lo.X + (hi.X - lo.X) * dt,
 			lo.Y + (hi.Y - lo.Y) * dt,
 			lo.Z + (hi.Z - lo.Z) * dt);
-	
+
 	private float InterpolateLinear(
 		float lo,
 		float hi,
 		float dt) => lo + (hi - lo) * dt;
-	
+
 	/// <summary>
 	/// Schedules adding <i>or updating</i> frames to the tween.
 	/// </summary>
 	public void Add(List<Frame<U, W>> fs) => fs.ForEach(f => this._buf.Add((f.T, f)));
-	
+
 	/// <summary>
 	/// Schedules removing frames from the tween.
 	/// </summary>
 	public void Remove(List<Frame<U, W>> fs) => fs.ForEach(f => this._buf.Add((f.T, null)));
-	
+
 	/// <summary>
 	/// Returns the interpolated tween frame at the given timestamp. Returns null
 	/// if the timestamp is before the first defined point.
@@ -219,7 +220,8 @@ public class Base<U, W> : ITween<U, W>
 	public Frame<U, W>? Get(ulong t)
 	{
 		(Frame<U, W>? lb, Frame<U, W>? ub) = (this.LowerBound(t), this.UpperBound(t));
-		if (lb.HasValue) {
+		if (lb.HasValue)
+		{
 			// t lies on an explicit keyframe.
 			if (t == lb.Value.T)
 			{
@@ -247,13 +249,13 @@ public class Base<U, W> : ITween<U, W>
 						//
 						// See https://stackoverflow.com/a/3678769 for more information.
 						float dt = (
-							(float) (t - lb.Value.T)) / (
-							(float) (ub.Value.T - lb.Value.T));
+							(float)(t - lb.Value.T)) / (
+							(float)(ub.Value.T - lb.Value.T));
 						return new Frame<U, W>(
 							t,
 							this.InterpolateLinear(
-								(dynamic) lb.Value.V,
-								(dynamic) ub.Value.V,
+								(dynamic)lb.Value.V,
+								(dynamic)ub.Value.V,
 								dt),
 							default(W),
 							false);
@@ -266,7 +268,7 @@ public class Base<U, W> : ITween<U, W>
 		}
 		return null;
 	}
-	
+
 	/// <summary>
 	/// Get a list of frames in this tween.
 	/// </summary>
@@ -279,28 +281,28 @@ public class Base<U, W> : ITween<U, W>
 	public List<Frame<U, W>> Slice(ulong? lo, ulong? hi)
 	{
 		var slice = new List<Frame<U, W>>();
-		
+
 		if (!this._keyframes.Any())
 		{
 			return slice;
 		}
-		
+
 		if (lo.HasValue && hi.HasValue && hi.Value < lo.Value)  // Invalid input.
 		{
 			return slice;
 		}
-		
+
 		Frame<U, W>? lb = this.UpperBound(
 			lo.HasValue ? lo.Value : this._keyframes.GetKeyAtIndex(0));
 		Frame<U, W>? ub = this.LowerBound(
 			hi.HasValue ? hi.Value : this._keyframes.GetKeyAtIndex(
 				this._keyframes.Count - 1));
-		
+
 		if (!lb.HasValue || !ub.HasValue)  // Should not happen.
 		{
 			return slice;
 		}
-		
+
 		if (lo.HasValue && lo.Value != lb.Value.T)
 		{
 			Frame<U, W>? f = this.Get(lo.Value);
@@ -309,15 +311,15 @@ public class Base<U, W> : ITween<U, W>
 				slice.Add(f.Value);
 			}
 		}
-		
-		for(
+
+		for (
 			var i = this._keyframes.IndexOfKey(lb.Value.T);
 			i <= this._keyframes.IndexOfKey(ub.Value.T);
 			i++)
 		{
 			slice.Add(this._keyframes.GetValueAtIndex(i));
 		}
-		
+
 		if (hi.HasValue && hi.Value != ub.Value.T)
 		{
 			Frame<U, W>? f = this.Get(hi.Value);
@@ -326,10 +328,10 @@ public class Base<U, W> : ITween<U, W>
 				slice.Add(f.Value);
 			}
 		}
-		
+
 		return slice;
 	}
-	
+
 	/// <summary>
 	/// Remove all keyframes in the half-open interval <c>[t, inf)</c>.
 	/// </summary>
@@ -340,12 +342,13 @@ public class Base<U, W> : ITween<U, W>
 		for (
 			int i = lb.HasValue ? this._keyframes.IndexOfKey(lb.Value.T) : 0;
 			i < this._keyframes.Count;
-			i++) {
-				frames.Add(this._keyframes.GetValueAtIndex(i));
+			i++)
+		{
+			frames.Add(this._keyframes.GetValueAtIndex(i));
 		}
 		this.Remove(frames);
 	}
-	
+
 	/// <summary>
 	/// Replace all keyframes in the open interval <c>(t, inf)</c>.
 	/// </summary>
@@ -366,32 +369,39 @@ public class Base<U, W> : ITween<U, W>
 					f.Value.D,
 					true)});
 		}
-		
+
 		this.Add(fs);
 	}
-	
+
 	/// <summary>
 	/// Commits all writes to <see cref="Tween._buf"> to the internal
 	/// <see cref="Tween._keyframes"> list.
 	/// </summary>
 	public void Flush()
 	{
-		foreach(var e in this._buf) {
-			if (this._keyframes.ContainsKey(e.T)) {
+		foreach (var e in this._buf)
+		{
+			if (this._keyframes.ContainsKey(e.T))
+			{
 				// If a value already exists at the target timestamp, overwrite with new value.
-				if (e.F.HasValue) {
+				if (e.F.HasValue)
+				{
 					this._keyframes.SetValueAtIndex(this._keyframes.IndexOfKey(e.T), e.F.Value);
-				} else {
+				}
+				else
+				{
 					this._keyframes.Remove(e.T);
 				}
-			} else if (e.F.HasValue) {
+			}
+			else if (e.F.HasValue)
+			{
 				this._keyframes.Add(e.T, e.F.Value);
 			}
 		}
-		
+
 		this._buf.Clear();
 	}
-	
+
 	/// <summary>
 	/// Schedules all keyframes in the tween for deletion.
 	/// </summary>
