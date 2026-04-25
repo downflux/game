@@ -7,11 +7,10 @@ public partial class HP : DF.Instances.Tween.Float<bool>
 	{
 		base._Ready();
 
-		this._tween.Add([
+		this.Add([
 			new (0, 100, false),
 			new (10000, 0, false),
 		]);
-		this._tween.Flush();
 		this.ValueTriggerEvent += (t, e) =>
 			{
 				GD.Print(

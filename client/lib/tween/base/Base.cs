@@ -6,7 +6,7 @@ namespace DF.Lib.Tween;
 
 /// <summary>
 /// Interface defining a "curve" per
-/// https://www.forrestthewoods.com/blog/tech_of_planetary_annihilation_chrono_cam/.
+/// <see href="https://www.forrestthewoods.com/blog/tech_of_planetary_annihilation_chrono_cam/" />
 /// </summary>
 /// <typeparam name="U"></typeparam>
 /// <typeparam name="W"></typeparam>

@@ -1,5 +1,6 @@
 using GdUnit4;
 using static GdUnit4.Assertions;
+using System.Collections.Generic;
 
 namespace DF.Tests.Lib.Tween;
 
@@ -123,12 +124,12 @@ public class FloatTest
 			this._t.Find(10, 15, 111, DF.Lib.Tween.EdgeType.FallingEdge)).IsEmpty();
 		AssertThat(
 			this._t.Find(10, 15, 111, DF.Lib.Tween.EdgeType.RisingEdge)).IsEqual(
-				new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>> {
+				new List<DF.Lib.Tween.Frame<float, bool?>> {
 					new (11, 111, null, false)
 				});
 		AssertThat(  // Multiple intercepts.
 			this._t.Find(20, 50, 121, DF.Lib.Tween.EdgeType.RisingEdge)).IsEqual(
-				new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>> {
+				new List<DF.Lib.Tween.Frame<float, bool?>> {
 					new (21, 121, null, false),
 					new (41, 121, null, false)
 				});
@@ -138,7 +139,7 @@ public class FloatTest
 			this._t.Find(30, 40, 129, DF.Lib.Tween.EdgeType.RisingEdge)).IsEmpty();
 		AssertThat(
 			this._t.Find(30, 40, 129, DF.Lib.Tween.EdgeType.FallingEdge)).IsEqual(
-				new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>> {
+				new List<DF.Lib.Tween.Frame<float, bool?>> {
 					new (31, 129, null, false)
 				});
 	}

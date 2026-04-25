@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DF.Lib.Tween;
 
@@ -91,14 +92,14 @@ public class Float<W> : Base<float, W>
 	/// <c>[lo, hi]</c> given the value <c>v</c>.
 	/// </summary>
 	/// <param name="et">
-	/// <see cref="DF.Lib.Tween.EdgeType" /> of <c>v</c>, e.g. if <c>EdgeType</c> is
+	/// <see cref="EdgeType" /> of <c>v</c>, e.g. if <c>EdgeType</c> is
 	/// <c>FallingEdge</c>, return only if <c>lo.V &gt; v &gt; hi.V</c>.
 	/// </param>
-	public System.Collections.Generic.List<Frame<float, W>> Find(ulong? lo, ulong? hi, float v, EdgeType et)
+	public List<Frame<float, W>> Find(ulong? lo, ulong? hi, float v, EdgeType et)
 	{
-		System.Collections.Generic.List<Frame<float, W>> slice = this.Slice(lo, hi);
+		List<Frame<float, W>> slice = this.Slice(lo, hi);
 
-		var results = new System.Collections.Generic.List<Frame<float, W>>();
+		var results = new List<Frame<float, W>>();
 
 		for (var i = 0; i < slice.Count; i++)
 		{

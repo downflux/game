@@ -1,5 +1,6 @@
 using GdUnit4;
 using static GdUnit4.Assertions;
+using System.Collections.Generic;
 
 namespace DF.Tests.Lib.Tween;
 
@@ -15,11 +16,11 @@ public class BaseTest
 		this._t = new DF.Lib.Tween.Base<float, bool?>(
 			DF.Lib.Tween.InterpolationType.Linear);
 		this._t.Add(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>{
+			[
 				new(10, 110, true),
 				new(20, 120, null),
 				new(30, 130, null),
-			});
+			]);
 		this._t.Flush();
 	}
 
@@ -72,7 +73,7 @@ public class BaseTest
 	public void TestSliceAll()
 	{
 		AssertThat(this._t.Slice(null, null)).IsEqual(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>{
+			new List<DF.Lib.Tween.Frame<float, bool?>>{
 				new(10, 110, true),
 				new(20, 120, null),
 				new(30, 130, null)});
@@ -82,26 +83,26 @@ public class BaseTest
 	public void TestSliceEmpty()
 	{
 		AssertThat(this._t.Slice(null, 9)).IsEqual(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>());
+			new List<DF.Lib.Tween.Frame<float, bool?>>());
 		AssertThat(this._t.Slice(31, null)).IsEqual(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>());
+			new List<DF.Lib.Tween.Frame<float, bool?>>());
 	}
 
 	[TestCase]
 	public void TestSlice()
 	{
 		AssertThat(this._t.Slice(0, 10)).IsEqual(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>{
+			new List<DF.Lib.Tween.Frame<float, bool?>>{
 				new(10, 110, true)});
 		AssertThat(this._t.Slice(10, 10)).IsEqual(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>{
+			new List<DF.Lib.Tween.Frame<float, bool?>>{
 				new(10, 110, true)});
 		AssertThat(this._t.Slice(0, 11)).IsEqual(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>{
+			new List<DF.Lib.Tween.Frame<float, bool?>>{
 				new(10, 110, true),
 				new(11, 111, null, false)});
 		AssertThat(this._t.Slice(10, 20)).IsEqual(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>{
+			new List<DF.Lib.Tween.Frame<float, bool?>>{
 				new(10, 110, true),
 				new(20, 120, null)});
 	}
@@ -122,7 +123,7 @@ public class BaseTest
 		this._t.Flush();
 
 		AssertThat(this._t.Slice(null, null)).IsEqual(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>{
+			new List<DF.Lib.Tween.Frame<float, bool?>>{
 				new(10, 110, true)});
 	}
 
@@ -131,14 +132,14 @@ public class BaseTest
 	{
 		this._t.Merge(
 			25,
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>{
+			[
 				new(30, 140, null),
 				new(40, 150, null),
-			});
+			]);
 		this._t.Flush();
 
 		AssertThat(this._t.Slice(null, null)).IsEqual(
-			new System.Collections.Generic.List<DF.Lib.Tween.Frame<float, bool?>>{
+			new List<DF.Lib.Tween.Frame<float, bool?>>{
 				new(10, 110, true),
 				new(20, 120, null),
 				new(25, 125, null),

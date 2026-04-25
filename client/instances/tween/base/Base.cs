@@ -1,9 +1,26 @@
 using System;
 using System.Collections.Generic;
-using DF.Instances.Timer;
-using Godot;
 
 namespace DF.Instances.Tween;
+
+/// <summary>
+/// <see cref="DF.Lib.Tween.ITween{U, W}"/> implementation to be referenced by Godot nodes.
+/// </summary>
+/// <remarks>
+/// All mutate methods are written to an internal buffer and updated during <see cref="Godot.Node._Process(double)" />.
+/// </remarks>
+public interface ITween<U, W> where U : struct
+{
+	public string ID();
+
+	public void Add(List<DF.Lib.Tween.Frame<U, W>> fs);
+	public void Remove(List<DF.Lib.Tween.Frame<U, W>> fs);
+	public DF.Lib.Tween.Frame<U, W>? Get(ulong t);
+	public List<DF.Lib.Tween.Frame<U, W>> Slice(ulong? lo, ulong? hi);
+	public void Cut(ulong t);
+	public void Merge(ulong t, List<DF.Lib.Tween.Frame<U, W>> fs);
+	public void Clear();
+}
 
 public delegate void TriggerEventHandler<U, W>(
 	object sender,
@@ -22,10 +39,10 @@ public class TriggerEventHandlerArgs<U, W> : EventArgs
 /// Logic encapsulating the <see cref="DF.Lib.Tween.Base{U, W}" /> object within a
 /// <see cref="Godot.Node" /> object.
 /// </summary>
-public partial class Base<U, W> : Godot.Node
+public partial class Base<U, W> : Godot.Node, ITween<U, W>
 	where U : struct
 {
-	public string ID { get; }
+	private string _id = "";
 
 	/// <summary>
 	/// Emitted whenever a keyframe occurs.
@@ -42,7 +59,7 @@ public partial class Base<U, W> : Godot.Node
 	public Base(DF.Lib.Tween.ITween<U, W> tween)
 	{
 		this._tween = tween;
-		this.ID = System.Guid.NewGuid().ToString("D");
+		this._id = System.Guid.NewGuid().ToString("D");
 	}
 
 	/// <remarks>
@@ -53,7 +70,7 @@ public partial class Base<U, W> : Godot.Node
 	/// <list type="number">
 	///   <item>
 	///     <description>
-	///       The default <see cref="Tween{U}.KeyFrameTriggerEvent" /> in the
+	///       The default <see cref="Base{U, W}.KeyFrameTriggerEvent" /> in the
 	///       interval
 	///     </description>
 	///   </item>
@@ -86,4 +103,13 @@ public partial class Base<U, W> : Godot.Node
 			}
 		}
 	}
+
+	public string ID() => this._id;
+	public void Add(List<DF.Lib.Tween.Frame<U, W>> fs) => this._tween.Add(fs);
+	public void Remove(List<DF.Lib.Tween.Frame<U, W>> fs) => this._tween.Remove(fs);
+	public DF.Lib.Tween.Frame<U, W>? Get(ulong t) => this._tween.Get(t);
+	public List<DF.Lib.Tween.Frame<U, W>> Slice(ulong? lo, ulong? hi) => this._tween.Slice(lo, hi);
+	public void Cut(ulong t) => this._tween.Cut(t);
+	public void Merge(ulong t, List<DF.Lib.Tween.Frame<U, W>> fs) => this.Merge(t, fs);
+	public void Clear() => this._tween.Clear();
 }
