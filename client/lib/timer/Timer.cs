@@ -2,6 +2,8 @@ using System;
 
 namespace DF.Lib.Timer;
 
+public delegate ITimer D();
+
 public interface ITimer
 {
   public ulong PrevTick();

@@ -37,24 +37,12 @@ public partial class Base<U, W> : Godot.Node
 	/// { timestamp : data } tuples.
 	/// </summary>
 	internal DF.Lib.Tween.ITween<U, W> _tween;
-	internal DF.Lib.Timer.ITimer? _timer;
-
-	/// <summary>
-	/// Last time that _Process() was invoked.
-	/// </summary>
-	private ulong _last_tick_ms = 0;
+	internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
 
 	public Base(DF.Lib.Tween.ITween<U, W> tween)
 	{
 		this._tween = tween;
 		this.ID = System.Guid.NewGuid().ToString("D");
-	}
-
-	public override void _Ready()
-	{
-		base._Ready();
-
-		this._timer = DF.Instances.Timer.Foo.S();
 	}
 
 	/// <remarks>
@@ -83,14 +71,11 @@ public partial class Base<U, W> : Godot.Node
 	/// </remarks>
 	public override void _Process(double dt)
 	{
-		// _Process() is in pre-order traversal. See
-		// https://docs.godotengine.org/en/stable/tutorials/scripting/scene_tree.html#tree-order
-		// for more information.
+		base._Process(dt);
+
 		this._tween.Flush();
 
-		// Godot.GD.Print($"prev = {this._timer.PrevTick()}; curr = {this._timer.CurrTick()}");
-
-		List<DF.Lib.Tween.Frame<U, W>> slice = this._tween.Slice(this._timer!.PrevTick(), this._timer!.CurrTick());
+		List<DF.Lib.Tween.Frame<U, W>> slice = this._tween.Slice(this._timer().PrevTick(), this._timer().CurrTick());
 
 		foreach (var f in slice)
 		{

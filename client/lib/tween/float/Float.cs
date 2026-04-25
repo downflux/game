@@ -2,9 +2,20 @@ using System;
 
 namespace DF.Lib.Tween;
 
+/// <summary>
+/// Edge detection type. Used to trigger signals when a tween falls below or rises
+/// above a specific value.
+/// </summary>
 public enum EdgeType
 {
+	/// <summary>
+	/// Trigger a signal when a tween falls below a value <c>v</c>. 
+	/// </summary>
 	FallingEdge,
+
+	/// <summary>
+	/// Trigger a signal when a tween rises above a value <c>v</c>. 
+	/// </summary>
 	RisingEdge,
 }
 
@@ -80,7 +91,7 @@ public class Float<W> : Base<float, W>
 	/// <c>[lo, hi]</c> given the value <c>v</c>.
 	/// </summary>
 	/// <param name="et">
-	/// <see cref="DF.Lib.Tween.EdgeType" /> of <c>v</c>. If <c>EdgeType</c> is
+	/// <see cref="DF.Lib.Tween.EdgeType" /> of <c>v</c>, e.g. if <c>EdgeType</c> is
 	/// <c>FallingEdge</c>, return only if <c>lo.V &gt; v &gt; hi.V</c>.
 	/// </param>
 	public System.Collections.Generic.List<Frame<float, W>> Find(ulong? lo, ulong? hi, float v, EdgeType et)

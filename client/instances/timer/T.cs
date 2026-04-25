@@ -1,13 +1,14 @@
 using Godot;
+using Mono.CompilerServices.SymbolWriter;
 using System;
 
 namespace DF.Instances.Timer;
 
-public partial class Foo : Godot.Node, DF.Lib.Timer.ITimer
+public partial class T : Godot.Node, DF.Lib.Timer.ITimer
 {
-  private static Foo? _singleton;
+  private static T? _singleton;
 
-  public static Foo S() => Foo._singleton!;
+  public static T S() => T._singleton!;
 
   internal ulong _prev_tick = 0;
   internal ulong _curr_tick = 0;
@@ -15,13 +16,11 @@ public partial class Foo : Godot.Node, DF.Lib.Timer.ITimer
   public ulong PrevTick() => this._prev_tick;
   public ulong CurrTick() => this._curr_tick;
 
-  public Foo()
-  {
-  }
-
   public override void _Ready()
   {
-    Foo._singleton = this;
+    base._Ready();
+
+    T._singleton = this;
   }
 
   public override void _Process(double delta)

@@ -24,7 +24,7 @@ public partial class Float<W> : Base<float, W>
 		{
 			List<DF.Lib.Tween.Frame<float, W>> fs = (
 				(DF.Lib.Tween.Float<W>)(this._tween)).Find(
-					this._timer.PrevTick(), this._timer.CurrTick(), v, et);
+					this._timer().PrevTick(), this._timer().CurrTick(), v, et);
 			foreach (var f in fs)
 			{
 				this.ValueTriggerEvent?.Invoke(this, new TriggerEventHandlerArgs<float, W>(f));

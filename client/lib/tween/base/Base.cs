@@ -4,6 +4,12 @@ using System.Linq;
 
 namespace DF.Lib.Tween;
 
+/// <summary>
+/// Interface defining a "curve" per
+/// https://www.forrestthewoods.com/blog/tech_of_planetary_annihilation_chrono_cam/.
+/// </summary>
+/// <typeparam name="U"></typeparam>
+/// <typeparam name="W"></typeparam>
 public interface ITween<U, W> where U : struct
 {
 	public void Add(List<Frame<U, W>> fs);
@@ -73,7 +79,7 @@ public readonly record struct Frame<U, W> where U : struct
 	}
 }
 
-public class Base<U, W> : ITween<U, W>
+public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	where U : struct
 {
 	/// <summary>
@@ -82,17 +88,15 @@ public class Base<U, W> : ITween<U, W>
 	/// program). This property is only mutated with explicit calls to
 	/// <see cref="Tween{U, W}.Flush"> list.
 	/// </summary>
-	private SortedList<ulong, Frame<U, W>> _keyframes = new();
+	private SortedList<ulong, Frame<U, W>> _keyframes = [];
 
 	/// <summary>
 	/// The set of keyframe buffers which needs to be written to the internal
 	/// <see cref="Tween{U, W}._keyframes"> list.
 	/// </summary>
-	private List<(ulong T, Frame<U, W>? F)> _buf = new();
+	private List<(ulong T, Frame<U, W>? F)> _buf = [];
 
-	public InterpolationType InterpolationType { get; }
-
-	public Base(InterpolationType t) => this.InterpolationType = t;
+	public InterpolationType InterpolationType { get; } = t;
 
 	/// <summary>
 	/// Get an explicit keyframe stored in the tween which is guaranteed to have
@@ -105,7 +109,7 @@ public class Base<U, W> : ITween<U, W>
 	/// </remarks>
 	internal Frame<U, W>? LowerBound(ulong t)
 	{
-		if (!this._keyframes.Any())
+		if (this._keyframes.Count == 0)
 		{
 			return null;
 		}
@@ -152,7 +156,7 @@ public class Base<U, W> : ITween<U, W>
 	/// </summary>
 	internal Frame<U, W>? UpperBound(ulong t)
 	{
-		if (!this._keyframes.Any())
+		if (this._keyframes.Count == 0)
 		{
 			return null;
 		}
@@ -282,7 +286,7 @@ public class Base<U, W> : ITween<U, W>
 	{
 		var slice = new List<Frame<U, W>>();
 
-		if (!this._keyframes.Any())
+		if (this._keyframes.Count == 0)
 		{
 			return slice;
 		}
@@ -362,12 +366,12 @@ public class Base<U, W> : ITween<U, W>
 		this.Cut(t);
 		if (f.HasValue)
 		{
-			this.Add(new List<Frame<U, W>>{
+			this.Add([
 				new Frame<U, W>(
 					f.Value.T,
 					f.Value.V,
 					f.Value.D,
-					true)});
+					true)]);
 		}
 
 		this.Add(fs);
