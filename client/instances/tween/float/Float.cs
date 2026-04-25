@@ -10,8 +10,6 @@ public partial class Float<W> : Base<float, W>
 
 	public event TriggerEventHandler<float, W>? ValueTriggerEvent;
 
-	private ulong _last_tick_ms = 0;
-
 	public Float() : base(
 		new DF.Lib.Tween.Float<W>(
 			DF.Lib.Tween.InterpolationType.Linear))
@@ -22,18 +20,15 @@ public partial class Float<W> : Base<float, W>
 	{
 		base._Process(dt);
 
-		var tick_ms = Godot.Time.GetTicksMsec();
-
 		foreach (var (v, et) in this.WatchPoints)
 		{
 			List<DF.Lib.Tween.Frame<float, W>> fs = (
 				(DF.Lib.Tween.Float<W>)(this._tween)).Find(
-					this._last_tick_ms, tick_ms, v, et);
+					this._timer.PrevTick(), this._timer.CurrTick(), v, et);
 			foreach (var f in fs)
 			{
 				this.ValueTriggerEvent?.Invoke(this, new TriggerEventHandlerArgs<float, W>(f));
 			}
 		}
-		this._last_tick_ms = tick_ms;
 	}
 }

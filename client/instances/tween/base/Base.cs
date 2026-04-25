@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using DF.Instances.Timer;
+using Godot;
 
 namespace DF.Instances.Tween;
 
@@ -35,6 +37,7 @@ public partial class Base<U, W> : Godot.Node
 	/// { timestamp : data } tuples.
 	/// </summary>
 	internal DF.Lib.Tween.ITween<U, W> _tween;
+	internal DF.Lib.Timer.ITimer? _timer;
 
 	/// <summary>
 	/// Last time that _Process() was invoked.
@@ -45,6 +48,13 @@ public partial class Base<U, W> : Godot.Node
 	{
 		this._tween = tween;
 		this.ID = System.Guid.NewGuid().ToString("D");
+	}
+
+	public override void _Ready()
+	{
+		base._Ready();
+
+		this._timer = DF.Instances.Timer.Foo.S();
 	}
 
 	/// <remarks>
@@ -78,9 +88,9 @@ public partial class Base<U, W> : Godot.Node
 		// for more information.
 		this._tween.Flush();
 
-		var tick_ms = Godot.Time.GetTicksMsec();
+		// Godot.GD.Print($"prev = {this._timer.PrevTick()}; curr = {this._timer.CurrTick()}");
 
-		List<DF.Lib.Tween.Frame<U, W>> slice = this._tween.Slice(this._last_tick_ms, tick_ms);
+		List<DF.Lib.Tween.Frame<U, W>> slice = this._tween.Slice(this._timer!.PrevTick(), this._timer!.CurrTick());
 
 		foreach (var f in slice)
 		{
@@ -90,7 +100,5 @@ public partial class Base<U, W> : Godot.Node
 				this.KeyFrameTriggerEvent?.Invoke(this, new TriggerEventHandlerArgs<U, W>(f));
 			}
 		}
-
-		this._last_tick_ms = Godot.Time.GetTicksMsec();
 	}
 }

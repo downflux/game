@@ -5,6 +5,8 @@ public partial class HP : DF.Instances.Tween.Float<bool>
 {
 	public override void _Ready()
 	{
+		base._Ready();
+
 		this._tween.Add([
 			new (0, 100, false),
 			new (10000, 0, false),
