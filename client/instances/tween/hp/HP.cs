@@ -1,6 +1,8 @@
 using Godot;
 using System;
 
+namespace DF.Instances.Tween;
+
 public partial class HP : DF.Instances.Tween.Float<bool>
 {
 	public override void _Ready()

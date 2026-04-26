@@ -1,16 +1,28 @@
 [gd_scene format=3 uid="uid://c33138h25f7e5"]
 
 [ext_resource type="Script" uid="uid://b3vln0ld81cvg" path="res://example/Example.cs" id="1_fdt2r"]
-[ext_resource type="Script" uid="uid://caov5tcfmnlbc" path="res://example/HP.cs" id="2_pjyox"]
+[ext_resource type="Script" uid="uid://b5vgo6ijjoalg" path="res://instances/unit/base/Base.cs" id="2_8clr1"]
+[ext_resource type="Script" uid="uid://caov5tcfmnlbc" path="res://instances/tween/hp/HP.cs" id="2_pjyox"]
 
 [node name="Example" type="Node2D" unique_id=2067538211]
 script = ExtResource("1_fdt2r")
 
-[node name="HP" type="Node" parent="." unique_id=1052569396]
+[node name="Unit" type="Node2D" parent="." unique_id=267042463]
+position = Vector2(114, 76)
+script = ExtResource("2_8clr1")
+MaxHP = 100.0
+
+[node name="HP" type="Node" parent="Unit" unique_id=1052569396]
 script = ExtResource("2_pjyox")
 WatchPoints = Dictionary[float, int]({
-0.0: 0,
-10.0: 0,
-20.0: 0,
-90.0: 0
+0.0: 0
 })
+
+[node name="HPBar" type="ProgressBar" parent="Unit" unique_id=118608803]
+offset_left = -10.0
+offset_top = -20.0
+offset_right = 10.0
+offset_bottom = -16.0
+step = 5.0
+rounded = true
+show_percentage = false
