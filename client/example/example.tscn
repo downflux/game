@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b3vln0ld81cvg" path="res://example/Example.cs" id="1_fdt2r"]
 [ext_resource type="Script" uid="uid://b5vgo6ijjoalg" path="res://instances/unit/base/Base.cs" id="2_8clr1"]
 [ext_resource type="Script" uid="uid://caov5tcfmnlbc" path="res://instances/tween/hp/HP.cs" id="2_pjyox"]
+[ext_resource type="Script" uid="uid://dyyyk6b40b7gd" path="res://instances/tween/vector3/Vector3.cs" id="4_7cn0y"]
 
 [node name="Example" type="Node2D" unique_id=2067538211]
 script = ExtResource("1_fdt2r")
@@ -26,3 +27,6 @@ offset_bottom = -16.0
 step = 5.0
 rounded = true
 show_percentage = false
+
+[node name="Position" type="Node" parent="Unit" unique_id=1544110946]
+script = ExtResource("4_7cn0y")

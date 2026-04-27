@@ -13,6 +13,25 @@ public interface ITween<U, W> where U : struct
 {
 	public string ID();
 
+	/// <summary>
+	/// Initialize curves with values and flush the cache.
+	/// </summary>
+	/// <remarks>
+	/// <c>_Ready()</c> is called in post-traversal order, but <c>_Process()</c>
+	/// is called in pre-traversal order --
+	/// 
+	/// <list type="number"> 
+	///   <item><c>child._Ready()</c></item>
+	///   <item><c>parent._Ready()</c></item>
+	///   <item><c>parent._Process()</c></item>
+	///   <item><c>child._Process()</c></item>
+	/// </list>
+	/// 
+	/// Calling <c>Init()</c> within <c>parent._Ready()</c> ensures that a
+	/// defined value for each curve exists before the next <c>_Process()</c>
+	/// cycle.
+	/// </remarks>
+	public void Init(DF.Lib.Tween.Frame<U, W> f);
 	public void Add(List<DF.Lib.Tween.Frame<U, W>> fs);
 	public void Remove(List<DF.Lib.Tween.Frame<U, W>> fs);
 	public DF.Lib.Tween.Frame<U, W>? Get(ulong t);
@@ -39,10 +58,10 @@ public class TriggerEventHandlerArgs<U, W> : EventArgs
 /// Logic encapsulating the <see cref="DF.Lib.Tween.Base{U, W}" /> object within a
 /// <see cref="Godot.Node" /> object.
 /// </summary>
-public partial class Base<U, W> : Godot.Node, ITween<U, W>
+public partial class Base<U, W>(DF.Lib.Tween.ITween<U, W> tween) : Godot.Node, ITween<U, W>
 	where U : struct
 {
-	private string _id = "";
+	private string _id = System.Guid.NewGuid().ToString("D");
 
 	/// <summary>
 	/// Emitted whenever a keyframe occurs.
@@ -53,14 +72,8 @@ public partial class Base<U, W> : Godot.Node, ITween<U, W>
 	/// Internal data model for this node, comprised of a list of
 	/// { timestamp : data } tuples.
 	/// </summary>
-	internal DF.Lib.Tween.ITween<U, W> _tween;
+	internal DF.Lib.Tween.ITween<U, W> _tween = tween;
 	internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
-
-	public Base(DF.Lib.Tween.ITween<U, W> tween)
-	{
-		this._tween = tween;
-		this._id = System.Guid.NewGuid().ToString("D");
-	}
 
 	/// <remarks>
 	/// Supposing <c>_Process()</c> is executed at <c>t1 > t0</c> the time at
@@ -102,6 +115,12 @@ public partial class Base<U, W> : Godot.Node, ITween<U, W>
 				this.KeyFrameTriggerEvent?.Invoke(this, new TriggerEventHandlerArgs<U, W>(f));
 			}
 		}
+	}
+
+	public void Init(DF.Lib.Tween.Frame<U, W> f)
+	{
+		this.Add([f]);
+		this._tween.Flush();
 	}
 
 	public string ID() => this._id;
