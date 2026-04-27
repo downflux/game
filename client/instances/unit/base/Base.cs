@@ -28,7 +28,17 @@ public partial class Base : Node2D
       [
         new(this._timer().CurrTick(), new(this.Position.X, this.Position.Y, 0), false),
       ], true);
+
     this.hp().WatchPoints[this.MaxHP] = DF.Lib.Tween.EdgeType.RisingEdge;
+
+    this.position().KeyFrameTriggerEvent += (t, e) =>
+    {
+      if (e.F.D)  // Interpreting frame metadata as "emit if true"
+      {
+        GD.Print(
+            $"DEBUG(Example.cs): at t ~ {(ulong)Math.Round((float)e.F.T / 1000)}s, KeyFrame triggered at {e.F.V}.");
+      }
+    };
   }
 
   /// <summary>

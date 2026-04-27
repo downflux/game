@@ -182,19 +182,19 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 		return null;
 	}
 
-	private U InterpolateLinear(U lo, U hi, float dt)
+	private static U InterpolateLinear(U lo, U hi, float dt)
 	{
 		throw new ArgumentException($"Unsupported Linear interpolation data type {typeof(U)}");
 	}
 
-	private Godot.Vector2 InterpolateLinear(
+	private static Godot.Vector2 InterpolateLinear(
 		Godot.Vector2 lo,
 		Godot.Vector2 hi,
 		float dt) => new(
 			lo.X + (hi.X - lo.X) * dt,
 			lo.Y + (hi.Y - lo.Y) * dt);
 
-	private Godot.Vector3 InterpolateLinear(
+	private static Godot.Vector3 InterpolateLinear(
 		Godot.Vector3 lo,
 		Godot.Vector3 hi,
 		float dt) => new(
@@ -202,7 +202,7 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			lo.Y + (hi.Y - lo.Y) * dt,
 			lo.Z + (hi.Z - lo.Z) * dt);
 
-	private float InterpolateLinear(
+	private static float InterpolateLinear(
 		float lo,
 		float hi,
 		float dt) => lo + (hi - lo) * dt;
@@ -257,7 +257,7 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 							(float)(ub.Value.T - lb.Value.T));
 						return new Frame<U, W>(
 							t,
-							this.InterpolateLinear(
+							Base<U, W>.InterpolateLinear(
 								(dynamic)lb.Value.V,
 								(dynamic)ub.Value.V,
 								dt),
@@ -297,9 +297,9 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 		}
 
 		Frame<U, W>? lb = this.UpperBound(
-			lo.HasValue ? lo.Value : this._keyframes.GetKeyAtIndex(0));
+			lo ?? this._keyframes.GetKeyAtIndex(0));
 		Frame<U, W>? ub = this.LowerBound(
-			hi.HasValue ? hi.Value : this._keyframes.GetKeyAtIndex(
+			hi ?? this._keyframes.GetKeyAtIndex(
 				this._keyframes.Count - 1));
 
 		if (!lb.HasValue || !ub.HasValue)  // Should not happen.
@@ -378,28 +378,28 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	}
 
 	/// <summary>
-	/// Commits all writes to <see cref="Tween._buf"> to the internal
-	/// <see cref="Tween._keyframes"> list.
+	/// Commits all writes to <see cref="Tween._buf" /> to the internal
+	/// <see cref="Tween._keyframes" /> list.
 	/// </summary>
 	public void Flush()
 	{
-		foreach (var e in this._buf)
+		foreach (var (T, F) in this._buf)
 		{
-			if (this._keyframes.ContainsKey(e.T))
+			if (this._keyframes.ContainsKey(T))
 			{
 				// If a value already exists at the target timestamp, overwrite with new value.
-				if (e.F.HasValue)
+				if (F.HasValue)
 				{
-					this._keyframes.SetValueAtIndex(this._keyframes.IndexOfKey(e.T), e.F.Value);
+					this._keyframes.SetValueAtIndex(this._keyframes.IndexOfKey(T), F.Value);
 				}
 				else
 				{
-					this._keyframes.Remove(e.T);
+					this._keyframes.Remove(T);
 				}
 			}
-			else if (e.F.HasValue)
+			else if (F.HasValue)
 			{
-				this._keyframes.Add(e.T, e.F.Value);
+				this._keyframes.Add(T, F.Value);
 			}
 		}
 
