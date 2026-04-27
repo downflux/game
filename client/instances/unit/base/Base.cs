@@ -20,11 +20,14 @@ public partial class Base : Node2D
   {
     base._Ready();
 
-    this.hp().Init(
-      new(this._timer().CurrTick(), this.MaxHP, false));
-    this.position().Init(
-      new(this._timer().CurrTick(), new(this.Position.X, this.Position.Y, 0), false));
-
+    this.hp().Add(
+      [
+        new(this._timer().CurrTick(), this.MaxHP, false),
+      ], true);
+    this.position().Add(
+      [
+        new(this._timer().CurrTick(), new(this.Position.X, this.Position.Y, 0), false),
+      ], true);
     this.hp().WatchPoints[this.MaxHP] = DF.Lib.Tween.EdgeType.RisingEdge;
   }
 
@@ -33,15 +36,7 @@ public partial class Base : Node2D
   /// </summary>
   public Godot.Vector3 Position3D() => this.position().Get(this._timer().CurrTick())!.Value.V;
 
-  public float HP()
-  {
-    var hp = this.hp().Get(this._timer().CurrTick());
-    if (hp.HasValue)
-    {
-      return Godot.Mathf.Clamp(hp.Value.V, 0, this.MaxHP);
-    }
-    return this.MaxHP;
-  }
+  public float HP() => Godot.Mathf.Clamp(this.hp().Get(this._timer().CurrTick())!.Value.V, 0, this.MaxHP);
 
   public void SetHP(float v, ulong dt)
   {

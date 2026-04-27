@@ -14,7 +14,8 @@ public interface ITween<U, W> where U : struct
 	public string ID();
 
 	/// <summary>
-	/// Initialize curves with values and flush the cache.
+	/// Add a series of keyframes If <paramref name="init" /> is set to
+	/// <c>true</c>, explicitly flushes the cache.
 	/// </summary>
 	/// <remarks>
 	/// <c>_Ready()</c> is called in post-traversal order, but <c>_Process()</c>
@@ -27,12 +28,14 @@ public interface ITween<U, W> where U : struct
 	///   <item><c>child._Process()</c></item>
 	/// </list>
 	/// 
-	/// Calling <c>Init()</c> within <c>parent._Ready()</c> ensures that a
+	/// Therefore, calling with <paramref name="init" /> set will ensure that a
 	/// defined value for each curve exists before the next <c>_Process()</c>
 	/// cycle.
+	/// 
+	/// Do not set <paramref name="init"> outside of a parent's <c>_Ready()</c>
+	/// function.
 	/// </remarks>
-	public void Init(DF.Lib.Tween.Frame<U, W> f);
-	public void Add(List<DF.Lib.Tween.Frame<U, W>> fs);
+	public void Add(List<DF.Lib.Tween.Frame<U, W>> fs, bool init = false);
 	public void Remove(List<DF.Lib.Tween.Frame<U, W>> fs);
 	public DF.Lib.Tween.Frame<U, W>? Get(ulong t);
 	public List<DF.Lib.Tween.Frame<U, W>> Slice(ulong? lo, ulong? hi);
@@ -58,7 +61,7 @@ public class TriggerEventHandlerArgs<U, W> : EventArgs
 /// Logic encapsulating the <see cref="DF.Lib.Tween.Base{U, W}" /> object within a
 /// <see cref="Godot.Node" /> object.
 /// </summary>
-public partial class Base<U, W>(DF.Lib.Tween.ITween<U, W> tween) : Godot.Node, ITween<U, W>
+public partial class Base<U, W> : Godot.Node, ITween<U, W>
 	where U : struct
 {
 	private string _id = System.Guid.NewGuid().ToString("D");
@@ -72,8 +75,18 @@ public partial class Base<U, W>(DF.Lib.Tween.ITween<U, W> tween) : Godot.Node, I
 	/// Internal data model for this node, comprised of a list of
 	/// { timestamp : data } tuples.
 	/// </summary>
-	internal DF.Lib.Tween.ITween<U, W> _tween = tween;
+	internal DF.Lib.Tween.ITween<U, W> _tween;
 	internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
+
+	public Base(DF.Lib.Tween.ITween<U, W> t) : this(t, [])
+	{
+	}
+
+	public Base(DF.Lib.Tween.ITween<U, W> t, List<DF.Lib.Tween.Frame<U, W>> fs)
+	{
+		this._tween = t;
+		this.Add(fs, fs.Count > 0);
+	}
 
 	/// <remarks>
 	/// Supposing <c>_Process()</c> is executed at <c>t1 > t0</c> the time at
@@ -117,14 +130,23 @@ public partial class Base<U, W>(DF.Lib.Tween.ITween<U, W> tween) : Godot.Node, I
 		}
 	}
 
-	public void Init(DF.Lib.Tween.Frame<U, W> f)
+	public void Init(List<DF.Lib.Tween.Frame<U, W>> fs)
 	{
-		this.Add([f]);
+		this.Add(fs);
 		this._tween.Flush();
 	}
 
 	public string ID() => this._id;
-	public void Add(List<DF.Lib.Tween.Frame<U, W>> fs) => this._tween.Add(fs);
+
+	public void Add(List<DF.Lib.Tween.Frame<U, W>> fs, bool init = true)
+	{
+		this._tween.Add(fs);
+		if (init)
+		{
+			this._tween.Flush();
+		}
+	}
+
 	public void Remove(List<DF.Lib.Tween.Frame<U, W>> fs) => this._tween.Remove(fs);
 	public DF.Lib.Tween.Frame<U, W>? Get(ulong t) => this._tween.Get(t);
 	public List<DF.Lib.Tween.Frame<U, W>> Slice(ulong? lo, ulong? hi) => this._tween.Slice(lo, hi);
