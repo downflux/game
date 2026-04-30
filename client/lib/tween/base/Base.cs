@@ -14,6 +14,14 @@ public interface ITween<U, W> where U : struct
 {
 	public void Add(List<Frame<U, W>> fs);
 	public void Remove(List<Frame<U, W>> fs);
+
+	/// <summary>
+	/// Returns a keyframe strictly after the input time. If t is beyond the last keyframe, return the current frame.
+	/// </summary>
+	/// <param name="t"></param>
+	/// <returns></returns>
+	public Frame<U, W>? Next(ulong t);
+
 	public Frame<U, W>? Get(ulong t);
 	public List<Frame<U, W>> Slice(ulong? lo, ulong? hi);
 	public void Cut(ulong t);
@@ -182,9 +190,29 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 		return null;
 	}
 
+	public Frame<U, W>? Next(ulong t)
+	{
+		Frame<U, W>? f = this.UpperBound(t);
+		if (f.HasValue)
+		{
+			if (f.Value.T == t)
+			{
+				int i = this._keyframes.IndexOfKey(t) + 1;
+				if (i >= this._keyframes.Count)
+				{
+					return null;
+				}
+				return this._keyframes.GetValueAtIndex(i);
+			}
+			return f;
+		}
+		return null;
+	}
+
 	private static U InterpolateLinear(U lo, U hi, float dt)
 	{
-		throw new ArgumentException($"Unsupported Linear interpolation data type {typeof(U)}");
+		throw new ArgumentException(
+			$"Unsupported Linear interpolation data type {typeof(U)}");
 	}
 
 	private static Godot.Vector2 InterpolateLinear(
@@ -223,7 +251,10 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	/// </summary>
 	public Frame<U, W>? Get(ulong t)
 	{
-		(Frame<U, W>? lb, Frame<U, W>? ub) = (this.LowerBound(t), this.UpperBound(t));
+		(Frame<U, W>? lb, Frame<U, W>? ub) = (
+			this.LowerBound(t),
+			this.UpperBound(t));
+
 		if (lb.HasValue)
 		{
 			// t lies on an explicit keyframe.
@@ -277,8 +308,8 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	/// Get a list of frames in this tween.
 	/// </summary>
 	/// <remarks>
-	/// Returns all frames in the closed interval <c>[lo, hi]</c>. If the interval
-	/// bounds <c>lo</c> and <c>hi</c> are not a keyframe, include the
+	/// Returns all frames in the closed interval <c>[lo, hi]</c>. If the
+	/// interval bounds <c>lo</c> and <c>hi</c> are not a keyframe, include the
 	/// interpolated frame at the given bounds. If <c>lo</c> or <c>hi</c> are set
 	/// to <c>null</c>, return the open interval <c>(-inf, inf)</c> instead.
 	/// </remarks>
@@ -387,7 +418,8 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 		{
 			if (this._keyframes.ContainsKey(T))
 			{
-				// If a value already exists at the target timestamp, overwrite with new value.
+				// If a value already exists at the target timestamp, overwrite with
+				// new value.
 				if (F.HasValue)
 				{
 					this._keyframes.SetValueAtIndex(this._keyframes.IndexOfKey(T), F.Value);

@@ -2,6 +2,10 @@ using System;
 
 namespace DF.Instances.Timer;
 
+/// <summary>
+/// Singleton used to control timing lookups in
+/// <see cref="DF.Lib.Tween.Base{U, W}"/> types. 
+/// </summary>
 public partial class T : Godot.Node, DF.Lib.Timer.ITimer
 {
   private static T? _singleton;

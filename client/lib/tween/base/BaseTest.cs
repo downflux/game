@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace DF.Tests.Lib.Tween;
 
+#pragma warning disable CS8618
+
 [TestSuite]
 public class BaseTest
 {
-	private DF.Lib.Tween.Base<float, bool?> _t = new DF.Lib.Tween.Base<float, bool?>(
-		DF.Lib.Tween.InterpolationType.Linear);
-
+	private DF.Lib.Tween.Base<float, bool?> _t;
 	[BeforeTest]
 	public void SetUp()
 	{
@@ -66,6 +66,21 @@ public class BaseTest
 	public void TestUpperBound(ulong t, ulong u, float v, bool? d)
 	{
 		AssertThat(_t.UpperBound(t)).IsEqual(
+			new DF.Lib.Tween.Frame<float, bool?>(u, v, d));
+	}
+
+	[TestCase]
+	public void TestNextNull()
+	{
+		AssertThat(this._t.Next(30)).IsNull();
+	}
+
+	[TestCase((ulong)0, (ulong)10, 110, true)]
+	[TestCase((ulong)9, (ulong)10, 110, true)]
+	[TestCase((ulong)10, (ulong)20, 120, null)]
+	public void TestNext(ulong t, ulong u, float v, bool? d)
+	{
+		AssertThat(_t.Next(t)).IsEqual(
 			new DF.Lib.Tween.Frame<float, bool?>(u, v, d));
 	}
 

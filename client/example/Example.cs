@@ -7,7 +7,7 @@ public partial class Example : Node2D
 	public override void _Ready()
 	{
 		var hp = this.GetNode<DF.Instances.Tween.HP>("Unit/HP");
-		var position = this.GetNode<DF.Instances.Tween.Vector3>("Unit/Position");
+		var position = this.GetNode<DF.Instances.Tween.Position>("Unit/Position");
 
 		hp.Add([
 			new (0, 100, false),
@@ -20,7 +20,7 @@ public partial class Example : Node2D
 		};
 
 		position.Add([
-			new (10000, new (100, 100, 0), true),
+			new (10000, new (100, 100, 0), DF.Lib.Path.KeyFrameType.ReachedGoal),
 		]);
 	}
 

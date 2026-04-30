@@ -4,11 +4,12 @@ using System.Collections.Generic;
 
 namespace DF.Tests.Lib.Tween;
 
+#pragma warning disable CS8618
+
 [TestSuite]
 public class FloatTest
 {
-	private DF.Lib.Tween.Float<bool?> _t = new DF.Lib.Tween.Float<bool?>(
-		DF.Lib.Tween.InterpolationType.Linear);
+	private DF.Lib.Tween.Float<bool?> _t;
 
 	[BeforeTest]
 	public void SetUp()
