@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Intrinsics.Arm;
 using Godot;
 
 namespace DF.Lib.Path;
@@ -9,7 +10,7 @@ public enum KeyFrameType
 {
   None = 0,
   ReachedTile = 1,
-  ReachedGoal = 2 | ReachedTile,
+  ReachedGoal = 2,
 }
 
 public partial class Path
@@ -19,10 +20,36 @@ public partial class Path
 
   public List<Godot.Vector3I> P() => new List<Godot.Vector3I>(this._path);
 
-  public List<DF.Lib.Tween.Frame<Godot.Vector3, KeyFrameType>> F(ulong t)
+  /// <summary>
+  /// Return frames of paths (including next).
+  /// </summary>
+  /// <param name="t"></param>
+  /// <returns></returns>
+  public List<DF.Lib.Tween.Frame<Godot.Vector3, KeyFrameType>> Frames(ulong t, Godot.Vector3 p, float v)
   {
+    float u = (float)t;
+
+    List<DF.Lib.Tween.Frame<Godot.Vector3, KeyFrameType>> fs = [
+      new(t, p, KeyFrameType.None),
+    ];
+    for (int i = 0; i < this._path.Count; i++)
+    {
+      Godot.Vector3I q = this._path[i];
+      Console.WriteLine($"i = {i}, q = {q}");
+
+      u += (p - q).Length() * v;
+
+      fs.Add(
+        new(
+          (ulong)u,
+          new(q.X, q.Y, q.Z),
+          KeyFrameType.ReachedTile | (
+            (i == this._path.Count - 1) ? KeyFrameType.ReachedGoal : KeyFrameType.None)));
+
+      p = q;
+    }
     // TODO(minkezhang): Implement.
-    return [];
+    return fs;
   }
 
   public void Merge(List<Godot.Vector3I> path)

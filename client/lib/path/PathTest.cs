@@ -74,4 +74,17 @@ public class PathTest
     });
   }
 
+  [TestCase]
+  public void TestFrames()
+  {
+    AssertThat(this._path.Frames(1, new(0, 0, (float)0.5), 10)).IsEqual(
+      new List<DF.Lib.Tween.Frame<Godot.Vector3, DF.Lib.Path.KeyFrameType>>
+      {
+        new(1, new(0, 0, (float)0.5), DF.Lib.Path.KeyFrameType.None),
+        new(6, new(0, 0, 1), DF.Lib.Path.KeyFrameType.ReachedTile),
+        new(16, new(0, 0, 2), DF.Lib.Path.KeyFrameType.ReachedTile),
+        new(26, new(0, 0, 3), DF.Lib.Path.KeyFrameType.ReachedTile | DF.Lib.Path.KeyFrameType.ReachedGoal),
+      }
+    );
+  }
 }

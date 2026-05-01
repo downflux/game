@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using Godot;
 
 namespace DF.Lib.Tween;
 
@@ -65,7 +67,9 @@ public readonly record struct Frame<U, W> where U : struct
 	public ulong T { get; }  // Timestamp
 	public U V { get; }      // Value
 	public W? D { get; }     // Data
-	public bool K { get; }   // IsKeyframe
+
+	private readonly bool _k;
+	public bool IsKeyFrame() => this._k;
 
 	public Frame(ulong t, U v, W? d) : this(t, v, d, true)
 	{
@@ -83,7 +87,7 @@ public readonly record struct Frame<U, W> where U : struct
 		this.T = t;
 		this.V = v;
 		this.D = d;
-		this.K = k;
+		this._k = k;
 	}
 }
 

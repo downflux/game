@@ -122,7 +122,7 @@ public partial class Base<U, W> : Godot.Node, ITween<U, W>
 
 		foreach (var f in slice)
 		{
-			if (f.K)
+			if (f.IsKeyFrame())
 			{
 				// Emit the default keyframe trigger event.
 				this.KeyFrameTriggerEvent?.Invoke(this, new TriggerEventHandlerArgs<U, W>(f));
