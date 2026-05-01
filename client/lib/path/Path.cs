@@ -27,21 +27,27 @@ public partial class Path
   /// <returns></returns>
   public List<DF.Lib.Tween.Frame<Godot.Vector3, KeyFrameType>> Frames(ulong t, Godot.Vector3 p, float v)
   {
+    if (!this._index.HasValue || v == 0)
+    {
+      return [];
+    }
+
     float u = (float)t;
 
     List<DF.Lib.Tween.Frame<Godot.Vector3, KeyFrameType>> fs = [
       new(t, p, KeyFrameType.None),
     ];
-    for (int i = 0; i < this._path.Count; i++)
+    for (int i = this._index.Value; i < this._path.Count; i++)
     {
       Godot.Vector3I q = this._path[i];
-      Console.WriteLine($"i = {i}, q = {q}");
 
-      u += (p - q).Length() * v;
+      u += (p - q).Length() / v;
 
+      Godot.GD.Print($"u = {u}, ulong = {(ulong)(int)Math.Round(u)}");
       fs.Add(
         new(
-          (ulong)u,
+          (ulong)(int)Math.Round(u),
+          // TODO(minkezhang): Translate Vector3 to Vector3I.
           new(q.X, q.Y, q.Z),
           KeyFrameType.ReachedTile | (
             (i == this._path.Count - 1) ? KeyFrameType.ReachedGoal : KeyFrameType.None)));

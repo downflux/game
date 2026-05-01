@@ -6,6 +6,7 @@ public partial class Example : Node2D
 {
 	public override void _Ready()
 	{
+		var unit = this.GetNode<DF.Instances.Unit.Base>("Unit");
 		var hp = this.GetNode<DF.Instances.Tween.HP>("Unit/HP");
 		var position = this.GetNode<DF.Instances.Tween.Position>("Unit/Position");
 
@@ -19,8 +20,10 @@ public partial class Example : Node2D
 				$"DEBUG(Example.cs): at t ~ {(ulong)Math.Round((float)e.F.T / 1000)}s, HP has reached {e.F.V}.");
 		};
 
-		position.Add([
-			new (10000, new (100, 100, 0), DF.Lib.Path.KeyFrameType.ReachedGoal),
+		unit.SetPath([
+			new(100, 200, 0),
+			new(200, 100, 0),
+			new(100, 200, 0),
 		]);
 	}
 

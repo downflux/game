@@ -151,6 +151,6 @@ public partial class Base<U, W> : Godot.Node, ITween<U, W>
 	public DF.Lib.Tween.Frame<U, W>? Get(ulong t) => this._tween.Get(t);
 	public List<DF.Lib.Tween.Frame<U, W>> Slice(ulong? lo, ulong? hi) => this._tween.Slice(lo, hi);
 	public void Cut(ulong t) => this._tween.Cut(t);
-	public void Merge(ulong t, List<DF.Lib.Tween.Frame<U, W>> fs) => this.Merge(t, fs);
+	public void Merge(ulong t, List<DF.Lib.Tween.Frame<U, W>> fs) => this._tween.Merge(t, fs);
 	public void Clear() => this._tween.Clear();
 }

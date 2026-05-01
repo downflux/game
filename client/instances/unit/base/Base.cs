@@ -56,11 +56,12 @@ public partial class Base : Node2D
   public void SetPath(List<Godot.Vector3I> p)
   {
     this._path.Merge(p);
-    /**
     this.position().Merge(
       this._timer().CurrTick(),
-      this._path.F(this._timer().CurrTick()));
-     */
+      this._path.Frames(
+        this._timer().CurrTick(),
+        this.Position3D(),
+        (float)0.05)); // TODO(minkezhang): Velocity curve.
   }
 
   public void SetHP(float v, ulong dt)
