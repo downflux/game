@@ -20,7 +20,11 @@ public partial class Base : Node2D
   //   linear); VTOL and HTOL --> START | END takeoff.
   // TODO(minkezhang): Change Posiiton curve to include START | END takeoff
   //   XOR enum.
-
+  // TODO(minkezhang): Add START | END turning enum.
+  // TODO(minkezhang): Consider move modes for point-to-point air movement,
+  //   vs. continuous turning (i.e. spline) (but only air, not ground, which
+  //   will ignore collision detection (otherwise this becomes 3D boids
+  //   behavior).
   private DF.Instances.Tween.HP hp() => this.GetNode<DF.Instances.Tween.HP>("HP");
   private DF.Instances.Tween.Position position() => this.GetNode<DF.Instances.Tween.Position>("Position");
   private DF.Instances.Tween.Velocity velocity() => this.GetNode<DF.Instances.Tween.Velocity>("Velocity");
