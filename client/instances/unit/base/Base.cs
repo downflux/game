@@ -16,7 +16,8 @@ public partial class Base : Node2D
   // TODO(minkezhang): Change position() to Vector4: (x, y, z, theta)
   // TODO(minkezhang): Change velocity() to Vector3: ((vx, vy), vz, w)
   // TODO(minkezhang): Change Path to Vector4, and add configurable vz behavior
-  //   e.g. VTOL vs. HTOL.
+  //   e.g. VTOL vs. HTOL, walk-only (i.e. hug ground -- ignore vz and assume
+  //   linear); VTOL and HTOL --> START | END takeoff.
   // TODO(minkezhang): Change Posiiton curve to include START | END takeoff
   //   XOR enum.
 
