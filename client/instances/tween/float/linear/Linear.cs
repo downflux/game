@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace DF.Instances.Tween;
+namespace DF.Instances.Tween.Float;
 
-public partial class Float<W>(List<DF.Lib.Tween.Frame<float, W>> fs) : Base<float, W>(
+public partial class Linear<W>(List<DF.Lib.Tween.Frame<float, W>> fs) : Base<float, W>(
 	new DF.Lib.Tween.Float<W>(
 			DF.Lib.Tween.InterpolationType.Linear), fs)
 {
@@ -12,7 +12,7 @@ public partial class Float<W>(List<DF.Lib.Tween.Frame<float, W>> fs) : Base<floa
 
 	public event TriggerEventHandler<float, W>? ValueTriggerEvent;
 
-	public Float() : this([])
+	public Linear() : this([])
 	{
 	}
 

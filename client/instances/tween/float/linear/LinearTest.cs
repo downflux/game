@@ -7,7 +7,7 @@ namespace DF.Tests.Instances.Tween;
 [RequireGodotRuntime]
 public class FloatTest
 {
-	private DF.Instances.Tween.Float<bool> _n = new DF.Instances.Tween.Float<bool>()
+	private DF.Instances.Tween.Float.Linear<bool> _n = new DF.Instances.Tween.Float.Linear<bool>()
 	{
 		WatchPoints = new Godot.Collections.Dictionary<float, DF.Lib.Tween.EdgeType>
 		{
@@ -18,7 +18,7 @@ public class FloatTest
 	[BeforeTest]
 	public void SetUp()
 	{
-		this._n = new DF.Instances.Tween.Float<bool>()
+		this._n = new DF.Instances.Tween.Float.Linear<bool>()
 		{
 			WatchPoints = new Godot.Collections.Dictionary<float, DF.Lib.Tween.EdgeType>
 			{

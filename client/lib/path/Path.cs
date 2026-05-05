@@ -23,9 +23,15 @@ public partial class Path
   /// <summary>
   /// Return frames of paths (including next).
   /// </summary>
-  /// <param name="t"></param>
+  /// <remarks>
+  /// TODO(minkezhang): Add angular velocity into calculations as well.
+  /// </remarks>
+  /// <param name="t">The starting timestamp.</param>
+  /// <param name="p">The initial position of the unit.</param>
+  /// <param name="v">The velocity of the unit.</param>
+  /// <param name="w">The angular velocity of the unit.</param>
   /// <returns></returns>
-  public List<DF.Lib.Tween.Frame<Godot.Vector3, KeyFrameType>> Frames(ulong t, Godot.Vector3 p, float v)
+  public List<DF.Lib.Tween.Frame<Godot.Vector3, KeyFrameType>> Frames(Godot.Vector3 p, ulong t, float v, float w = 0)
   {
     if (!this._index.HasValue || v == 0)
     {
@@ -43,7 +49,6 @@ public partial class Path
 
       u += (p - q).Length() / v;
 
-      Godot.GD.Print($"u = {u}, ulong = {(ulong)(int)Math.Round(u)}");
       fs.Add(
         new(
           (ulong)(int)Math.Round(u),
@@ -54,7 +59,6 @@ public partial class Path
 
       p = q;
     }
-    // TODO(minkezhang): Implement.
     return fs;
   }
 

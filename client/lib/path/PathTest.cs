@@ -77,7 +77,7 @@ public class PathTest
   [TestCase]
   public void TestFrames()
   {
-    AssertThat(this._path.Frames(1, new(0, 0, (float)0.5), 10)).IsEqual(
+    AssertThat(this._path.Frames(new(0, 0, (float)0.5), 1, (float)0.1)).IsEqual(
       new List<DF.Lib.Tween.Frame<Godot.Vector3, DF.Lib.Path.KeyFrameType>>
       {
         new(1, new(0, 0, (float)0.5), DF.Lib.Path.KeyFrameType.None),
