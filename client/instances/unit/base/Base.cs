@@ -13,18 +13,22 @@ public partial class Base : Node2D
   [Godot.Export]
   required public float BaseVelocity;
 
-  // TODO(minkezhang): Change position() to Vector4: (x, y, z, theta)
-  // TODO(minkezhang): Change velocity() to Vector3: ((vx, vy), vz, w)
-  // TODO(minkezhang): Change Path to Vector4, and add configurable vz behavior
+  [Godot.Export]
+  required public float BaseAngularVelocity;
+
+  [Godot.Export]
+  required public float BaseVerticalVelocity;
+
+  // TODO(minkezhang): Add configurable vz behavior
   //   e.g. VTOL vs. HTOL, walk-only (i.e. hug ground -- ignore vz and assume
   //   linear); VTOL and HTOL --> START | END takeoff.
   // TODO(minkezhang): Change Posiiton curve to include START | END takeoff
   //   XOR enum.
-  // TODO(minkezhang): Add START | END turning enum.
   // TODO(minkezhang): Consider move modes for point-to-point air movement,
   //   vs. continuous turning (i.e. spline) (but only air, not ground, which
   //   will ignore collision detection (otherwise this becomes 3D boids
   //   behavior).
+  // TODO(minkezhang): Add orientation debug line.
   private DF.Instances.Tween.HP hp() => this.GetNode<DF.Instances.Tween.HP>("HP");
   private DF.Instances.Tween.Position position() => this.GetNode<DF.Instances.Tween.Position>("Position");
   private DF.Instances.Tween.Velocity velocity() => this.GetNode<DF.Instances.Tween.Velocity>("Velocity");
@@ -41,15 +45,21 @@ public partial class Base : Node2D
       ], true);
     this.velocity().Add(
       [
-        new(this._timer().CurrTick(), this.BaseVelocity, false),
+        new(
+          this._timer().CurrTick(),
+          new(this.BaseVelocity, this.BaseVerticalVelocity, this.BaseAngularVelocity),
+          false),
       ], true);
     this.position().Add(
       [
         new(
           this._timer().CurrTick(),
           new(
-            this.Position.X,
-            this.Position.Y, 0),
+            new(
+              this.Position.X,
+              this.Position.Y,
+              0),
+            0),
             DF.Lib.Path.KeyFrameType.ReachedTile),
       ], true);
 
@@ -69,10 +79,10 @@ public partial class Base : Node2D
   /// <summary>
   /// Calculates the "true" 3D position of the isometric unit.
   /// </summary>
-  public Godot.Vector3 Position3D() => this.position().Get(this._timer().CurrTick())!.Value.V;
+  public DF.Lib.Position.Position Position4D() => this.position().Get(this._timer().CurrTick())!.Value.V;
 
   public float HP() => Godot.Mathf.Clamp(this.hp().Get(this._timer().CurrTick())!.Value.V, 0, this.MaxHP);
-  public float Velocity() => this.velocity().Get(this._timer().CurrTick())!.Value.V;
+  public DF.Lib.Position.Velocity Velocity() => this.velocity().Get(this._timer().CurrTick())!.Value.V;
 
   public void SetPath(List<Godot.Vector3I> p)
   {
@@ -80,7 +90,7 @@ public partial class Base : Node2D
     this.position().Merge(
       this._timer().CurrTick(),
       this._path.Frames(
-        this.Position3D(),
+        this.Position4D(),
         this._timer().CurrTick(),
         this.Velocity()));
   }
@@ -99,7 +109,7 @@ public partial class Base : Node2D
     ]);
   }
 
-  public void SetVelocity(float v)
+  public void SetVelocity(DF.Lib.Position.Velocity v)
   {
     this.velocity().Add([
       new(this._timer().CurrTick(), v, false),
@@ -107,7 +117,7 @@ public partial class Base : Node2D
     this.position().Merge(
       this._timer().CurrTick(),
       this._path.Frames(
-      this.Position3D(),
+      this.Position4D(),
       this._timer().CurrTick(),
       v));
   }
@@ -118,7 +128,7 @@ public partial class Base : Node2D
 
     this.GetNode<Godot.ProgressBar>("HPBar").Value = this.HP() / this.MaxHP * 100;
 
-    var p = this.Position3D();
-    this.Position = new Godot.Vector2(p.X, p.Y);
+    var p = this.Position4D();
+    this.Position = new Godot.Vector2(p.P.X, p.P.Y);
   }
 }

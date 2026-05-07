@@ -14,6 +14,7 @@ position = Vector2(114, 76)
 script = ExtResource("2_8clr1")
 MaxHP = 100.0
 BaseVelocity = 0.05
+BaseAngularVelocity = 0.01
 
 [node name="HP" type="Node" parent="Unit" unique_id=1052569396]
 script = ExtResource("2_pjyox")

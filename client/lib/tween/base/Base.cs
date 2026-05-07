@@ -219,6 +219,13 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			$"Unsupported Linear interpolation data type {typeof(U)}");
 	}
 
+	private static DF.Lib.Position.Position InterpolateLinear(
+		DF.Lib.Position.Position lo,
+		DF.Lib.Position.Position hi,
+		float dt) => new(
+			Base<Godot.Vector3, W>.InterpolateLinear(lo.P, hi.P, dt),
+			Base<float, W>.InterpolateLinear(lo.T, hi.T, dt));
+
 	private static Godot.Vector2 InterpolateLinear(
 		Godot.Vector2 lo,
 		Godot.Vector2 hi,
