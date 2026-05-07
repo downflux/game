@@ -97,7 +97,7 @@ public class PathTest
         0,
         0
       )).IsEqual(
-        new F(0, new(new(0, 0, 0), 1)));
+        new F(1, new(new(0, 0, 0), 1)));
 
     AssertThat(  // Simple
       DF.Lib.Path.Path.GenerateRotationFrame(
@@ -170,11 +170,11 @@ public class PathTest
       new List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType>>
       {
         new(1, new(new(0, 0, 0.5f), 0), DF.Lib.Path.KeyFrameType.None),
-        new(1, new(new(0, 0, 0.5f), (float)Math.PI / 2), DF.Lib.Path.KeyFrameType.CompletedTurn),
-        new(11, new(new(0, 1, 1), (float)Math.PI / 2), DF.Lib.Path.KeyFrameType.ReachedTile),
-        new(21, new(new(0, 2, 2), (float)Math.PI / 2), DF.Lib.Path.KeyFrameType.ReachedTile),
+        new(2, new(new(0, 0, 0.5f), (float)Math.PI / 2), DF.Lib.Path.KeyFrameType.CompletedTurn),
+        new(12, new(new(0, 1, 1), (float)Math.PI / 2), DF.Lib.Path.KeyFrameType.ReachedTile),
+        new(22, new(new(0, 2, 2), (float)Math.PI / 2), DF.Lib.Path.KeyFrameType.ReachedTile),
         new(
-          31, new(new(0, 3, 3), (float)Math.PI / 2),
+          32, new(new(0, 3, 3), (float)Math.PI / 2),
           DF.Lib.Path.KeyFrameType.ReachedTile | DF.Lib.Path.KeyFrameType.ReachedGoal),
       });
 

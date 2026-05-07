@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Formats.Tar;
 
 namespace DF.Lib.Path;
 
@@ -43,7 +42,7 @@ public partial class Path
 
     if (w == 0)
     {
-      return (u, new(p.P, q.T));
+      return (u + 1, new(p.P, q.T));
     }
 
     if (Math.Abs(dt) > Math.PI)
@@ -51,7 +50,7 @@ public partial class Path
       dt = (float)(2 * Math.PI) - Math.Abs(dt);
     }
 
-    u += Math.Abs(dt) / w;
+    u += Math.Max(1, Math.Abs(dt) / w);
     return (u, new(p.P, q.T));
   }
 
@@ -64,7 +63,7 @@ public partial class Path
       return (u, null);
     }
 
-    u += (q.XY - p.XY).Length() / v;
+    u += Math.Max(1, (q.XY - p.XY).Length() / v);
     return (u, q);
   }
 
@@ -121,7 +120,7 @@ public partial class Path
 
       p = q;
     }
-    return fs;
+    return fs; // Path.MergeFrames(fs);
   }
 
   public void Merge(List<Godot.Vector3I> path)

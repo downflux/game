@@ -67,11 +67,8 @@ public partial class Base : Node2D
 
     this.position().KeyFrameTriggerEvent += (t, e) =>
     {
-      if (e.F.D.HasFlag(DF.Lib.Path.KeyFrameType.ReachedTile))
-      {
-        GD.Print(
-            $"DEBUG(Example.cs): at t ~ {(ulong)Math.Round((float)e.F.T / 1000)}s, KeyFrame triggered at {e.F.V}.");
-      }
+      GD.Print(
+        $"DEBUG(Base.cs): at t ~ {(ulong)Math.Round((float)e.F.T / 1000)}s ({e.F.T}), KeyFrame triggered at {e.F.V} with flags {e.F.D}");
     };
     this.position().KeyFrameTriggerEvent += this._path.KeyFrameTriggerEventHandler;
   }
@@ -122,11 +119,32 @@ public partial class Base : Node2D
       v));
   }
 
+  public override void _Draw()
+  {
+    base._Draw();
+
+    this.DrawCircle(
+      this.Position,
+      10,
+      Godot.Colors.Green,
+      false,
+      1);
+
+    this.DrawLine(
+      this.Position,
+      this.Position + new Vector2(
+        Mathf.Cos(this.Position4D().T),
+        Mathf.Sin(this.Position4D().T)) * 100,
+      Godot.Colors.Green,
+      1);
+  }
+
   public override void _Process(double dt)
   {
     base._Process(dt);
 
     this.GetNode<Godot.ProgressBar>("HPBar").Value = this.HP() / this.MaxHP * 100;
+    this.QueueRedraw();
 
     var p = this.Position4D();
     this.Position = new Godot.Vector2(p.P.X, p.P.Y);
