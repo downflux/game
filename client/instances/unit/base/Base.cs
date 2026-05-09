@@ -2,6 +2,7 @@ using Godot;
 using Microsoft.VisualStudio.TestPlatform.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace DF.Instances.Unit;
 
@@ -35,6 +36,12 @@ public partial class Base : Node2D
   internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
   internal DF.Lib.Path.Path _path = new();
 
+  /// <summary>
+  /// When reaching the end of a set of waypoints, instructs the unit to loop
+  /// back to the beginning if set to true.
+  /// </summary>
+  private bool _loop = false;
+
   public override void _Ready()
   {
     base._Ready();
@@ -67,8 +74,10 @@ public partial class Base : Node2D
 
     this.position().KeyFrameTriggerEvent += (t, e) =>
     {
-      GD.Print(
-        $"DEBUG(Base.cs): at t ~ {(ulong)Math.Round((float)e.F.T / 1000)}s ({e.F.T}), KeyFrame triggered at {e.F.V} with flags {e.F.D}");
+      if (e.F.D.HasFlag(Lib.Path.KeyFrameType.ReachedGoal))
+      {
+        this.SetPath(this._loop ? this._path.P() : [], this._loop);
+      }
     };
     this.position().KeyFrameTriggerEvent += this._path.KeyFrameTriggerEventHandler;
   }
@@ -81,7 +90,7 @@ public partial class Base : Node2D
   public float HP() => Godot.Mathf.Clamp(this.hp().Get(this._timer().CurrTick())!.Value.V, 0, this.MaxHP);
   public DF.Lib.Position.Velocity Velocity() => this.velocity().Get(this._timer().CurrTick())!.Value.V;
 
-  public void SetPath(List<Godot.Vector3I> p)
+  public void SetPath(List<Godot.Vector3I> p, bool loop = false)
   {
     this._path.Merge(p);
     this.position().Merge(
@@ -90,6 +99,7 @@ public partial class Base : Node2D
         this.Position4D(),
         this._timer().CurrTick(),
         this.Velocity()));
+    this._loop = loop;
   }
 
   public void SetHP(float v, ulong dt)
@@ -119,32 +129,11 @@ public partial class Base : Node2D
       v));
   }
 
-  public override void _Draw()
-  {
-    base._Draw();
-
-    this.DrawCircle(
-      this.Position,
-      10,
-      Godot.Colors.Green,
-      false,
-      1);
-
-    this.DrawLine(
-      this.Position,
-      this.Position + new Vector2(
-        Mathf.Cos(this.Position4D().T),
-        Mathf.Sin(this.Position4D().T)) * 100,
-      Godot.Colors.Green,
-      1);
-  }
-
   public override void _Process(double dt)
   {
     base._Process(dt);
 
     this.GetNode<Godot.ProgressBar>("HPBar").Value = this.HP() / this.MaxHP * 100;
-    this.QueueRedraw();
 
     var p = this.Position4D();
     this.Position = new Godot.Vector2(p.P.X, p.P.Y);

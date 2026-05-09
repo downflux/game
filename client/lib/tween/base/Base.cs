@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using Godot;
 
 namespace DF.Lib.Tween;
 
@@ -420,8 +418,8 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	}
 
 	/// <summary>
-	/// Commits all writes to <see cref="Tween._buf" /> to the internal
-	/// <see cref="Tween._keyframes" /> list.
+	/// Commits all writes to <see cref="Base._buf" /> to the internal
+	/// <see cref="Base._keyframes" /> list.
 	/// </summary>
 	public void Flush()
 	{

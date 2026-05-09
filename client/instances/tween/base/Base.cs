@@ -122,7 +122,9 @@ public partial class Base<U, W> : Godot.Node, ITween<U, W>
 
 		foreach (var f in slice)
 		{
-			if (f.IsKeyFrame())
+			// Ensure that we are not emitting a signal twice if the frame sits on
+			// the boundary of the interval.
+			if (f.IsKeyFrame() && f.T < this._timer().CurrTick())
 			{
 				// Emit the default keyframe trigger event.
 				this.KeyFrameTriggerEvent?.Invoke(this, new TriggerEventHandlerArgs<U, W>(f));

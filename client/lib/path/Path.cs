@@ -16,12 +16,6 @@ public enum KeyFrameType
 
 public partial class Path
 {
-  public static Godot.Vector3 ToWorld(Godot.Vector3I c)
-  {
-    // TODO(minkezhang): Return grid transformation.
-    return (Godot.Vector3)c;
-  }
-
   internal List<Godot.Vector3I> _path = [];
   internal int? _index;
 
@@ -76,7 +70,6 @@ public partial class Path
   /// <param name="t">The starting timestamp.</param>
   /// <param name="p">The initial position of the unit.</param>
   /// <param name="v">The velocity of the unit.</param>
-  /// <param name="w">The angular velocity of the unit.</param>
   /// <returns></returns>
   public List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, KeyFrameType>> Frames(
     DF.Lib.Position.Position p, ulong t, DF.Lib.Position.Velocity v)
@@ -88,16 +81,25 @@ public partial class Path
 
     float u = (float)t;  // Current time.
 
-    DF.Lib.Position.Position? f = null;
+    DF.Lib.Position.Position? f;
 
     List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, KeyFrameType>> fs = [
       new(t, p, KeyFrameType.None),
     ];
     for (int i = this._index.Value; i < this._path.Count; i++)
     {
-      Godot.Vector3 qp = Path.ToWorld(this._path[i]);
+      Godot.Vector3 qp = DF.Lib.Position.Transformation.ToWorld(this._path[i]);
       DF.Lib.Position.Position q = new(
         qp, (new Godot.Vector2(qp.X, qp.Y) - p.XY).Angle());
+
+      // Edge case -- it is possible that the current position p is already at
+      // the first waypoint. Do not generate the trivial additional rotation
+      // and translation frames, and skip to the next waypoint (from the
+      // current position p).
+      if (i == 0 && p.P == q.P)
+      {
+        continue;
+      }
 
       (u, f) = Path.GenerateRotationFrame(p, q, u, v.W);
 
@@ -120,7 +122,7 @@ public partial class Path
 
       p = q;
     }
-    return fs; // Path.MergeFrames(fs);
+    return fs;
   }
 
   public void Merge(List<Godot.Vector3I> path)
@@ -142,7 +144,7 @@ public partial class Path
       path.Insert(0, n.Value);
     }
     this._path = path;
-    this._index = 0;
+    this._index = path.Count == 0 ? null : 0;
   }
 
   public Godot.Vector3I? Next()
@@ -154,7 +156,7 @@ public partial class Path
     return null;
   }
 
-  public void SetNext()
+  internal void SetNext()
   {
     this._index = this._index.HasValue ? this._index + 1 : 0;
   }

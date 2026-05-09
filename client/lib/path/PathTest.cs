@@ -60,6 +60,8 @@ public class PathTest
       new(1, 0, 1),
       new(2, 0, 2),
     });
+
+    AssertThat(this._path.Next()).IsEqual(new Godot.Vector3I(0, 1, 1));
   }
 
   [TestCase]
@@ -76,6 +78,8 @@ public class PathTest
       new(0, 2, 2),
       new(2, 0, 2),
     });
+
+    AssertThat(this._path.Next()).IsEqual(new Godot.Vector3I(0, 2, 2));
   }
 
   [TestCase]
@@ -165,6 +169,17 @@ public class PathTest
       new(0, 0, 0.5f), 0);
     ulong t = 1;
     DF.Lib.Position.Velocity v = new(0.1f, 0, 0);
+
+    AssertThat(this._path.Frames(new(new(0, 1, 1), 0), t, v)).IsEqual(  // Skip first frame if already at the waypoint.
+      new List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType>>
+      {
+        new(1, new(new(0, 1, 1), 0), DF.Lib.Path.KeyFrameType.None),
+        new(2, new(new(0, 1, 1), (float)Math.PI / 2), DF.Lib.Path.KeyFrameType.CompletedTurn),
+        new(12, new(new(0, 2, 2), (float)Math.PI / 2), DF.Lib.Path.KeyFrameType.ReachedTile),
+        new(
+          22, new(new(0, 3, 3), (float)Math.PI / 2),
+          DF.Lib.Path.KeyFrameType.ReachedTile | DF.Lib.Path.KeyFrameType.ReachedGoal),
+      });
 
     AssertThat(this._path.Frames(p, t, v)).IsEqual(  // With no rotation
       new List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType>>
