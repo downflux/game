@@ -133,6 +133,9 @@ public partial class Path
       if (f.HasValue)
       {
         fs.Add(new((ulong)Math.Round(u), f.Value, KeyFrameType.CompletedTurn));
+
+        // Ensure unit stays aligned during translation.
+        q = new(q.P, f.Value.T);
       }
 
       (u, f) = Path.GenerateTranslationFrame(p, q, u, v.XY);

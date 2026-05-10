@@ -21,10 +21,9 @@ public partial class Example : Node2D
 		};
 
 		unit.SetPath([
-			new(100, 200, 0),
-			new(100, 300, 0),
-			new(200, 300, 0),
-			new(200, 200, 0),
+			new(50, 350, 0),
+			new(300, 200, 0),
+			new(200, 350, 0),
 		], true);
 	}
 
