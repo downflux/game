@@ -342,6 +342,12 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			hi ?? this._keyframes.GetKeyAtIndex(
 				this._keyframes.Count - 1));
 
+		if (!lb.HasValue && ub.HasValue && lo.HasValue && hi.HasValue)  // lo is beyond the last known keyframe.
+		{
+			slice.Add(this.Get(lo.Value)!.Value);
+			slice.Add(this.Get(hi.Value)!.Value);
+		}
+
 		if (!lb.HasValue || !ub.HasValue)  // Should not happen.
 		{
 			return slice;

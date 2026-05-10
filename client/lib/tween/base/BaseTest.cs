@@ -120,6 +120,10 @@ public class BaseTest
 			new List<DF.Lib.Tween.Frame<float, bool?>>{
 				new(10, 110, true),
 				new(20, 120, null)});
+		AssertThat(this._t.Slice(40, 50)).IsEqual(
+			new List<DF.Lib.Tween.Frame<float, bool?>>{
+				new(40, 130, null),
+				new(50, 130, null)});
 	}
 
 	[TestCase((ulong)0)]

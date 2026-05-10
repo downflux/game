@@ -21,15 +21,18 @@ public partial class Path
 
   public List<Godot.Vector3I> P() => new List<Godot.Vector3I>(this._path);
 
-  // Generates angular movement.
+  /// <summary>
+  /// Generates angular movement frame.
+  /// </summary>
   internal static F GenerateRotationFrame(
     DF.Lib.Position.Position p, DF.Lib.Position.Position q, float u, float w)
   {
+
     // Angle of q relative to the x-axis in radians.
-    float dt = p.T - q.T;
+    float dt = (float)(p.T - q.T) % (float)Math.Tau;
 
     // Rotate.
-    if (Math.Abs(dt) < 1e-2) // epsilon && w > 0)  // epsilon
+    if (Math.Abs(dt) < 1e-2)  // epsilon
     {
       return (u, null);
     }
@@ -39,16 +42,25 @@ public partial class Path
       return (u + 1, new(p.P, q.T));
     }
 
+    float qt = q.T;
+
     if (Math.Abs(dt) > Math.PI)
     {
-      dt = (float)(2 * Math.PI) - Math.Abs(dt);
+      Godot.GD.Print($"DEBUG(Path.cs): dt greater than 180: |{dt * 180 / Math.PI}|");
+      Godot.GD.Print($"                p = {p.T * 180 / Math.PI}, q = {q.T * 180 / Math.PI}");
+      qt += (float)(Math.Sign(dt) * Math.Tau);
+      dt = (float)Math.Tau - Math.Abs(dt);
+      Godot.GD.Print($"                altered dt = {dt * 180 / Math.PI}");
+      Godot.GD.Print($"                altered qt = {qt * 180 / Math.PI}");
     }
 
     u += Math.Max(1, Math.Abs(dt) / w);
-    return (u, new(p.P, q.T));
+    return (u, new(p.P, qt));
   }
 
-  // Generates XY movement.
+  /// <summary>
+  /// Generates XY movement frame.
+  /// </summary>
   internal static F GenerateTranslationFrame(
   DF.Lib.Position.Position p, DF.Lib.Position.Position q, float u, float v)
   {
@@ -62,9 +74,24 @@ public partial class Path
   }
 
   /// <summary>
-  /// Return frames of paths (including next).
+  /// Return a list of <see cref="DF.Lib.Tween.Frame{U, W}"/> movement
+  /// frames of the stored path. Callers call this function <b>once</b> before
+  /// movement starts and merges into the
+  /// <see cref="DF.Instances.Tween.Position"/> instance.
   /// </summary>
   /// <remarks>
+  /// <example>
+  /// <code>
+  ///     path.Merge(ps);
+  /// 
+  ///     var fs = path.Frames(
+  ///       position.Get(timer.CurrTick())!.Value.V,
+  ///       this._timer().CurrTick(),
+  ///       v));
+  /// 
+  ///     position.Merge(timer.CurrTick(), fs);
+  /// </code>
+  /// </example>
   /// TODO(minkezhang): Add vertical velocity.
   /// </remarks>
   /// <param name="t">The starting timestamp.</param>
@@ -90,7 +117,7 @@ public partial class Path
     {
       Godot.Vector3 qp = DF.Lib.Position.Transformation.ToWorld(this._path[i]);
       DF.Lib.Position.Position q = new(
-        qp, (new Godot.Vector2(qp.X, qp.Y) - p.XY).Angle());
+        qp, (float)Math.Floor(p.T / (float)Math.Tau) * (float)Math.Tau + (new Godot.Vector2(qp.X, qp.Y) - p.XY).Angle());
 
       // Edge case -- it is possible that the current position p is already at
       // the first waypoint. Do not generate the trivial additional rotation
@@ -122,9 +149,18 @@ public partial class Path
 
       p = q;
     }
+
+    foreach (var g in fs)
+    {
+      Godot.GD.Print($"DEBUG(Path.cs): Frames f == (p = {g.V.P}, theta = {g.V.T * 180 / Math.PI})");
+    }
     return fs;
   }
 
+  /// <summary>
+  /// Sets a new path. Preserves <see cref="Path.Next" /> by prepending to the
+  /// path to smooth out unit movement.
+  /// </summary>
   public void Merge(List<Godot.Vector3I> path)
   {
     if (path.Count == 0)
@@ -147,6 +183,20 @@ public partial class Path
     this._index = path.Count == 0 ? null : 0;
   }
 
+  /// <summary>
+  /// Gets the next waypoint for the parent
+  /// <see cref="DF.Instances.Unit.Base"/> instance.
+  /// </summary>
+  /// <remarks>
+  /// Parent must connect the
+  /// <see cref="DF.Instances.Tween.Base{U, W}.KeyFrameTriggerEvent"/> event
+  /// handler manually.
+  /// <example>
+  /// <code>
+  ///     position.KeyFrameTriggerEvent += path.KeyFrameTriggerEventHandler;
+  /// </code>
+  /// </example>
+  /// </remarks>
   public Godot.Vector3I? Next()
   {
     if (this._index.HasValue && this._index.Value < this._path.Count)
@@ -156,16 +206,24 @@ public partial class Path
     return null;
   }
 
+  /// <summary>
+  /// Advances the internal waypoint pointer to the next node.
+  /// </summary>
   internal void SetNext()
   {
     this._index = this._index.HasValue ? this._index + 1 : 0;
   }
 
+  /// <summary>
+  /// Event handler for the parent <see cref="DF.Instances.Unit.Base"/> to
+  /// link to the
+  /// <see cref="DF.Instances.Tween.Base{U, W}.KeyFrameTriggerEvent"/>
+  /// instance.
+  /// </summary>
   public void KeyFrameTriggerEventHandler(
     object sender,
     DF.Instances.Tween.TriggerEventHandlerArgs<DF.Lib.Position.Position, KeyFrameType> e)
   {
-    // TODO(minkezhang): Translate e.F.V.P (a Vector3 value) to a Vector3I.
     if (e.F.D.HasFlag(KeyFrameType.ReachedTile))
     {
       this.SetNext();

@@ -8,10 +8,23 @@ namespace DF.Instances.Debug;
 public partial class Unit : Node2D
 {
   [Godot.Export]
-  DF.Instances.Unit.Base Node;
+  public DF.Instances.Unit.Base Node;
 
   private const int _unit_radius = 5;
   private const int _angle_marker_length = 50;
+
+  private DF.Instances.Debug.Tween.HP hp()
+  {
+    return (DF.Instances.Debug.Tween.HP)this.GetNode("HP");
+  }
+
+  public override void _Ready()
+  {
+    base._Ready();
+
+    this.hp().Tween = (DF.Instances.Tween.HP)this.Node.GetNode("HP");
+    this.hp().YMax = this.Node.MaxHP;
+  }
 
   private void _DrawPosition() => this.DrawCircle(
     this.Node.Position,

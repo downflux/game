@@ -129,6 +129,15 @@ public class PathTest
         (float)Math.PI / 4
       )).IsEqual(
         new F(3, new(new(0, 0, 0), (float)(3 * Math.PI / 4))));
+
+    AssertThat(  // Closest tuple of 2 * PI, even if that's negative.
+      DF.Lib.Path.Path.GenerateRotationFrame(
+        new(new(0, 0, 0), 0),
+        new(new(0, 1, 0), (float)(7 * Math.PI / 4)),
+        0,
+        (float)Math.PI / 4
+    )).IsEqual(
+      new F(1, new(new(0, 0, 0), (float)(-Math.PI / 4))));
   }
 
   [TestCase]
