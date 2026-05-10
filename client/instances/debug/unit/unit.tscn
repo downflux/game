@@ -2,10 +2,16 @@
 
 [ext_resource type="Script" uid="uid://cox8klfh4y8ht" path="res://instances/debug/unit/Unit.cs" id="1_fejpe"]
 [ext_resource type="Script" uid="uid://p50puuh21g8j" path="res://instances/debug/tween/HP.cs" id="2_56m3n"]
+[ext_resource type="Script" uid="uid://c1yefl6avxyrk" path="res://instances/debug/tween/Position.cs" id="3_imoyt"]
 
 [node name="Unit" type="Node2D" unique_id=1229125358]
 script = ExtResource("1_fejpe")
 
 [node name="HP" type="Node2D" parent="." unique_id=786067981]
 script = ExtResource("2_56m3n")
+Dimension = Vector2i(200, 100)
+
+[node name="Position" type="Node2D" parent="." unique_id=1530786020]
+position = Vector2(100, 0)
+script = ExtResource("3_imoyt")
 Dimension = Vector2i(200, 100)

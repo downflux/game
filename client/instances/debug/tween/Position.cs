@@ -1,24 +1,30 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 
 namespace DF.Instances.Debug.Tween;
 
-public partial class Float<W> : DF.Instances.Debug.Tween.Base<float, W>
+public partial class Position : DF.Instances.Debug.Tween.Base<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType>
 {
   public float? YMin;
   public float? YMax;
 
-  internal (float YMin, float YMax) YRange(List<DF.Lib.Tween.Frame<float, W>> fs)
+  public Position()
+  {
+    this.Label = "Position";
+  }
+
+  internal (float YMin, float YMax) YRange(List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType>> fs)
   {
     if (this.YMax.HasValue)
     {
-      return (this.YMin ?? 0, this.YMax.Value);
+      return (this.YMin.HasValue ? this.YMin.Value : 0, this.YMax.Value);
     }
 
     (float ymin, float ymax) = (float.PositiveInfinity, float.NegativeInfinity);
-    foreach (DF.Lib.Tween.Frame<float, W> f in fs)
+    foreach (DF.Lib.Tween.Frame<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType> f in fs)
     {
-      (ymin, ymax) = (Math.Min(ymin, f.V), Math.Max(ymax, f.V));
+      (ymin, ymax) = (Math.Min(ymin, f.V.T), Math.Max(ymax, f.V.T));
 
     }
     return (ymin, ymax);
@@ -42,23 +48,23 @@ public partial class Float<W> : DF.Instances.Debug.Tween.Base<float, W>
       ((float)this._timer().CurrTick() - (float)this.WindowSize / 2) < 0 ? 0 : (float)this._timer().CurrTick() - (float)this.WindowSize / 2,
       (float)this._timer().CurrTick() + (float)this.WindowSize / 2);
 
-    List<DF.Lib.Tween.Frame<float, W>> fs = this.Tween.Slice((ulong)xmin, (ulong)xmax);
+    List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType>> fs = this.Tween.Slice((ulong)xmin, (ulong)xmax);
 
     (float ymin, float ymax) = this.YRange(fs);
 
     if (fs.Count > 0)
     {
-      DF.Lib.Tween.Frame<float, W> f = fs[0];
+      DF.Lib.Tween.Frame<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType> f = fs[0];
       for (var i = 1; i < fs.Count; i++)
       {
-        DF.Lib.Tween.Frame<float, W> g = fs[i];
+        DF.Lib.Tween.Frame<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType> g = fs[i];
 
         Godot.Vector2I offset_f = new(
-          Float<W>.Offset(xmin, xmax, this.Dimension.X, f.T),
-          -Float<W>.Offset(ymin, ymax, this.Dimension.Y, f.V));
+          DF.Instances.Debug.Tween.Position.Offset(xmin, xmax, this.Dimension.X, f.T),
+          -DF.Instances.Debug.Tween.Position.Offset(ymin, ymax, this.Dimension.Y, f.V.T));
         Godot.Vector2I offset_g = new(
-          Float<W>.Offset(xmin, xmax, this.Dimension.X, g.T),
-          -Float<W>.Offset(ymin, ymax, this.Dimension.Y, g.V));
+          DF.Instances.Debug.Tween.Position.Offset(xmin, xmax, this.Dimension.X, g.T),
+          -DF.Instances.Debug.Tween.Position.Offset(ymin, ymax, this.Dimension.Y, g.V.T));
         Godot.Vector2 p = this.Position + new Godot.Vector2I(0, this.Dimension.Y) + offset_f;
         Godot.Vector2 q = this.Position + new Godot.Vector2I(0, this.Dimension.Y) + offset_g;
 
@@ -73,7 +79,7 @@ public partial class Float<W> : DF.Instances.Debug.Tween.Base<float, W>
       }
     }
 
-    int curr_tick = Float<W>.Offset(xmin, xmax, this.Dimension.X, this._timer().CurrTick());
+    int curr_tick = DF.Instances.Debug.Tween.Position.Offset(xmin, xmax, this.Dimension.X, this._timer().CurrTick());
 
     this.DrawLine(
       this.Position + new Godot.Vector2I(curr_tick, 0),
