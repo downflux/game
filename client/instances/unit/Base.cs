@@ -120,7 +120,7 @@ public partial class Base : Node2D
   public void SetVelocity(DF.Lib.Position.Velocity v)
   {
     Godot.GD.Print($"DEBUG(Base.cs): setting v = {v}");
-    // BUG(minkezhang): Calling SetVelocity() very fast seems to break something.
+    // BUG(minkezhang): Increasing SetVelocity() very fast seems to break something.
     // TODO(minkezhang): Make this.position().Merge call a trigger based on velocity keypoint.
     if (v.XY < 0 || v.W < 0)  // Epsilon.
     {

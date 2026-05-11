@@ -109,6 +109,7 @@ public partial class Path
     List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, KeyFrameType>> fs = [
       new(t, p, KeyFrameType.None),
     ];
+
     for (int i = this._index.Value; i < this._path.Count; i++)
     {
       Godot.Vector3 qp = DF.Lib.Position.Transformation.ToWorld(this._path[i]);
@@ -140,6 +141,13 @@ public partial class Path
 
         // Ensure unit stays aligned during translation.
         q = new(q.P, f.Value.T);
+      }
+
+      // Only orient towards the next waypoint if the planar velocity is 0. Do
+      // not continue generating rotational frames in this case.
+      if (v.XY <= 1e-2)  // Epsilon.
+      {
+        return fs;
       }
 
       (u, f) = Path.GenerateTranslationFrame(p, q, u, v.XY);
