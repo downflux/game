@@ -24,6 +24,9 @@ public partial class Example : Node2D
 			new(50, 350, 0),
 			new(300, 200, 0),
 			new(200, 350, 0),
+			new(200, 400, 0),
+			new(50, 350, 0),
+			new(200, 350, 0),
 		], true);
 	}
 

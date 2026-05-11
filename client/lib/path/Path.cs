@@ -31,8 +31,7 @@ public partial class Path
     // Angle of q relative to the x-axis in radians.
     float dt = (float)(p.T - q.T) % (float)Math.Tau;
 
-    // Rotate.
-    if (Math.Abs(dt) < 1e-2)  // epsilon
+    if (Math.Abs(dt) < 1e-2)  // Epsilon.
     {
       return (u, null);
     }
@@ -46,12 +45,8 @@ public partial class Path
 
     if (Math.Abs(dt) > Math.PI)
     {
-      Godot.GD.Print($"DEBUG(Path.cs): dt greater than 180: |{dt * 180 / Math.PI}|");
-      Godot.GD.Print($"                p = {p.T * 180 / Math.PI}, q = {q.T * 180 / Math.PI}");
       qt += (float)(Math.Sign(dt) * Math.Tau);
       dt = (float)Math.Tau - Math.Abs(dt);
-      Godot.GD.Print($"                altered dt = {dt * 180 / Math.PI}");
-      Godot.GD.Print($"                altered qt = {qt * 180 / Math.PI}");
     }
 
     u += Math.Max(1, Math.Abs(dt) / w);
@@ -151,11 +146,6 @@ public partial class Path
       }
 
       p = q;
-    }
-
-    foreach (var g in fs)
-    {
-      Godot.GD.Print($"DEBUG(Path.cs): Frames f == (p = {g.V.P}, theta = {g.V.T * 180 / Math.PI})");
     }
     return fs;
   }
