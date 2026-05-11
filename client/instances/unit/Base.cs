@@ -1,3 +1,4 @@
+using DF.Instances.Timer;
 using Godot;
 using Microsoft.VisualStudio.TestPlatform.Utilities;
 using System;
@@ -118,6 +119,13 @@ public partial class Base : Node2D
 
   public void SetVelocity(DF.Lib.Position.Velocity v)
   {
+    Godot.GD.Print($"DEBUG(Base.cs): setting v = {v}");
+    // BUG(minkezhang): Calling SetVelocity() very fast seems to break something.
+    // TODO(minkezhang): Make this.position().Merge call a trigger based on velocity keypoint.
+    if (v.XY < 0 || v.W < 0)  // Epsilon.
+    {
+      return;
+    }
     this.velocity().Add([
       new(this._timer().CurrTick(), v, false),
     ]);

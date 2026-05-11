@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace DF.Lib.Path;
 
@@ -111,8 +112,16 @@ public partial class Path
     for (int i = this._index.Value; i < this._path.Count; i++)
     {
       Godot.Vector3 qp = DF.Lib.Position.Transformation.ToWorld(this._path[i]);
-      DF.Lib.Position.Position q = new(
-        qp, (float)Math.Floor(p.T / (float)Math.Tau) * (float)Math.Tau + (new Godot.Vector2(qp.X, qp.Y) - p.XY).Angle());
+
+      // The actual rotation of p may be a multiple of 2pi; we want to make
+      // sure that the direction of the new waypoint is within 2pi of the
+      // current orientation, which means we need to adjust the target
+      // orientation (qt).
+      float qt = (new Godot.Vector2(qp.X, qp.Y) - p.XY).Angle();
+      float dt = p.T - qt;
+      int rotations = (int)(Math.Sign(dt) * Math.Floor(Math.Abs(dt) / Math.Tau));
+
+      DF.Lib.Position.Position q = new(qp, rotations * (float)Math.Tau + qt);
 
       // Edge case -- it is possible that the current position p is already at
       // the first waypoint. Do not generate the trivial additional rotation

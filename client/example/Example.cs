@@ -30,7 +30,26 @@ public partial class Example : Node2D
 		], true);
 	}
 
-	public override void _Process(double delta)
+	private DF.Instances.Unit.Base unit() => (DF.Instances.Unit.Base)this.GetNode("Unit");
+
+	public override void _UnhandledKeyInput(InputEvent @event)
 	{
+		base._UnhandledKeyInput(@event);
+
+		if (@event is Godot.InputEventKey eventKey)
+		{
+			if (eventKey.Pressed && eventKey.Keycode == Key.Up)
+			{
+				Godot.GD.Print("DEBUG(Example.cs): Increasing speed");
+				DF.Lib.Position.Velocity v = this.unit().Velocity();
+				this.unit().SetVelocity(new(v.XY + 1f * this.unit().BaseVelocity, v.Z, v.W + this.unit().BaseAngularVelocity));
+			}
+			if (eventKey.Pressed && eventKey.Keycode == Key.Down)
+			{
+				Godot.GD.Print("DEBUG(Example.cs): Decreasing speed");
+				DF.Lib.Position.Velocity v = this.unit().Velocity();
+				this.unit().SetVelocity(new(v.XY - 1f * this.unit().BaseVelocity, v.Z, v.W - this.unit().BaseAngularVelocity));
+			}
+		}
 	}
 }
