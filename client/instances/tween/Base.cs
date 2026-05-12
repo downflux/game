@@ -9,7 +9,7 @@ namespace DF.Instances.Tween;
 /// <remarks>
 /// All mutate methods are written to an internal buffer and updated during <see cref="Godot.Node._Process(double)" />.
 /// </remarks>
-public interface ITween<U, W> where U : struct
+public interface ITween<U, W> : ITweenRO<U, W> where U : struct
 {
 	public string ID();
 
@@ -37,11 +37,15 @@ public interface ITween<U, W> where U : struct
 	/// </remarks>
 	public void Add(List<DF.Lib.Tween.Frame<U, W>> fs, bool init = false);
 	public void Remove(List<DF.Lib.Tween.Frame<U, W>> fs);
-	public DF.Lib.Tween.Frame<U, W>? Get(ulong t);
-	public List<DF.Lib.Tween.Frame<U, W>> Slice(ulong? lo, ulong? hi);
 	public void Cut(ulong t);
 	public void Merge(ulong t, List<DF.Lib.Tween.Frame<U, W>> fs);
 	public void Clear();
+}
+
+public interface ITweenRO<U, W> where U : struct
+{
+	public DF.Lib.Tween.Frame<U, W>? Get(ulong t);
+	public List<DF.Lib.Tween.Frame<U, W>> Slice(ulong? lo, ulong? hi);
 }
 
 public delegate void TriggerEventHandler<U, W>(

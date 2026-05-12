@@ -4,7 +4,7 @@ namespace DF.Instances.Debug.Tween;
 
 public partial class Base<U, W> : Node2D where U : struct
 {
-  public DF.Instances.Tween.Base<U, W>? Tween = null;
+  public DF.Instances.Tween.ITweenRO<U, W>? Tween = null;
   public string Label = "";
   private const int _font_size = 12;
 
