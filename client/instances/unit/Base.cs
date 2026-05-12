@@ -30,10 +30,9 @@ public partial class Base : Node2D
   //   vs. continuous turning (i.e. spline) (but only air, not ground, which
   //   will ignore collision detection (otherwise this becomes 3D boids
   //   behavior).
-  // TODO(minkezhang): Add orientation debug line.
-  private DF.Instances.Tween.HP hp() => this.GetNode<DF.Instances.Tween.HP>("HP");
-  private DF.Instances.Tween.Position position() => this.GetNode<DF.Instances.Tween.Position>("Position");
-  private DF.Instances.Tween.Velocity velocity() => this.GetNode<DF.Instances.Tween.Velocity>("Velocity");
+  private DF.Instances.Tween.HP hp_tween() => this.GetNode<DF.Instances.Tween.HP>("HP");
+  private DF.Instances.Tween.Position position_tween() => this.GetNode<DF.Instances.Tween.Position>("Position");
+  private DF.Instances.Tween.Velocity velocity_tween() => this.GetNode<DF.Instances.Tween.Velocity>("Velocity");
   internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
   internal DF.Lib.Path.Path _path = new();
 
@@ -47,18 +46,18 @@ public partial class Base : Node2D
   {
     base._Ready();
 
-    this.hp().Add(
+    this.hp_tween().Add(
       [
         new(this._timer().CurrTick(), this.MaxHP, false),
       ], true);
-    this.velocity().Add(
+    this.velocity_tween().Add(
       [
         new(
           this._timer().CurrTick(),
           new(this.BaseVelocity, this.BaseVerticalVelocity, this.BaseAngularVelocity),
           false),
       ], true);
-    this.position().Add(
+    this.position_tween().Add(
       [
         new(
           this._timer().CurrTick(),
@@ -71,30 +70,50 @@ public partial class Base : Node2D
             DF.Lib.Path.KeyFrameType.ReachedTile),
       ], true);
 
-    this.hp().WatchPoints[this.MaxHP] = DF.Lib.Tween.EdgeType.RisingEdge;
+    this.hp_tween().WatchPoints[this.MaxHP] = DF.Lib.Tween.EdgeType.RisingEdge;
 
-    this.position().KeyFrameTriggerEvent += (t, e) =>
+    this.position_tween().KeyFrameTriggerEvent += this.PathLoopHandler;
+    this.position_tween().KeyFrameTriggerEvent += this._path.KeyFrameTriggerEventHandler;
+    this.velocity_tween().KeyFrameTriggerEvent += this.SetVelocityKeyFrameTriggerEventHandler;
+  }
+
+  private void PathLoopHandler(
+    object sender,
+    Tween.TriggerEventHandlerArgs<Lib.Position.Position, Lib.Path.KeyFrameType> e)
+  {
+    if (e.F.D.HasFlag(Lib.Path.KeyFrameType.ReachedGoal))
     {
-      if (e.F.D.HasFlag(Lib.Path.KeyFrameType.ReachedGoal))
-      {
-        this.SetPath(this._loop ? this._path.P() : [], this._loop);
-      }
-    };
-    this.position().KeyFrameTriggerEvent += this._path.KeyFrameTriggerEventHandler;
+      this.SetPath(this._loop ? this._path.P() : [], this._loop);
+    }
+  }
+
+  private void SetVelocityKeyFrameTriggerEventHandler(
+    object sender,
+    DF.Instances.Tween.TriggerEventHandlerArgs<DF.Lib.Position.Velocity, bool> e)
+  {
+    if (e.F.IsKeyFrame())
+    {
+      this.position_tween().Merge(
+        this._timer().CurrTick(),
+        this._path.Frames(
+        this.Position4D(),
+        this._timer().CurrTick(),
+        e.F.V));
+    }
   }
 
   /// <summary>
   /// Calculates the "true" 3D position of the isometric unit.
   /// </summary>
-  public DF.Lib.Position.Position Position4D() => this.position().Get(this._timer().CurrTick())!.Value.V;
+  public DF.Lib.Position.Position Position4D() => this.position_tween().Get(this._timer().CurrTick())!.Value.V;
 
-  public float HP() => Godot.Mathf.Clamp(this.hp().Get(this._timer().CurrTick())!.Value.V, 0, this.MaxHP);
-  public DF.Lib.Position.Velocity Velocity() => this.velocity().Get(this._timer().CurrTick())!.Value.V;
+  public float HP() => Godot.Mathf.Clamp(this.hp_tween().Get(this._timer().CurrTick())!.Value.V, 0, this.MaxHP);
+  public DF.Lib.Position.Velocity Velocity() => this.velocity_tween().Get(this._timer().CurrTick())!.Value.V;
 
   public void SetPath(List<Godot.Vector3I> p, bool loop = false)
   {
     this._path.Merge(p);
-    this.position().Merge(
+    this.position_tween().Merge(
       this._timer().CurrTick(),
       this._path.Frames(
         this.Position4D(),
@@ -112,7 +131,7 @@ public partial class Base : Node2D
         $"setting HP {v} outside of valid range [{0}, {this.MaxHP}]");
     }
 
-    this.hp().Add([
+    this.hp_tween().Add([
       new(this._timer().CurrTick() + dt, v, false),
     ]);
   }
@@ -121,20 +140,13 @@ public partial class Base : Node2D
   {
     Godot.GD.Print($"DEBUG(Base.cs): setting v = {v}");
     // BUG(minkezhang): Increasing SetVelocity() very fast seems to break something.
-    // TODO(minkezhang): Make this.position().Merge call a trigger based on velocity keypoint.
     if (v.XY < 0 || v.W < 0)  // Epsilon.
     {
       return;
     }
-    this.velocity().Add([
+    this.velocity_tween().Add([
       new(this._timer().CurrTick(), v, false),
     ]);
-    this.position().Merge(
-      this._timer().CurrTick(),
-      this._path.Frames(
-      this.Position4D(),
-      this._timer().CurrTick(),
-      v));
   }
 
   public override void _Process(double dt)
