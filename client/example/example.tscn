@@ -42,5 +42,4 @@ script = ExtResource("5_scst5")
 [node name="Debug" type="Node" parent="." unique_id=1206748121]
 
 [node name="Unit" parent="Debug" unique_id=1229125358 node_paths=PackedStringArray("Node") instance=ExtResource("6_6rqat")]
-position = Vector2(193, 29)
 Node = NodePath("../../Unit")

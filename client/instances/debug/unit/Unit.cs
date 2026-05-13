@@ -1,7 +1,5 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace DF.Instances.Debug;
 
@@ -14,7 +12,6 @@ public partial class Unit : Node2D
   private const int _angle_marker_length = 50;
 
   private DF.Instances.Debug.Tween.HP hp() => (DF.Instances.Debug.Tween.HP)this.GetNode("HP");
-  private DF.Instances.Debug.Tween.Position position() => (DF.Instances.Debug.Tween.Position)this.GetNode("Position");
   private DF.Instances.Debug.Tween.Angle angle() => (DF.Instances.Debug.Tween.Angle)this.GetNode("Angle");
 
 
@@ -29,8 +26,7 @@ public partial class Unit : Node2D
 
     this.hp().Tween = (DF.Instances.Tween.HP)this.Node.GetNode("HP");
     this.hp().YMax = this.Node.MaxHP;
-    this.position().Tween = (DF.Instances.Tween.Position)this.Node.GetNode("Position");
-    this.angle().Tween = new DF.Instances.Debug.Tween.Shim((DF.Instances.Tween.Position)this.Node.GetNode("Position"));
+    this.angle().Tween = new DF.Instances.Debug.Tween.ToAngle((DF.Instances.Tween.Position)this.Node.GetNode("Position"));
   }
 
   private void _DrawPosition()

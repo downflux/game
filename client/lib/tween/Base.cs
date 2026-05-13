@@ -162,7 +162,7 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	/// <summary>
 	/// Get an explicit keyframe stored in the tween which is guaranteed to have
 	/// occurred at or after the input timestamp. c.f.
-	/// <see cref="Tween{U, W}.LowerBound">.
+	/// <see cref="Base{U, W}.LowerBound">.
 	/// </summary>
 	internal Frame<U, W>? UpperBound(ulong t)
 	{
@@ -342,13 +342,20 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			hi ?? this._keyframes.GetKeyAtIndex(
 				this._keyframes.Count - 1));
 
-		if (!lb.HasValue && ub.HasValue && lo.HasValue && hi.HasValue)  // lo is beyond the last known keyframe.
+		// If `lo` is beyond the last known keyframe, then the upper bound of `lb`
+		// does not exist, and `lb` will return null. Here, ub contains the value
+		// of the last known keyframe; we know that `lo < hi` by virtue of the
+		// check before, which is to say, the lower bound of `hi` is the same as
+		// the lower bound of `lo`.
+		if (!lb.HasValue && ub.HasValue && lo.HasValue && hi.HasValue)
 		{
 			slice.Add(this.Get(lo.Value)!.Value);
 			slice.Add(this.Get(hi.Value)!.Value);
 		}
 
-		if (!lb.HasValue || !ub.HasValue)  // Should not happen.
+		// `ub` should always be defined by this point. `lb` may be null, as per
+		// above.
+		if (!lb.HasValue || !ub.HasValue)
 		{
 			return slice;
 		}
@@ -377,6 +384,7 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			{
 				slice.Add(f.Value);
 			}
+
 		}
 
 		return slice;

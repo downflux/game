@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DF.Instances.Debug.Tween;
 
-public partial class Float<W> : DF.Instances.Debug.Tween.Base<float, W>
+public partial class Float<W> : DF.Instances.Debug.Tween.Graph<float, W>
 {
   public float? YMin;
   public float? YMax;
@@ -59,14 +59,14 @@ public partial class Float<W> : DF.Instances.Debug.Tween.Base<float, W>
         Godot.Vector2I offset_g = new(
           Float<W>.Offset(xmin, xmax, this.Dimension.X, g.T),
           -Float<W>.Offset(ymin, ymax, this.Dimension.Y, g.V));
-        Godot.Vector2 p = this.Position + new Godot.Vector2I(0, this.Dimension.Y) + offset_f;
-        Godot.Vector2 q = this.Position + new Godot.Vector2I(0, this.Dimension.Y) + offset_g;
+        Godot.Vector2 p = new Godot.Vector2I(0, this.Dimension.Y) + offset_f;
+        Godot.Vector2 q = new Godot.Vector2I(0, this.Dimension.Y) + offset_g;
 
         this.DrawLine(p, q, Godot.Colors.Green, 1);
-        this.DrawCircle(p, 2, f.IsKeyFrame() ? Godot.Colors.Red : Godot.Colors.Gray);
+        this._DrawPoint(f, p);
         if (i == fs.Count - 1)  // Draw last point.
         {
-          this.DrawCircle(q, 2, g.IsKeyFrame() ? Godot.Colors.Red : Godot.Colors.Gray);
+          this._DrawPoint(g, q);
         }
 
         f = g;
@@ -76,14 +76,17 @@ public partial class Float<W> : DF.Instances.Debug.Tween.Base<float, W>
     int curr_tick = Float<W>.Offset(xmin, xmax, this.Dimension.X, this._timer().CurrTick());
 
     this.DrawLine(
-      this.Position + new Godot.Vector2I(curr_tick, 0),
-      this.Position + new Godot.Vector2I(curr_tick, this.Dimension.Y),
+      new Godot.Vector2I(curr_tick, 0),
+      new Godot.Vector2I(curr_tick, this.Dimension.Y),
       Godot.Colors.Gray,
       1);
   }
 
-  internal void _DrawPoint(DF.Lib.Tween.Frame<float, bool> f, Godot.Vector2 p)
+  internal void _DrawPoint(DF.Lib.Tween.Frame<float, W> f, Godot.Vector2 p)
   {
-    this.DrawCircle(p, 2, f.IsKeyFrame() ? Godot.Colors.Red : Godot.Colors.Gray);
+    (float xmin, float xmax) = (
+      ((float)this._timer().CurrTick() - (float)this.WindowSize / 2) < 0 ? 0 : (float)this._timer().CurrTick() - (float)this.WindowSize / 2,
+      (float)this._timer().CurrTick() + (float)this.WindowSize / 2);
+    this.DrawCircle(p, 2, f.IsKeyFrame() && (f.T >= xmin || f.T <= xmax) ? Godot.Colors.Red : Godot.Colors.Gray);
   }
 }
