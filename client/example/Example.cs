@@ -32,6 +32,23 @@ public partial class Example : Node2D
 
 	private DF.Instances.Unit.Base unit() => (DF.Instances.Unit.Base)this.GetNode("Unit");
 
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		base._UnhandledInput(@event);
+
+		if (@event is Godot.InputEventMouseButton eventMouse)
+		{
+			if (eventMouse.ButtonIndex.HasFlag(MouseButton.Left) && eventMouse.IsReleased())
+			{
+				// TODO(minkezhang): Break out HP into separate health object, with DoT.
+				// TODO(minkezhang): Break out Position into own object, with path and velocity.
+				// TODO(minkezhang): Break out server vs client rendering -- i.e. triggers.
+				// TODO(minkezhang): Break out Weapon() object for AoE vs single target API.
+				this.unit().Fire();  // TODO(minkezhang): Add target, vs. AoE.
+			}
+		}
+	}
+
 	public override void _UnhandledKeyInput(InputEvent @event)
 	{
 		base._UnhandledKeyInput(@event);

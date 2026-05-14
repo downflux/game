@@ -6,9 +6,4 @@ public partial class HP : DF.Instances.Debug.Tween.Float<bool>
   {
     this.Label = "HP";
   }
-
-  public override void _Draw()
-  {
-    base._Draw();
-  }
 }

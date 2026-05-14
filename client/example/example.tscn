@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://caov5tcfmnlbc" path="res://instances/tween/HP.cs" id="2_pjyox"]
 [ext_resource type="Script" uid="uid://ejnefkcwa0ew" path="res://instances/tween/Position.cs" id="4_7cn0y"]
 [ext_resource type="Script" uid="uid://c8140tvyafyvo" path="res://instances/tween/Velocity.cs" id="5_scst5"]
+[ext_resource type="Script" uid="uid://catcbtdpxp62m" path="res://instances/tween/Pulse.cs" id="6_2xiy6"]
 [ext_resource type="PackedScene" uid="uid://bv7k3f7yebiqj" path="res://instances/debug/unit/unit.tscn" id="6_6rqat"]
 
 [node name="Example" type="Node2D" unique_id=2067538211]
@@ -38,6 +39,9 @@ script = ExtResource("4_7cn0y")
 
 [node name="Velocity" type="Node" parent="Unit" unique_id=1202961359]
 script = ExtResource("5_scst5")
+
+[node name="Weapon" type="Node" parent="Unit" unique_id=533429203]
+script = ExtResource("6_2xiy6")
 
 [node name="Debug" type="Node" parent="." unique_id=1206748121]
 

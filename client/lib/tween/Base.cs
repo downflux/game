@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DF.Lib.Tween;
 
@@ -34,8 +35,7 @@ public enum InterpolationType
 {
 	Linear,
 	Step,
-	// TODO(minkezhang): Implement Pulse type.
-	// Pulse,
+	Pulse,
 }
 
 /// <summary>
@@ -281,6 +281,8 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			{
 				switch (this.InterpolationType)
 				{
+					case InterpolationType.Pulse:
+						return new Frame<U, W>(t, default(U), default(W), false);
 					case InterpolationType.Linear:
 						if (ub.Value.T == lb.Value.T)
 						{
@@ -349,8 +351,11 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 		// the lower bound of `lo`.
 		if (!lb.HasValue && ub.HasValue && lo.HasValue && hi.HasValue)
 		{
-			slice.Add(this.Get(lo.Value)!.Value);
-			slice.Add(this.Get(hi.Value)!.Value);
+			if (this.InterpolationType != InterpolationType.Pulse)
+			{
+				slice.Add(this.Get(lo.Value)!.Value);
+				slice.Add(this.Get(hi.Value)!.Value);
+			}
 		}
 
 		// `ub` should always be defined by this point. `lb` may be null, as per
@@ -360,7 +365,7 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			return slice;
 		}
 
-		if (lo.HasValue && lo.Value != lb.Value.T)
+		if (lo.HasValue && lo.Value != lb.Value.T && this.InterpolationType != InterpolationType.Pulse)
 		{
 			Frame<U, W>? f = this.Get(lo.Value);
 			if (f.HasValue)
@@ -377,7 +382,7 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			slice.Add(this._keyframes.GetValueAtIndex(i));
 		}
 
-		if (hi.HasValue && hi.Value != ub.Value.T)
+		if (hi.HasValue && hi.Value != ub.Value.T && this.InterpolationType != InterpolationType.Pulse)
 		{
 			Frame<U, W>? f = this.Get(hi.Value);
 			if (f.HasValue)

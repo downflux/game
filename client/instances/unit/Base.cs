@@ -33,6 +33,7 @@ public partial class Base : Node2D
   private DF.Instances.Tween.HP hp_tween() => this.GetNode<DF.Instances.Tween.HP>("HP");
   private DF.Instances.Tween.Position position_tween() => this.GetNode<DF.Instances.Tween.Position>("Position");
   private DF.Instances.Tween.Velocity velocity_tween() => this.GetNode<DF.Instances.Tween.Velocity>("Velocity");
+  private DF.Instances.Tween.Pulse weapon_tween() => this.GetNode<DF.Instances.Tween.Pulse>("Weapon");
   internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
   internal DF.Lib.Path.Path _path = new();
 
@@ -75,6 +76,14 @@ public partial class Base : Node2D
     this.position_tween().KeyFrameTriggerEvent += this.PathLoopHandler;
     this.position_tween().KeyFrameTriggerEvent += this._path.KeyFrameTriggerEventHandler;
     this.velocity_tween().KeyFrameTriggerEvent += this.SetVelocityKeyFrameTriggerEventHandler;
+    this.weapon_tween().KeyFrameTriggerEvent += this.FireHandler;
+  }
+
+  private void FireHandler(object sender,
+    Tween.TriggerEventHandlerArgs<bool, bool> e)
+  {
+    // TODO(minkezhang): Debug.
+    this.IncrementHP(10, 0);
   }
 
   private void PathLoopHandler(
@@ -122,7 +131,14 @@ public partial class Base : Node2D
     this._loop = loop;
   }
 
-  public void SetHP(float v, ulong dt)
+  public void Fire()
+  {
+    this.weapon_tween().Add([
+      new(this._timer().CurrTick(), true, false),
+    ]);
+  }
+
+  public void IncrementHP(float v, ulong dt)
   {
     if (v > this.MaxHP || v < 0)
     {
@@ -132,7 +148,8 @@ public partial class Base : Node2D
     }
 
     this.hp_tween().Add([
-      new(this._timer().CurrTick() + dt, v, false),
+      new(this._timer().CurrTick(), this.HP(), false),
+      new(this._timer().CurrTick() + dt, this.HP() + v, false),
     ]);
   }
 

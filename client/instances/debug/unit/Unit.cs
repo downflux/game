@@ -1,3 +1,5 @@
+using DF.Instances.Timer;
+using DF.Lib.Timer;
 using Godot;
 using System.Collections.Generic;
 
@@ -13,7 +15,7 @@ public partial class Unit : Node2D
 
   private DF.Instances.Debug.Tween.HP hp() => (DF.Instances.Debug.Tween.HP)this.GetNode("HP");
   private DF.Instances.Debug.Tween.Angle angle() => (DF.Instances.Debug.Tween.Angle)this.GetNode("Angle");
-
+  private DF.Instances.Debug.Tween.Pulse weapon() => (DF.Instances.Debug.Tween.Pulse)this.GetNode("Weapon");
 
   public override void _Ready()
   {
@@ -27,6 +29,8 @@ public partial class Unit : Node2D
     this.hp().Tween = (DF.Instances.Tween.HP)this.Node.GetNode("HP");
     this.hp().YMax = this.Node.MaxHP;
     this.angle().Tween = new DF.Instances.Debug.Tween.ToAngle((DF.Instances.Tween.Position)this.Node.GetNode("Position"));
+    this.weapon().Tween = (DF.Instances.Tween.Pulse)this.Node.GetNode("Weapon");
+
   }
 
   private void _DrawPosition()
