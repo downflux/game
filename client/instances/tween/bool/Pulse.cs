@@ -3,11 +3,9 @@ using System.Collections.Generic;
 
 namespace DF.Instances.Tween.Bool;
 
-public partial class Pulse<W>(List<DF.Lib.Tween.Frame<bool, W>> fs) : Base<bool, W>(
-  new DF.Lib.Tween.Bool<W>(
-      DF.Lib.Tween.InterpolationType.Pulse), fs)
+public partial class Pulse<W> : Base<bool, W>
 {
-  public Pulse() : this([])
+  public Pulse() : base(new DF.Lib.Tween.Bool<W>(DF.Lib.Tween.InterpolationType.Pulse))
   {
   }
 }

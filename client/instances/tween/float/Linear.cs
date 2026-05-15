@@ -3,16 +3,13 @@ using System.Collections.Generic;
 
 namespace DF.Instances.Tween.Float;
 
-public partial class Linear<W>(List<DF.Lib.Tween.Frame<float, W>> fs) : Base<float, W>(
-	new DF.Lib.Tween.Float<W>(
-			DF.Lib.Tween.InterpolationType.Linear), fs)
+public partial class Linear<W> : Base<float, W>
 {
-	[Godot.Export]
-	required public Godot.Collections.Dictionary<float, DF.Lib.Tween.EdgeType> WatchPoints;
+	public Godot.Collections.Dictionary<float, DF.Lib.Tween.EdgeType> WatchPoints = [];
 
 	public event TriggerEventHandler<float, W>? ValueTriggerEvent;
 
-	public Linear() : this([])
+	public Linear() : base(new DF.Lib.Tween.Float<W>(DF.Lib.Tween.InterpolationType.Linear))
 	{
 	}
 

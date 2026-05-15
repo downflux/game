@@ -12,8 +12,6 @@ public partial class Unit : Node2D
 
   private const int _unit_radius = 5;
   private const int _angle_marker_length = 50;
-
-  private DF.Instances.Debug.Tween.HP hp() => (DF.Instances.Debug.Tween.HP)this.GetNode("HP");
   private DF.Instances.Debug.Tween.Angle angle() => (DF.Instances.Debug.Tween.Angle)this.GetNode("Angle");
   private DF.Instances.Debug.Tween.Pulse weapon() => (DF.Instances.Debug.Tween.Pulse)this.GetNode("Weapon");
 
@@ -26,8 +24,7 @@ public partial class Unit : Node2D
       return;
     }
 
-    this.hp().Tween = (DF.Instances.Tween.HP)this.Node.GetNode("HP");
-    this.hp().YMax = this.Node.MaxHP;
+    ((DF.Views.Debug.Components.HealthPool)this.GetNode("HealthPool")).SetNode(((DF.Instances.Components.HealthPool)this.Node.GetNode("HealthPool")));
     this.angle().Tween = new DF.Instances.Debug.Tween.ToAngle((DF.Instances.Tween.Position)this.Node.GetNode("Position"));
     this.weapon().Tween = (DF.Instances.Tween.Pulse)this.Node.GetNode("Weapon");
 

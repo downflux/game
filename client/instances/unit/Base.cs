@@ -10,9 +10,6 @@ namespace DF.Instances.Unit;
 public partial class Base : Node2D
 {
   [Godot.Export]
-  required public float MaxHP;
-
-  [Godot.Export]
   required public float BaseVelocity;
 
   [Godot.Export]
@@ -30,7 +27,9 @@ public partial class Base : Node2D
   //   vs. continuous turning (i.e. spline) (but only air, not ground, which
   //   will ignore collision detection (otherwise this becomes 3D boids
   //   behavior).
-  private DF.Instances.Tween.HP hp_tween() => this.GetNode<DF.Instances.Tween.HP>("HP");
+  // TODO(minkezhang): Add Attack(cooldown) as a separate component.
+  // TODO(minkezhang): CLean up namespaces.
+  private DF.Instances.Components.HealthPool health_component() => this.GetNode<DF.Instances.Components.HealthPool>("HealthPool");
   private DF.Instances.Tween.Position position_tween() => this.GetNode<DF.Instances.Tween.Position>("Position");
   private DF.Instances.Tween.Velocity velocity_tween() => this.GetNode<DF.Instances.Tween.Velocity>("Velocity");
   private DF.Instances.Tween.Pulse weapon_tween() => this.GetNode<DF.Instances.Tween.Pulse>("Weapon");
@@ -47,17 +46,13 @@ public partial class Base : Node2D
   {
     base._Ready();
 
-    this.hp_tween().Add(
-      [
-        new(this._timer().CurrTick(), this.MaxHP, false),
-      ], true);
     this.velocity_tween().Add(
       [
         new(
           this._timer().CurrTick(),
           new(this.BaseVelocity, this.BaseVerticalVelocity, this.BaseAngularVelocity),
           false),
-      ], true);
+      ]);
     this.position_tween().Add(
       [
         new(
@@ -69,9 +64,10 @@ public partial class Base : Node2D
               0),
             0),
             DF.Lib.Path.KeyFrameType.ReachedTile),
-      ], true);
+      ]);
 
-    this.hp_tween().WatchPoints[this.MaxHP] = DF.Lib.Tween.EdgeType.RisingEdge;
+    this.position_tween().Init();
+    this.velocity_tween().Init();
 
     this.position_tween().KeyFrameTriggerEvent += this.PathLoopHandler;
     this.position_tween().KeyFrameTriggerEvent += this._path.KeyFrameTriggerEventHandler;
@@ -83,7 +79,7 @@ public partial class Base : Node2D
     Tween.TriggerEventHandlerArgs<bool, bool> e)
   {
     // TODO(minkezhang): Debug.
-    this.IncrementHP(10, 0);
+    this.health_component().Damage(10, Components.DamageAttribute.Bullet);
   }
 
   private void PathLoopHandler(
@@ -116,7 +112,7 @@ public partial class Base : Node2D
   /// </summary>
   public DF.Lib.Position.Position Position4D() => this.position_tween().Get(this._timer().CurrTick())!.Value.V;
 
-  public float HP() => Godot.Mathf.Clamp(this.hp_tween().Get(this._timer().CurrTick())!.Value.V, 0, this.MaxHP);
+  public float Health() => this.health_component().Health();
   public DF.Lib.Position.Velocity Velocity() => this.velocity_tween().Get(this._timer().CurrTick())!.Value.V;
 
   public void SetPath(List<Godot.Vector3I> p, bool loop = false)
@@ -138,21 +134,6 @@ public partial class Base : Node2D
     ]);
   }
 
-  public void IncrementHP(float v, ulong dt)
-  {
-    if (v > this.MaxHP || v < 0)
-    {
-      throw new ArgumentOutOfRangeException(
-        nameof(v),
-        $"setting HP {v} outside of valid range [{0}, {this.MaxHP}]");
-    }
-
-    this.hp_tween().Add([
-      new(this._timer().CurrTick(), this.HP(), false),
-      new(this._timer().CurrTick() + dt, this.HP() + v, false),
-    ]);
-  }
-
   public void SetVelocity(DF.Lib.Position.Velocity v)
   {
     Godot.GD.Print($"DEBUG(Base.cs): setting v = {v}");
@@ -170,7 +151,7 @@ public partial class Base : Node2D
   {
     base._Process(dt);
 
-    this.GetNode<Godot.ProgressBar>("HPBar").Value = this.HP() / this.MaxHP * 100;
+    this.GetNode<Godot.ProgressBar>("HPBar").Value = this.Health() / this.health_component().MaxHealth * 100;
 
     var p = this.Position4D();
     this.Position = new Godot.Vector2(p.P.X, p.P.Y);

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bv7k3f7yebiqj"]
+
+[ext_resource type="Script" uid="uid://cox8klfh4y8ht" path="res://instances/views/debug/unit/Unit.cs" id="1_fejpe"]
+[ext_resource type="Script" uid="uid://x8rhys31n6yv" path="res://instances/views/debug/tween/Angle.cs" id="4_4rki6"]
+[ext_resource type="Script" uid="uid://c0qwrn3bc6aec" path="res://instances/views/debug/tween/Pulse.cs" id="4_ypmvi"]
+[ext_resource type="Script" uid="uid://difqrjsqxqsjt" path="res://instances/views/debug/components/HealthPool.cs" id="5_fdm8e"]
+
+[node name="Unit" type="Node2D" unique_id=1229125358]
+script = ExtResource("1_fejpe")
+
+[node name="HealthPool" type="Node2D" parent="." unique_id=325109734]
+script = ExtResource("5_fdm8e")
+Dimension = Vector2i(200, 100)
+
+[node name="Angle" type="Node2D" parent="." unique_id=1415617059]
+position = Vector2(0, 100)
+script = ExtResource("4_4rki6")
+Dimension = Vector2i(200, 100)
+
+[node name="Weapon" type="Node2D" parent="." unique_id=176685805]
+position = Vector2(575, 244)
+script = ExtResource("4_ypmvi")
+Dimension = Vector2i(200, 100)

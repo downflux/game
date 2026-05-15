@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b3vln0ld81cvg" path="res://example/Example.cs" id="1_fdt2r"]
 [ext_resource type="Script" uid="uid://b5vgo6ijjoalg" path="res://instances/unit/Base.cs" id="2_8clr1"]
-[ext_resource type="Script" uid="uid://caov5tcfmnlbc" path="res://instances/tween/HP.cs" id="2_pjyox"]
+[ext_resource type="Script" uid="uid://378gwik5sfrx" path="res://instances/components/HealthPool.cs" id="3_2xiy6"]
 [ext_resource type="Script" uid="uid://ejnefkcwa0ew" path="res://instances/tween/Position.cs" id="4_7cn0y"]
 [ext_resource type="Script" uid="uid://c8140tvyafyvo" path="res://instances/tween/Velocity.cs" id="5_scst5"]
 [ext_resource type="Script" uid="uid://catcbtdpxp62m" path="res://instances/tween/Pulse.cs" id="6_2xiy6"]
-[ext_resource type="PackedScene" uid="uid://bv7k3f7yebiqj" path="res://instances/debug/unit/unit.tscn" id="6_6rqat"]
+[ext_resource type="PackedScene" uid="uid://bv7k3f7yebiqj" path="res://instances/views/debug/unit/unit.tscn" id="6_6rqat"]
 
 [node name="Example" type="Node2D" unique_id=2067538211]
 script = ExtResource("1_fdt2r")
@@ -14,15 +14,12 @@ script = ExtResource("1_fdt2r")
 [node name="Unit" type="Node2D" parent="." unique_id=267042463]
 position = Vector2(114, 76)
 script = ExtResource("2_8clr1")
-MaxHP = 100.0
 BaseVelocity = 0.05
 BaseAngularVelocity = 0.001
 
-[node name="HP" type="Node" parent="Unit" unique_id=1052569396]
-script = ExtResource("2_pjyox")
-WatchPoints = Dictionary[float, int]({
-0.0: 0
-})
+[node name="HealthPool" type="Node" parent="Unit" unique_id=1552440866]
+script = ExtResource("3_2xiy6")
+MaxHealth = 100.0
 
 [node name="HPBar" type="ProgressBar" parent="Unit" unique_id=118608803]
 offset_left = -10.0

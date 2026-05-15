@@ -10,7 +10,7 @@ public partial class Graph<U, W> : Base<U, W> where U : struct
 
 
   /// <summary>
-  /// Size of the window in ms.
+  /// Size of the time window (x-axis) in ms.
   /// </summary>
   public ulong WindowSize = 10000;
 
