@@ -35,6 +35,10 @@ public partial class Pulse : DF.Instances.Debug.Tween.Graph<bool, bool>
     {
       foreach (var f in fs)
       {
+        if (!f.IsKeyFrame())
+        {
+          continue;
+        }
         Godot.Vector2I offset = f.V ? new(
             Pulse.Offset(xmin, xmax, this.Dimension.X, f.T),
             0) : new(Pulse.Offset(xmin, xmax, this.Dimension.X, f.T), this.Dimension.Y);

@@ -33,7 +33,7 @@ public partial class Example : Node2D
 				// TODO(minkezhang): Break out Position into own object, with path and velocity.
 				// TODO(minkezhang): Break out server vs client rendering -- i.e. triggers.
 				// TODO(minkezhang): Break out Weapon() object for AoE vs single target API.
-				this.unit().Fire();  // TODO(minkezhang): Add target, vs. AoE.
+				((DF.Instances.Components.Abilities.Fireball)this.GetNode("Unit/Abilities/Fireball")).Attack((DF.Instances.Unit.Base)this.GetNode("Unit"));
 			}
 		}
 	}

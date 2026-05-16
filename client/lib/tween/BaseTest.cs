@@ -165,4 +165,42 @@ public class BaseTest
 				new(30, 140, null),
 				new(40, 150, null)});
 	}
+
+	[TestCase]
+	public void TestScale()
+	{
+		AssertThat(DF.Lib.Tween.Base<float, bool?>.Scale(
+			[
+				new(10, 110, true),
+				new(20, 120, true),
+				new(30, 130, true),
+			], 1)).IsEqual(
+				new List<DF.Lib.Tween.Frame<float, bool?>>{
+				new(10, 110, true),
+				new(20, 120, true),
+				new(30, 130, true),
+		});
+		AssertThat(DF.Lib.Tween.Base<float, bool?>.Scale(
+			[
+				new(10, 110, true),
+				new(20, 120, true),
+				new(30, 130, true),
+			], 2)).IsEqual(
+				new List<DF.Lib.Tween.Frame<float, bool?>>{
+				new(10, 110, true),
+				new(30, 120, true),
+				new(50, 130, true),
+		});
+
+		this._t.Scale(0, 2);
+		this._t.Flush();
+
+		AssertThat(this._t.Slice(10, null)).IsEqual(
+			new List<DF.Lib.Tween.Frame<float, bool?>>
+			{
+				new(10, 110, true),
+				new(30, 120, null),
+				new(50, 130, null),
+			});
+	}
 }

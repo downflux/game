@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DF.Instances.Timer;
+using Godot;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DF.Lib.Tween;
@@ -25,6 +27,7 @@ public interface ITween<U, W> where U : struct
 
 	public Frame<U, W>? Get(ulong t);
 	public List<Frame<U, W>> Slice(ulong? lo, ulong? hi);
+	public void Scale(ulong? t, float r);
 	public void Cut(ulong t);
 	public void Merge(ulong t, List<Frame<U, W>> fs);
 	public void Flush();
@@ -326,7 +329,7 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	/// </remarks>
 	public List<Frame<U, W>> Slice(ulong? lo, ulong? hi)
 	{
-		var slice = new List<Frame<U, W>>();
+		List<Frame<U, W>> slice = [];
 
 		if (this._keyframes.Count == 0)
 		{
@@ -351,11 +354,8 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 		// the lower bound of `lo`.
 		if (!lb.HasValue && ub.HasValue && lo.HasValue && hi.HasValue)
 		{
-			if (this.InterpolationType != InterpolationType.Pulse)
-			{
-				slice.Add(this.Get(lo.Value)!.Value);
-				slice.Add(this.Get(hi.Value)!.Value);
-			}
+			slice.Add(this.Get(lo.Value)!.Value);
+			slice.Add(this.Get(hi.Value)!.Value);
 		}
 
 		// `ub` should always be defined by this point. `lb` may be null, as per
@@ -470,4 +470,46 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	/// Schedules all keyframes in the tween for deletion.
 	/// </summary>
 	public void Clear() => this.Remove(this._keyframes.Values.ToList());
+
+	/// <summary>
+	/// Rescales the subsequent points in a tween by <c>r</c>, where
+	/// <c>r > 0</c>.
+	/// </summary>
+	/// <remarks>
+	/// N.B.: Since the timestamp is of type <see cref="ulong"/>, there will be
+	/// rounding errors using this method. Callers should prefer to keep in
+	/// memory the case list of frames where <c>r == 1</c>, and scale
+	/// accordingly. 
+	/// </remarks>
+	public void Scale(ulong? t, float r)
+	{
+		List<Frame<U, W>> fs = this.Slice(t, null);
+		if (t.HasValue)
+		{
+		}
+		if (fs.Count == 0)
+		{
+			return;
+		}
+		List<Frame<U, W>> gs = Base<U, W>.Scale(fs, r);
+		this.Merge(gs[0].T, gs);
+	}
+
+	public static List<Frame<U, W>> Scale(List<Frame<U, W>> fs, float r)
+	{
+		if (fs.Count == 0)
+		{
+			return [];
+		}
+
+		List<Frame<U, W>> result = [fs[0]];
+		float t = fs[0].T;
+		for (int i = 1; i < fs.Count; i++)
+		{
+			Frame<U, W> g = fs[i];
+			float u = t + ((float)g.T - t) * r;
+			result.Add(new((ulong)Math.Round(u), g.V, g.D, g.IsKeyFrame()));
+		}
+		return result;
+	}
 }

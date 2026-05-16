@@ -28,11 +28,10 @@ public partial class Base : Node2D
   //   will ignore collision detection (otherwise this becomes 3D boids
   //   behavior).
   // TODO(minkezhang): Add Attack(cooldown) as a separate component.
-  // TODO(minkezhang): CLean up namespaces.
-  private DF.Instances.Components.HealthPool health_component() => this.GetNode<DF.Instances.Components.HealthPool>("HealthPool");
+  // TODO(minkezhang): Clean up namespaces.
+  internal DF.Instances.Components.HealthPool health_component() => this.GetNode<DF.Instances.Components.HealthPool>("HealthPool");
   private DF.Instances.Tween.Position position_tween() => this.GetNode<DF.Instances.Tween.Position>("Position");
   private DF.Instances.Tween.Velocity velocity_tween() => this.GetNode<DF.Instances.Tween.Velocity>("Velocity");
-  private DF.Instances.Tween.Pulse weapon_tween() => this.GetNode<DF.Instances.Tween.Pulse>("Weapon");
   internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
   internal DF.Lib.Path.Path _path = new();
 
@@ -72,7 +71,6 @@ public partial class Base : Node2D
     this.position_tween().KeyFrameTriggerEvent += this.PathLoopHandler;
     this.position_tween().KeyFrameTriggerEvent += this._path.KeyFrameTriggerEventHandler;
     this.velocity_tween().KeyFrameTriggerEvent += this.SetVelocityKeyFrameTriggerEventHandler;
-    this.weapon_tween().KeyFrameTriggerEvent += this.FireHandler;
   }
 
   private void FireHandler(object sender,
@@ -125,13 +123,6 @@ public partial class Base : Node2D
         this._timer().CurrTick(),
         this.Velocity()));
     this._loop = loop;
-  }
-
-  public void Fire()
-  {
-    this.weapon_tween().Add([
-      new(this._timer().CurrTick(), true, false),
-    ]);
   }
 
   public void SetVelocity(DF.Lib.Position.Velocity v)

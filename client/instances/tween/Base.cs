@@ -39,6 +39,7 @@ public interface ITween<U, W> : ITweenRO<U, W> where U : struct
 	public void Remove(List<DF.Lib.Tween.Frame<U, W>> fs);
 	public void Cut(ulong t);
 	public void Merge(ulong t, List<DF.Lib.Tween.Frame<U, W>> fs);
+	public void Scale(ulong? t, float r);
 	public void Clear();
 }
 
@@ -144,4 +145,5 @@ public partial class Base<U, W>(DF.Lib.Tween.ITween<U, W> t) : Godot.Node, ITwee
 	public void Cut(ulong t) => this._tween.Cut(t);
 	public void Merge(ulong t, List<DF.Lib.Tween.Frame<U, W>> fs) => this._tween.Merge(t, fs);
 	public void Clear() => this._tween.Clear();
+	public void Scale(ulong? t, float r) => this._tween.Scale(t, r);
 }
