@@ -47,6 +47,7 @@ public interface ITweenRO<U, W> where U : struct
 {
 	public DF.Lib.Tween.Frame<U, W>? Get(ulong t);
 	public List<DF.Lib.Tween.Frame<U, W>> Slice(ulong? lo, ulong? hi);
+	public DF.Lib.Tween.InterpolationType Type();
 }
 
 public delegate void TriggerEventHandler<U, W>(
@@ -146,4 +147,5 @@ public partial class Base<U, W>(DF.Lib.Tween.ITween<U, W> t) : Godot.Node, ITwee
 	public void Merge(ulong t, List<DF.Lib.Tween.Frame<U, W>> fs) => this._tween.Merge(t, fs);
 	public void Clear() => this._tween.Clear();
 	public void Scale(ulong? t, float r) => this._tween.Scale(t, r);
+	public DF.Lib.Tween.InterpolationType Type() => this._tween.Type();
 }

@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DF.Instances.Timer;
-using Godot;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DF.Lib.Tween;
 
@@ -32,6 +29,7 @@ public interface ITween<U, W> where U : struct
 	public void Merge(ulong t, List<Frame<U, W>> fs);
 	public void Flush();
 	public void Clear();
+	public InterpolationType Type();
 }
 
 public enum InterpolationType
@@ -108,7 +106,6 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	/// <see cref="Tween{U, W}._keyframes"> list.
 	/// </summary>
 	private List<(ulong T, Frame<U, W>? F)> _buf = [];
-
 	public InterpolationType InterpolationType { get; } = t;
 
 	/// <summary>
@@ -274,6 +271,11 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			{
 				return lb;
 			}
+			// Pulse curves do not have any interpolation.
+			else if (this.InterpolationType == InterpolationType.Pulse)
+			{
+				return new Frame<U, W>(t, default(U), default(W), false);
+			}
 			// t lies beyond the last known explicit keyframe -- the tween should
 			// pause at the last known value.
 			else if (!ub.HasValue)
@@ -284,8 +286,6 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			{
 				switch (this.InterpolationType)
 				{
-					case InterpolationType.Pulse:
-						return new Frame<U, W>(t, default(U), default(W), false);
 					case InterpolationType.Linear:
 						if (ub.Value.T == lb.Value.T)
 						{
@@ -347,7 +347,7 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 			hi ?? this._keyframes.GetKeyAtIndex(
 				this._keyframes.Count - 1));
 
-		// If `lo` is beyond the last known keyframe, then the upper bound of `lb`
+		// If `lo` is beyond the last known keyframe, then the upper bound of `lo`
 		// does not exist, and `lb` will return null. Here, ub contains the value
 		// of the last known keyframe; we know that `lo < hi` by virtue of the
 		// check before, which is to say, the lower bound of `hi` is the same as
@@ -376,8 +376,8 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 
 		for (
 			var i = this._keyframes.IndexOfKey(lb.Value.T);
-			i <= this._keyframes.IndexOfKey(ub.Value.T);
-			i++)
+i <= this._keyframes.IndexOfKey(ub.Value.T);
+i++)
 		{
 			slice.Add(this._keyframes.GetValueAtIndex(i));
 		}
@@ -401,9 +401,9 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	public void Cut(ulong t)
 	{
 		Frame<U, W>? lb = this.UpperBound(t);
-		var frames = new System.Collections.Generic.List<Frame<U, W>>();
+		List<Frame<U, W>> frames = [];
 		for (
-			int i = lb.HasValue ? this._keyframes.IndexOfKey(lb.Value.T) : 0;
+			int i = lb.HasValue ? this._keyframes.IndexOfKey(lb.Value.T) : this._keyframes.Count;
 			i < this._keyframes.Count;
 			i++)
 		{
@@ -512,4 +512,6 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 		}
 		return result;
 	}
+
+	public InterpolationType Type() => this.InterpolationType;
 }

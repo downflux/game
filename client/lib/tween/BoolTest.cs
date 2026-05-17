@@ -47,6 +47,9 @@ public class BoolTest
       new List<DF.Lib.Tween.Frame<bool, bool?>>{
         new(10, true, true),
         new(20, true, null)});
-    AssertThat(this._t.Slice(40, 50)).IsEmpty();
+    AssertThat(this._t.Slice(40, 50)).IsEqual(
+      new List<DF.Lib.Tween.Frame<bool, bool?>>{
+        new(40, false, null, false),
+        new(50, false, null, false)});
   }
 }

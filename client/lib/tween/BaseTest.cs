@@ -122,8 +122,8 @@ public class BaseTest
 				new(20, 120, null)});
 		AssertThat(this._t.Slice(40, 50)).IsEqual(
 			new List<DF.Lib.Tween.Frame<float, bool?>>{
-				new(40, 130, null),
-				new(50, 130, null)});
+				new(40, 130, null, false),
+				new(50, 130, null, false)});
 	}
 
 	[TestCase((ulong)0)]
@@ -136,6 +136,7 @@ public class BaseTest
 		AssertThat(this._t.Slice(null, null)).IsEmpty();
 	}
 
+	[TestCase]
 	public void TestCut()
 	{
 		this._t.Cut(11);
@@ -144,6 +145,21 @@ public class BaseTest
 		AssertThat(this._t.Slice(null, null)).IsEqual(
 			new List<DF.Lib.Tween.Frame<float, bool?>>{
 				new(10, 110, true)});
+	}
+
+	[TestCase]
+	public void TestCutNoOp()
+	{
+		this._t.Cut(31);
+		this._t.Flush();
+
+		AssertThat(this._t.Slice(null, null)).IsEqual(
+			new List<DF.Lib.Tween.Frame<float, bool?>>{
+				new(10, 110, true),
+				new(20, 120, null),
+				new(30, 130, null),
+
+			});
 	}
 
 	[TestCase]

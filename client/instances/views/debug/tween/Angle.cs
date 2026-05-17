@@ -29,6 +29,7 @@ internal class ToAngle(DF.Instances.Tween.ITweenRO<DF.Lib.Position.Position, DF.
     }
     return fs;
   }
+  public DF.Lib.Tween.InterpolationType Type() => this._tween.Type();
 }
 
 public partial class Angle : DF.Instances.Debug.Tween.Float<DF.Lib.Path.KeyFrameType>

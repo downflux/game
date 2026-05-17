@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace DF.Instances.Debug.Tween;
 
@@ -60,7 +61,16 @@ public partial class Float<W> : DF.Instances.Debug.Tween.Graph<float, W>
           Float<W>.Offset(xmin, xmax, this.Dimension.X, g.T),
           -Float<W>.Offset(ymin, ymax, this.Dimension.Y, g.V));
         Godot.Vector2 p = new Godot.Vector2I(0, this.Dimension.Y) + offset_f;
-        Godot.Vector2 q = new Godot.Vector2I(0, this.Dimension.Y) + offset_g;
+        Godot.Vector2 q = p;
+        switch (this.Tween.Type())
+        {
+          case DF.Lib.Tween.InterpolationType.Linear:
+            q = new Godot.Vector2I(0, this.Dimension.Y) + offset_g;
+            break;
+          case DF.Lib.Tween.InterpolationType.Step:
+            q = new Godot.Vector2I(0, this.Dimension.Y) + new Godot.Vector2I(offset_g.X, offset_f.Y);
+            break;
+        }
 
         this.DrawLine(p, q, Godot.Colors.Green, 1);
         this._DrawPoint(f, p);
