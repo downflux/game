@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Godot;
 
 namespace DF.Instances.Debug.Tween;
@@ -22,7 +23,54 @@ public partial class Float<W> : DF.Instances.Debug.Tween.Graph<float, W>
       (ymin, ymax) = (Math.Min(ymin, f.V), Math.Max(ymax, f.V));
 
     }
-    return (ymin, ymax);
+    return ymax - ymin < 1 ? (ymin - 1, ymax + 1) : (ymin, ymax);
+  }
+
+  private void _DrawLine(
+    float xmin,
+    float xmax,
+    float ymin,
+    float ymax,
+    DF.Lib.Tween.Frame<float, W> curr,
+    DF.Lib.Tween.Frame<float, W>? next)
+  {
+    if (this.Tween == null)
+    {
+      return;
+    }
+
+    Godot.Vector2I offset_f = new(
+      Float<W>.Offset(xmin, xmax, this.Dimension.X, curr.T),
+      -Float<W>.Offset(ymin, ymax, this.Dimension.Y, curr.V));
+    Godot.Vector2I? offset_g = next.HasValue ? new(
+      Float<W>.Offset(xmin, xmax, this.Dimension.X, next.Value.T),
+      -Float<W>.Offset(ymin, ymax, this.Dimension.Y, next.Value.V)) : null;
+    Godot.Vector2 p = new Godot.Vector2I(0, this.Dimension.Y) + offset_f;
+    Godot.Vector2? q = null;
+    switch (this.Tween.Type())
+    {
+      case DF.Lib.Tween.InterpolationType.Linear:
+        if (offset_g.HasValue)
+        {
+          q = new Godot.Vector2I(0, this.Dimension.Y) + offset_g.Value;
+        }
+        break;
+      case DF.Lib.Tween.InterpolationType.Step:
+        if (offset_g.HasValue)
+        {
+          q = new Godot.Vector2I(0, this.Dimension.Y) + new Godot.Vector2I(offset_g.Value.X, offset_f.Y);
+        }
+        break;
+      case DF.Lib.Tween.InterpolationType.Pulse:
+        q = new Godot.Vector2I(0, this.Dimension.Y) + new Godot.Vector2I(offset_f.X, 0);
+        break;
+    }
+    if (q.HasValue)
+    {
+      this.DrawLine(p, q.Value, Godot.Colors.Green, 1);
+    }
+
+    this._DrawPoint(curr, p);
   }
 
   internal static int Offset(float min, float max, float width, float v)
@@ -50,41 +98,21 @@ public partial class Float<W> : DF.Instances.Debug.Tween.Graph<float, W>
     if (fs.Count > 0)
     {
       DF.Lib.Tween.Frame<float, W> f = fs[0];
-      for (var i = 1; i < fs.Count; i++)
+      for (var i = 1; i <= fs.Count; i++)
       {
-        DF.Lib.Tween.Frame<float, W> g = fs[i];
 
-        Godot.Vector2I offset_f = new(
-          Float<W>.Offset(xmin, xmax, this.Dimension.X, f.T),
-          -Float<W>.Offset(ymin, ymax, this.Dimension.Y, f.V));
-        Godot.Vector2I offset_g = new(
-          Float<W>.Offset(xmin, xmax, this.Dimension.X, g.T),
-          -Float<W>.Offset(ymin, ymax, this.Dimension.Y, g.V));
-        Godot.Vector2 p = new Godot.Vector2I(0, this.Dimension.Y) + offset_f;
-        Godot.Vector2 q = p;
-        switch (this.Tween.Type())
+        DF.Lib.Tween.Frame<float, W>? g = i == fs.Count ? null : fs[i];
+        this._DrawLine(xmin, xmax, ymin, ymax, f, g);
+        if (g.HasValue)
         {
-          case DF.Lib.Tween.InterpolationType.Linear:
-            q = new Godot.Vector2I(0, this.Dimension.Y) + offset_g;
-            break;
-          case DF.Lib.Tween.InterpolationType.Step:
-            q = new Godot.Vector2I(0, this.Dimension.Y) + new Godot.Vector2I(offset_g.X, offset_f.Y);
-            break;
+          f = g.Value;
         }
-
-        this.DrawLine(p, q, Godot.Colors.Green, 1);
-        this._DrawPoint(f, p);
-        if (i == fs.Count - 1)  // Draw last point.
-        {
-          this._DrawPoint(g, q);
-        }
-
-        f = g;
       }
     }
 
     int curr_tick = Float<W>.Offset(xmin, xmax, this.Dimension.X, this._timer().CurrTick());
 
+    // Draw current tick line.
     this.DrawLine(
       new Godot.Vector2I(curr_tick, 0),
       new Godot.Vector2I(curr_tick, this.Dimension.Y),
@@ -92,7 +120,7 @@ public partial class Float<W> : DF.Instances.Debug.Tween.Graph<float, W>
       1);
   }
 
-  internal void _DrawPoint(DF.Lib.Tween.Frame<float, W> f, Godot.Vector2 p)
+  private void _DrawPoint(DF.Lib.Tween.Frame<float, W> f, Godot.Vector2 p)
   {
     (float xmin, float xmax) = (
       ((float)this._timer().CurrTick() - (float)this.WindowSize / 2) < 0 ? 0 : (float)this._timer().CurrTick() - (float)this.WindowSize / 2,

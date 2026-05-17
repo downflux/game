@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using DF.Instances.Timer;
 
-namespace DF.Instances.Debug.Tween;
+namespace DF.Instances.Debug.Tween.Bool;
 
 internal class ToFloat(
   DF.Instances.Tween.ITweenRO<bool, bool> tween) : DF.Instances.Tween.ITweenRO<float, bool>

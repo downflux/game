@@ -12,7 +12,7 @@ public partial class Unit : Node2D
 
   private const int _unit_radius = 5;
   private const int _angle_marker_length = 50;
-  private DF.Instances.Debug.Tween.Angle angle() => (DF.Instances.Debug.Tween.Angle)this.GetNode("Angle");
+  private DF.Instances.Debug.Tween.Angle.Angle angle() => (DF.Instances.Debug.Tween.Angle.Angle)this.GetNode("Angle");
 
   public override void _Ready()
   {
@@ -25,7 +25,7 @@ public partial class Unit : Node2D
 
     ((DF.Views.Debug.Components.HealthPool)this.GetNode("HealthPool")).SetNode(((DF.Instances.Components.HealthPool)this.Node.GetNode("HealthPool")));
     ((DF.Views.Debug.Components.Abilities.Cooldown)this.GetNode("Abilities/Fireball")).SetNode(((DF.Instances.Components.Abilities.Cooldown)this.Node.GetNode("Abilities/Fireball")));
-    this.angle().Tween = new DF.Instances.Debug.Tween.ToAngle((DF.Instances.Tween.Position)this.Node.GetNode("Position"));
+    this.angle().Tween = new DF.Instances.Debug.Tween.Angle.ToFloat((DF.Instances.Tween.Position)this.Node.GetNode("Position"));
 
   }
 

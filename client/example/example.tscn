@@ -42,7 +42,7 @@ script = ExtResource("5_scst5")
 [node name="Fireball" type="Node" parent="Unit/Abilities" unique_id=302656965]
 script = ExtResource("7_2xiy6")
 BaseDamage = 5.0
-RechargePeriod = 500
+RechargePeriod = 3000
 
 [node name="Debug" type="Node" parent="." unique_id=1206748121]
 

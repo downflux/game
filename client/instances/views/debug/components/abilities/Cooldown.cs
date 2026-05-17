@@ -8,7 +8,7 @@ public partial class Cooldown : Godot.Node2D
   [Godot.Export]
   public Godot.Vector2I Dimension;
 
-  private DF.Instances.Debug.Tween.Pulse _pulse = new() { Label = "Pulse" };
+  private DF.Instances.Debug.Tween.Float<bool> _pulse = new() { Label = "Pulse" };
   private DF.Instances.Debug.Tween.Float<bool> _charge = new()
   {
     Label = "Charge",
@@ -38,7 +38,7 @@ public partial class Cooldown : Godot.Node2D
   public void SetNode(DF.Instances.Components.Abilities.Cooldown n)
   {
     this.Node = n;
-    this._pulse.Tween = this.Node._pulse;
-    this._charge.Tween = new DF.Instances.Debug.Tween.ToFloat(this.Node._charge);
+    this._pulse.Tween = new DF.Instances.Debug.Tween.Bool.ToFloat(this.Node._pulse);
+    this._charge.Tween = new DF.Instances.Debug.Tween.Bool.ToFloat(this.Node._charge);
   }
 }

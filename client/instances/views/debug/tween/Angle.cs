@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 
-namespace DF.Instances.Debug.Tween;
+namespace DF.Instances.Debug.Tween.Angle;
 
 /// <summary>
 /// Transform a <see cref="DF.Lib.Position.Position"/> tween and extract just
 /// the angular component. 
 /// </summary>
-internal class ToAngle(DF.Instances.Tween.ITweenRO<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType> tween) : DF.Instances.Tween.ITweenRO<float, DF.Lib.Path.KeyFrameType>
+internal class ToFloat(
+  DF.Instances.Tween.ITweenRO<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType> tween) : DF.Instances.Tween.ITweenRO<float, DF.Lib.Path.KeyFrameType>
 {
   private DF.Instances.Tween.ITweenRO<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType> _tween = tween;
 
@@ -32,6 +33,7 @@ internal class ToAngle(DF.Instances.Tween.ITweenRO<DF.Lib.Position.Position, DF.
   public DF.Lib.Tween.InterpolationType Type() => this._tween.Type();
 }
 
+// TODO(minkezhang): Remove.
 public partial class Angle : DF.Instances.Debug.Tween.Float<DF.Lib.Path.KeyFrameType>
 {
   public Angle() : base()
