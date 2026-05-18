@@ -1,5 +1,3 @@
-using DF.Instances.Timer;
-using DF.Lib.Timer;
 using Godot;
 using System.Collections.Generic;
 
@@ -12,7 +10,7 @@ public partial class Unit : Node2D
 
   private const int _unit_radius = 5;
   private const int _angle_marker_length = 50;
-  private DF.Instances.Debug.Tween.Angle.Angle angle() => (DF.Instances.Debug.Tween.Angle.Angle)this.GetNode("Angle");
+  private DF.Instances.Debug.Tween.Angle.Angle angle_view() => (DF.Instances.Debug.Tween.Angle.Angle)this.GetNode("Angle");
 
   public override void _Ready()
   {
@@ -25,7 +23,7 @@ public partial class Unit : Node2D
 
     ((DF.Views.Debug.Components.HealthPool)this.GetNode("HealthPool")).SetNode(((DF.Instances.Components.HealthPool)this.Node.GetNode("HealthPool")));
     ((DF.Views.Debug.Components.Abilities.Cooldown)this.GetNode("Abilities/Fireball")).SetNode(((DF.Instances.Components.Abilities.Cooldown)this.Node.GetNode("Abilities/Fireball")));
-    this.angle().Tween = new DF.Instances.Debug.Tween.Angle.ToFloat((DF.Instances.Tween.Position)this.Node.GetNode("Position"));
+    this.angle_view().Tween = new DF.Instances.Debug.Tween.Angle.ToFloat(this.Node.moveable_component()._position);
 
   }
 
@@ -54,8 +52,8 @@ public partial class Unit : Node2D
     this.DrawLine(
       this.Node.Position,
       this.Node.Position + new Godot.Vector2(
-        Mathf.Cos(this.Node.Position4D().T),
-        Mathf.Sin(this.Node.Position4D().T)) * _angle_marker_length,
+        Mathf.Cos(this.Node.moveable_component().Position().T),
+        Mathf.Sin(this.Node.moveable_component().Position().T)) * _angle_marker_length,
       Godot.Colors.Green,
       1);
   }
@@ -67,11 +65,11 @@ public partial class Unit : Node2D
       return;
     }
 
-    Godot.Vector3I? ni = this.Node._path.Next();
+    Godot.Vector3I? ni = this.Node.moveable_component()._path.Next();
     if (ni.HasValue)
     {
       this.DrawLine(
-        DF.Lib.Position.Transformation.Project(this.Node.Position4D().P),
+        DF.Lib.Position.Transformation.Project(this.Node.moveable_component().Position().P),
         DF.Lib.Position.Transformation.Project(
           DF.Lib.Position.Transformation.ToWorld(ni.Value)),
         Godot.Colors.Red,
@@ -86,7 +84,7 @@ public partial class Unit : Node2D
       return;
     }
 
-    List<Godot.Vector3I> path = this.Node._path.P();
+    List<Godot.Vector3I> path = this.Node.moveable_component()._path.P();
     if (path.Count == 0)
     {
       return;

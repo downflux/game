@@ -3,10 +3,9 @@
 [ext_resource type="Script" uid="uid://b3vln0ld81cvg" path="res://example/Example.cs" id="1_fdt2r"]
 [ext_resource type="Script" uid="uid://b5vgo6ijjoalg" path="res://instances/unit/Base.cs" id="2_8clr1"]
 [ext_resource type="Script" uid="uid://378gwik5sfrx" path="res://instances/components/HealthPool.cs" id="3_2xiy6"]
-[ext_resource type="Script" uid="uid://ejnefkcwa0ew" path="res://instances/tween/Position.cs" id="4_7cn0y"]
-[ext_resource type="Script" uid="uid://c8140tvyafyvo" path="res://instances/tween/Velocity.cs" id="5_scst5"]
 [ext_resource type="PackedScene" uid="uid://bv7k3f7yebiqj" path="res://instances/views/debug/unit/unit.tscn" id="6_6rqat"]
 [ext_resource type="Script" uid="uid://ho0l3k5sk2ry" path="res://instances/components/abilities/Fireball.cs" id="7_2xiy6"]
+[ext_resource type="Script" uid="uid://gfcdreobj46y" path="res://instances/components/Moveable.cs" id="7_h7cfd"]
 
 [node name="Example" type="Node2D" unique_id=2067538211]
 script = ExtResource("1_fdt2r")
@@ -31,18 +30,17 @@ rounded = true
 show_percentage = false
 metadata/_edit_use_anchors_ = true
 
-[node name="Position" type="Node" parent="Unit" unique_id=1544110946]
-script = ExtResource("4_7cn0y")
-
-[node name="Velocity" type="Node" parent="Unit" unique_id=1202961359]
-script = ExtResource("5_scst5")
-
 [node name="Abilities" type="Node" parent="Unit" unique_id=336769740]
 
 [node name="Fireball" type="Node" parent="Unit/Abilities" unique_id=302656965]
 script = ExtResource("7_2xiy6")
 BaseDamage = 5.0
 RechargePeriod = 3000
+
+[node name="Moveable" type="Node" parent="Unit" unique_id=906271240]
+script = ExtResource("7_h7cfd")
+PlanarVelocity = 0.05
+AngularVelocity = 0.001
 
 [node name="Debug" type="Node" parent="." unique_id=1206748121]
 

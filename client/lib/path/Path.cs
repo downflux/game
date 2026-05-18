@@ -230,7 +230,7 @@ public partial class Path
   /// <see cref="DF.Instances.Tween.Base{U, W}.KeyFrameTriggerEvent"/>
   /// instance.
   /// </summary>
-  public void KeyFrameTriggerEventHandler(
+  public void ReachedTileHandler(
     object sender,
     DF.Instances.Tween.TriggerEventHandlerArgs<DF.Lib.Position.Position, KeyFrameType> e)
   {

@@ -6,10 +6,7 @@ public partial class Example : Node2D
 {
 	public override void _Ready()
 	{
-		var unit = this.GetNode<DF.Instances.Unit.Base>("Unit");
-		var position = this.GetNode<DF.Instances.Tween.Position>("Unit/Position");
-
-		unit.SetPath([
+		this.example_moveable().SetPath([
 			new(50, 350, 0),
 			new(300, 200, 0),
 			new(200, 350, 0),
@@ -19,7 +16,8 @@ public partial class Example : Node2D
 		], true);
 	}
 
-	private DF.Instances.Unit.Base unit() => (DF.Instances.Unit.Base)this.GetNode("Unit");
+	private DF.Instances.Components.Moveable example_moveable() => this.GetNode<DF.Instances.Components.Moveable>("Unit/Moveable");
+
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
@@ -47,14 +45,14 @@ public partial class Example : Node2D
 			if (eventKey.Pressed && eventKey.Keycode == Key.Up)
 			{
 				Godot.GD.Print("DEBUG(Example.cs): Increasing speed");
-				DF.Lib.Position.Velocity v = this.unit().Velocity();
-				this.unit().SetVelocity(new(v.XY + 1f * this.unit().BaseVelocity, v.Z, v.W + this.unit().BaseAngularVelocity));
+				DF.Lib.Position.Velocity v = this.example_moveable().Velocity();
+				this.example_moveable().SetVelocity(new(v.XY + 1f * this.example_moveable().PlanarVelocity, v.Z, v.W + this.example_moveable().AngularVelocity));
 			}
 			if (eventKey.Pressed && eventKey.Keycode == Key.Down)
 			{
 				Godot.GD.Print("DEBUG(Example.cs): Decreasing speed");
-				DF.Lib.Position.Velocity v = this.unit().Velocity();
-				this.unit().SetVelocity(new(v.XY - 1f * this.unit().BaseVelocity, v.Z, v.W - this.unit().BaseAngularVelocity));
+				DF.Lib.Position.Velocity v = this.example_moveable().Velocity();
+				this.example_moveable().SetVelocity(new(v.XY - 1f * this.example_moveable().PlanarVelocity, v.Z, v.W - this.example_moveable().AngularVelocity));
 			}
 		}
 	}
