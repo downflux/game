@@ -27,8 +27,6 @@ public partial class Example : Node2D
 		{
 			if (eventMouse.ButtonIndex.HasFlag(MouseButton.Left) && eventMouse.IsReleased())
 			{
-				// TODO(minkezhang): Break out HP into separate health object, with DoT.
-				// TODO(minkezhang): Break out Position into own object, with path and velocity.
 				// TODO(minkezhang): Break out server vs client rendering -- i.e. triggers.
 				// TODO(minkezhang): Break out Weapon() object for AoE vs single target API.
 				((DF.Instances.Components.Abilities.Fireball)this.GetNode("Unit/Abilities/Fireball")).Attack((DF.Instances.Unit.Base)this.GetNode("Unit"));

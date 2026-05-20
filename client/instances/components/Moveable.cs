@@ -64,7 +64,7 @@ public partial class Moveable : Node
 
   private void _ReachedGoalHandler(
     object sender,
-    Tween.TriggerEventHandlerArgs<Lib.Position.Position, Lib.Path.KeyFrameType> e)
+    Tween.KeyframeTriggerEventHandlerArgs<Lib.Position.Position, Lib.Path.KeyFrameType> e)
   {
     if (e.F.D.HasFlag(Lib.Path.KeyFrameType.ReachedGoal))
     {
@@ -81,7 +81,7 @@ public partial class Moveable : Node
 
   private void _VelocityChangedHandler(
     object sender,
-    DF.Instances.Tween.TriggerEventHandlerArgs<DF.Lib.Position.Velocity, bool?> e)
+    DF.Instances.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Velocity, bool?> e)
   {
     if (e.F.IsKeyFrame())
     {

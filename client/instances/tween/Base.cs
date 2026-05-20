@@ -50,17 +50,15 @@ public interface ITweenRO<U, W> where U : struct
 	public DF.Lib.Tween.InterpolationType Type();
 }
 
-public delegate void TriggerEventHandler<U, W>(
+public delegate void KeyframeTriggerEventHandler<U, W>(
 	object sender,
-	TriggerEventHandlerArgs<U, W> e)
+	KeyframeTriggerEventHandlerArgs<U, W> e)
 where U : struct;
 
-public class TriggerEventHandlerArgs<U, W> : EventArgs
+public class KeyframeTriggerEventHandlerArgs<U, W>(DF.Lib.Tween.Frame<U, W> f) : EventArgs
 	where U : struct
 {
-	public DF.Lib.Tween.Frame<U, W> F { get; }
-
-	public TriggerEventHandlerArgs(DF.Lib.Tween.Frame<U, W> f) => this.F = f;
+	public DF.Lib.Tween.Frame<U, W> F { get; } = f;
 }
 
 /// <summary>
@@ -75,7 +73,7 @@ public partial class Base<U, W>(DF.Lib.Tween.ITween<U, W> t) : Godot.Node, ITwee
 	/// <summary>
 	/// Emitted whenever a keyframe occurs.
 	/// </summary>
-	public event TriggerEventHandler<U, W>? KeyFrameTriggerEvent;
+	public event KeyframeTriggerEventHandler<U, W>? KeyFrameTriggerEvent;
 
 	/// <summary>
 	/// Internal data model for this node, comprised of a list of
@@ -132,7 +130,7 @@ public partial class Base<U, W>(DF.Lib.Tween.ITween<U, W> t) : Godot.Node, ITwee
 			if (f.IsKeyFrame() && f.T < this._timer().CurrTick())
 			{
 				// Emit the default keyframe trigger event.
-				this.KeyFrameTriggerEvent?.Invoke(this, new TriggerEventHandlerArgs<U, W>(f));
+				this.KeyFrameTriggerEvent?.Invoke(this, new KeyframeTriggerEventHandlerArgs<U, W>(f));
 			}
 		}
 	}

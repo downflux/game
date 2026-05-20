@@ -8,7 +8,7 @@ public partial class HealthPool : Godot.Node2D
   [Godot.Export]
   public Godot.Vector2I Dimension;
 
-  private DF.Instances.Debug.Tween.Float<bool> _view = new() { Label = "Health" };
+  private DF.Instances.Debug.Tween.Float<bool?> _view = new() { Label = "Health" };
 
   public override void _Ready()
   {

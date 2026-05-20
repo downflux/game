@@ -9,15 +9,18 @@ public partial class Fireball : Cooldown
 
   public Fireball()
   {
-    this._pulse.KeyFrameTriggerEvent += (object sender, DF.Instances.Tween.TriggerEventHandlerArgs<bool, bool> e) =>
+    this._pulse.KeyFrameTriggerEvent += this._OnTrigger;
+  }
+
+  private void _OnTrigger(object sender, DF.Instances.Tween.KeyframeTriggerEventHandlerArgs<bool, bool> e)
+  {
+    if (this._target != null)
     {
-      if (this._target != null)
-      {
-        // TODO(minkezhang): Pause self, set pathing to aim at target, follow, etc. or add to Unit.
-        // TODO(minkezhang): Check if target is alive; if yes, continue attacking.
-        this._target.health_component().Damage(this.BaseDamage, Components.DamageAttribute.Explosive | Components.DamageAttribute.Fire);
-      }
-    };
+      // TODO(minkezhang): Pause self, set pathing to aim at target, follow, etc. or add to Unit.
+      // TODO(minkezhang): Check if target is alive; if yes, continue attacking. (if this._loop, this.Attack(this._target).
+      // TODO(minkezhang): Path.Pause(), Path.Resume(), etc. on Next(), insert and then remove from path.
+      this._target._health_component().Damage(this.BaseDamage, Components.DamageAttribute.Explosive | Components.DamageAttribute.Fire);
+    }
   }
 
   public void Attack(DF.Instances.Unit.Base other)  // TODO(minkezhang): loop = false;

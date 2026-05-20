@@ -37,7 +37,7 @@ public class Float<W> : Base<float, W>
 	/// </remarks>
 	internal Frame<float, W>? Intercept(Frame<float, W>? lb, Frame<float, W>? ub, float v, EdgeType et)
 	{
-		if (this.InterpolationType == InterpolationType.Step)
+		if (this.InterpolationType != InterpolationType.Linear)
 		{
 			return null;
 		}
@@ -78,9 +78,10 @@ public class Float<W> : Base<float, W>
 				lb.Value.V < ub.Value.V && et == EdgeType.RisingEdge) || (
 				lb.Value.V > ub.Value.V && et == EdgeType.FallingEdge))
 		{
-			if ((ulong)Math.Round(t) > lb.Value.T)
+			ulong u = (ulong)Math.Ceiling(t);
+			if (u > lb.Value.T)
 			{
-				return this.Get((ulong)Math.Round(t));
+				return this.Get(u);
 			}
 		}
 

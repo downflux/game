@@ -99,7 +99,7 @@ public class FloatTest
 		AssertThat(  // t = lb, for the half-open interval (lb, ub]
 			this._t.Intercept(
 				new(10, 110, true),
-				new(20, 120, true),
+				new(20, 120, null),
 				110,
 				DF.Lib.Tween.EdgeType.RisingEdge)).IsNull();
 		AssertThat(  // t = ub, for the half-open interval (lb, ub]
@@ -109,6 +109,13 @@ public class FloatTest
 				120,
 				DF.Lib.Tween.EdgeType.RisingEdge)).IsEqual(
 			new DF.Lib.Tween.Frame<float, bool?>(20, 120, null, true));
+		AssertThat(  // lb.V < v < ub.V and Ceil
+			this._t.Intercept(
+				new(10, 110, true),
+				new(11, 111, null, false),
+				110.1f,
+				DF.Lib.Tween.EdgeType.RisingEdge)).IsEqual(
+			new DF.Lib.Tween.Frame<float, bool?>(11, 111, null, false));
 	}
 
 	[TestCase]

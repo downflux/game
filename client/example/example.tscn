@@ -13,8 +13,6 @@ script = ExtResource("1_fdt2r")
 [node name="Unit" type="Node2D" parent="." unique_id=267042463]
 position = Vector2(114, 76)
 script = ExtResource("2_8clr1")
-BaseVelocity = 0.05
-BaseAngularVelocity = 0.001
 
 [node name="HealthPool" type="Node" parent="Unit" unique_id=1552440866]
 script = ExtResource("3_2xiy6")
@@ -34,8 +32,8 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Fireball" type="Node" parent="Unit/Abilities" unique_id=302656965]
 script = ExtResource("7_2xiy6")
-BaseDamage = 5.0
-RechargePeriod = 3000
+BaseDamage = 30.0
+RechargePeriod = 1
 
 [node name="Moveable" type="Node" parent="Unit" unique_id=906271240]
 script = ExtResource("7_h7cfd")
