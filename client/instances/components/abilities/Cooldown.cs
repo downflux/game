@@ -14,8 +14,10 @@ public partial class Cooldown : Base
 
   private ulong _last_triggered = 0;
 
-  internal DF.Instances.Tween.Bool.Pulse<bool> _pulse = new();
-  internal DF.Instances.Tween.Bool.Step<bool> _charge = new();
+  internal DF.Instances.Tween.Base<bool, bool> _pulse = new(
+    new DF.Lib.Tween.Bool<bool>(DF.Lib.Tween.InterpolationType.Pulse));
+  internal DF.Instances.Tween.Base<bool, bool> _charge = new(
+    new DF.Lib.Tween.Bool<bool>(DF.Lib.Tween.InterpolationType.Step));
 
   public override void _Ready()
   {

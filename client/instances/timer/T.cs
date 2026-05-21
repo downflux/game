@@ -1,5 +1,3 @@
-using System;
-
 namespace DF.Instances.Timer;
 
 /// <summary>

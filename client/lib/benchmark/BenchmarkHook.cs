@@ -1,5 +1,3 @@
-using System;
-
 namespace DF.Benchmarks;
 
 // TODO(minkezhang): Implement once GdUnit4Net v6.0.0 is released.

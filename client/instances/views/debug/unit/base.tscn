@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://bv7k3f7yebiqj"]
 
-[ext_resource type="Script" uid="uid://cox8klfh4y8ht" path="res://instances/views/debug/unit/Unit.cs" id="1_fejpe"]
+[ext_resource type="Script" uid="uid://cox8klfh4y8ht" path="res://instances/views/debug/unit/Base.cs" id="1_fejpe"]
 [ext_resource type="Script" uid="uid://xy6k5knkpg8h" path="res://instances/views/debug/components/abilities/Cooldown.cs" id="4_3efcl"]
 [ext_resource type="Script" uid="uid://difqrjsqxqsjt" path="res://instances/views/debug/components/HealthPool.cs" id="5_fdm8e"]
 [ext_resource type="Script" uid="uid://dl8p2ddfbtno4" path="res://instances/views/debug/components/Moveable.cs" id="5_x2rwp"]
 
-[node name="Unit" type="Node2D" unique_id=1229125358]
+[node name="Base" type="Node2D" unique_id=1229125358]
 script = ExtResource("1_fejpe")
 
 [node name="HealthPool" type="Node2D" parent="." unique_id=325109734]

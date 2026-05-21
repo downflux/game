@@ -2,7 +2,7 @@ using Godot;
 
 namespace DF.Instances.Debug;
 
-public partial class Unit : Node2D
+public partial class Base : Node2D
 {
   [Godot.Export]
   public DF.Instances.Unit.Base? Node;

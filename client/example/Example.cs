@@ -1,6 +1,4 @@
 using Godot;
-using Microsoft.VisualStudio.TestPlatform.TestExecutor;
-using System;
 
 public partial class Example : Node2D
 {
@@ -16,7 +14,7 @@ public partial class Example : Node2D
 		], true);
 	}
 
-	private DF.Instances.Components.Moveable example_moveable() => this.GetNode<DF.Instances.Components.Moveable>("Unit/Moveable");
+	private DF.Instances.Components.Moveable example_moveable() => this.GetNode<DF.Instances.Components.Moveable>("Data/Base/Moveable");
 
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -29,7 +27,7 @@ public partial class Example : Node2D
 			{
 				// TODO(minkezhang): Break out server vs client rendering -- i.e. triggers.
 				// TODO(minkezhang): Break out Weapon() object for AoE vs single target API.
-				((DF.Instances.Components.Abilities.Fireball)this.GetNode("Unit/Abilities/Fireball")).Attack((DF.Instances.Unit.Base)this.GetNode("Unit"));
+				((DF.Instances.Components.Abilities.Fireball)this.GetNode("Data/Base/Abilities/Fireball")).Attack((DF.Instances.Unit.Base)this.GetNode("Data/Base"));
 			}
 		}
 	}

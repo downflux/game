@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Threading;
-using DF.Instances.Timer;
 
 namespace DF.Instances.Debug.Tween.Bool;
 

@@ -3,22 +3,33 @@
 [ext_resource type="Script" uid="uid://b3vln0ld81cvg" path="res://example/Example.cs" id="1_fdt2r"]
 [ext_resource type="Script" uid="uid://b5vgo6ijjoalg" path="res://instances/unit/Base.cs" id="2_8clr1"]
 [ext_resource type="Script" uid="uid://378gwik5sfrx" path="res://instances/components/HealthPool.cs" id="3_2xiy6"]
-[ext_resource type="PackedScene" uid="uid://bv7k3f7yebiqj" path="res://instances/views/debug/unit/unit.tscn" id="6_6rqat"]
+[ext_resource type="PackedScene" uid="uid://bv7k3f7yebiqj" path="res://instances/views/debug/unit/base.tscn" id="6_6rqat"]
 [ext_resource type="Script" uid="uid://ho0l3k5sk2ry" path="res://instances/components/abilities/Fireball.cs" id="7_2xiy6"]
 [ext_resource type="Script" uid="uid://gfcdreobj46y" path="res://instances/components/Moveable.cs" id="7_h7cfd"]
 
 [node name="Example" type="Node2D" unique_id=2067538211]
 script = ExtResource("1_fdt2r")
 
-[node name="Unit" type="Node2D" parent="." unique_id=267042463]
+[node name="Views" type="Node" parent="." unique_id=11888108]
+
+[node name="Client" type="Node" parent="Views" unique_id=47027698]
+
+[node name="Debug" type="Node" parent="Views" unique_id=1206748121]
+
+[node name="Base" parent="Views/Debug" unique_id=1229125358 node_paths=PackedStringArray("Node") instance=ExtResource("6_6rqat")]
+Node = NodePath("../../../Data/Base")
+
+[node name="Data" type="Node" parent="." unique_id=367932193]
+
+[node name="Base" type="Node2D" parent="Data" unique_id=267042463]
 position = Vector2(114, 76)
 script = ExtResource("2_8clr1")
 
-[node name="HealthPool" type="Node" parent="Unit" unique_id=1552440866]
+[node name="HealthPool" type="Node" parent="Data/Base" unique_id=1552440866]
 script = ExtResource("3_2xiy6")
 MaxHealth = 100.0
 
-[node name="HPBar" type="ProgressBar" parent="Unit" unique_id=118608803]
+[node name="HPBar" type="ProgressBar" parent="Data/Base" unique_id=118608803]
 offset_left = -10.0
 offset_top = -20.0
 offset_right = 10.0
@@ -28,19 +39,14 @@ rounded = true
 show_percentage = false
 metadata/_edit_use_anchors_ = true
 
-[node name="Abilities" type="Node" parent="Unit" unique_id=336769740]
+[node name="Abilities" type="Node" parent="Data/Base" unique_id=336769740]
 
-[node name="Fireball" type="Node" parent="Unit/Abilities" unique_id=302656965]
+[node name="Fireball" type="Node" parent="Data/Base/Abilities" unique_id=302656965]
 script = ExtResource("7_2xiy6")
 BaseDamage = 49.0
 RechargePeriod = 500
 
-[node name="Moveable" type="Node" parent="Unit" unique_id=906271240]
+[node name="Moveable" type="Node" parent="Data/Base" unique_id=906271240]
 script = ExtResource("7_h7cfd")
 PlanarVelocity = 0.05
 AngularVelocity = 0.001
-
-[node name="Debug" type="Node" parent="." unique_id=1206748121]
-
-[node name="Unit" parent="Debug" unique_id=1229125358 node_paths=PackedStringArray("Node") instance=ExtResource("6_6rqat")]
-Node = NodePath("../../Unit")

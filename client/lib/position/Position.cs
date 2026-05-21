@@ -1,5 +1,3 @@
-using Godot;
-
 namespace DF.Lib.Position;
 
 public record struct Position(Godot.Vector3 p, float t)
