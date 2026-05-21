@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cox8klfh4y8ht" path="res://instances/views/debug/unit/Unit.cs" id="1_fejpe"]
 [ext_resource type="Script" uid="uid://xy6k5knkpg8h" path="res://instances/views/debug/components/abilities/Cooldown.cs" id="4_3efcl"]
-[ext_resource type="Script" uid="uid://x8rhys31n6yv" path="res://instances/views/debug/tween/Angle.cs" id="4_4rki6"]
 [ext_resource type="Script" uid="uid://difqrjsqxqsjt" path="res://instances/views/debug/components/HealthPool.cs" id="5_fdm8e"]
+[ext_resource type="Script" uid="uid://dl8p2ddfbtno4" path="res://instances/views/debug/components/Moveable.cs" id="5_x2rwp"]
 
 [node name="Unit" type="Node2D" unique_id=1229125358]
 script = ExtResource("1_fejpe")
@@ -12,14 +12,14 @@ script = ExtResource("1_fejpe")
 script = ExtResource("5_fdm8e")
 Dimension = Vector2i(200, 100)
 
-[node name="Angle" type="Node2D" parent="." unique_id=1415617059]
-position = Vector2(0, 100)
-script = ExtResource("4_4rki6")
-Dimension = Vector2i(200, 100)
-
 [node name="Abilities" type="Node2D" parent="." unique_id=953141612]
-position = Vector2(0, 200)
+position = Vector2(0, 100)
 
 [node name="Fireball" type="Node2D" parent="Abilities" unique_id=1635236873]
 script = ExtResource("4_3efcl")
+Dimension = Vector2i(200, 100)
+
+[node name="Moveable" type="Node2D" parent="." unique_id=919448501]
+position = Vector2(0, 200)
+script = ExtResource("5_x2rwp")
 Dimension = Vector2i(200, 100)

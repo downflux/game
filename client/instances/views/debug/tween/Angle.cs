@@ -23,26 +23,14 @@ internal class ToFloat(
 
   public List<DF.Lib.Tween.Frame<float, DF.Lib.Path.KeyFrameType>> Slice(ulong? hi, ulong? lo)
   {
-    List<DF.Lib.Tween.Frame<float, DF.Lib.Path.KeyFrameType>> fs = [];
+    List<DF.Lib.Tween.Frame<float, DF.Lib.Path.KeyFrameType>> result = [];
+
     foreach (var f in this._tween.Slice(hi, lo))
     {
-      fs.Add(new(f.T, f.V.T, f.D, f.IsKeyFrame()));
+      result.Add(new(f.T, f.V.T, f.D, f.IsKeyFrame()));
     }
-    return fs;
+    return result;
   }
+
   public DF.Lib.Tween.InterpolationType Type() => this._tween.Type();
-}
-
-// TODO(minkezhang): Remove.
-public partial class Angle : DF.Instances.Debug.Tween.Float<DF.Lib.Path.KeyFrameType>
-{
-  public Angle() : base()
-  {
-    this.Label = "Angle";
-  }
-
-  public override void _Draw()
-  {
-    base._Draw();
-  }
 }

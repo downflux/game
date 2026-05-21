@@ -12,10 +12,9 @@ public partial class Cooldown : Godot.Node2D
   private DF.Instances.Debug.Tween.Float<bool> _charge = new()
   {
     Label = "Charge",
-    YMax = 1,
+    YMax = 2,
+    YMin = -1,
   };
-
-  // TODO(minkezhang): Add Step tween renderer and add the charge.
 
   public override void _Ready()
   {

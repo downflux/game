@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 namespace DF.Tests.Lib.Tween;
 
+#pragma warning disable CS8618
+
 [TestSuite]
 public class BoolTest
 {
   private DF.Lib.Tween.Bool<bool?> _t;
+
   [BeforeTest]
   public void SetUp()
   {

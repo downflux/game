@@ -20,12 +20,8 @@ public enum EdgeType
 	RisingEdge,
 }
 
-public class Float<W> : Base<float, W>
+public class Float<W>(InterpolationType t) : Base<float, W>(t)
 {
-	public Float(InterpolationType t) : base(t)
-	{
-	}
-
 	/// <summary>
 	/// Find the linear intercept point in the half-open interval <c>(lb, ub]</c>.
 	/// </summary>

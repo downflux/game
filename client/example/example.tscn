@@ -32,8 +32,8 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Fireball" type="Node" parent="Unit/Abilities" unique_id=302656965]
 script = ExtResource("7_2xiy6")
-BaseDamage = 30.0
-RechargePeriod = 1
+BaseDamage = 49.0
+RechargePeriod = 500
 
 [node name="Moveable" type="Node" parent="Unit" unique_id=906271240]
 script = ExtResource("7_h7cfd")

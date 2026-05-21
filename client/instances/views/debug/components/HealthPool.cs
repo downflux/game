@@ -12,6 +12,8 @@ public partial class HealthPool : Godot.Node2D
 
   public override void _Ready()
   {
+    base._Ready();
+
     this._view.Dimension = this.Dimension;
     this.AddChild(this._view);
 
