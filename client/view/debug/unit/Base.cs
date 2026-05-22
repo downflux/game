@@ -16,8 +16,8 @@ public partial class Base : Node2D
       return;
     }
 
-    ((DF.View.Debug.Component.HealthPool)this.GetNode("HealthPool")).SetNode(((DF.Model.Component.HealthPool)this.Node.GetNode("HealthPool")));
-    ((DF.View.Debug.Component.Ability.Cooldown)this.GetNode("Abilities/Fireball")).SetNode(((DF.Model.Component.Ability.Cooldown)this.Node.GetNode("Abilities/Fireball")));
-    ((DF.View.Debug.Component.Moveable)this.GetNode("Moveable")).SetNode(((DF.Model.Component.Moveable)this.Node.GetNode("Moveable")));
+    this.GetNode<DF.View.Debug.Component.HealthPool>("HealthPool").SetNode(this.Node.GetNode<DF.Model.Component.HealthPool>("HealthPool"));
+    this.GetNode<DF.View.Debug.Component.Ability.Cooldown>("Abilities/Fireball").SetNode(this.Node.GetNode<DF.Model.Component.Ability.Cooldown>("Abilities/Fireball"));
+    this.GetNode<DF.View.Debug.Component.Moveable>("Moveable").SetNode(this.Node.GetNode<DF.Model.Component.Moveable>("Moveable"));
   }
 }

@@ -16,7 +16,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-T="uid://r1lq6ul0tdr2"
+Server="*uid://r1lq6ul0tdr2"
 
 [dotnet]
 

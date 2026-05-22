@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://b3vln0ld81cvg" path="res://example/Example.cs" id="1_fdt2r"]
 [ext_resource type="Script" uid="uid://cujgkbkd7ewf4" path="res://view/client/unit/Base.cs" id="2_6rqat"]
 [ext_resource type="Script" uid="uid://b5vgo6ijjoalg" path="res://model/unit/Base.cs" id="2_8clr1"]
-[ext_resource type="Script" uid="uid://378gwik5sfrx" path="res://model/components/HealthPool.cs" id="3_2xiy6"]
+[ext_resource type="Script" uid="uid://378gwik5sfrx" path="res://model/component/HealthPool.cs" id="5_scst5"]
 [ext_resource type="PackedScene" uid="uid://bv7k3f7yebiqj" path="res://view/debug/unit/base.tscn" id="6_6rqat"]
-[ext_resource type="Script" uid="uid://ho0l3k5sk2ry" path="res://model/components/abilities/Fireball.cs" id="7_2xiy6"]
-[ext_resource type="Script" uid="uid://gfcdreobj46y" path="res://model/components/Moveable.cs" id="7_h7cfd"]
+[ext_resource type="Script" uid="uid://ho0l3k5sk2ry" path="res://model/component/ability/Fireball.cs" id="6_wmyp6"]
+[ext_resource type="Script" uid="uid://gfcdreobj46y" path="res://model/component/Moveable.cs" id="7_6rqat"]
 
 [node name="Example" type="Node2D" unique_id=2067538211]
 script = ExtResource("1_fdt2r")
@@ -40,17 +40,17 @@ Node = NodePath("../../../Data/Base")
 script = ExtResource("2_8clr1")
 
 [node name="HealthPool" type="Node" parent="Data/Base" unique_id=1552440866]
-script = ExtResource("3_2xiy6")
+script = ExtResource("5_scst5")
 MaxHealth = 100.0
 
 [node name="Abilities" type="Node" parent="Data/Base" unique_id=336769740]
 
 [node name="Fireball" type="Node" parent="Data/Base/Abilities" unique_id=302656965]
-script = ExtResource("7_2xiy6")
-BaseDamage = 49.0
+script = ExtResource("6_wmyp6")
+BaseDamage = 60.0
 RechargePeriod = 500
 
 [node name="Moveable" type="Node" parent="Data/Base" unique_id=906271240]
-script = ExtResource("7_h7cfd")
+script = ExtResource("7_6rqat")
 PlanarVelocity = 0.05
 AngularVelocity = 0.001
