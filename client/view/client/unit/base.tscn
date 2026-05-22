@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cy0lybla6gaen"]
+
+[ext_resource type="Script" uid="uid://cujgkbkd7ewf4" path="res://view/client/unit/Base.cs" id="1_r6158"]
+[ext_resource type="Script" uid="uid://csujjgvs7e01a" path="res://view/client/component/HealthPool.cs" id="2_tryff"]
+
+[node name="Base" type="Node2D" unique_id=610534936]
+script = ExtResource("1_r6158")
+
+[node name="HealthPool" type="ProgressBar" parent="." unique_id=674050901]
+offset_left = -10.0
+offset_top = -20.0
+offset_right = 10.0
+offset_bottom = -16.0
+step = 5.0
+rounded = true
+show_percentage = false
+script = ExtResource("2_tryff")
+metadata/_edit_use_anchors_ = true

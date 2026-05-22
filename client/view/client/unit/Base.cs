@@ -10,6 +10,7 @@ public partial class Base : Node2D
   public void SetNode(DF.Model.Unit.Base n)
   {
     this.Node = n;
+    this.GetNode<DF.View.Client.Component.HealthPool>("HealthPool").SetNode(this.Node.GetNode<DF.Model.Component.HealthPool>("HealthPool"));
   }
 
   public override void _Ready()
@@ -35,7 +36,6 @@ public partial class Base : Node2D
       return;
     }
 
-    this.GetNode<Godot.ProgressBar>("HPBar").Value = this.Node.Health() / this.Node.HealthPool().MaxHealth * 100;
     this.Position = DF.Lib.Position.Transformation.Project(this.Node.Moveable().Position().P);
   }
 }
