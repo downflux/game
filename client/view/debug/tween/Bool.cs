@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 
-namespace DF.Instances.Debug.Tween.Bool;
+namespace DF.View.Debug.Tween.Bool;
 
 internal class ToFloat(
-  DF.Instances.Tween.ITweenRO<bool, bool> tween) : DF.Instances.Tween.ITweenRO<float, bool>
+  DF.Model.Tween.ITweenRO<bool, bool> tween) : DF.Model.Tween.ITweenRO<float, bool>
 {
-  private DF.Instances.Tween.ITweenRO<bool, bool> _tween = tween;
+  private DF.Model.Tween.ITweenRO<bool, bool> _tween = tween;
 
   public DF.Lib.Tween.Frame<float, bool>? Get(ulong t)
   {

@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 
-namespace DF.Instances.Tween.Float;
+namespace DF.Model.Tween.Float;
 
 public delegate void ValueTriggerEventHandler<W>(
 	object sender,
 	ValueTriggerEventHandlerArgs<W> e);
 
 public class ValueTriggerEventHandlerArgs<W>(
-	DF.Lib.Tween.Frame<float, W> f, float v, DF.Lib.Tween.EdgeType et) : DF.Instances.Tween.KeyframeTriggerEventHandlerArgs<float, W>(f)
+	DF.Lib.Tween.Frame<float, W> f, float v, DF.Lib.Tween.EdgeType et) : DF.Model.Tween.KeyframeTriggerEventHandlerArgs<float, W>(f)
 {
 	public float V { get; } = v;
 	public DF.Lib.Tween.EdgeType EdgeType { get; } = et;

@@ -1,6 +1,6 @@
 using Godot;
 
-namespace DF.Instances.Unit;
+namespace DF.Model.Unit;
 
 public partial class Base : Node
 {
@@ -15,10 +15,10 @@ public partial class Base : Node
   //   behavior).
   // TODO(minkezhang): Add Attack(cooldown) as a separate component.
   // TODO(minkezhang): Clean up namespaces.
-  public DF.Instances.Components.HealthPool HealthPool() => this.GetNode<DF.Instances.Components.HealthPool>("HealthPool");
-  public DF.Instances.Components.Moveable Moveable() => this.GetNode<DF.Instances.Components.Moveable>("Moveable");
+  public DF.Model.Component.HealthPool HealthPool() => this.GetNode<DF.Model.Component.HealthPool>("HealthPool");
+  public DF.Model.Component.Moveable Moveable() => this.GetNode<DF.Model.Component.Moveable>("Moveable");
 
-  internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
+  internal DF.Lib.Timer.D _timer = () => DF.Model.Timer.Server.S();
 
   public float Health() => this.HealthPool().Health();
   public bool IsAlive() => this.HealthPool().IsAlive();

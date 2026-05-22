@@ -1,4 +1,4 @@
-namespace DF.Instances.Debug.Tween;
+namespace DF.View.Debug.Tween;
 
 public partial class Graph<U, W> : Base<U, W> where U : struct
 {

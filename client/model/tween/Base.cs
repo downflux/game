@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DF.Instances.Tween;
+namespace DF.Model.Tween;
 
 /// <summary>
 /// <see cref="DF.Lib.Tween.ITween{U, W}"/> implementation to be referenced by Godot nodes.
@@ -80,7 +80,7 @@ public partial class Base<U, W>(DF.Lib.Tween.ITween<U, W> t) : Godot.Node, ITwee
 	/// { timestamp : data } tuples.
 	/// </summary>
 	internal DF.Lib.Tween.ITween<U, W> _tween = t;
-	internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
+	internal DF.Lib.Timer.D _timer = () => DF.Model.Timer.Server.S();
 
 	/// <summary>
 	/// Call this in parent <see cref="Godot.Node._Ready"/> calls; <c>_Ready</c>

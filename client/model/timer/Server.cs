@@ -1,14 +1,14 @@
-namespace DF.Instances.Timer;
+namespace DF.Model.Timer;
 
 /// <summary>
 /// Singleton used to control timing lookups in
 /// <see cref="DF.Lib.Tween.Base{U, W}"/> types. 
 /// </summary>
-public partial class T : Godot.Node, DF.Lib.Timer.ITimer
+public partial class Server : Godot.Node, DF.Lib.Timer.ITimer
 {
-  private static T? _singleton;
+  private static Server? _singleton;
 
-  public static T S() => T._singleton!;
+  public static Server S() => Server._singleton!;
 
   internal ulong _prev_tick = 0;
   internal ulong _curr_tick = 0;
@@ -20,7 +20,7 @@ public partial class T : Godot.Node, DF.Lib.Timer.ITimer
   {
     base._Ready();
 
-    T._singleton = this;
+    Server._singleton = this;
   }
 
   public override void _Process(double delta)

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace DF.Instances.Debug.Tween;
+namespace DF.View.Debug.Tween;
 
-public partial class Float<W> : DF.Instances.Debug.Tween.Graph<float, W>
+public partial class Float<W> : DF.View.Debug.Tween.Graph<float, W>
 {
   public float? YMin;
   public float? YMax;

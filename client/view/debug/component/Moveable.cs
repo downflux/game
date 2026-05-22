@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using Godot;
 
-namespace DF.Views.Debug.Components;
+namespace DF.View.Debug.Component;
 
 public partial class Moveable : Godot.Node2D
 {
   [Godot.Export]
-  public DF.Instances.Components.Moveable? Node;
+  public DF.Model.Component.Moveable? Node;
 
   [Godot.Export]
   public Godot.Vector2I Dimension;
 
-  private DF.Instances.Debug.Tween.Float<DF.Lib.Path.KeyFrameType> _angle = new() { Label = "Orientation" };
+  private DF.View.Debug.Tween.Float<DF.Lib.Path.KeyFrameType> _angle = new() { Label = "Orientation" };
 
   private const int _unit_radius = 5;
   private const int _angle_marker_length = 50;
@@ -29,10 +29,10 @@ public partial class Moveable : Godot.Node2D
     this.SetNode(this.Node);
   }
 
-  public void SetNode(DF.Instances.Components.Moveable n)
+  public void SetNode(DF.Model.Component.Moveable n)
   {
     this.Node = n;
-    this._angle.Tween = new DF.Instances.Debug.Tween.Angle.ToFloat(n._position);
+    this._angle.Tween = new DF.View.Debug.Tween.Angle.ToFloat(n._position);
   }
 
   private void _DrawPosition()

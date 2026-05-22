@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-namespace DF.Instances.Components;
+namespace DF.Model.Component;
 
 [System.Flags]
 public enum DamageAttribute
@@ -19,18 +19,18 @@ public partial class HealthPool : Node
   [Godot.Export]
   required public float MaxHealth;
 
-  internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
+  internal DF.Lib.Timer.D _timer = () => DF.Model.Timer.Server.S();
 
   private bool _is_alive = true;
 
-  internal DF.Instances.Tween.Float.Linear<bool?> _health = new()
+  internal DF.Model.Tween.Float.Linear<bool?> _health = new()
   {
     WatchPoints = new Godot.Collections.Dictionary<float, DF.Lib.Tween.EdgeType> {
       { 0, DF.Lib.Tween.EdgeType.FallingEdge },
     },
   };
 
-  private void _DeathHandler(object sender, DF.Instances.Tween.Float.ValueTriggerEventHandlerArgs<bool?> e)
+  private void _DeathHandler(object sender, DF.Model.Tween.Float.ValueTriggerEventHandlerArgs<bool?> e)
   {
     if (e.V == 0 && e.EdgeType == DF.Lib.Tween.EdgeType.FallingEdge)
     {

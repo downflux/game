@@ -231,7 +231,7 @@ public partial class Path
   /// </summary>
   public void ReachedTileHandler(
     object sender,
-    DF.Instances.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, KeyFrameType> e)
+    DF.Model.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, KeyFrameType> e)
   {
     if (e.F.D.HasFlag(KeyFrameType.ReachedTile))
     {

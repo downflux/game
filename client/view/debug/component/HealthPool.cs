@@ -1,14 +1,14 @@
-namespace DF.Views.Debug.Components;
+namespace DF.View.Debug.Component;
 
 public partial class HealthPool : Godot.Node2D
 {
   [Godot.Export]
-  public DF.Instances.Components.HealthPool? Node;
+  public DF.Model.Component.HealthPool? Node;
 
   [Godot.Export]
   public Godot.Vector2I Dimension;
 
-  private DF.Instances.Debug.Tween.Float<bool?> _view = new() { Label = "Health" };
+  private DF.View.Debug.Tween.Float<bool?> _view = new() { Label = "Health" };
 
   public override void _Ready()
   {
@@ -25,7 +25,7 @@ public partial class HealthPool : Godot.Node2D
     this.SetNode(this.Node);
   }
 
-  public void SetNode(DF.Instances.Components.HealthPool n)
+  public void SetNode(DF.Model.Component.HealthPool n)
   {
     this.Node = n;
     this._view.Tween = this.Node._health;

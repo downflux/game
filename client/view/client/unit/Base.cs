@@ -1,13 +1,13 @@
 using Godot;
 
-namespace DF.Instances.View.Unit;
+namespace DF.View.Client.Unit;
 
 public partial class Base : Node2D
 {
   [Godot.Export]
-  public DF.Instances.Unit.Base? Node;
+  public DF.Model.Unit.Base? Node;
 
-  public void SetNode(DF.Instances.Unit.Base n)
+  public void SetNode(DF.Model.Unit.Base n)
   {
     this.Node = n;
   }
@@ -24,7 +24,7 @@ public partial class Base : Node2D
     this.SetNode(this.Node);
   }
 
-  internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
+  internal DF.Lib.Timer.D _timer = () => DF.Model.Timer.Server.S();
 
   public override void _Process(double dt)
   {
