@@ -97,13 +97,13 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	/// The internal list of tween keyframes which is used to interpolate data at
 	/// any given timestamp (given as milliseconds since the start of the
 	/// program). This property is only mutated with explicit calls to
-	/// <see cref="Tween{U, W}.Flush"> list.
+	/// <see cref="Base{U, W}.Flush"> list.
 	/// </summary>
 	private SortedList<ulong, Frame<U, W>> _keyframes = [];
 
 	/// <summary>
 	/// The set of keyframe buffers which needs to be written to the internal
-	/// <see cref="Tween{U, W}._keyframes"> list.
+	/// <see cref="Base{U, W}._keyframes"> list.
 	/// </summary>
 	private List<(ulong T, Frame<U, W>? F)> _buf = [];
 	public InterpolationType InterpolationType { get; } = t;
@@ -437,8 +437,8 @@ i++)
 	}
 
 	/// <summary>
-	/// Commits all writes to <see cref="Base._buf" /> to the internal
-	/// <see cref="Base._keyframes" /> list.
+	/// Commits all writes to <see cref="Base{U, W}._buf" /> to the internal
+	/// <see cref="Base{U, W}._keyframes" /> list.
 	/// </summary>
 	public void Flush()
 	{

@@ -72,7 +72,7 @@ public partial class Path
   /// Return a list of <see cref="DF.Lib.Tween.Frame{U, W}"/> movement
   /// frames of the stored path. Callers call this function <b>once</b> before
   /// movement starts and merges into the
-  /// <see cref="DF.Instances.Tween.Position"/> instance.
+  /// <see cref="DF.Lib.Position.Position"/> instance.
   /// </summary>
   /// <remarks>
   /// <example>
@@ -194,11 +194,11 @@ public partial class Path
 
   /// <summary>
   /// Gets the next waypoint for the parent
-  /// <see cref="DF.Instances.Unit.Base"/> instance.
+  /// <see cref="DF.Model.Unit.Base"/> instance.
   /// </summary>
   /// <remarks>
   /// Parent must connect the
-  /// <see cref="DF.Instances.Tween.Base{U, W}.KeyFrameTriggerEvent"/> event
+  /// <see cref="DF.Model.Tween.Base{U, W}.KeyFrameTriggerEvent"/> event
   /// handler manually.
   /// <example>
   /// <code>
@@ -224,9 +224,9 @@ public partial class Path
   }
 
   /// <summary>
-  /// Event handler for the parent <see cref="DF.Instances.Unit.Base"/> to
+  /// Event handler for the parent <see cref="DF.Model.Unit.Base"/> to
   /// link to the
-  /// <see cref="DF.Instances.Tween.Base{U, W}.KeyFrameTriggerEvent"/>
+  /// <see cref="DF.Model.Tween.Base{U, W}.KeyFrameTriggerEvent"/>
   /// instance.
   /// </summary>
   public void ReachedTileHandler(

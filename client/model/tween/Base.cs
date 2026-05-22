@@ -84,7 +84,7 @@ public partial class Base<U, W>(DF.Lib.Tween.ITween<U, W> t) : Godot.Node, ITwee
 
 	/// <summary>
 	/// Call this in parent <see cref="Godot.Node._Ready"/> calls; <c>_Ready</c>
-	/// is in post-order traversal, but <see cref="Godot.Node._Process(double)"/>
+	/// is in post-order traversal, but <see cref="Godot.Node._Process"/>
 	/// is in pre-order traversal, meaning that child nodes
 	/// (<see cref="Base{U, W}"/> instances) do not have an opportunity to update
 	/// their internal cache before starting a tick.
