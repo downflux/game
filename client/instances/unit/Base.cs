@@ -2,7 +2,7 @@ using Godot;
 
 namespace DF.Instances.Unit;
 
-public partial class Base : Node2D
+public partial class Base : Node
 {
   // TODO(minkezhang): Add configurable vz behavior
   //   e.g. VTOL vs. HTOL, walk-only (i.e. hug ground -- ignore vz and assume
@@ -15,19 +15,11 @@ public partial class Base : Node2D
   //   behavior).
   // TODO(minkezhang): Add Attack(cooldown) as a separate component.
   // TODO(minkezhang): Clean up namespaces.
-  internal DF.Instances.Components.HealthPool _health_component() => this.GetNode<DF.Instances.Components.HealthPool>("HealthPool");
-  internal DF.Instances.Components.Moveable _moveable_component() => this.GetNode<DF.Instances.Components.Moveable>("Moveable");
+  public DF.Instances.Components.HealthPool HealthPool() => this.GetNode<DF.Instances.Components.HealthPool>("HealthPool");
+  public DF.Instances.Components.Moveable Moveable() => this.GetNode<DF.Instances.Components.Moveable>("Moveable");
 
   internal DF.Lib.Timer.D _timer = () => DF.Instances.Timer.T.S();
 
-  public float Health() => this._health_component().Health();
-  public bool IsAlive() => this._health_component().IsAlive();
-
-  public override void _Process(double dt)
-  {
-    base._Process(dt);
-
-    this.GetNode<Godot.ProgressBar>("HPBar").Value = this.Health() / this._health_component().MaxHealth * 100;
-    this.Position = DF.Lib.Position.Transformation.Project(this._moveable_component().Position().P);
-  }
+  public float Health() => this.HealthPool().Health();
+  public bool IsAlive() => this.HealthPool().IsAlive();
 }

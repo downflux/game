@@ -19,7 +19,7 @@ public partial class Fireball : Cooldown
       // TODO(minkezhang): Pause self, set pathing to aim at target, follow, etc. or add to Unit.
       // TODO(minkezhang): Check if target is alive; if yes, continue attacking. (if this._loop, this.Attack(this._target).
       // TODO(minkezhang): Path.Pause(), Path.Resume(), etc. on Next(), insert and then remove from path.
-      this._target._health_component().Damage(this.BaseDamage, Components.DamageAttribute.Explosive | Components.DamageAttribute.Fire);
+      this._target.HealthPool().Damage(this.BaseDamage, Components.DamageAttribute.Explosive | Components.DamageAttribute.Fire);
     }
   }
 
