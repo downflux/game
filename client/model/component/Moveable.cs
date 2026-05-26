@@ -14,8 +14,8 @@ public partial class Moveable : Node
   [Godot.Export]
   required public float VerticalVelocity;
 
-  internal DF.Model.Tween.Base<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType> _position = new(
-    new DF.Lib.Tween.Base<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType>(
+  internal DF.Model.Tween.Base<DF.Lib.Position.Position, DF.Lib.Path.FrameData> _position = new(
+    new DF.Lib.Tween.Base<DF.Lib.Position.Position, DF.Lib.Path.FrameData>(
       DF.Lib.Tween.InterpolationType.Linear));
   internal DF.Model.Tween.Base<DF.Lib.Position.Velocity, bool?> _velocity = new(
     new DF.Lib.Tween.Base<DF.Lib.Position.Velocity, bool?>(
@@ -47,7 +47,7 @@ public partial class Moveable : Node
         new(
           this._timer().CurrTick(),
           new(),
-          DF.Lib.Path.KeyFrameType.None),
+          new("", DF.Lib.Path.KeyFrameType.None)),
       ]);
 
     this._position.Init();
@@ -63,13 +63,13 @@ public partial class Moveable : Node
 
   private void _ReachedGoalHandler(
     object sender,
-    DF.Model.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, DF.Lib.Path.KeyFrameType> e)
+    DF.Model.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, DF.Lib.Path.FrameData> e)
   {
-    if (e.F.D.HasFlag(Lib.Path.KeyFrameType.ReachedGoal))
+    if (e.F.D.T.HasFlag(Lib.Path.KeyFrameType.ReachedGoal) && e.F.D.ID == this._path.ID())
     {
       if (this._loop)
       {
-        this.SetPath(this._path.P(), true);
+        this.SetPath(this._path.Cells(), true);
       }
       else
       {
@@ -95,21 +95,21 @@ public partial class Moveable : Node
 
   public void Stop() => this.SetPath([]);
 
-  public void SetPath(List<Godot.Vector3I> p, bool loop = false)
+  public void SetPath(List<Godot.Vector3I> p, bool is_looped = false)
   {
     if (this._position == null || this._velocity == null)
     {
       return;
     }
 
-    this._path.Merge(p);
+    this._path.Merge(p, is_looped);
     this._position.Merge(
       this._timer().CurrTick(),
       this._path.Frames(
        this.Position(),
         this._timer().CurrTick(),
         this.Velocity()));
-    this._loop = loop;
+    this._loop = is_looped;
   }
 
   public void SetVelocity(DF.Lib.Position.Velocity v)

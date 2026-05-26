@@ -12,12 +12,13 @@ script = ExtResource("1_fdt2r")
 
 [node name="Client" type="Node" parent="Views" unique_id=47027698]
 
-[node name="Base" parent="Views/Client" unique_id=610534936 instance=ExtResource("2_6rqat")]
+[node name="Base" parent="Views/Client" unique_id=610534936 node_paths=PackedStringArray("Node") instance=ExtResource("2_6rqat")]
+Node = NodePath("../../../Data/Base")
 
 [node name="Debug" type="Node" parent="Views" unique_id=1206748121]
 
 [node name="Base" parent="Views/Debug" unique_id=1229125358 node_paths=PackedStringArray("Node") instance=ExtResource("6_6rqat")]
-Node = NodePath("")
+Node = NodePath("../../../Data/Base")
 
 [node name="Data" type="Node" parent="." unique_id=367932193]
 

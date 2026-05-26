@@ -11,7 +11,7 @@ public partial class Moveable : Godot.Node2D
   [Godot.Export]
   public Godot.Vector2I Dimension;
 
-  private DF.View.Debug.Tween.Float<DF.Lib.Path.KeyFrameType> _angle = new() { Label = "Orientation" };
+  private DF.View.Debug.Tween.Float<DF.Lib.Path.FrameData> _angle = new() { Label = "Orientation" };
 
   private const int _unit_radius = 5;
   private const int _angle_marker_length = 50;
@@ -92,7 +92,7 @@ public partial class Moveable : Godot.Node2D
       return;
     }
 
-    List<Godot.Vector3I> path = this.Node._path.P();
+    List<Godot.Vector3I> path = this.Node._path.Cells();
     if (path.Count == 0)
     {
       return;

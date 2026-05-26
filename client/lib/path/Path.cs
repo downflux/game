@@ -14,20 +14,46 @@ public enum KeyFrameType
   CompletedTurn = 4,
 }
 
-public partial class Path
+public readonly record struct FrameData(string id, KeyFrameType t)
 {
-  internal List<Godot.Vector3I> _path = [];
-  internal int? _index;
+  public KeyFrameType T { get; } = t;
+  public string ID { get; } = id;
+}
 
-  public List<Godot.Vector3I> P() => new List<Godot.Vector3I>(this._path);
+public class Generator()
+{
+  public static List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, FrameData>> Rotate(
+    string id,
+    DF.Lib.Position.Position p,
+    DF.Lib.Position.Position q,
+    ulong t,
+    DF.Lib.Position.Velocity v)
+  {
+    var (u, f) = Generator._Rotation(p, q, t, v.W);
+    if (!f.HasValue)
+    {
+      return [];
+    }
+
+    return [
+      new((ulong)u, f.Value, new(id, KeyFrameType.CompletedTurn))
+    ];
+  }
 
   /// <summary>
   /// Generates angular movement frame.
   /// </summary>
-  internal static F GenerateRotationFrame(
-    DF.Lib.Position.Position p, DF.Lib.Position.Position q, float u, float w)
+  /// <param name="p">Source position.</param>
+  /// <param name="q">Destination position.</param>
+  /// <param name="u">Input time in milliseconds, as float.</param>
+  /// <param name="w">Angular velocity.</param>
+  /// <returns></returns>
+  internal static F _Rotation(
+    DF.Lib.Position.Position p,
+    DF.Lib.Position.Position q,
+    float u,
+    float w)
   {
-
     // Angle of q relative to the x-axis in radians.
     float dt = (float)(p.T - q.T) % (float)Math.Tau;
 
@@ -56,8 +82,11 @@ public partial class Path
   /// <summary>
   /// Generates XY movement frame.
   /// </summary>
-  internal static F GenerateTranslationFrame(
-  DF.Lib.Position.Position p, DF.Lib.Position.Position q, float u, float v)
+  internal static F _Translation(
+  DF.Lib.Position.Position p,
+  DF.Lib.Position.Position q,
+  float u,
+  float v)
   {
     if (p == q || v == 0)
     {
@@ -68,35 +97,14 @@ public partial class Path
     return (u, q);
   }
 
-  /// <summary>
-  /// Return a list of <see cref="DF.Lib.Tween.Frame{U, W}"/> movement
-  /// frames of the stored path. Callers call this function <b>once</b> before
-  /// movement starts and merges into the
-  /// <see cref="DF.Lib.Position.Position"/> instance.
-  /// </summary>
-  /// <remarks>
-  /// <example>
-  /// <code>
-  ///     path.Merge(ps);
-  /// 
-  ///     var fs = path.Frames(
-  ///       position.Get(timer.CurrTick())!.Value.V,
-  ///       this._timer().CurrTick(),
-  ///       v));
-  /// 
-  ///     position.Merge(timer.CurrTick(), fs);
-  /// </code>
-  /// </example>
-  /// TODO(minkezhang): Add vertical velocity.
-  /// </remarks>
-  /// <param name="t">The starting timestamp.</param>
-  /// <param name="p">The initial position of the unit.</param>
-  /// <param name="v">The velocity of the unit.</param>
-  /// <returns></returns>
-  public List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, KeyFrameType>> Frames(
-    DF.Lib.Position.Position p, ulong t, DF.Lib.Position.Velocity v)
+  public static List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, FrameData>> Frames(
+    string id,
+    DF.Lib.Position.Position p,
+    ulong t,
+    DF.Lib.Position.Velocity v,
+    List<Godot.Vector3I> cells)
   {
-    if (!this._index.HasValue)
+    if (cells.Count == 0)
     {
       return [];
     }
@@ -105,13 +113,13 @@ public partial class Path
 
     DF.Lib.Position.Position? f;
 
-    List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, KeyFrameType>> fs = [
-      new(t, p, KeyFrameType.None),
+    List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, FrameData>> fs = [
+      new(t, p, new(id, KeyFrameType.None)),
     ];
 
-    for (int i = this._index.Value; i < this._path.Count; i++)
+    for (int i = 0; i < cells.Count; i++)
     {
-      Godot.Vector3 qp = DF.Lib.Position.Transformation.ToWorld(this._path[i]);
+      Godot.Vector3 qp = DF.Lib.Position.Transformation.ToWorld(cells[i]);
 
       // The actual rotation of p may be a multiple of 2pi; we want to make
       // sure that the direction of the new waypoint is within 2pi of the
@@ -132,11 +140,11 @@ public partial class Path
         continue;
       }
 
-      (u, f) = Path.GenerateRotationFrame(p, q, u, v.W);
+      (u, f) = Generator._Rotation(p, q, u, v.W);
 
       if (f.HasValue)
       {
-        fs.Add(new((ulong)Math.Round(u), f.Value, KeyFrameType.CompletedTurn));
+        fs.Add(new((ulong)Math.Round(u), f.Value, new(id, KeyFrameType.CompletedTurn)));
 
         // Ensure unit stays aligned during translation.
         q = new(q.P, f.Value.T);
@@ -149,7 +157,7 @@ public partial class Path
         return fs;
       }
 
-      (u, f) = Path.GenerateTranslationFrame(p, q, u, v.XY);
+      (u, f) = Generator._Translation(p, q, u, v.XY);
 
       if (f.HasValue)
       {
@@ -157,24 +165,76 @@ public partial class Path
           new(
             (ulong)Math.Round(u),
             f.Value,
-            KeyFrameType.ReachedTile | (
-              (i == this._path.Count - 1) ? KeyFrameType.ReachedGoal : KeyFrameType.None)));
+            new(
+              id,
+              KeyFrameType.ReachedTile | (
+                (i == cells.Count - 1) ? KeyFrameType.ReachedGoal : KeyFrameType.None))));
       }
 
       p = q;
     }
     return fs;
   }
+}
+
+public class Path
+{
+  /// <summary>
+  /// Ordered list of waypoint cells (i.e. not real-world positions).
+  /// </summary>
+  internal List<Godot.Vector3I> _cells = [];
 
   /// <summary>
-  /// Sets a new path. Preserves <see cref="Path.Next" /> by prepending to the
+  /// Tracks the next waypoint. This property is changed by installing the
+  /// <see cref="ReachedTileHandler"/> on the position tween
+  /// </summary>
+  internal int? _index;
+  internal bool _is_looped = false;
+  internal string _id = Guid.NewGuid().ToString();
+
+  public string ID() => this._id;
+
+  /// <summary>
+  /// Returns the list of cells that have not yet been reached in the current
+  /// path. If <see cref="Path._is_looped"/> is set to <c>true</c>, returns
+  /// the loop, starting at the next node. 
+  /// </summary>
+  public List<Godot.Vector3I> Cells()
+  {
+    if (!this._index.HasValue)
+    {
+      return [];
+    }
+
+    List<Godot.Vector3I> result = [];
+    if (!this._is_looped)
+    {
+      for (int i = this._index.Value; i < this._cells.Count; i++)
+      {
+        result.Add(this._cells[i]);
+      }
+    }
+    else
+    {
+      for (int i = 0; i < this._cells.Count; i++)
+      {
+        result.Add(this._cells[(i + this._index.Value) % this._cells.Count]);
+      }
+    }
+    return result;
+  }
+
+  /// <summary>
+  /// Sets a new path. Preserves <see cref="Next" /> by prepending to the
   /// path to smooth out unit movement.
   /// </summary>
-  public void Merge(List<Godot.Vector3I> path)
+  public void Merge(List<Godot.Vector3I> cells, bool is_looped = false)
   {
-    if (path.Count == 0)
+    this._is_looped = is_looped;
+
+    if (cells.Count == 0)
     {
-      this._path = path;
+      this._cells = cells;
       this._index = null;
       return;
     }
@@ -184,12 +244,12 @@ public partial class Path
     // Preserve current next-node destination if it exists -- we want to make
     // sure that if the unit is currently traveling that it will continue going
     // to the next whole node.
-    if (n.HasValue && n.Value != path[0])
+    if (n.HasValue && n.Value != cells[0])
     {
-      path.Insert(0, n.Value);
+      cells.Insert(0, n.Value);
     }
-    this._path = path;
-    this._index = path.Count == 0 ? null : 0;
+    this._cells = cells;
+    this._index = cells.Count == 0 ? null : 0;
   }
 
   /// <summary>
@@ -208,9 +268,9 @@ public partial class Path
   /// </remarks>
   public Godot.Vector3I? Next()
   {
-    if (this._index.HasValue && this._index.Value < this._path.Count)
+    if (this._index.HasValue && this._index.Value < this._cells.Count)
     {
-      return this._path[this._index.Value];
+      return this._cells[this._index.Value];
     }
     return null;
   }
@@ -231,11 +291,40 @@ public partial class Path
   /// </summary>
   public void ReachedTileHandler(
     object sender,
-    DF.Model.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, KeyFrameType> e)
+    DF.Model.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, FrameData> e)
   {
-    if (e.F.D.HasFlag(KeyFrameType.ReachedTile))
+    if (e.F.D.T.HasFlag(KeyFrameType.ReachedTile) && e.F.D.ID == this._id)
     {
       this.SetNext();
     }
   }
+
+  /// <summary>
+  /// Return a list of <see cref="DF.Lib.Tween.Frame{U, W}"/> movement
+  /// frames of the stored path. Callers call this function <b>once</b> before
+  /// movement starts and merges into the
+  /// <see cref="DF.Lib.Position.Position"/> instance.
+  /// </summary>
+  /// <remarks>
+  /// <example>
+  /// <code>
+  ///     path.Merge(ps, is_looped: false);
+  /// 
+  ///     var fs = path.Frames(
+  ///       position.Get(timer.CurrTick())!.Value.V,
+  ///       this._timer().CurrTick(),
+  ///       v));
+  /// 
+  ///     position.Merge(timer.CurrTick(), fs);
+  /// </code>
+  /// </example>
+  /// TODO(minkezhang): Add vertical velocity.
+  /// </remarks>
+  /// <param name="p">The current position of the unit.</param>
+  /// <param name="t">The starting timestamp in milliseconds.</param>
+  /// <param name="v">The velocity of the unit.</param>
+  public List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, FrameData>> Frames(
+    DF.Lib.Position.Position p,
+    ulong t,
+    DF.Lib.Position.Velocity v) => Generator.Frames(this._id, p, t, v, this.Cells());
 }
