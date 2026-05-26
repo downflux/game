@@ -5,6 +5,7 @@ namespace DF.Controller.Command;
 
 public interface IAttack
 {
+  public void Attack(DF.Model.Unit.Base target);
 }
 
 public class Attack
@@ -25,8 +26,8 @@ public class Attack
   }
 
   private void _TurnCompletedHandler(
-  object sender,
-  DF.Model.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, DF.Lib.Path.FrameData> e)
+    object sender,
+    DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, DF.Lib.Path.FrameData> e)
   {
     if (this._id == "")
     {
@@ -36,7 +37,7 @@ public class Attack
     if (e.F.D.T.HasFlag(Lib.Path.KeyFrameType.CompletedTurn) && e.F.D.ID == this._id)
     {
       this._id = "";
-      // this._attack.Attack(
+      this._attack.Attack(this._dst);
     }
   }
 
@@ -59,6 +60,4 @@ public class Attack
         this._timer().CurrTick(),
         this._src.Moveable().Velocity()));
   }
-
-
 }

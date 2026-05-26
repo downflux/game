@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DF.Lib.Tween;
+namespace DF.Lib.Tween.Float;
 
 /// <summary>
 /// Edge detection type. Used to trigger signals when a tween falls below or rises
@@ -114,3 +114,40 @@ public class Float<W>(InterpolationType t) : Base<float, W>(t)
 		return results;
 	}
 }
+
+public delegate void ValueTriggerEventHandler<W>(
+	object sender,
+	ValueTriggerEventHandlerArgs<W> e);
+
+public class ValueTriggerEventHandlerArgs<W>(
+	DF.Lib.Tween.Frame<float, W> f, float v, EdgeType et) : DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<float, W>(f)
+{
+	public float V { get; } = v;
+	public EdgeType EdgeType { get; } = et;
+}
+
+public partial class Linear<W> : Float<W>
+{
+	public Dictionary<float, EdgeType> WatchPoints = [];
+
+	public event ValueTriggerEventHandler<W>? ValueTriggerEvent;
+
+	public Linear() : base(InterpolationType.Linear)
+	{
+	}
+
+	public override void Process(ulong lb, ulong ub)
+	{
+		base.Process(lb, ub);
+
+		foreach (var (v, et) in this.WatchPoints)
+		{
+			List<DF.Lib.Tween.Frame<float, W>> fs = this.Find(lb, ub, v, et);
+			foreach (var f in fs)
+			{
+				this.ValueTriggerEvent?.Invoke(this, new ValueTriggerEventHandlerArgs<W>(f, v, et));
+			}
+		}
+	}
+}
+

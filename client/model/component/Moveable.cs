@@ -14,12 +14,10 @@ public partial class Moveable : Node
   [Godot.Export]
   required public float VerticalVelocity;
 
-  internal DF.Model.Tween.Base<DF.Lib.Position.Position, DF.Lib.Path.FrameData> _position = new(
-    new DF.Lib.Tween.Base<DF.Lib.Position.Position, DF.Lib.Path.FrameData>(
-      DF.Lib.Tween.InterpolationType.Linear));
-  internal DF.Model.Tween.Base<DF.Lib.Position.Velocity, bool?> _velocity = new(
-    new DF.Lib.Tween.Base<DF.Lib.Position.Velocity, bool?>(
-      DF.Lib.Tween.InterpolationType.Step));
+  internal DF.Lib.Tween.Base<DF.Lib.Position.Position, DF.Lib.Path.FrameData> _position = new(
+    DF.Lib.Tween.InterpolationType.Linear);
+  internal DF.Lib.Tween.Base<DF.Lib.Position.Velocity, bool?> _velocity = new(
+    DF.Lib.Tween.InterpolationType.Step);
 
   internal DF.Lib.Path.Path _path = new();
 
@@ -30,6 +28,14 @@ public partial class Moveable : Node
   private bool _loop = false;
 
   internal DF.Lib.Timer.D _timer = () => DF.Model.Timer.Server.S();
+
+  public override void _ExitTree()
+  {
+    base._ExitTree();
+
+    DF.Model.Tween.Directory.S().Dequeue(this._position.ID());
+    DF.Model.Tween.Directory.S().Dequeue(this._velocity.ID());
+  }
 
   public override void _Ready()
   {
@@ -50,20 +56,17 @@ public partial class Moveable : Node
           new("", DF.Lib.Path.KeyFrameType.None)),
       ]);
 
-    this._position.Init();
-    this._velocity.Init();
+    DF.Model.Tween.Directory.S().Enqueue(this._position);
+    DF.Model.Tween.Directory.S().Enqueue(this._velocity);
 
     this._position.KeyFrameTriggerEvent += this._ReachedGoalHandler;
     this._position.KeyFrameTriggerEvent += this._path.ReachedTileHandler;
     this._velocity.KeyFrameTriggerEvent += this._VelocityChangedHandler;
-
-    this.AddChild(this._position);
-    this.AddChild(this._velocity);
   }
 
   private void _ReachedGoalHandler(
     object sender,
-    DF.Model.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, DF.Lib.Path.FrameData> e)
+    DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, DF.Lib.Path.FrameData> e)
   {
     if (e.F.D.T.HasFlag(Lib.Path.KeyFrameType.ReachedGoal) && e.F.D.ID == this._path.ID())
     {
@@ -80,7 +83,7 @@ public partial class Moveable : Node
 
   private void _VelocityChangedHandler(
     object sender,
-    DF.Model.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Velocity, bool?> e)
+    DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Velocity, bool?> e)
   {
     if (e.F.IsKeyFrame())
     {

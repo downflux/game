@@ -4,34 +4,6 @@ using System.Linq;
 
 namespace DF.Lib.Tween;
 
-/// <summary>
-/// Interface defining a "curve" per
-/// <see href="https://www.forrestthewoods.com/blog/tech_of_planetary_annihilation_chrono_cam/" />
-/// </summary>
-/// <typeparam name="U"></typeparam>
-/// <typeparam name="W"></typeparam>
-public interface ITween<U, W> where U : struct
-{
-	public void Add(List<Frame<U, W>> fs);
-	public void Remove(List<Frame<U, W>> fs);
-
-	/// <summary>
-	/// Returns a keyframe strictly after the input time. If t is beyond the last keyframe, return the current frame.
-	/// </summary>
-	/// <param name="t"></param>
-	/// <returns></returns>
-	public Frame<U, W>? Next(ulong t);
-
-	public Frame<U, W>? Get(ulong t);
-	public List<Frame<U, W>> Slice(ulong? lo, ulong? hi);
-	public void Scale(ulong? t, float r);
-	public void Cut(ulong t);
-	public void Merge(ulong t, List<Frame<U, W>> fs);
-	public void Flush();
-	public void Clear();
-	public InterpolationType Type();
-}
-
 public enum InterpolationType
 {
 	Linear,
@@ -90,7 +62,7 @@ public readonly record struct Frame<U, W> where U : struct
 	}
 }
 
-public class Base<U, W>(InterpolationType t) : ITween<U, W>
+public class Base<U, W>(InterpolationType t) : ITween<U, W>, INode
 	where U : struct
 {
 	/// <summary>
@@ -107,6 +79,10 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>
 	/// </summary>
 	private List<(ulong T, Frame<U, W>? F)> _buf = [];
 	public InterpolationType InterpolationType { get; } = t;
+
+	private string _id = Guid.NewGuid().ToString();
+	public string ID() => this._id;
+	public event KeyframeTriggerEventHandler<U, W>? KeyFrameTriggerEvent;
 
 	/// <summary>
 	/// Get an explicit keyframe stored in the tween which is guaranteed to have
@@ -514,4 +490,33 @@ i++)
 	}
 
 	public InterpolationType Type() => this.InterpolationType;
+
+	public virtual void Process(ulong lb, ulong ub)
+	{
+		this.Flush();
+
+		List<DF.Lib.Tween.Frame<U, W>> slice = this.Slice(lb, ub);
+
+		foreach (var f in slice)
+		{
+			// Ensure that we are not emitting a signal twice if the frame sits on
+			// the boundary of the interval.
+			if (f.IsKeyFrame() && f.T < ub)
+			{
+				// Emit the default keyframe trigger event.
+				this.KeyFrameTriggerEvent?.Invoke(this, new KeyframeTriggerEventHandlerArgs<U, W>(f));
+			}
+		}
+	}
+}
+
+public delegate void KeyframeTriggerEventHandler<U, W>(
+	object sender,
+	KeyframeTriggerEventHandlerArgs<U, W> e)
+where U : struct;
+
+public class KeyframeTriggerEventHandlerArgs<U, W>(Frame<U, W> f) : EventArgs
+	where U : struct
+{
+	public Frame<U, W> F { get; } = f;
 }

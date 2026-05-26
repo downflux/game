@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Server="*uid://r1lq6ul0tdr2"
+Directory="*uid://dbnrjw32t7v31"
 
 [dotnet]
 

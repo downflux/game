@@ -3,9 +3,9 @@ using System.Collections.Generic;
 namespace DF.View.Debug.Tween.Bool;
 
 internal class ToFloat(
-  DF.Model.Tween.ITweenRO<bool, bool> tween) : DF.Model.Tween.ITweenRO<float, bool>
+  DF.Lib.Tween.ITweenRO<bool, bool> tween) : DF.Lib.Tween.ITweenRO<float, bool>
 {
-  private DF.Model.Tween.ITweenRO<bool, bool> _tween = tween;
+  private DF.Lib.Tween.ITweenRO<bool, bool> _tween = tween;
 
   public DF.Lib.Tween.Frame<float, bool>? Get(ulong t)
   {

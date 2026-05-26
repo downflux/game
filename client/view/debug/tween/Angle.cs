@@ -7,9 +7,9 @@ namespace DF.View.Debug.Tween.Angle;
 /// the angular component. 
 /// </summary>
 internal class ToFloat(
-  DF.Model.Tween.ITweenRO<DF.Lib.Position.Position, DF.Lib.Path.FrameData> tween) : DF.Model.Tween.ITweenRO<float, DF.Lib.Path.FrameData>
+  DF.Lib.Tween.ITweenRO<DF.Lib.Position.Position, DF.Lib.Path.FrameData> tween) : DF.Lib.Tween.ITweenRO<float, DF.Lib.Path.FrameData>
 {
-  private DF.Model.Tween.ITweenRO<DF.Lib.Position.Position, DF.Lib.Path.FrameData> _tween = tween;
+  private DF.Lib.Tween.ITweenRO<DF.Lib.Position.Position, DF.Lib.Path.FrameData> _tween = tween;
 
   public DF.Lib.Tween.Frame<float, DF.Lib.Path.FrameData>? Get(ulong t)
   {

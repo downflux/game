@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Godot;
 
 namespace DF.Model.Component;
@@ -23,16 +25,17 @@ public partial class HealthPool : Node
 
   private bool _is_alive = true;
 
-  internal DF.Model.Tween.Float.Linear<bool?> _health = new()
+  internal DF.Lib.Tween.Float.Linear<bool?> _health = new()
   {
-    WatchPoints = new Godot.Collections.Dictionary<float, DF.Lib.Tween.EdgeType> {
-      { 0, DF.Lib.Tween.EdgeType.FallingEdge },
-    },
+    WatchPoints = new Dictionary<float, DF.Lib.Tween.Float.EdgeType>
+    {
+      { 0, DF.Lib.Tween.Float.EdgeType.FallingEdge }
+    }
   };
 
-  private void _DeathHandler(object sender, DF.Model.Tween.Float.ValueTriggerEventHandlerArgs<bool?> e)
+  private void _DeathHandler(object sender, DF.Lib.Tween.Float.ValueTriggerEventHandlerArgs<bool?> e)
   {
-    if (e.V == 0 && e.EdgeType == DF.Lib.Tween.EdgeType.FallingEdge)
+    if (e.V == 0 && e.EdgeType == DF.Lib.Tween.Float.EdgeType.FallingEdge)
     {
       this._is_alive = false;
     }
@@ -40,14 +43,22 @@ public partial class HealthPool : Node
 
   public bool IsAlive() => this._is_alive;
 
+  public override void _ExitTree()
+  {
+    base._ExitTree();
+
+    DF.Model.Tween.Directory.S().Dequeue(this._health.ID());
+  }
+
   public override void _Ready()
   {
     base._Ready();
 
-    this._health.WatchPoints[this.MaxHealth] = DF.Lib.Tween.EdgeType.RisingEdge;
+    DF.Model.Tween.Directory.S().Enqueue(this._health);
+
+    this._health.WatchPoints[this.MaxHealth] = DF.Lib.Tween.Float.EdgeType.RisingEdge;
     this._health.Add([
       new(this._timer().CurrTick(), this.MaxHealth, null)]);
-    this._health.Init();
 
     this._health.ValueTriggerEvent += this._DeathHandler;
     this._health.ValueTriggerEvent += (t, e) =>
@@ -55,8 +66,6 @@ public partial class HealthPool : Node
       GD.Print(
         $"DEBUG(HealthPool.cs): at t ~ {(ulong)Math.Round((float)e.F.T / 1000)}s, HP has triggered {e.V}.");
     };
-
-    this.AddChild(this._health);
   }
 
   public void Damage(float v, DamageAttribute d)

@@ -12,7 +12,7 @@ public partial class Fireball : Cooldown
     this._pulse.KeyFrameTriggerEvent += this._OnTrigger;
   }
 
-  private void _OnTrigger(object sender, DF.Model.Tween.KeyframeTriggerEventHandlerArgs<bool, bool> e)
+  private void _OnTrigger(object sender, DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<bool, bool> e)
   {
     if (this._target != null)
     {

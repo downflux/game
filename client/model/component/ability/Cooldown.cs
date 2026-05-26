@@ -14,24 +14,26 @@ public partial class Cooldown : Base
 
   private ulong _last_triggered = 0;
 
-  internal DF.Model.Tween.Base<bool, bool> _pulse = new(
-    new DF.Lib.Tween.Bool<bool>(DF.Lib.Tween.InterpolationType.Pulse));
-  internal DF.Model.Tween.Base<bool, bool> _charge = new(
-    new DF.Lib.Tween.Bool<bool>(DF.Lib.Tween.InterpolationType.Step));
+  internal DF.Lib.Tween.Bool<bool> _pulse = new(DF.Lib.Tween.InterpolationType.Pulse);
+  internal DF.Lib.Tween.Bool<bool> _charge = new(DF.Lib.Tween.InterpolationType.Step);
+
+  public override void _ExitTree()
+  {
+    base._ExitTree();
+
+    DF.Model.Tween.Directory.S().Dequeue(this._pulse.ID());
+    DF.Model.Tween.Directory.S().Dequeue(this._charge.ID());
+  }
 
   public override void _Ready()
   {
     base._Ready();
 
-    this.AddChild(this._pulse);
-    this.AddChild(this._charge);
+    DF.Model.Tween.Directory.S().Enqueue(this._pulse);
+    DF.Model.Tween.Directory.S().Enqueue(this._charge);
 
     this._charge.Add([
       new (this._timer().CurrTick(), true, false)]);
-
-    this._pulse.Init();
-    this._charge.Init();
-
   }
 
   public ulong Next()

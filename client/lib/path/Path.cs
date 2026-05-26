@@ -291,7 +291,7 @@ public class Path
   /// </summary>
   public void ReachedTileHandler(
     object sender,
-    DF.Model.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, FrameData> e)
+    DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, FrameData> e)
   {
     if (e.F.D.T.HasFlag(KeyFrameType.ReachedTile) && e.F.D.ID == this._id)
     {
