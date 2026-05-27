@@ -491,6 +491,33 @@ i++)
 
 	public InterpolationType Type() => this.InterpolationType;
 
+	/// <summary>
+	/// Method to be invoked in a <see cref="Godot.Node._Process(double)"/> call. 
+	/// </summary>
+	/// <remarks>
+	/// Supposing <c>Process()</c> is executed at <c>t1 > t0</c> the time at
+	/// which the last time <c>Process()</c> was called, control which events
+	/// are emitted in the half-open interval <c>(t0, t1]</c> --
+	///
+	/// <list type="number">
+	///   <item>
+	///     <description>
+	///       The default <see cref="Base{U, W}.KeyFrameTriggerEvent" /> in the
+	///       interval
+	///     </description>
+	///   </item>
+	///   <item>
+	///     <description>
+	///       Any events stored in the frame data.
+	///     </description>
+	///   </item>
+	///   <item>
+	///     <description>
+	///       Any events triggered by crossing a specific value.
+	///     </description>
+	///   </item>
+	/// </list>
+	/// </remarks>
 	public virtual void Process(ulong lb, ulong ub)
 	{
 		this.Flush();

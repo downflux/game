@@ -17,12 +17,15 @@ public partial class Cooldown : Base
   internal DF.Lib.Tween.Bool<bool> _pulse = new(DF.Lib.Tween.InterpolationType.Pulse);
   internal DF.Lib.Tween.Bool<bool> _charge = new(DF.Lib.Tween.InterpolationType.Step);
 
-  public override void _ExitTree()
+  public override void _Notification(int what)
   {
-    base._ExitTree();
+    base._Notification(what);
 
-    DF.Model.Tween.Directory.S().Dequeue(this._pulse.ID());
-    DF.Model.Tween.Directory.S().Dequeue(this._charge.ID());
+    if (what == Godot.GodotObject.NotificationPredelete)
+    {
+      DF.Model.Tween.Directory.S().Dequeue(this._pulse.ID());
+      DF.Model.Tween.Directory.S().Dequeue(this._charge.ID());
+    }
   }
 
   public override void _Ready()

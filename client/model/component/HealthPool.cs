@@ -43,11 +43,14 @@ public partial class HealthPool : Node
 
   public bool IsAlive() => this._is_alive;
 
-  public override void _ExitTree()
+  public override void _Notification(int what)
   {
-    base._ExitTree();
+    base._Notification(what);
 
-    DF.Model.Tween.Directory.S().Dequeue(this._health.ID());
+    if (what == Godot.GodotObject.NotificationPredelete)
+    {
+      DF.Model.Tween.Directory.S().Dequeue(this._health.ID());
+    }
   }
 
   public override void _Ready()

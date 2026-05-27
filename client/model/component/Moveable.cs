@@ -29,12 +29,15 @@ public partial class Moveable : Node
 
   internal DF.Lib.Timer.D _timer = () => DF.Model.Timer.Server.S();
 
-  public override void _ExitTree()
+  public override void _Notification(int what)
   {
-    base._ExitTree();
+    base._Notification(what);
 
-    DF.Model.Tween.Directory.S().Dequeue(this._position.ID());
-    DF.Model.Tween.Directory.S().Dequeue(this._velocity.ID());
+    if (what == Godot.GodotObject.NotificationPredelete)
+    {
+      DF.Model.Tween.Directory.S().Dequeue(this._position.ID());
+      DF.Model.Tween.Directory.S().Dequeue(this._velocity.ID());
+    }
   }
 
   public override void _Ready()
