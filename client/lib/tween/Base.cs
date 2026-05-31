@@ -62,6 +62,9 @@ public readonly record struct Frame<U, W> where U : struct
 	}
 }
 
+[Godot.Signal]
+public delegate void ShowNoteEventHandler(int input, double time);
+
 public class Base<U, W>(InterpolationType t) : ITween<U, W>, INode
 	where U : struct
 {
@@ -83,6 +86,7 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>, INode
 	private string _id = Guid.NewGuid().ToString();
 	public string ID() => this._id;
 	public event KeyframeTriggerEventHandler<U, W>? KeyFrameTriggerEvent;
+
 
 	/// <summary>
 	/// Get an explicit keyframe stored in the tween which is guaranteed to have
@@ -352,8 +356,8 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>, INode
 
 		for (
 			var i = this._keyframes.IndexOfKey(lb.Value.T);
-i <= this._keyframes.IndexOfKey(ub.Value.T);
-i++)
+			i <= this._keyframes.IndexOfKey(ub.Value.T);
+			i++)
 		{
 			slice.Add(this._keyframes.GetValueAtIndex(i));
 		}
@@ -418,24 +422,24 @@ i++)
 	/// </summary>
 	public void Flush()
 	{
-		foreach (var (T, F) in this._buf)
+		foreach (var (t, f) in this._buf)
 		{
-			if (this._keyframes.ContainsKey(T))
+			if (this._keyframes.ContainsKey(t))
 			{
 				// If a value already exists at the target timestamp, overwrite with
 				// new value.
-				if (F.HasValue)
+				if (f.HasValue)
 				{
-					this._keyframes.SetValueAtIndex(this._keyframes.IndexOfKey(T), F.Value);
+					this._keyframes.SetValueAtIndex(this._keyframes.IndexOfKey(t), f.Value);
 				}
 				else
 				{
-					this._keyframes.Remove(T);
+					this._keyframes.Remove(t);
 				}
 			}
-			else if (F.HasValue)
+			else if (f.HasValue)
 			{
-				this._keyframes.Add(T, F.Value);
+				this._keyframes.Add(t, f.Value);
 			}
 		}
 
@@ -492,47 +496,13 @@ i++)
 	public InterpolationType Type() => this.InterpolationType;
 
 	/// <summary>
-	/// Method to be invoked in a <see cref="Godot.Node._Process(double)"/> call. 
+	/// Raise all signals in the half-open interval <c>[t0, t1)</c>.
 	/// </summary>
-	/// <remarks>
-	/// Supposing <c>Process()</c> is executed at <c>t1 > t0</c> the time at
-	/// which the last time <c>Process()</c> was called, control which events
-	/// are emitted in the half-open interval <c>(t0, t1]</c> --
-	///
-	/// <list type="number">
-	///   <item>
-	///     <description>
-	///       The default <see cref="Base{U, W}.KeyFrameTriggerEvent" /> in the
-	///       interval
-	///     </description>
-	///   </item>
-	///   <item>
-	///     <description>
-	///       Any events stored in the frame data.
-	///     </description>
-	///   </item>
-	///   <item>
-	///     <description>
-	///       Any events triggered by crossing a specific value.
-	///     </description>
-	///   </item>
-	/// </list>
-	/// </remarks>
-	public virtual void Process(ulong lb, ulong ub)
+	public virtual void Raise(ulong lb, ulong ub)
 	{
-		this.Flush();
-
-		List<DF.Lib.Tween.Frame<U, W>> slice = this.Slice(lb, ub);
-
-		foreach (var f in slice)
+		foreach (var f in this.Slice(lb, ub).Where(f => f.IsKeyFrame() && f.T < ub))
 		{
-			// Ensure that we are not emitting a signal twice if the frame sits on
-			// the boundary of the interval.
-			if (f.IsKeyFrame() && f.T < ub)
-			{
-				// Emit the default keyframe trigger event.
-				this.KeyFrameTriggerEvent?.Invoke(this, new KeyframeTriggerEventHandlerArgs<U, W>(f));
-			}
+			this.KeyFrameTriggerEvent?.Invoke(this, new KeyframeTriggerEventHandlerArgs<U, W>(f));
 		}
 	}
 }

@@ -20,10 +20,10 @@ public enum EdgeType
 	RisingEdge,
 }
 
-public class Float<W>(InterpolationType t) : Base<float, W>(t)
+public class Base<W>(InterpolationType t) : Base<float, W>(t)
 {
 	/// <summary>
-	/// Find the linear intercept point in the half-open interval <c>(lb, ub]</c>.
+	/// Find the linear intercept point in the half-open interval <c>[lb, ub)</c>.
 	/// </summary>
 	/// <remarks>
 	/// This function assumes a smooth linear function in between the two
@@ -38,7 +38,7 @@ public class Float<W>(InterpolationType t) : Base<float, W>(t)
 			return null;
 		}
 
-		if (lb.HasValue && ub.HasValue && lb.Value.T > ub.Value.T)
+		if (lb.HasValue && ub.HasValue && lb.Value.T > ub.Value.T)  // Invalid value.
 		{
 			return null;
 		}
@@ -64,7 +64,7 @@ public class Float<W>(InterpolationType t) : Base<float, W>(t)
 		}
 
 		float t = ub.Value.T - (ub.Value.V - v) * dt / dv;
-		if (t <= (float)lb.Value.T || t > (float)ub.Value.T)
+		if (t < (float)lb.Value.T || t >= (float)ub.Value.T)
 		{
 			return null;
 		}
@@ -74,8 +74,8 @@ public class Float<W>(InterpolationType t) : Base<float, W>(t)
 				lb.Value.V < ub.Value.V && et == EdgeType.RisingEdge) || (
 				lb.Value.V > ub.Value.V && et == EdgeType.FallingEdge))
 		{
-			ulong u = (ulong)Math.Ceiling(t);
-			if (u > lb.Value.T)
+			ulong u = (ulong)Math.Floor(t);
+			if (u < ub.Value.T)
 			{
 				return this.Get(u);
 			}
@@ -100,11 +100,7 @@ public class Float<W>(InterpolationType t) : Base<float, W>(t)
 
 		for (var i = 0; i < slice.Count; i++)
 		{
-			Frame<float, W>? f = this.Intercept(
-				i == 0 ? null : slice[i - 1],
-				slice[i],
-				v,
-				et);
+			Frame<float, W>? f = this.Intercept(i == 0 ? null : slice[i - 1], slice[i], v, et);
 			if (f.HasValue)
 			{
 				results.Add(f.Value);
@@ -113,15 +109,4 @@ public class Float<W>(InterpolationType t) : Base<float, W>(t)
 
 		return results;
 	}
-}
-
-public delegate void ValueTriggerEventHandler<W>(
-	object sender,
-	ValueTriggerEventHandlerArgs<W> e);
-
-public class ValueTriggerEventHandlerArgs<W>(
-	DF.Lib.Tween.Frame<float, W> f, float v, EdgeType et) : DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<float, W>(f)
-{
-	public float V { get; } = v;
-	public EdgeType EdgeType { get; } = et;
 }

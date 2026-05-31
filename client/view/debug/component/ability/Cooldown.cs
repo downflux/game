@@ -38,6 +38,6 @@ public partial class Cooldown : Godot.Node2D
   {
     this.Node = n;
     this._pulse.Tween = new DF.View.Debug.Tween.Bool.ToFloat(this.Node._pulse);
-    this._charge.Tween = new DF.View.Debug.Tween.Bool.ToFloat(this.Node._charge);
+    this._charge.Tween = new DF.View.Debug.Tween.Bool.ToFloat(this.Node._ready);
   }
 }

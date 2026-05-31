@@ -5,7 +5,7 @@ namespace DF.Lib.Tween;
 public interface INode
 {
   string ID();
-  void Process(ulong lb, ulong ub);
+  void Raise(ulong lb, ulong ub);
   void Flush();
 }
 

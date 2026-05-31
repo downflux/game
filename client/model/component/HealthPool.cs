@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Godot;
 
 namespace DF.Model.Component;
@@ -33,10 +32,11 @@ public partial class HealthPool : Node
     }
   };
 
-  private void _DeathHandler(object sender, DF.Lib.Tween.Float.ValueTriggerEventHandlerArgs<bool?> e)
+  private void _OnDeathHandler(object sender, DF.Lib.Tween.Float.ValueTriggerEventHandlerArgs<bool?> e)
   {
     if (e.V == 0 && e.EdgeType == DF.Lib.Tween.Float.EdgeType.FallingEdge)
     {
+      Godot.GD.Print($"DEBUG(HealthPool.cs): at t ~ {(ulong)Math.Round((float)e.F.T / 1000)}s, HP has triggered {e.V}.");
       this._is_alive = false;
     }
   }
@@ -49,7 +49,7 @@ public partial class HealthPool : Node
 
     if (what == Godot.GodotObject.NotificationPredelete)
     {
-      DF.Model.Tween.Directory.S().Dequeue(this._health.ID());
+      DF.Model.Tween.Directory.S().Remove(this._health.ID());
     }
   }
 
@@ -57,18 +57,13 @@ public partial class HealthPool : Node
   {
     base._Ready();
 
-    DF.Model.Tween.Directory.S().Enqueue(this._health);
+    DF.Model.Tween.Directory.S().Add(this._health);
 
     this._health.WatchPoints[this.MaxHealth] = DF.Lib.Tween.Float.EdgeType.RisingEdge;
     this._health.Add([
       new(this._timer().CurrTick(), this.MaxHealth, null)]);
 
-    this._health.ValueTriggerEvent += this._DeathHandler;
-    this._health.ValueTriggerEvent += (t, e) =>
-    {
-      GD.Print(
-        $"DEBUG(HealthPool.cs): at t ~ {(ulong)Math.Round((float)e.F.T / 1000)}s, HP has triggered {e.V}.");
-    };
+    this._health.ValueTriggerEvent += this._OnDeathHandler;
   }
 
   public void Damage(float v, DamageAttribute d)

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DF.Lib.Tween.Float;
 
-public partial class Linear<W> : Float<W>
+public partial class Linear<W> : Base<W>
 {
   public Dictionary<float, EdgeType> WatchPoints = [];
 
@@ -12,17 +13,27 @@ public partial class Linear<W> : Float<W>
   {
   }
 
-  public override void Process(ulong lb, ulong ub)
+  public override void Raise(ulong lb, ulong ub)
   {
-    base.Process(lb, ub);
+    base.Raise(lb, ub);
 
     foreach (var (v, et) in this.WatchPoints)
     {
-      List<DF.Lib.Tween.Frame<float, W>> fs = this.Find(lb, ub, v, et);
-      foreach (var f in fs)
+      foreach (var f in this.Find(lb, ub, v, et).Where(f => f.T < ub))
       {
         this.ValueTriggerEvent?.Invoke(this, new ValueTriggerEventHandlerArgs<W>(f, v, et));
       }
     }
   }
+}
+
+public delegate void ValueTriggerEventHandler<W>(
+  object sender,
+  ValueTriggerEventHandlerArgs<W> e);
+
+public class ValueTriggerEventHandlerArgs<W>(
+  DF.Lib.Tween.Frame<float, W> f, float v, EdgeType et) : DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<float, W>(f)
+{
+  public float V { get; } = v;
+  public EdgeType EdgeType { get; } = et;
 }

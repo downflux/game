@@ -35,8 +35,8 @@ public partial class Moveable : Node
 
     if (what == Godot.GodotObject.NotificationPredelete)
     {
-      DF.Model.Tween.Directory.S().Dequeue(this._position.ID());
-      DF.Model.Tween.Directory.S().Dequeue(this._velocity.ID());
+      DF.Model.Tween.Directory.S().Remove(this._position.ID());
+      DF.Model.Tween.Directory.S().Remove(this._velocity.ID());
     }
   }
 
@@ -59,8 +59,8 @@ public partial class Moveable : Node
           new("", DF.Lib.Path.KeyFrameType.None)),
       ]);
 
-    DF.Model.Tween.Directory.S().Enqueue(this._position);
-    DF.Model.Tween.Directory.S().Enqueue(this._velocity);
+    DF.Model.Tween.Directory.S().Add(this._position);
+    DF.Model.Tween.Directory.S().Add(this._velocity);
 
     this._position.KeyFrameTriggerEvent += this._ReachedGoalHandler;
     this._position.KeyFrameTriggerEvent += this._path.ReachedTileHandler;

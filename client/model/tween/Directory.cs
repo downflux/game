@@ -39,7 +39,7 @@ public partial class Directory : Godot.Node
   /// their internal cache before starting a tick.
   /// </remarks>
   /// <param name="n"></param>
-  public void Enqueue(DF.Lib.Tween.INode n)
+  public void Add(DF.Lib.Tween.INode n)
   {
     this._tweens[n.ID()] = n;
 
@@ -59,18 +59,27 @@ public partial class Directory : Godot.Node
   // for more information.
   /// </summary>
   /// <param name="id"></param>
-  public void Dequeue(string id)
+  public void Remove(string id)
   {
     this._tweens.Remove(id);
   }
 
+  /// <summary>
+  /// Trigger each <see cref="DF.Lib.Tween.INode"/> mutation by first updating
+  /// all curves, and <b>then</b> raise any signals.
+  /// </summary>
   public override void _Process(double delta)
   {
     base._Process(delta);
 
     foreach (var (_, n) in this._tweens)
     {
-      n.Process(this._timer().PrevTick(), this._timer().CurrTick());
+      n.Flush();
+    }
+
+    foreach (var (_, n) in this._tweens)
+    {
+      n.Raise(this._timer().PrevTick(), this._timer().CurrTick());
     }
   }
 }

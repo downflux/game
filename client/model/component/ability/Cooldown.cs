@@ -1,7 +1,18 @@
-using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.Marshalling;
+using DF.Lib.Tween.Float;
+using Godot;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DF.Model.Component.Ability;
+
+public enum FSM
+{
+  None = 0,
+  Cooldown = 1,
+  Queued = 2,  // Someone is waiting for the next charge.
+  Ready = 3,
+}
 
 public partial class Cooldown : Base
 {
@@ -12,10 +23,21 @@ public partial class Cooldown : Base
   [Godot.Export]
   public ulong RechargePeriod = 0;
 
+  /// <summary>
+  /// An ability can only trigger once per game tick, to prevent situations
+  /// where multiple callers to a unit may result in invalid attack triggers.
+  /// This would be effectively an AoE attack, but masked as a single-target
+  /// trigger.
+  /// </summary>
   private ulong _last_triggered = 0;
 
+  private bool _queued = false;
+
+  protected bool IsQueued() => this._queued;
+  protected void SetQueued(bool v) => this._queued = v;
+
   internal DF.Lib.Tween.Bool<bool> _pulse = new(DF.Lib.Tween.InterpolationType.Pulse);
-  internal DF.Lib.Tween.Bool<bool> _charge = new(DF.Lib.Tween.InterpolationType.Step);
+  internal DF.Lib.Tween.Bool<bool> _ready = new(DF.Lib.Tween.InterpolationType.Step);
 
   public override void _Notification(int what)
   {
@@ -23,8 +45,8 @@ public partial class Cooldown : Base
 
     if (what == Godot.GodotObject.NotificationPredelete)
     {
-      DF.Model.Tween.Directory.S().Dequeue(this._pulse.ID());
-      DF.Model.Tween.Directory.S().Dequeue(this._charge.ID());
+      DF.Model.Tween.Directory.S().Remove(this._pulse.ID());
+      DF.Model.Tween.Directory.S().Remove(this._ready.ID());
     }
   }
 
@@ -32,16 +54,47 @@ public partial class Cooldown : Base
   {
     base._Ready();
 
-    DF.Model.Tween.Directory.S().Enqueue(this._pulse);
-    DF.Model.Tween.Directory.S().Enqueue(this._charge);
+    DF.Model.Tween.Directory.S().Add(this._pulse);
+    DF.Model.Tween.Directory.S().Add(this._ready);
 
-    this._charge.Add([
+    this._ready.KeyFrameTriggerEvent += this._OnReadyKeyFrameTriggerEvent;
+
+    this._ready.Add([
       new (this._timer().CurrTick(), true, false)]);
   }
 
+  private void _OnReadyKeyFrameTriggerEvent(
+    object sender,
+    DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<bool, bool> e)
+  {
+    if (this.IsQueued() && e.F.V)
+    {
+      this._Trigger();
+      this.SetQueued(false);
+    }
+  }
+
+  protected FSM _State()
+  {
+    if (this._IsReady() && this._last_triggered != this._timer().CurrTick())
+    {
+      return FSM.Ready;
+    }
+    if (this.IsQueued())
+    {
+      return FSM.Queued;
+    }
+    return FSM.Cooldown;
+  }
+
+  private bool _IsReady() => this._ready.Get(this._timer().CurrTick())!.Value.V;
+
+  /// <summary>
+  /// Returns game tick at which this ability can be used again.
+  /// </summary>
   public ulong Next()
   {
-    List<DF.Lib.Tween.Frame<bool, bool>> fs = this._charge.Slice(
+    List<DF.Lib.Tween.Frame<bool, bool>> fs = this._ready.Slice(
       this._timer().CurrTick(),
       this._timer().CurrTick() + this.RechargePeriod);
 
@@ -56,7 +109,24 @@ public partial class Cooldown : Base
     return ulong.MaxValue;
   }
 
-  public override bool Trigger()
+  public virtual void Enqueue()
+  {
+    switch (this._State())
+    {
+      // Cannot queue more than once.
+      case FSM.Queued:
+        return;
+      case FSM.Cooldown:
+        this.SetQueued(true);
+        return;
+      case FSM.None:
+      case FSM.Ready:
+        this._Trigger();
+        return;
+    }
+  }
+
+  private void _Trigger()
   {
     // This function can only trigger once per game tick, to prevent situations
     // where multiple callers to a unit may result in invalid attack triggers.
@@ -64,19 +134,12 @@ public partial class Cooldown : Base
     // trigger.
     if (this._last_triggered == this._timer().CurrTick())
     {
-      return false;
+      return;
     }
 
-    this._last_triggered = this._timer().CurrTick();
-
-    DF.Lib.Tween.Frame<bool, bool>? f = this._charge.Get(this._timer().CurrTick());
-    if (f.HasValue && !f.Value.V)
-    {
-      return false;
-    }
     this._pulse.Add([
       new(this._timer().CurrTick(), true, false),
-      ]);
+    ]);
 
     List<DF.Lib.Tween.Frame<bool, bool>> fs = [
       new(this._timer().CurrTick(), false, false)];
@@ -84,7 +147,9 @@ public partial class Cooldown : Base
     {
       fs.Add(new(this._timer().CurrTick() + this.RechargePeriod, true, false));
     }
-    this._charge.Merge(this._timer().CurrTick(), fs);
-    return true;
+
+    this._ready.Merge(this._timer().CurrTick(), fs);
+
+    return;
   }
 }

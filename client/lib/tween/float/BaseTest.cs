@@ -2,19 +2,19 @@ using GdUnit4;
 using static GdUnit4.Assertions;
 using System.Collections.Generic;
 
-namespace DF.Tests.Lib.Tween;
+namespace DF.Tests.Lib.Float.Tween;
 
 #pragma warning disable CS8618
 
 [TestSuite]
-public class FloatTest
+public class BaseTest
 {
-	private DF.Lib.Tween.Float.Float<bool?> _t;
+	private DF.Lib.Tween.Float.Base<bool?> _t;
 
 	[BeforeTest]
 	public void SetUp()
 	{
-		this._t = new DF.Lib.Tween.Float.Float<bool?>(
+		this._t = new DF.Lib.Tween.Float.Base<bool?>(
 			DF.Lib.Tween.InterpolationType.Linear);
 		this._t.Add(
 			[
@@ -96,26 +96,26 @@ public class FloatTest
 				40,
 				DF.Lib.Tween.Float.EdgeType.FallingEdge)).IsNull();
 
-		AssertThat(  // t = lb, for the half-open interval (lb, ub]
+		AssertThat(  // t = lb, for the half-open interval [lb, ub)
 			this._t.Intercept(
 				new(10, 110, true),
 				new(20, 120, null),
 				110,
-				DF.Lib.Tween.Float.EdgeType.RisingEdge)).IsNull();
-		AssertThat(  // t = ub, for the half-open interval (lb, ub]
+				DF.Lib.Tween.Float.EdgeType.RisingEdge)).IsEqual(
+			new DF.Lib.Tween.Frame<float, bool?>(10, 110, true, true));
+		AssertThat(  // t = ub, for the half-open interval [lb, ub)
 			this._t.Intercept(
 				new(10, 110, true),
 				new(20, 120, true),
 				120,
-				DF.Lib.Tween.Float.EdgeType.RisingEdge)).IsEqual(
-			new DF.Lib.Tween.Frame<float, bool?>(20, 120, null, true));
-		AssertThat(  // lb.V < v < ub.V and Ceil
+				DF.Lib.Tween.Float.EdgeType.RisingEdge)).IsNull();
+		AssertThat(  // lb.V < v < ub.V, calling Floor(t) on the intersection time
 			this._t.Intercept(
 				new(10, 110, true),
 				new(11, 111, null, false),
-				110.1f,
+				110.9f,
 				DF.Lib.Tween.Float.EdgeType.RisingEdge)).IsEqual(
-			new DF.Lib.Tween.Frame<float, bool?>(11, 111, null, false));
+			new DF.Lib.Tween.Frame<float, bool?>(10, 110, true, true));
 	}
 
 	[TestCase]

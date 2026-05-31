@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b5vgo6ijjoalg" path="res://model/unit/Base.cs" id="1_gbi6a"]
 [ext_resource type="Script" uid="uid://378gwik5sfrx" path="res://model/component/HealthPool.cs" id="2_us6bb"]
-[ext_resource type="Script" uid="uid://ho0l3k5sk2ry" path="res://model/component/ability/Fireball.cs" id="3_ixwgi"]
+[ext_resource type="Script" uid="uid://ho0l3k5sk2ry" path="res://model/component/ability/Attack.cs" id="3_gbi6a"]
 [ext_resource type="Script" uid="uid://gfcdreobj46y" path="res://model/component/Moveable.cs" id="4_cined"]
 
 [node name="Base" type="Node" unique_id=1270958351]
@@ -14,10 +14,10 @@ MaxHealth = 100.0
 
 [node name="Abilities" type="Node" parent="." unique_id=1989936870]
 
-[node name="Fireball" type="Node" parent="Abilities" unique_id=2111572]
-script = ExtResource("3_ixwgi")
+[node name="Attack" type="Node" parent="Abilities" unique_id=2111572]
+script = ExtResource("3_gbi6a")
 BaseDamage = 60.0
-RechargePeriod = 500
+RechargePeriod = 1000
 
 [node name="Moveable" type="Node" parent="." unique_id=567105469]
 script = ExtResource("4_cined")

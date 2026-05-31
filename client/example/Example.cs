@@ -27,7 +27,8 @@ public partial class Example : Node2D
 			{
 				// TODO(minkezhang): Break out server vs client rendering -- i.e. triggers.
 				// TODO(minkezhang): Break out Weapon() object for AoE vs single target API.
-				((DF.Model.Component.Ability.Fireball)this.GetNode("Data/Base/Abilities/Fireball")).Attack((DF.Model.Unit.Base)this.GetNode("Data/Base"));
+				((DF.Model.Component.Ability.Attack)this.GetNode("Data/Base/Abilities/Attack")).SetTarget((DF.Model.Unit.Base)this.GetNode("Data/Base"), true);
+				((DF.Model.Component.Ability.Attack)this.GetNode("Data/Base/Abilities/Attack")).Enqueue();
 			}
 		}
 	}
