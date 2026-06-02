@@ -62,9 +62,9 @@ public partial class Moveable : Node
     DF.Model.Tween.Directory.S().Add(this._position);
     DF.Model.Tween.Directory.S().Add(this._velocity);
 
-    this._position.KeyFrameTriggerEvent += this._ReachedGoalHandler;
-    this._position.KeyFrameTriggerEvent += this._path.ReachedTileHandler;
-    this._velocity.KeyFrameTriggerEvent += this._VelocityChangedHandler;
+    this._position.KeyframeTriggerEvent += this._ReachedGoalHandler;
+    this._position.KeyframeTriggerEvent += this._path.ReachedTileHandler;
+    this._velocity.KeyframeTriggerEvent += this._VelocityChangedHandler;
   }
 
   private void _ReachedGoalHandler(

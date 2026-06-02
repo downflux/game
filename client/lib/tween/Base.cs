@@ -85,7 +85,20 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>, INode
 
 	private string _id = Guid.NewGuid().ToString();
 	public string ID() => this._id;
-	public event KeyframeTriggerEventHandler<U, W>? KeyFrameTriggerEvent;
+
+	private readonly DF.Lib.Event.WeakEventHandler<KeyframeTriggerEventHandlerArgs<U, W>> _keyframe_trigger_event = new();
+	public event System.EventHandler<KeyframeTriggerEventHandlerArgs<U, W>> KeyframeTriggerEvent
+	{
+		add
+		{
+
+			_keyframe_trigger_event.Add(value);
+		}
+		remove
+		{
+			_keyframe_trigger_event.Remove(value);
+		}
+	}
 
 
 	/// <summary>
@@ -502,15 +515,10 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>, INode
 	{
 		foreach (var f in this.Slice(lb, ub).Where(f => f.IsKeyFrame() && f.T < ub))
 		{
-			this.KeyFrameTriggerEvent?.Invoke(this, new KeyframeTriggerEventHandlerArgs<U, W>(f));
+			this._keyframe_trigger_event.Invoke(this, new KeyframeTriggerEventHandlerArgs<U, W>(f));
 		}
 	}
 }
-
-public delegate void KeyframeTriggerEventHandler<U, W>(
-	object sender,
-	KeyframeTriggerEventHandlerArgs<U, W> e)
-where U : struct;
 
 public class KeyframeTriggerEventHandlerArgs<U, W>(Frame<U, W> f) : EventArgs
 	where U : struct

@@ -1,18 +1,6 @@
 using System.Collections.Generic;
-using System.Runtime.InteropServices.Marshalling;
-using DF.Lib.Tween.Float;
-using Godot;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DF.Model.Component.Ability;
-
-public enum FSM
-{
-  None = 0,
-  Cooldown = 1,
-  Queued = 2,  // Someone is waiting for the next charge.
-  Ready = 3,
-}
 
 public partial class Cooldown : Base
 {
@@ -57,14 +45,14 @@ public partial class Cooldown : Base
     DF.Model.Tween.Directory.S().Add(this._pulse);
     DF.Model.Tween.Directory.S().Add(this._ready);
 
-    this._ready.KeyFrameTriggerEvent += this._OnReadyKeyFrameTriggerEvent;
+    this._ready.KeyframeTriggerEvent += this._OnReadyKeyFrameTriggerEvent;
 
     this._ready.Add([
       new (this._timer().CurrTick(), true, false)]);
   }
 
   private void _OnReadyKeyFrameTriggerEvent(
-    object sender,
+    object? sender,
     DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<bool, bool> e)
   {
     if (this.IsQueued() && e.F.V)

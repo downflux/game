@@ -11,7 +11,7 @@ public partial class Attack : Cooldown
 
   public Attack()
   {
-    this._pulse.KeyFrameTriggerEvent += this._OnPulseTrigger;
+    this._pulse.KeyframeTriggerEvent += this._OnPulseTrigger;
   }
 
   public void Stop() => this.SetTarget(null, false);
@@ -30,7 +30,7 @@ public partial class Attack : Cooldown
     }
   }
 
-  private void _OnPulseTrigger(object sender, DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<bool, bool> e)
+  private void _OnPulseTrigger(object? sender, DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<bool, bool> e)
   {
     if (this._target != null)
     {

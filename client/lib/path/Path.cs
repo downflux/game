@@ -258,7 +258,7 @@ public class Path
   /// </summary>
   /// <remarks>
   /// Parent must connect the
-  /// <see cref="DF.Lib.Tween.Base{U, W}.KeyFrameTriggerEvent"/> event
+  /// <see cref="DF.Lib.Tween.Base{U, W}.KeyframeTriggerEvent"/> event
   /// handler manually.
   /// <example>
   /// <code>
@@ -286,7 +286,7 @@ public class Path
   /// <summary>
   /// Event handler for the parent <see cref="DF.Model.Unit.Base"/> to
   /// link to the
-  /// <see cref="DF.Lib.Tween.Base{U, W}.KeyFrameTriggerEvent"/>
+  /// <see cref="DF.Lib.Tween.Base{U, W}.KeyframeTriggerEvent"/>
   /// instance.
   /// </summary>
   public void ReachedTileHandler(
