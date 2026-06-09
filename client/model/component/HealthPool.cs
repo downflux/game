@@ -32,7 +32,7 @@ public partial class HealthPool : Node
     }
   };
 
-  private void _OnDeathHandler(object sender, DF.Lib.Tween.Float.ValueTriggerEventHandlerArgs<bool?> e)
+  private void _OnDeathHandler(object? sender, DF.Lib.Tween.Float.ValueTriggerEventHandlerArgs<bool?> e)
   {
     if (e.V == 0 && e.EdgeType == DF.Lib.Tween.Float.EdgeType.FallingEdge)
     {
