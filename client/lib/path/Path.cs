@@ -97,6 +97,21 @@ public class Generator()
     return (u, q);
   }
 
+  /// <summary>
+  /// Generate target angle of rotation.
+  ///
+  /// The actual rotation of <c>p</c> may be a multiple of 2pi; we want to make
+  /// sure that the direction of the new waypoint is within 2pi of the
+  /// current orientation, which means we need to adjust the target orientation
+  /// <c>target</c>.
+  /// </summary>
+  public static float Theta(DF.Lib.Position.Position p, float target)
+  {
+    float dt = p.T - target;
+    int rotations = (int)(Math.Sign(dt) * Math.Floor(Math.Abs(dt) / Math.Tau));
+    return rotations * (float)Math.Tau + target;
+  }
+
   public static List<DF.Lib.Tween.Frame<DF.Lib.Position.Position, FrameData>> Frames(
     string id,
     DF.Lib.Position.Position p,
@@ -126,10 +141,7 @@ public class Generator()
       // current orientation, which means we need to adjust the target
       // orientation (qt).
       float qt = (new Godot.Vector2(qp.X, qp.Y) - p.XY).Angle();
-      float dt = p.T - qt;
-      int rotations = (int)(Math.Sign(dt) * Math.Floor(Math.Abs(dt) / Math.Tau));
-
-      DF.Lib.Position.Position q = new(qp, rotations * (float)Math.Tau + qt);
+      DF.Lib.Position.Position q = new(qp, Generator.Theta(p, qt));
 
       // Edge case -- it is possible that the current position p is already at
       // the first waypoint. Do not generate the trivial additional rotation
@@ -290,7 +302,7 @@ public class Path
   /// instance.
   /// </summary>
   public void ReachedTileHandler(
-    object sender,
+    object? sender,
     DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, FrameData> e)
   {
     if (e.F.D.T.HasFlag(KeyFrameType.ReachedTile) && e.F.D.ID == this._id)

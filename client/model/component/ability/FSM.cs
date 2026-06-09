@@ -6,4 +6,5 @@ public enum FSM
   Cooldown = 1,
   Queued = 2,  // Someone is waiting for the next charge.
   Ready = 3,
+  Stop = 4,
 }

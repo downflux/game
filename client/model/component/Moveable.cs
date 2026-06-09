@@ -68,7 +68,7 @@ public partial class Moveable : Node
   }
 
   private void _ReachedGoalHandler(
-    object sender,
+    object? sender,
     DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Position, DF.Lib.Path.FrameData> e)
   {
     if (e.F.D.T.HasFlag(Lib.Path.KeyFrameType.ReachedGoal) && e.F.D.ID == this._path.ID())
@@ -85,7 +85,7 @@ public partial class Moveable : Node
   }
 
   private void _VelocityChangedHandler(
-    object sender,
+    object? sender,
     DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<DF.Lib.Position.Velocity, bool?> e)
   {
     if (e.F.IsKeyFrame())
@@ -101,6 +101,21 @@ public partial class Moveable : Node
 
   public void Stop() => this.SetPath([]);
 
+  public void SetOrientation(float theta)
+  {
+    this.Stop();
+
+    DF.Lib.Position.Position q = new(
+      this.Position().P,
+      DF.Lib.Path.Generator.Theta(this.Position(), theta));
+    var fs = DF.Lib.Path.Generator.Rotate(
+      "",
+      this.Position(),
+      q,
+      this._timer().CurrTick(),
+      this.Velocity());
+    this._position.Merge(this._timer().CurrTick(), fs);
+  }
   public void SetPath(List<Godot.Vector3I> p, bool is_looped = false)
   {
     if (this._position == null || this._velocity == null)
@@ -108,6 +123,8 @@ public partial class Moveable : Node
       return;
     }
 
+    // TODO(minkezhang): Stop at next waypoint -- queue this move for the next
+    // TileReached handler?
     this._path.Merge(p, is_looped);
     this._position.Merge(
       this._timer().CurrTick(),

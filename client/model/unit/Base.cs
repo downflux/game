@@ -17,9 +17,17 @@ public partial class Base : Node
   // TODO(minkezhang): Clean up namespaces.
   public DF.Model.Component.HealthPool HealthPool() => this.GetNode<DF.Model.Component.HealthPool>("HealthPool");
   public DF.Model.Component.Moveable Moveable() => this.GetNode<DF.Model.Component.Moveable>("Moveable");
+  public DF.Model.Component.Ability.Attack Attack() => this.GetNode<DF.Model.Component.Ability.Attack>("Abilities/Attack");
 
   internal DF.Lib.Timer.D _timer = () => DF.Model.Timer.Server.S();
 
   public float Health() => this.HealthPool().Health();
   public bool IsAlive() => this.HealthPool().IsAlive();
+
+  public override void _Ready()
+  {
+    base._Ready();
+
+    this.Attack().SetSource(this);
+  }
 }

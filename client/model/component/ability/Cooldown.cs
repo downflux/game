@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices.Marshalling;
+using Godot;
 
 namespace DF.Model.Component.Ability;
 
@@ -20,9 +22,6 @@ public partial class Cooldown : Base
   private ulong _last_triggered = 0;
 
   private bool _queued = false;
-
-  protected bool IsQueued() => this._queued;
-  protected void SetQueued(bool v) => this._queued = v;
 
   internal DF.Lib.Tween.Bool<bool> _pulse = new(DF.Lib.Tween.InterpolationType.Pulse);
   internal DF.Lib.Tween.Bool<bool> _ready = new(DF.Lib.Tween.InterpolationType.Step);
@@ -55,20 +54,25 @@ public partial class Cooldown : Base
     object? sender,
     DF.Lib.Tween.KeyframeTriggerEventHandlerArgs<bool, bool> e)
   {
-    if (this.IsQueued() && e.F.V)
+    if (this._queued && e.F.V)
     {
-      this._Trigger();
-      this.SetQueued(false);
+      this._queued = false;
+      this.Enqueue();
     }
   }
 
-  protected FSM _State()
+  protected override FSM State()
   {
+    if (base.State() == FSM.Stop)
+    {
+      return base.State();
+    }
+
     if (this._IsReady() && this._last_triggered != this._timer().CurrTick())
     {
       return FSM.Ready;
     }
-    if (this.IsQueued())
+    if (this._queued)
     {
       return FSM.Queued;
     }
@@ -97,21 +101,19 @@ public partial class Cooldown : Base
     return ulong.MaxValue;
   }
 
-  public virtual void Enqueue()
+  public override void Enqueue()
   {
-    switch (this._State())
+    switch (this.State())
     {
-      // Cannot queue more than once.
-      case FSM.Queued:
-        return;
       case FSM.Cooldown:
-        this.SetQueued(true);
+        this._queued = true;
         return;
       case FSM.None:
       case FSM.Ready:
         this._Trigger();
         return;
     }
+    base.Enqueue();
   }
 
   private void _Trigger()
