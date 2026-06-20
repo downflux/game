@@ -54,7 +54,6 @@ public partial class Attack : Cooldown
       this.Stop();
       return;
     }
-
     this._source!.Moveable().SetOrientation(0);
     // TODO(minkezhang): Pause self, set pathing to aim at target, follow, etc. or add to Unit.
     // TODO(minkezhang): Path.Pause(), Path.Resume(), etc. on Next(), insert and then remove from path.

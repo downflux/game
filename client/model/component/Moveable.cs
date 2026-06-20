@@ -99,39 +99,52 @@ public partial class Moveable : Node
     }
   }
 
-  public void Stop() => this.SetPath([]);
+  public void Stop()
+  {
+    Godot.GD.Print($"DEBUG(Moveable.cs): stop");
+
+    this.SetPath([]);
+  }
 
   public void SetOrientation(float theta)
-  {
-    this.Stop();
-
-    DF.Lib.Position.Position q = new(
-      this.Position().P,
-      DF.Lib.Path.Generator.Theta(this.Position(), theta));
-    var fs = DF.Lib.Path.Generator.Rotate(
-      "",
-      this.Position(),
-      q,
-      this._timer().CurrTick(),
-      this.Velocity());
-    this._position.Merge(this._timer().CurrTick(), fs);
-  }
-  public void SetPath(List<Godot.Vector3I> p, bool is_looped = false)
   {
     if (this._position == null || this._velocity == null)
     {
       return;
     }
 
+    this._path.Merge([], false);
+    this._loop = false;
+
+    var n = this._position.Next(this._timer().CurrTick());
+    var t = n.HasValue ? n.Value.T : this._timer().CurrTick();
+    var p = n.HasValue ? n.Value.V : this.Position();
+    var v = this._velocity.Get(t)!.Value.V;
+
+    DF.Lib.Position.Position q = new(p.P, DF.Lib.Path.Generator.Theta(p, theta));
+    var fs = DF.Lib.Path.Generator.Rotate("", p, q, t, v);
+    this._position.Merge(t, fs);
+  }
+
+  public void SetPath(List<Godot.Vector3I> path, bool is_looped = false)
+  {
+    if (this._position == null || this._velocity == null)
+    {
+      return;
+    }
+
+    var n = this._position.Next(this._timer().CurrTick());
+    var t = n.HasValue ? n.Value.T : this._timer().CurrTick();
+    var p = n.HasValue ? n.Value.V : this.Position();
+    var v = this._velocity.Get(t)!.Value.V;
+
+    this._path.Merge(path, is_looped);
+    var fs = this._path.Frames(p, t, v);
+
     // TODO(minkezhang): Stop at next waypoint -- queue this move for the next
     // TileReached handler?
-    this._path.Merge(p, is_looped);
-    this._position.Merge(
-      this._timer().CurrTick(),
-      this._path.Frames(
-       this.Position(),
-        this._timer().CurrTick(),
-        this.Velocity()));
+    this._path.Merge(path, is_looped);
+    this._position.Merge(t, fs);
     this._loop = is_looped;
   }
 
