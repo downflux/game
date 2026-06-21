@@ -509,6 +509,11 @@ public class Base<U, W>(InterpolationType t) : ITween<U, W>, INode
 	public InterpolationType Type() => this.InterpolationType;
 
 	/// <summary>
+	/// Returns all keyframes within the half-open interval <c>[lb, ub)</c>.
+	/// </summary>
+	public virtual List<Frame<U, W>> KeyFrames(ulong lb, ulong ub) => this.Slice(lb, ub).Where(f => f.IsKeyFrame() && f.T < ub).ToList();
+
+	/// <summary>
 	/// Raise all signals in the half-open interval <c>[t0, t1)</c>.
 	/// </summary>
 	public virtual void Raise(ulong lb, ulong ub)
